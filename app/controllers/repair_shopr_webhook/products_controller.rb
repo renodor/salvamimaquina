@@ -1,9 +1,11 @@
 class RepairShoprWebhook::ProductsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate
+  # before_action :authenticate
 
   def product_updated
     logger.info("PARAMS ARE HERE: #{params}")
+    logger.info("HEADERS ARE HERE: #{response.headers}")
+    logger.info("AUTHORIZATION IS HERE: #{request.headers['HTTP_AUTHORIZATION']}")
     render json: 'alright'
   end
 
