@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/solidusio/solidus.git
-  revision: 6603bb93994a026d1005a18e96747b642d7ac968
+  revision: 239af4ea1bb7d8042b83294dbaf8d41450acaf21
   branch: v2.11
   specs:
     solidus (2.11.5)
