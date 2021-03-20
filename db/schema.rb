@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_19_221520) do
+ActiveRecord::Schema.define(version: 2021_03_20_173733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -891,6 +891,7 @@ ActiveRecord::Schema.define(version: 2021_03_19_221520) do
     t.boolean "fulfillable", default: true, null: false
     t.string "code"
     t.boolean "check_stock_on_transfer", default: true
+    t.integer "repair_shopr_id"
     t.index ["country_id"], name: "index_spree_stock_locations_on_country_id"
     t.index ["state_id"], name: "index_spree_stock_locations_on_state_id"
   end
