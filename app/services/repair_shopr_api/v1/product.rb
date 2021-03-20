@@ -4,9 +4,9 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
   class << self
     def update_product(id)
       attributes = get_product(id)['product']
-
+      Rails.logger.info('###### HERE ######')
       product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
-
+      Rails.logger.info('###### AND HERE ######')
       # attributes at a Spree::Product level
       product.attributes = {
         description: attributes['description'],
