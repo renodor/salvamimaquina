@@ -54,13 +54,13 @@ Metrics/BlockLength:
     - config/routes.rb
 
 Metrics/AbcSize:
-  Max: 20
+  Enabled: false
 
 Metrics/MethodLength:
   Max: 20
 
 Layout/LineLength:
-  Max: 100
+  Max: 200
 
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
