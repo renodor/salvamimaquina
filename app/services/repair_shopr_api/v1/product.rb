@@ -29,10 +29,10 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
       end
 
       product.save!
-      sync_product_stocks(product, attributes['location_quantities'])
+      update_product_stock(product, attributes['location_quantities'])
     end
 
-    def sync_product_stock(product, location_quantities)
+    def update_product_stock(product, location_quantities)
       location_quantities.each do |location_quantity|
         stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
         stock_item = product.stock_items.find_by(stock_location: stock_location)
