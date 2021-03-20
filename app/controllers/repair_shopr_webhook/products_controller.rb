@@ -3,10 +3,16 @@ class RepairShoprWebhook::ProductsController < ApplicationController
   # before_action :authenticate
 
   def product_updated
-    logger.info("PARAMS ARE HERE: #{params}")
-    logger.info("HEADERS ARE HERE: #{response.headers}")
-    logger.info("AUTHORIZATION IS HERE: #{request.headers['HTTP_AUTHORIZATION']}")
-    render json: 'alright'
+    return unless params['link'].include?('https://coolshop.repairshopr.com/products/')
+
+    attributes = params['attributes']
+    Spree::Product.transaction do
+      product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
+      product.price = attributes['price_retail']
+      product.name = attributes['name']
+      product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id
+      product.save!
+    end
   end
 
   private
