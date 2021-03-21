@@ -20,17 +20,15 @@ class RepairShoprApi::V1::Base
   HTTP_UNPROCESSABLE_ENTITY_CODE = 429
 
   class << self
-    def products
-      request(
-        http_method: :get,
-        endpoint: 'products'
-      )
-    end
-
+    # rubocop:disable Naming/AccessorMethodName
     def get_product(id)
       request(http_method: :get, endpoint: "products/#{id}")
     end
 
+    def get_product_categories
+      request(http_method: :get, endpoint: '/products/categories')
+    end
+    # rubocop:enable Naming/AccessorMethodName
     private
 
     def client
