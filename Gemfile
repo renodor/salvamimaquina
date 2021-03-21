@@ -37,6 +37,10 @@ gem 'faraday'
 # Optimized JSON parser
 gem 'oj'
 
+# Exception management
+gem "sentry-ruby"
+gem "sentry-rails"
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'
