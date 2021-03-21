@@ -6,6 +6,7 @@ class RepairShoprWebhook::ProductsController < ApplicationController
     return unless params['link'].include?('https://coolshop.repairshopr.com/products/')
 
     RepairShoprApi::V1::Product.update_product(params['attributes']['id'])
+    head :ok
   end
 
   private

@@ -3,7 +3,9 @@
 class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
   class << self
     def update_product(id)
+      Rails.logger.info('#### START UPDATE PRODUCT')
       attributes = get_product(id)['product']
+      Rails.logger.info("#### update_product OK: #{attributes}")
 
       product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
       # attributes at a Spree::Product level
@@ -26,12 +28,14 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
         product.available_on = Date.today if product.new_record?
         product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id
       end
-
+      Rails.logger.info("#### ABOUT TO SAVE PRODUCT")
       product.save!
+      Rails.logger.info("#### SAVE PRODUCT OK")
       update_product_stock(product, attributes['location_quantities'])
     end
 
     def update_product_stock(product, location_quantities)
+      Rails.logger.info("#### START UPDATE PRODUCT STOCK")
       location_quantities.each do |location_quantity|
         stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
         stock_item = product.stock_items.find_by(stock_location: stock_location)
