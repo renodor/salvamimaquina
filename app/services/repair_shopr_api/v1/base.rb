@@ -2,8 +2,8 @@
 
 class RepairShoprApi::V1::Base
   API_ENDPOINT = 'https://coolshop.repairshopr.com/api/v1'
-  API_KEY = Rails.application.credentials.repair_shopr_api_key_test
-
+  # API_KEY = Rails.application.credentials.repair_shopr_api_key_test
+  API_KEY = 'nada'
   RepairShoprApiError = Class.new(StandardError)
   BadRequestError = Class.new(RepairShoprApiError)
   UnauthorizedError = Class.new(RepairShoprApiError)
@@ -47,7 +47,9 @@ class RepairShoprApi::V1::Base
 
       return parsed_response if @response.status == HTTP_OK_CODE
 
-      raise error_class, "Code: #{@response.status}, response: #{@response.body}"
+      # Sentry.capture_message("#{error_class}, Code: #{@response.status}, response: #{@response.body}")
+      #raise error_class, "Code: #{@response.status}, response: #{@response.body}"
+      raise 'HEEEELLLOOOOO'
     end
 
     def error_class
