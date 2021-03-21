@@ -47,9 +47,7 @@ class RepairShoprApi::V1::Base
 
       return parsed_response if @response.status == HTTP_OK_CODE
 
-      # Sentry.capture_message("#{error_class}, Code: #{@response.status}, response: #{@response.body}")
-      #raise error_class, "Code: #{@response.status}, response: #{@response.body}"
-      raise 'HEEEELLLOOOOO'
+      raise error_class, "Code: #{@response.status}, response: #{@response.body}"
     end
 
     def error_class
