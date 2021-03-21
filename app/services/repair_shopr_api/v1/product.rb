@@ -165,19 +165,13 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
         }
       ]
 
-      categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id
       categories_taxon = Spree::Taxon.find_by(name: 'Categories')
-      repair_shopr_product_categories.each do |category|
-        taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: category['id'], taxonomy_id: categories_taxonomy_id)
-        taxon.name = category['name']
-        taxon.description = category['description']
-        taxon.save!
-      end
-
-      repair_shopr_product_categories.each do |category|
-        taxon = Spree::Taxon.find_by(repair_shopr_id: category['id'])
-        if (parent_category_id = category['ancestry']&.split('/')&.last)
-          taxon.move_to_child_of(Spree::Taxon.find_by(repair_shopr_id: parent_category_id))
+      repair_shopr_product_categories.each do |repair_shopr_product_category|
+        taxon = find_or_create_taxon(repair_shopr_product_category)
+        if (parent_category_id = repair_shopr_product_category['ancestry']&.split('/')&.last)
+          parent_category_attributes = repair_shopr_product_categories.find { |category| category['id'] == parent_category_id }
+          parent_taxon = find_or_create_taxon(parent_category_attributes)
+          taxon.move_to_child_of(parent_taxon)
         else
           taxon.move_to_child_of(categories_taxon)
         end
@@ -186,6 +180,15 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
       ### END OF SYNC RS CATEGORIES WITH SOLIDUS CATEGORY TAXONS ###
 
       ### UPDATE PRODUCT CATEGORIES
+    end
+
+    def find_or_create_taxon(product_category)
+      categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id
+      taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: categories_taxonomy_id)
+      taxon.name = product_category['name']
+      taxon.description = product_category['description']
+      taxon.save!
+      taxon
     end
   end
 end
