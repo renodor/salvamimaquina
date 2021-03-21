@@ -4,9 +4,8 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
   class << self
     def update_product(id)
       attributes = get_product(id)['product']
-      Rails.logger.info('###### HERE ######')
+
       product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
-      Rails.logger.info('###### AND HERE ######')
       # attributes at a Spree::Product level
       product.attributes = {
         description: attributes['description'],
@@ -34,7 +33,9 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
 
     def update_product_stock(product, location_quantities)
       location_quantities.each do |location_quantity|
+        Rails.logger.info('### HERE I AM ###')
         stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
+        Rails.logger.info('### HERE I AM ###')
         stock_item = product.stock_items.find_by(stock_location: stock_location)
         next unless stock_item.count_on_hand != location_quantity['quantity']
 
