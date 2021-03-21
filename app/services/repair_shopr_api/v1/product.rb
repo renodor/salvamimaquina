@@ -33,7 +33,7 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
     end
 
     def update_product_stock(product, location_quantities)
-      Rails.logger.info("Updating stock of product with RepairShopr ID: #{id}")
+      Rails.logger.info("Updating stock of product with RepairShopr ID: #{product.repair_shopr_id}")
       location_quantities.each do |location_quantity|
         stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
         stock_item = product.stock_items.find_by(stock_location: stock_location)
@@ -47,7 +47,7 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
           quantity: stock_item.count_on_hand > location_quantity['quantity'] ? -absolute_difference : absolute_difference
         )
       end
-      Rails.logger.info("Stock of product with RepairShopr ID: #{id} updated")
+      Rails.logger.info("Stock of product with RepairShopr ID: #{product.repair_shopr_id} updated")
     end
   end
 end
