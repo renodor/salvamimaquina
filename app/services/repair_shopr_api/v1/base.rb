@@ -2,8 +2,8 @@
 
 class RepairShoprApi::V1::Base
   API_ENDPOINT = 'https://coolshop.repairshopr.com/api/v1'
-  # API_KEY = Rails.application.credentials.repair_shopr_api_key_test
-  API_KEY = 'nada'
+  API_KEY = Rails.application.credentials.repair_shopr_api_key_test
+
   RepairShoprApiError = Class.new(StandardError)
   BadRequestError = Class.new(RepairShoprApiError)
   UnauthorizedError = Class.new(RepairShoprApiError)
