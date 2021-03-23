@@ -29,6 +29,7 @@ class RepairShoprApi::V1::Base
       request(http_method: :get, endpoint: '/products/categories')
     end
     # rubocop:enable Naming/AccessorMethodName
+
     private
 
     def client

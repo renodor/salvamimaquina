@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 namespace :prepare_production_database do
-  task create_repair_shopr_stock_locations: :environment do
-    Rails.logger.info('Started create_repair_shopr_stock_locations task')
+  task create_stock_locations: :environment do
+    Rails.logger.info('Started create_stock_locations task')
 
     Spree::StockLocation.find_or_initialize_by(id: 1).update!(
       name: 'Bella Vista',
@@ -14,6 +16,7 @@ namespace :prepare_production_database do
       backorderable_default: false
     )
 
-    Rails.logger.info('Finished create_repair_shopr_stock_locations task')
+    Rails.logger.info("#{Spree::StockLocation.count} stock_locations created")
+    Rails.logger.info('Finished create_stock_locations task')
   end
 end
