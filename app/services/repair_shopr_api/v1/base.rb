@@ -26,7 +26,7 @@ class RepairShoprApi::V1::Base
     end
 
     def get_product_categories
-      request(http_method: :get, endpoint: '/products/categories')
+      request(http_method: :get, endpoint: 'products/categories')
     end
     # rubocop:enable Naming/AccessorMethodName
 

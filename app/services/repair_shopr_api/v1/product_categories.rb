@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RepairShoprApi::V1::Category < RepairShoprApi::V1::Base
+class RepairShoprApi::V1::ProductCategories < RepairShoprApi::V1::Base
   class << self
     def call
       @categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id
