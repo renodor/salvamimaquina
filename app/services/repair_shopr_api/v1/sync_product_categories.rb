@@ -4,7 +4,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
   class << self
     def call
       @categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id
-      @categories_taxon = Spree::Taxon.find_by(name: 'Categories')
+      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy_id)
 
       product_categories = get_product_categories['categories']
 

@@ -10,7 +10,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
       Spree::Product.transaction do
         if attributes['disabled']
-          destroy_product(attribute['id'])
+          destroy_product(attributes['id'])
           return
         end
 
