@@ -38,8 +38,8 @@ gem 'faraday'
 gem 'oj'
 
 # Exception management
-gem "sentry-ruby"
-gem "sentry-rails"
+gem 'sentry-ruby'
+gem 'sentry-rails'
 
 group :development, :test do
   # For debugging

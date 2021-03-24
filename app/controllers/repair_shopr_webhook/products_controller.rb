@@ -1,20 +1,10 @@
 class RepairShoprWebhook::ProductsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  # before_action :authenticate
 
   def product_updated
-    return unless params['link'].include?('https://coolshop.repairshopr.com/products/')
+    return unless params['link'].include?("https://#{Rails.application.credentials.repair_shopr_subdomain_test}.repairshopr.com/products/")
 
-    RepairShoprApi::V1::Product.call(params['attributes']['id'])
+    RepairShoprApi::V1::SyncProduct.call(id: params['attributes']['id'])
     head :ok
-  end
-
-  private
-
-  def authenticate
-    authenticate_or_request_with_http_token do |token, _options|
-      # Compare the tokens in a time-constant manner, to mitigate timing attacks.
-      ActiveSupport::SecurityUtils.secure_compare(token, Rails.application.credentials.repair_shopr_api_key)
-    end
   end
 end

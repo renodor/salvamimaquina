@@ -1,26 +1,33 @@
 # frozen_string_literal: true
 
-class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
+class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
   class << self
-    def call(id)
-      product_attributes = get_product(id)['product']
+    def call(attributes: nil, id: nil)
+      attributes ||= get_product(id)['product']
 
+      raise ArgumentError, 'attributes or id is needed' unless attributes
+
+      Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
       Spree::Product.transaction do
-        product = create_or_update_product(product_attributes)
-        update_product_stock(product, product_attributes['location_quantities'])
-        update_product_classifications(product, product_attributes['product_category'])
+        if attributes['disabled']
+          destroy_product(attribute['id'])
+          return
+        end
+
+        product = create_or_update_product(attributes)
+        update_product_stock(product, attributes['location_quantities'])
+        update_product_classifications(product, attributes['product_category'])
       end
+      Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
     end
 
     def create_or_update_product(attributes)
-      Rails.logger.info("Updating product with RepairShopr ID: #{attributes['id']}")
-
       product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
+
       # attributes at a Spree::Product level
       product.attributes = {
         description: attributes['description'],
-        name: attributes['name'],
-        discontinue_on: attributes['disabled'] ? Date.today : nil
+        name: attributes['name']
       }
 
       # attributes at Spree::Variant level
@@ -38,12 +45,10 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
       end
 
       product.save!
-      Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} updated")
       product
     end
 
     def update_product_stock(product, location_quantities)
-      Rails.logger.info("Updating stock of product with RepairShopr ID: #{product.repair_shopr_id}")
       location_quantities.each do |location_quantity|
         stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
         stock_item = product.stock_items.find_by(stock_location: stock_location)
@@ -57,13 +62,18 @@ class RepairShoprApi::V1::Product < RepairShoprApi::V1::Base
           quantity: stock_item.count_on_hand > location_quantity['quantity'] ? -absolute_difference : absolute_difference
         )
       end
-      Rails.logger.info("Stock of product with RepairShopr ID: #{product.repair_shopr_id} updated")
     end
 
     def update_product_classifications(product, product_category)
       product.classifications.destroy_all
+      return unless product_category
+
       taxon = Spree::Taxon.find_by(name: product_category.split(';').last, taxonomy_id: Spree::Taxonomy.find_by(name: 'Categories').id)
       Spree::Classification.create!(product_id: product.id, taxon_id: taxon.id)
+    end
+
+    def destroy_product(repair_shopr_id)
+      Spree::Product.find_by(repair_shopr_id: repair_shopr_id)&.destroy!
     end
   end
 end
