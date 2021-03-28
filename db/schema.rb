@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_050027) do
+ActiveRecord::Schema.define(version: 2021_03_28_192351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_050027) do
     t.text "alt"
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
+    t.integer "repair_shopr_id"
     t.index ["viewable_id"], name: "index_assets_on_viewable_id"
     t.index ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type"
   end
