@@ -1,0 +1,2 @@
+class RepairShoprProductsSyncLog < ApplicationRecord
+end
