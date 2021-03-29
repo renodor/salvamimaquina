@@ -3,24 +3,26 @@
 class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
   class << self
     def call(sync_logs: nil)
-      @categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id
-      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy_id)
+      @categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id || raise('Categories Taxonomy is needed')
+      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy_id) || raise('Categories Taxon is needed')
 
       product_categories = get_product_categories['categories']
-      binding.pry
+      taxons = nil
+      deleted_taxons = nil
       Rails.logger.info('Start to sync product categories')
       Spree::Taxon.transaction do
         taxons = create_or_update_taxons_and_flatten_hierarchy(product_categories)
         update_taxons_hierarchy(taxons, product_categories)
-        binding.pry
-        deleted_taxons = Spree::Taxon.where.not(id: taxons.map(&:id)).destroy_all
-
-        sync_logs&.synced_product_categories = taxons.size
-        sync_logs&.deleted_product_categories = deleted_taxons.size
+        deleted_taxons = Spree::Taxon.where.not(id: taxons.map(&:id) + [@categories_taxon.id]).destroy_all
       end
+      sync_logs&.synced_product_categories = taxons.size
+      sync_logs&.deleted_product_categories = deleted_taxons.size
       Rails.logger.info('Product categories synced')
+
+      taxons
     rescue => e
       sync_logs.sync_errors << { product_categories_error: e.message }
+      false
     end
 
     def create_or_update_taxons_and_flatten_hierarchy(product_categories)

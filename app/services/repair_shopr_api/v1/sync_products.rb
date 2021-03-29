@@ -9,11 +9,16 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
 
       Rails.logger.info('Start to sync products')
 
-      RepairShoprApi::V1::SyncProductCategories.call(sync_logs: sync_logs)
+      taxons = RepairShoprApi::V1::SyncProductCategories.call(sync_logs: sync_logs)
 
-      products.each { |product| RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs) }
+      if taxons
+        products.each do |product|
+          synced_product = RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs)
+          RepairShoprApi::V1::SyncProductImages.call(attributes: product, sync_logs: sync_logs) if synced_product
+        end
+      end
       Rails.logger.info('Products synced')
-      binding.pry
+
       sync_logs.save!
       sync_logs
     end
