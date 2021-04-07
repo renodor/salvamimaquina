@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_003428) do
     t.integer "deleted_product_images", default: 0
     t.integer "synced_product_categories", default: 0
     t.integer "deleted_product_categories", default: 0
-    t.string "sync_errors", default: [], array: true
+    t.jsonb "sync_errors", default: []
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

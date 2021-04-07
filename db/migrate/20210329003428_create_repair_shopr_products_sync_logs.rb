@@ -7,7 +7,7 @@ class CreateRepairShoprProductsSyncLogs < ActiveRecord::Migration[6.1]
       t.integer :deleted_product_images, default: 0
       t.integer :synced_product_categories, default: 0
       t.integer :deleted_product_categories, default: 0
-      t.string :sync_errors, array: true, default: []
+      t.jsonb :sync_errors, default: []
       t.timestamps
     end
   end

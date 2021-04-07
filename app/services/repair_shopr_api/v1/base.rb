@@ -36,10 +36,14 @@ class RepairShoprApi::V1::Base
 
     private
 
+    def sync_logs
+      @@sync_logs ||= RepairShoprProductsSyncLog.new # rubocop:disable Style/ClassVars
+    end
+
     def client
       Faraday.new(API_PATH) do |client|
         client.request :url_encoded
-        client.adapter Faraday.default_adapter # :net_http
+        client.adapter Faraday.default_adapter # The default adapter is :net_http
         client.headers['Authorization'] = "Bearer #{API_KEY}"
       end
     end
