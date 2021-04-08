@@ -1,0 +1,23 @@
+<h1 class="text-center">Synchronize RepairShopr & Solidus</h1>
+<button>
+  <%= link_to "Sync Everything (RepairShopr products, product images, and product categories)", shop_sync_everything_path %>
+</button>
+<button>
+  <%= link_to "Sync Products", shop_sync_products_path %>
+</button>
+<hr>
+<h2>Sync History</h2>
+<% @show_sync_logs.each do |sync_log| %>
+  <div>
+    <ul>
+      <li>Date: <%= sync_log.created_at.in_time_zone('Bogota').strftime("%d/%m/%Y - %H:%M:%S") %></li>
+      <li>Synced products: <%= sync_log.synced_products %></li>
+      <li>Deleted products: <%= sync_log.deleted_products %></li>
+      <li>Synced product images: <%= sync_log.synced_product_images %></li>
+      <li>Deleted product images: <%= sync_log.deleted_product_images %></li>
+      <li>Synced product categories: <%= sync_log.synced_product_categories %></li>
+      <li>Deleted product categories: <%= sync_log.deleted_product_categories %></li>
+      <li>Sync errors: <%= sync_log.sync_errors %></li>
+    </ul>
+  </div>
+<% end %>

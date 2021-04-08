@@ -36,9 +36,9 @@ class RepairShoprApi::V1::Base
 
     private
 
-    def sync_logs
-      @@sync_logs ||= RepairShoprProductsSyncLog.new # rubocop:disable Style/ClassVars
-    end
+    # def sync_logs
+    #   @@sync_logs ||= RepairShoprProductsSyncLog.new # rubocop:disable Style/ClassVars
+    # end
 
     def client
       Faraday.new(API_PATH) do |client|

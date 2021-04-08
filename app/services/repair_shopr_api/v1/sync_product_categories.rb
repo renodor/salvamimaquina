@@ -2,7 +2,7 @@
 
 class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
   class << self
-    def call
+    def call(sync_logs:)
       # Product categories (taxons) all belong to one parent taxon named "Categories",
       # that itself belong to one parent taxonomy names "Categories"
       @categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id || raise('Categories Taxonomy is needed')

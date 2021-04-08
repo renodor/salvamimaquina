@@ -2,7 +2,7 @@
 
 class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
   class << self
-    def call(attributes: nil, repair_shopr_id: nil)
+    def call(attributes: nil, repair_shopr_id: nil, sync_logs:)
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
       attributes ||= get_product(repair_shopr_id)['product']
