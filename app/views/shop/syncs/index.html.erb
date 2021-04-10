@@ -1,11 +1,29 @@
 <h1 class="text-center">Synchronize RepairShopr & Solidus</h1>
-<button>
-  <%= link_to "Sync Everything (RepairShopr products, product images, and product categories)", shop_sync_everything_path %>
-</button>
-<button>
-  <%= link_to "Sync Products", shop_sync_products_path %>
-</button>
-<hr>
+<h2>Sync Everything (products, product images, and product categories)</h2>
+<%= link_to "Sync Everything", shop_sync_everything_path %>
+
+<hr />
+
+<h2>Sync product categories</h2>
+<%= link_to "Sync Product Categories", shop_sync_product_categories_path %>
+
+<hr />
+
+<h2>Sync all products and product images</h2>
+<%= link_to "Sync Products", shop_sync_products_path %>
+
+
+<hr />
+
+<h2>Sync a specific product and its product images</h2>
+<%= form_with url: shop_sync_product_url, method: :post do |form| %>
+  <%= form.label :repair_shopr_product_id, "Select product" %>
+  <%= form.select :repair_shopr_product_id, options_for_select(@products) %>
+  <%= form.submit "Sync Product" %>
+<% end %>
+
+<hr />
+
 <h2>Sync History</h2>
 <% @show_sync_logs.each do |sync_log| %>
   <div>

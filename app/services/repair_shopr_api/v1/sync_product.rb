@@ -2,15 +2,14 @@
 
 class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
   class << self
-    def call(attributes: nil, repair_shopr_id: nil, sync_logs:)
+    def call(sync_logs:, attributes: nil, repair_shopr_id: nil)
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
-      attributes ||= get_product(repair_shopr_id)['product']
+      attributes ||= get_product(repair_shopr_id)
 
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
-      product = nil
       Spree::Product.transaction do
         # If product is disabled on RepairShopr, we just delete it from Solidus database
         if attributes['disabled']
@@ -18,12 +17,14 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
           return
         end
 
-        @product = create_or_update_product(attributes)
+        create_or_update_product(attributes)
         update_product_stock(attributes['location_quantities'])
         update_product_classifications(attributes['product_category'])
       end
       sync_logs.synced_products += 1
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
+
+      RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
 
       @product
     rescue => e
@@ -33,30 +34,29 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
     # Create/update product, product variant and product price
     def create_or_update_product(attributes)
-      product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
+      @product = Spree::Product.find_or_initialize_by(repair_shopr_id: attributes['id'])
 
       # Set attributes at a Spree::Product level
-      product.attributes = {
+      @product.attributes = {
         description: attributes['description'],
         name: attributes['name']
       }
 
       # Set attributes at Spree::Variant level
-      product.master.attributes = {
+      @product.master.attributes = {
         sku: attributes['upc_code'] || '',
         cost_price: attributes['price_cost']
       }
 
       # Set attributes at a Spree::Price level
-      product.price = attributes['price_retail']
+      @product.price = attributes['price_retail']
 
-      if product.new_record?
-        product.available_on = Date.today
-        product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id
+      if @product.new_record?
+        @product.available_on = Date.today
+        @product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id
       end
 
-      product.save!
-      product
+      @product.save!
     end
 
     # Location quantities is a RepairShopr array with the product stock information on each store

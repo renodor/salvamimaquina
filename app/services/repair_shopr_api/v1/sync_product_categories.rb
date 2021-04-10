@@ -9,7 +9,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy_id) || raise('Categories Taxon is needed')
 
       # Fetch all product categories from RepairShopr
-      product_categories = get_product_categories['categories']
+      product_categories = get_product_categories
       taxon_ids = nil
       deleted_taxons = nil
       Rails.logger.info('Start to sync product categories')

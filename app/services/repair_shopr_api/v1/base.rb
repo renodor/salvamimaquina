@@ -22,23 +22,19 @@ class RepairShoprApi::V1::Base
   class << self
     # rubocop:disable Naming/AccessorMethodName
     def get_products
-      request(http_method: :get, endpoint: 'products')
+      request(http_method: :get, endpoint: 'products')['products']
     end
 
     def get_product(id)
-      request(http_method: :get, endpoint: "products/#{id}")
+      request(http_method: :get, endpoint: "products/#{id}")['product']
     end
 
     def get_product_categories
-      request(http_method: :get, endpoint: 'products/categories')
+      request(http_method: :get, endpoint: 'products/categories')['categories']
     end
     # rubocop:enable Naming/AccessorMethodName
 
     private
-
-    # def sync_logs
-    #   @@sync_logs ||= RepairShoprProductsSyncLog.new # rubocop:disable Style/ClassVars
-    # end
 
     def client
       Faraday.new(API_PATH) do |client|
