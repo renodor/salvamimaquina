@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_29_003428) do
+ActiveRecord::Schema.define(version: 2021_04_10_175930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1029,6 +1029,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_003428) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.string "tax_code"
+    t.integer "repair_shopr_id"
   end
 
   create_table "spree_tax_rate_tax_categories", id: :serial, force: :cascade do |t|

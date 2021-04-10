@@ -6,11 +6,13 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Solidus relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/shop'
   namespace :shop do
-    get '/admin/sync', to: 'syncs#index', as: :sync
-    get '/admin/sync/everything', to: 'syncs#sync_everything', as: :sync_everything
-    get '/admin/sync/product_categories', to: 'syncs#sync_product_categories', as: :sync_product_categories
-    get '/admin/sync/products', to: 'syncs#sync_products', as: :sync_products
-    post '/admin/sync/product', to: 'syncs#sync_product', as: :sync_product
+    namespace :admin do
+      get '/sync', to: 'syncs#index'
+      get '/sync/everything', to: 'syncs#sync_everything'
+      get '/sync/product_categories', to: 'syncs#sync_product_categories'
+      get '/sync/products', to: 'syncs#sync_products'
+      post '/sync/product', to: 'syncs#sync_product'
+    end
   end
 
 

@@ -6,7 +6,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
       attributes ||= get_product(repair_shopr_id)
-
+      binding.pry
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")

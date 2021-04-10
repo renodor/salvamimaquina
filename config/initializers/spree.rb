@@ -106,11 +106,12 @@ Spree::Backend::Config.configure do |config|
   # Uncomment and change the following configuration if you want to add
   # a new menu item:
   #
-  # config.menu_items << config.class::MenuItem.new(
-  #   [:section],
-  #   'icon-name',
-  #   url: 'https://solidus.io/'
-  # )
+  config.menu_items << config.class::MenuItem.new(
+    [:sync_repair_shopr],
+    'arrow-down',
+    condition: -> { current_spree_user&.admin? },
+    url: '/shop/admin/sync'
+  )
 end
 
 Spree::Api::Config.configure do |config|
