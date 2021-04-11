@@ -18,8 +18,8 @@
 
 <h2>Sync a specific product and its product images</h2>
 <%= form_with url: shop_admin_sync_product_url, method: :post do |form| %>
-  <%= form.label :repair_shopr_product_id, "Select product" %>
-  <%= form.select :repair_shopr_product_id, options_for_select(@products) %>
+  <%= form.label :repair_shopr_product_id, "Product ID" %>
+  <%= form.number_field :repair_shopr_product_id %>
   <%= form.submit "Sync Product" %>
 <% end %>
 

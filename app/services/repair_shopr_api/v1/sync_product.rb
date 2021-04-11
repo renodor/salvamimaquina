@@ -6,7 +6,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
       attributes ||= get_product(repair_shopr_id)
-      binding.pry
+
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
@@ -27,8 +27,11 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
 
       @product
-    rescue => e
+    rescue ActiveRecord::ActiveRecordError => e
       sync_logs.sync_errors << { product_repair_shopr_id: attributes['id'], error: e }
+      false
+    rescue RepairShoprApi::V1::Base::NotFoundError
+      sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
       false
     end
 
@@ -66,7 +69,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     def update_product_stock(location_quantities)
       location_quantities.each do |location_quantity|
         stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
-        stock_item = @product.stock_items.find_by(stock_location: stock_location)
+        stock_item = @product.stock_items.find_by!(stock_location: stock_location)
         next unless stock_item.count_on_hand != location_quantity['quantity']
 
         absolute_difference = (stock_item.count_on_hand - location_quantity['quantity']).abs

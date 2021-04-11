@@ -21,8 +21,8 @@ class RepairShoprApi::V1::Base
 
   class << self
     # rubocop:disable Naming/AccessorMethodName
-    def get_products
-      request(http_method: :get, endpoint: 'products')['products']
+    def get_products(page = 1)
+      request(http_method: :get, endpoint: "products?page=#{page}")
     end
 
     def get_product(id)

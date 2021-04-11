@@ -5,9 +5,15 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
     def call(sync_logs:)
       Rails.logger.info('Start to sync products')
 
-      get_products.each do |product|
-        synced_product = RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs)
-        RepairShoprApi::V1::SyncProductImages.call(attributes: product, sync_logs: sync_logs) if synced_product
+      payload = get_products
+      total_pages = payload['meta']['total_pages']
+
+      total_pages.times do |n|
+        products = n.zero? ? payload['products'] : get_products(n + 1)['products']
+        products.each do |product|
+          synced_product = RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs)
+          RepairShoprApi::V1::SyncProductImages.call(attributes: product, sync_logs: sync_logs) if synced_product
+        end
       end
       Rails.logger.info('Products synced')
     end

@@ -5,7 +5,6 @@ class Shop::Admin::SyncsController < ApplicationController
   def index
     redirect_to '/shop/admin/login' and return unless current_spree_user&.admin?
 
-    @products = RepairShoprApi::V1::Base.get_products.map { |product| [product['name'], product['id']] }
     @sync_logs = RepairShoprProductsSyncLog.all.order(created_at: :desc)
   end
 
