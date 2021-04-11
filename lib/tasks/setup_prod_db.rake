@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 namespace :setup_prod_db do
   task run: %i[environment create_stock_locations create_taxonomy create_zone create_tax_category]
 
@@ -50,3 +51,4 @@ namespace :setup_prod_db do
     itbms_tax_rate.save!
   end
 end
+# rubocop:enable Metrics/BlockLength
