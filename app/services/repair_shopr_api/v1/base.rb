@@ -32,6 +32,10 @@ class RepairShoprApi::V1::Base
     def get_product_categories
       request(http_method: :get, endpoint: 'products/categories')['categories']
     end
+
+    def post_invoices(invoice)
+      request(http_method: :post, endpoint: 'invoices', params: invoice)
+    end
     # rubocop:enable Naming/AccessorMethodName
 
     private
