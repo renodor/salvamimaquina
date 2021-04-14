@@ -52,7 +52,11 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       }
 
       # Set attributes at a Spree::Price level
-      @product.price = attributes['price_retail']
+      # We need to deduce the tax from the retail price
+      # (To show product prices without tax on the shop, and add tax only at checkout)
+      tax_rate = Spree::TaxCategory.find_by!(repair_shopr_id: attributes['tax_rate_id']).tax_rates.first.amount
+      price_before_tax = attributes['price_retail'] - ((attributes['price_retail'] / (1 + tax_rate)) * tax_rate)
+      @product.price = price_before_tax
 
       if @product.new_record?
         @product.available_on = Date.today

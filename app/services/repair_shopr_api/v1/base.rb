@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class RepairShoprApi::V1::Base
-  API_PATH = "https://#{Rails.application.credentials.repair_shopr_subdomain}.repairshopr.com/api/v1"
-  API_KEY = Rails.application.credentials.repair_shopr_api_key
+  API_PATH = "https://#{Rails.application.credentials.repair_shopr_subdomain_test}.repairshopr.com/api/v1"
+  API_KEY = Rails.application.credentials.repair_shopr_api_key_test
 
   RepairShoprApiError = Class.new(StandardError)
   BadRequestError = Class.new(RepairShoprApiError)
@@ -21,6 +21,10 @@ class RepairShoprApi::V1::Base
 
   class << self
     # rubocop:disable Naming/AccessorMethodName
+    def me
+      request(http_method: :get, endpoint: 'me')
+    end
+
     def get_products(page = 1)
       request(http_method: :get, endpoint: "products?page=#{page}")
     end
@@ -35,6 +39,18 @@ class RepairShoprApi::V1::Base
 
     def post_invoices(invoice)
       request(http_method: :post, endpoint: 'invoices', params: invoice)
+    end
+
+    def get_customer_by_email(email)
+      request(http_method: :get, endpoint: "customers?email=#{email}")['customers'].first
+    end
+
+    def create_customer(customer_info)
+      request(http_method: :post, endpoint: 'customers', params: customer_info)
+    end
+
+    def update_customer(id, customer_info)
+      request(http_method: :put, endpoint: "customers/#{id}", params: customer_info)
     end
     # rubocop:enable Naming/AccessorMethodName
 
