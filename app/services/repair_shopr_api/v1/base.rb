@@ -3,6 +3,7 @@
 class RepairShoprApi::V1::Base
   API_PATH = "https://#{Rails.application.credentials.repair_shopr_subdomain_test}.repairshopr.com/api/v1"
   API_KEY = Rails.application.credentials.repair_shopr_api_key_test
+  RS_ROOT_CATEGORY_NAME = 'ecom'
 
   RepairShoprApiError = Class.new(StandardError)
   BadRequestError = Class.new(RepairShoprApiError)
@@ -35,7 +36,7 @@ class RepairShoprApi::V1::Base
 
     def get_product_categories
       product_categories = request(http_method: :get, endpoint: 'products/categories')['categories']
-      ecom_category_id = product_categories.detect { |product_category| product_category['name'] == 'ecom' }['id']
+      ecom_category_id = product_categories.detect { |product_category| product_category['name'] == RS_ROOT_CATEGORY_NAME }['id']
       # Returns only categories below the root category "ecom"
       product_categories.filter { |product_category| product_category['ancestry']&.include?(ecom_category_id.to_s) }
     end

@@ -13,7 +13,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       Spree::Product.transaction do
         # If product is disabled on RepairShopr, or does not belong to the "ecom" product category,
         # we just delete it from Solidus database
-        if attributes['disabled'] || !attributes['product_category']&.include?('ecom')
+        if attributes['disabled'] || !attributes['product_category']&.include?(RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME)
           sync_logs.deleted_products += 1 if Spree::Product.find_by(repair_shopr_id: attributes['id'])&.destroy!
           return
         end
@@ -92,7 +92,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
     # (In RepairShopr a product can belong to only one product category, so to only one classification in Solidus)
     def update_product_classifications(product_category)
-      taxon_name = product_category == 'ecom' ? 'Categories' : product_category.split(';').last
+      taxon_name = product_category == RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME ? 'Categories' : product_category.split(';').last
       taxon = Spree::Taxon.find_by!(name: taxon_name, taxonomy_id: Spree::Taxonomy.find_by!(name: 'Categories').id) # TODO: memoize "Categories" taxonomy id
       Spree::Classification.find_or_initialize_by(product_id: @product.id).update!(taxon_id: taxon.id)
     end
