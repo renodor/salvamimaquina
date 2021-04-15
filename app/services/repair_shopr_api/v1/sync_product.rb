@@ -11,8 +11,9 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
       Spree::Product.transaction do
-        # If product is disabled on RepairShopr, we just delete it from Solidus database
-        if attributes['disabled']
+        # If product is disabled on RepairShopr, or does not belong to the "ecom" product category,
+        # we just delete it from Solidus database
+        if attributes['disabled'] || !attributes['product_category']&.include?('ecom')
           sync_logs.deleted_products += 1 if Spree::Product.find_by(repair_shopr_id: attributes['id'])&.destroy!
           return
         end
@@ -54,8 +55,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Set attributes at a Spree::Price level
       # We need to deduce the tax from the retail price
       # (To show product prices without tax on the shop, and add tax only at checkout)
-      tax_rate = Spree::TaxCategory.find_by!(repair_shopr_id: attributes['tax_rate_id']).tax_rates.first.amount
-      price_before_tax = attributes['price_retail'] - ((attributes['price_retail'] / (1 + tax_rate)) * tax_rate)
+      price_before_tax = attributes['price_retail'] - ((attributes['price_retail'] / 1.07) * 0.07)
       @product.price = price_before_tax
 
       if @product.new_record?
@@ -88,16 +88,13 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     end
 
     # Spree::Classification is the joining table between Spree::Product and Spree::Taxons
-    # If the product belong to one product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
-    # If not, we just delete any existing classifications for this product
+    # If the product belong to a specific product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
+    # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
     # (In RepairShopr a product can belong to only one product category, so to only one classification in Solidus)
     def update_product_classifications(product_category)
-      if product_category
-        taxon = Spree::Taxon.find_by!(name: product_category.split(';').last, taxonomy_id: Spree::Taxonomy.find_by!(name: 'Categories').id)
-        Spree::Classification.find_or_initialize_by(product_id: @product.id).update!(taxon_id: taxon.id)
-      else
-        @product.classifications.destroy_all
-      end
+      taxon_name = product_category == 'ecom' ? 'Categories' : product_category.split(';').last
+      taxon = Spree::Taxon.find_by!(name: taxon_name, taxonomy_id: Spree::Taxonomy.find_by!(name: 'Categories').id) # TODO: memoize "Categories" taxonomy id
+      Spree::Classification.find_or_initialize_by(product_id: @product.id).update!(taxon_id: taxon.id)
     end
   end
 end

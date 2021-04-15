@@ -34,7 +34,10 @@ class RepairShoprApi::V1::Base
     end
 
     def get_product_categories
-      request(http_method: :get, endpoint: 'products/categories')['categories']
+      product_categories = request(http_method: :get, endpoint: 'products/categories')['categories']
+      ecom_category_id = product_categories.detect { |product_category| product_category['name'] == 'ecom' }['id']
+      # Returns only categories below the root category "ecom"
+      product_categories.filter { |product_category| product_category['ancestry']&.include?(ecom_category_id.to_s) }
     end
 
     def post_invoices(invoice)

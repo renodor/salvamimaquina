@@ -9,6 +9,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy_id) || raise('Categories Taxon is needed')
 
       # Fetch all product categories from RepairShopr
+      # (Only the categories below the root category "ecom" will be returned)
       product_categories = get_product_categories
       taxon_ids = nil
       deleted_taxons = nil
@@ -39,7 +40,9 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       product_categories.map do |product_category|
         taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @categories_taxonomy_id)
         taxon.update!(name: product_category['name'], description: product_category['description'])
-        { taxon: taxon, parent: product_category['ancestry'] }
+        # Product category without "/" in ancestry has only one ancester, which is the root category "ecom"
+        # So we can put it directly under the @categories_taxon
+        { taxon: taxon, parent: product_category['ancestry'].include?('/') ? product_category['ancestry'] : nil }
       end
     end
 

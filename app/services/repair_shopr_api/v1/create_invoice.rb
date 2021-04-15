@@ -21,6 +21,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       if customer_id
         update_customer(customer_id, customer_info)
       else
+        customer_info[:referred_by] = 'ecom'
         customer_id = create_customer(customer_info)
       end
 
@@ -43,7 +44,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
           name: line_item.variant.description,
           product_id: line_item.product.repair_shopr_id,
           quantity: line_item.quantity,
-          price: line_item.price * (1 + line_item.tax_category.tax_rates.first.amount),
+          price: line_item.price * 1.07,
           taxable: true,
           upc_code: line_item.variant.sku,
           tax_rate_id: line_item.tax_category.repair_shopr_id,
