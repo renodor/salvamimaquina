@@ -10,7 +10,8 @@ class RepairShoprApi::V1::SyncProductImages < RepairShoprApi::V1::Base
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
       # The product we want to sync images for must exist on the first place
-      @product = Spree::Product.find_by!(repair_shopr_id: attributes['id'])
+      @variant = Spree::Variant.find_by!(repair_shopr_id: attributes['id'])
+      @product = @variant.product
       product_photos = attributes['photos']
       product_image_ids = []
       Rails.logger.info("Start to sync product photos for product with RepairShopr ID: #{attributes['id']}")
@@ -47,11 +48,11 @@ class RepairShoprApi::V1::SyncProductImages < RepairShoprApi::V1::Base
     def create_product_image(photo)
       image = @product.images.new(
         viewable_type: 'Spree::Variant',
-        viewable_id: @product.master.id,
+        viewable_id: @variant.id,
         repair_shopr_id: photo['id'],
         alt: @product.name
       )
-      image.attachment.attach(io: URI.parse(photo['photo_url']).open, filename: "#{@product.slug}-#{@product.master.sku}")
+      image.attachment.attach(io: URI.parse(photo['photo_url']).open, filename: "#{@product.slug}-#{@variant.sku}")
       image.save!
       image.id
     end

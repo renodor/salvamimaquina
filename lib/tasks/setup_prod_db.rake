@@ -2,7 +2,7 @@
 
 # rubocop:disable Metrics/BlockLength
 namespace :setup_prod_db do
-  task run: %i[environment create_stock_locations create_taxonomy create_zone create_tax_category]
+  task run: %i[environment create_stock_locations create_taxonomies create_zone create_tax_category]
 
   task :create_stock_locations do
     Rails.logger.info('Create Bella Vista and San Francisco Stock Locations')
@@ -20,9 +20,10 @@ namespace :setup_prod_db do
     Spree::StockLocation.where.not(repair_shopr_id: [1928, 1927]).destroy_all
   end
 
-  task :create_taxonomy do
-    Rails.logger.info('Create Categories Taxonomy')
+  task :create_taxonomies do
+    Rails.logger.info('Create Categories Taxonomies')
     Spree::Taxonomy.find_or_create_by(name: 'Categories')
+    Spree::Taxonomy.find_or_create_by(name: 'Brands')
   end
 
   task :create_zone do
