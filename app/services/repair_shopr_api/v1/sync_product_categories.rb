@@ -5,8 +5,8 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
     def call(sync_logs:)
       # Product categories (taxons) all belong to one parent taxon named "Categories",
       # that itself belong to one parent taxonomy names "Categories"
-      @categories_taxonomy_id = Spree::Taxonomy.find_by(name: 'Categories').id || raise('Categories Taxonomy is needed')
-      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy_id) || raise('Categories Taxon is needed')
+      @categories_taxonomy = Spree::Taxonomy.find_by(name: 'Categories') || raise('Categories Taxonomy is needed')
+      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy.id) || raise('Categories Taxon is needed')
 
       # Fetch all product categories from RepairShopr
       # (Only the categories below the root category "ecom" will be returned)
@@ -18,9 +18,9 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
         taxons_and_parents = create_or_update_taxons_and_flatten_hierarchy(product_categories)
         taxon_ids = update_taxons_hierarchy(taxons_and_parents)
 
-        # All taxons that are not present in the taxon_ids array or is not the categories_taxon
+        # All taxons, belonging to categories taxonomy, that are not present in the taxon_ids array or is not the categories_taxon
         # need to be deleted (It means they have been deleted from RepairShopr)
-        deleted_taxons = Spree::Taxon.where.not(id: taxon_ids + [@categories_taxon.id]).destroy_all
+        deleted_taxons = @categories_taxonomy.taxons.where.not(id: taxon_ids + [@categories_taxon.id]).destroy_all
       end
 
       sync_logs.synced_product_categories = taxon_ids.size
@@ -38,7 +38,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
     # (We need this first step because we can't put a taxon below a parent that does not exist yet...)
     def create_or_update_taxons_and_flatten_hierarchy(product_categories)
       product_categories.map do |product_category|
-        taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @categories_taxonomy_id)
+        taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @categories_taxonomy.id)
         taxon.update!(name: product_category['name'], description: product_category['description'])
         # Product category without "/" in ancestry has only one ancester, which is the root category "ecom"
         # So we can put it directly under the @categories_taxon

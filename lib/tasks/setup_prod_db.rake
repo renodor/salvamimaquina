@@ -22,8 +22,8 @@ namespace :setup_prod_db do
 
   task :create_taxonomies do
     Rails.logger.info('Create Categories Taxonomies')
-    Spree::Taxonomy.find_or_create_by(name: 'Categories')
-    Spree::Taxonomy.find_or_create_by(name: 'Brands')
+    Spree::Taxonomy.find_or_create_by!(name: 'Categories').taxons.find_or_create_by!(name: 'Categories')
+    Spree::Taxonomy.find_or_create_by!(name: 'Brands').taxons.find_or_create_by(name: 'Brands')
   end
 
   task :create_zone do

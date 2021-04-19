@@ -53,15 +53,15 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
     # Create/update product, product variant and product price
     def create_or_update_product(attributes)
-      product_name = attributes['model'] || attributes['name']
+      if attributes['model']
+        @product = Spree::Product.find_by(name: attributes['model']) || Spree::Product.new
+        @product.name = attributes['model']
+      else
+        @product = Spree::Variant.find_by(repair_shopr_id: attributes['id'], is_master: true)&.product || Spree::Product.new
+        @product.name = attributes['name']
+      end
 
-      @product = Spree::Variant.find_by(repair_shopr_id: attributes['id'])&.product || Spree::Product.find_by(name: product_name) || Spree::Product.new
-
-      # Set attributes at a Spree::Product level
-      @product.attributes = {
-        name: product_name,
-        description: attributes['description']
-      }
+      @product.description = attributes['description']
 
       if @product.new_record?
         @product.available_on = Date.today
@@ -84,6 +84,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Set attributes at Spree::Variant level
       @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
 
+      old_product = @variant.product if @variant.product && @variant.product != @product
+
       @variant.attributes = {
         product_id: @product.id,
         is_master: attributes['model'].blank?,
@@ -99,7 +101,10 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       @variant.option_values = @variant_options[:option_values] || []
 
       @variant.price = price_before_tax(attributes['price_retail'])
+
       @variant.save!
+
+      old_product.destroy! if old_product && old_product.variants.blank?
     end
 
     # Location quantities is a RepairShopr array with the product stock information on each store
