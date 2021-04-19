@@ -120,6 +120,8 @@ end
 
 Spree.user_class = "Spree::LegacyUser"
 
+Rails.application.config.spree.calculators.shipping_methods << MyStore::Calculator::Shipping::CustomShippingCalculator
+
 # Rules for avoiding to store the current path into session for redirects
 # When at least one rule is matched, the request path will not be stored
 # in session.

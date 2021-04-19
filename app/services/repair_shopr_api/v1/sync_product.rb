@@ -38,20 +38,20 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
 
       @variant
-    # rescue ActiveRecord::ActiveRecordError => e
-    #   sync_logs.sync_errors << { product_repair_shopr_id: attributes['id'], error: e }
-    #   false
-    # rescue RepairShoprApi::V1::Base::NotFoundError
-    #   sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
-    #   false
-    # rescue => e
-    #   sync_logs.sync_errors << { error: e.message }
-    #   false
+    rescue ActiveRecord::ActiveRecordError => e
+      sync_logs.sync_errors << { product_repair_shopr_id: attributes['id'], error: e }
+      false
+    rescue RepairShoprApi::V1::Base::NotFoundError
+      sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
+      false
+    rescue => e
+      sync_logs.sync_errors << { error: e.message }
+      false
     end
 
     private
 
-    # Create/update product, product variant and product price
+    # Create/update Spree::Product
     def create_or_update_product(attributes)
       if attributes['model']
         @product = Spree::Product.find_by(name: attributes['model']) || Spree::Product.new
@@ -81,9 +81,11 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
     # Create/update Spree::Variant
     def create_or_update_variant(attributes)
-      # Set attributes at Spree::Variant level
       @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
 
+      # If variant had product (old_product), different from the one we are attaching it here (@product)
+      # we will maybe need to destroy it. But we need to do it after saving the variant
+      # otherwise the variant itself will be destroyed in the process
       old_product = @variant.product if @variant.product && @variant.product != @product
 
       @variant.attributes = {
@@ -99,11 +101,12 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
       # Add Spree::OptionValues to variant
       @variant.option_values = @variant_options[:option_values] || []
-
       @variant.price = price_before_tax(attributes['price_retail'])
 
       @variant.save!
 
+      # We need to destroy the old variant product if it has no other variants
+      # (It means it was a parent product for other variant that have all been destroyed or moved to another parent)
       old_product.destroy! if old_product && old_product.variants.blank?
     end
 
