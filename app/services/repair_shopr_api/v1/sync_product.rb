@@ -86,6 +86,19 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       else
         @variant = @product.master
         @variant.repair_shopr_id = attributes['id']
+
+        # This is very ugly but no time to find a better solution for now...
+        # The pb is I didn't find a way to relpace the master variant of a product (maybe need to create a custom Spree::Product instance method)
+        # So when the product is not a "model" (has no variant, but only one master), I can't replace its master by an already existing variant
+        # So if this variant was previously the variant of a "model" product, and now is not, it means it changed its product...
+        # So we need to recreate it and delete the old one
+
+        # Better solution idea:
+        # If product is new > its variants are necesarly new. So destroy all variants with repair_shopr_id == attributes['id'] and restart
+        # If product is not new > this variant is either its master, or a new variant. If its a new variant it may have belonged to an old product before...
+        # >>>> Maybe easier/cleaner to destroy/rebuild all the variants at every sync (products can stay like that)
+        possible_duplicate = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
+        possible_duplicate&.destroy! if possible_duplicate != @variant
       end
 
       # If variant had product (old_product), different from the one we are attaching it here (@product)
