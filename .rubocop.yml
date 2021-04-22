@@ -80,3 +80,6 @@ Lint/RaiseException:
 Lint/StructNewOverride:
   Enabled: true
 
+Naming/VariableNumber:
+  Enabled: false
+

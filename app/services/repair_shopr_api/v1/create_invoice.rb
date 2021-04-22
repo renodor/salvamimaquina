@@ -3,43 +3,60 @@
 class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
   class << self
     def call(order)
-      user_id = me['user_id'] # Todo: store this somewhere in an ENV variable... No need to call API if it won't change
+      @order = order
+      @user_id = me['user_id'] # TODO: store this somewhere in an ENV variable... No need to call API if it won't change
 
-      customer_id = get_customer_by_email(order.email)['id']
+      @customer_repair_shopr_id = create_or_update_customer
+      repair_shopr_invoice = build_repair_shopr_invoice
+      repair_shopr_invoice[:line_items] = build_repair_shopr_line_items
+      repair_shopr_invoice[:line_items] << build_repair_shopr_shipping
+
+      binding.pry
+      post_invoices(repair_shopr_invoice)
+      # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
+    end
+
+    def create_or_update_customer
+      ship_address = @order.ship_address
       customer_info = {
-        email: order.email,
-        first_name: order.bill_address.firstname,
-        last_name: order.bill_address.lastname,
-        fullname: order.bill_address.name,
-        address: order.bill_address.address1,
-        address_2: order.bill_address.address2,
-        city: order.bill_address.city,
-        state: order.bill_address.state.name,
-        phone: order.bill_address.phone
+        email: @order.email,
+        first_name: ship_address.firstname,
+        last_name: ship_address.lastname,
+        fullname: ship_address.name,
+        address: ship_address.address1,
+        address_2: ship_address.address2,
+        city: ship_address.city,
+        state: ship_address.state.name,
+        phone: ship_address.phone
       }
 
-      if customer_id
-        update_customer(customer_id, customer_info)
+      if (customer_repair_shopr_id = get_customer_by_email(@order.email)['id'])
+        update_customer(customer_repair_shopr_id, customer_info)
       else
         customer_info[:referred_by] = 'ecom'
-        customer_id = create_customer(customer_info)
+        customer_repair_shopr_id = create_customer(customer_info)
       end
 
-      repair_shopr_invoice = {
-        customer_id: customer_id,
-        balance_due: order.total,
-        number: order.number,
-        date: order.completed_at,
-        subtotal: order.item_total,
-        total: order.total,
-        tax: order.additional_tax_total,
-        is_paid: order.payment_state == 'paid',
-        location_id: define_invoice_location_id(order.shipments),
-        line_items: []
-      }
+      customer_repair_shopr_id
+    end
 
-      order.line_items.each do |line_item|
-        repair_shopr_invoice[:line_items] << {
+    def build_repair_shopr_invoice
+      {
+        customer_id: @customer_repair_shopr_id,
+        balance_due: @order.total,
+        number: @order.number,
+        date: @order.completed_at,
+        subtotal: @order.item_total,
+        total: @order.total,
+        tax: @order.additional_tax_total,
+        is_paid: @order.payment_state == 'paid',
+        location_id: define_invoice_location_id(@order.shipments)
+      }
+    end
+
+    def build_repair_shopr_line_items
+      @order.line_items.map do |line_item|
+        {
           item: line_item.variant.name,
           name: line_item.variant.description,
           product_id: line_item.variant.repair_shopr_id,
@@ -48,20 +65,19 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
           taxable: true,
           upc_code: line_item.variant.sku,
           tax_rate_id: line_item.tax_category.repair_shopr_id,
-          user_id: user_id
+          user_id: @user_id
         }
       end
+    end
 
-      repair_shopr_invoice[:line_items] << {
+    def build_repair_shopr_shipping
+      {
         item: 'Shipping',
         name: 'Shipping Cost',
         quantity: 1,
         taxable: false,
-        price: order.shipment_total
+        price: @order.shipment_total
       }
-
-      post_invoices(repair_shopr_invoice)
-      # Todo: send notif/error/email/anything... if invoice is not correctly created on RS...
     end
 
     # Bella Vista id = 1928
@@ -72,7 +88,6 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
     def define_invoice_location_id(shipments)
       stock_location_repair_shopr_ids = Hash.new(0)
       shipments.each do |shipment|
-        shipment.line_items.map(&:quantity).sum
         stock_location_repair_shopr_ids[shipment.stock_location.repair_shopr_id] += shipment.line_items.map(&:quantity).sum
       end
 

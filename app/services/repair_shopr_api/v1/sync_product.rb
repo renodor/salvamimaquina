@@ -25,8 +25,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         end
 
         add_product_attributes_from_notes(attributes) if attributes['notes'].present?
-        @variant_options = create_variant_options(attributes['variant_options']) if attributes['variant_options'].present?
-
+        # We need to nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
+        @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
         create_or_update_product(attributes)
         create_or_update_variant(attributes)
         update_product_stock(attributes['location_quantities'])
@@ -74,14 +74,19 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       end
 
       # Add Spree::OptionValues to variant
-      @product.option_types = @variant_options[:option_types] || []
+      @product.option_types = @variant_options ? @variant_options[:option_types] : []
 
       @product.save!
     end
 
     # Create/update Spree::Variant
     def create_or_update_variant(attributes)
-      @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
+      if attributes['model']
+        @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
+      else
+        @variant = @product.master
+        @variant.repair_shopr_id = attributes['id']
+      end
 
       # If variant had product (old_product), different from the one we are attaching it here (@product)
       # we will maybe need to destroy it. But we need to do it after saving the variant
@@ -89,6 +94,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       old_product = @variant.product if @variant.product && @variant.product != @product
 
       @variant.attributes = {
+        repair_shopr_name: attributes['name'],
         product_id: @product.id,
         is_master: attributes['model'].blank?,
         sku: attributes['upc_code'] || '',
@@ -100,7 +106,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       }
 
       # Add Spree::OptionValues to variant
-      @variant.option_values = @variant_options[:option_values] || []
+      @variant.option_values = @variant_options ? @variant_options[:option_values] : []
       @variant.price = price_before_tax(attributes['price_retail'])
 
       @variant.save!
