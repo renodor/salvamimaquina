@@ -6,6 +6,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
       attributes ||= get_product(repair_shopr_id)
+      add_product_attributes_from_notes if attributes['notes'].present?
 
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
@@ -13,29 +14,35 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       Spree::Variant.transaction do
         # If product already exists in Solidus but,
         # is disabled on RS, or does not belong to the RS "ecom" product category,
-        # we just delete it from Solidus database
+        # we need to delete it from Solidus database if it exists, and 
         variant_is_excluded_from_ecom = !attributes['product_category']&.include?(RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME)
+        existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
         if attributes['disabled'] || variant_is_excluded_from_ecom
-          if (already_existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id']))
-            already_existing_variant.destroy!
-            already_existing_variant.product.destroy! if variant.is_master?
+          if existing_variant
+            product = existing_variant.product
+            existing_variant.destroy!
+            product.destroy if product.variants.blank?
             sync_logs.deleted_products += 1
           end
           return
         end
+        destroy_variant_if_product_change(attributes, existing_variant) if existing_variant&.reload
 
-        add_product_attributes_from_notes(attributes) if attributes['notes'].present?
         # We need to nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
         @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
-        create_or_update_product(attributes)
-        create_or_update_variant(attributes)
+
+        initialize_product_and_variant(attributes)
+
+        assign_product_attributes(attributes)
+        assign_variant_attributes(attributes)
+
         update_product_stock(attributes['location_quantities'])
         update_product_classifications(attributes['product_category'], attributes['brand'])
       end
       sync_logs.synced_products += 1
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
 
-      RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
+      # RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
 
       @variant
     rescue ActiveRecord::ActiveRecordError => e
@@ -51,61 +58,46 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
     private
 
-    # Create/update Spree::Product
-    def create_or_update_product(attributes)
+    # If a variant changes its product (If it goes to another model, or if it has been removed from a model),
+    # we need to destroy it, because there is no way to pass a variant from a model to another
+    # And if the product has no other variants, we need to destroy it as well
+    def destroy_variant_if_product_change(attributes, existing_variant)
+      return unless (attributes['model'] && existing_variant.product.name != attributes['model']) || (attributes['model'].blank? && !existing_variant.is_master?)
+
+      product = existing_variant.product
+      existing_variant.destroy!
+      product.destroy if product.variants.blank?
+    end
+
+    def initialize_product_and_variant(attributes)
       if attributes['model']
-        @product = Spree::Product.find_by(name: attributes['model']) || Spree::Product.new
-        @product.name = attributes['model']
+        @product = Spree::Product.find_or_initialize_by(name: attributes['model'])
+        @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
       else
-        @product = Spree::Variant.find_by(repair_shopr_id: attributes['id'], is_master: true)&.product || Spree::Product.new
-        @product.name = attributes['name']
+        @product = Spree::Product.find_or_initialize_by(name: attributes['name'])
+        @variant = @product.master
+        @variant.repair_shopr_id = attributes['id']
       end
+    end
 
-      @product.description = attributes['description']
-
+    def assign_product_attributes(attributes)
       if @product.new_record?
         @product.available_on = Date.today
         @product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id
 
-        # Spree::Product.master needs a price for Spree::Product to be valid
-        # So we have to put one here even if there are several variants
-        # this master price will never really be used
+        # Spree::Product.master needs a price for Spree::Product to be valid, so we have to put one here
+        # however, if there are several variants, this master price will never really be used
         @product.master.price = price_before_tax(attributes['price_retail'])
       end
 
+      @product.description = attributes['description']
       # Add Spree::OptionValues to variant
       @product.option_types = @variant_options ? @variant_options[:option_types] : []
 
       @product.save!
     end
 
-    # Create/update Spree::Variant
-    def create_or_update_variant(attributes)
-      if attributes['model']
-        @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
-      else
-        @variant = @product.master
-        @variant.repair_shopr_id = attributes['id']
-
-        # This is very ugly but no time to find a better solution for now...
-        # The pb is I didn't find a way to relpace the master variant of a product (maybe need to create a custom Spree::Product instance method)
-        # So when the product is not a "model" (has no variant, but only one master), I can't replace its master by an already existing variant
-        # So if this variant was previously the variant of a "model" product, and now is not, it means it changed its product...
-        # So we need to recreate it and delete the old one
-
-        # Better solution idea:
-        # If product is new > its variants are necesarly new. So destroy all variants with repair_shopr_id == attributes['id'] and restart
-        # If product is not new > this variant is either its master, or a new variant. If its a new variant it may have belonged to an old product before...
-        # >>>> Maybe easier/cleaner to destroy/rebuild all the variants at every sync (products can stay like that)
-        possible_duplicate = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
-        possible_duplicate&.destroy! if possible_duplicate != @variant
-      end
-
-      # If variant had product (old_product), different from the one we are attaching it here (@product)
-      # we will maybe need to destroy it. But we need to do it after saving the variant
-      # otherwise the variant itself will be destroyed in the process
-      old_product = @variant.product if @variant.product && @variant.product != @product
-
+    def assign_variant_attributes(attributes)
       @variant.attributes = {
         repair_shopr_name: attributes['name'],
         product_id: @product.id,
@@ -123,10 +115,6 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       @variant.price = price_before_tax(attributes['price_retail'])
 
       @variant.save!
-
-      # We need to destroy the old variant product if it has no other variants
-      # (It means it was a parent product for other variant that have all been destroyed or moved to another parent)
-      old_product.destroy! if old_product && old_product.variants.blank?
     end
 
     # Location quantities is a RepairShopr array with the product stock information on each store
