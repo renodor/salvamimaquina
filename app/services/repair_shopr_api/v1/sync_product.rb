@@ -46,7 +46,6 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       sync_logs.synced_products += 1
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
 
-
       @variant
     rescue ActiveRecord::ActiveRecordError => e
       sync_logs.sync_errors << { product_repair_shopr_id: attributes['id'], error: e }
@@ -103,10 +102,10 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         @product.master.price = price_before_tax(attributes['price_retail'])
       end
 
-      @product.assign_attributes = {
+      @product.assign_attributes(
         description: attributes['description'],
         meta_description: "#{@product.name} - #{attributes['description']}",
-      }
+      )
 
       # Add Spree::OptionTypes to product
       @product.option_types = @variant_options ? @variant_options[:option_types] : []
@@ -115,7 +114,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     end
 
     def assign_variant_attributes(attributes)
-      @variant.assign_attributes = {
+      @variant.assign_attributes(
         repair_shopr_name: attributes['name'],
         product_id: @product.id,
         is_master: attributes['model'].blank?,
@@ -125,7 +124,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         width: attributes['width'],
         height: attributes['height'],
         depth: attributes['depth']
-      }
+      )
 
       # Add Spree::OptionValues to variant
       @variant.option_values = @variant_options ? @variant_options[:option_values] : []
