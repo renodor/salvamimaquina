@@ -40,11 +40,12 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
         update_product_stock(attributes['location_quantities'])
         update_product_classifications(attributes['product_category'], attributes['brand'])
+
+        RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs) unless variant_needs_to_be_excluded?(attributes)
       end
       sync_logs.synced_products += 1
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
 
-      # RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
 
       @variant
     rescue ActiveRecord::ActiveRecordError => e
@@ -76,7 +77,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     def destroy_variant_and_destroy_product_if_it_has_no_other_variants(variant)
       product = variant.product
       variant.destroy!
-      product.destroy! if product.variants.blank?
+      product.destroy! unless product.has_variants?
     end
 
     def initialize_product_and_variant(attributes)
@@ -84,7 +85,9 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         @product = Spree::Product.find_or_initialize_by(name: attributes['model'])
         @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
       else
-        @product = Spree::Product.find_or_initialize_by(name: attributes['name'])
+        @product = Spree::Variant.find_by(repair_shopr_id: attributes['id'])&.product || Spree::Product.new
+        @product.name = attributes['name']
+
         @variant = @product.master
         @variant.repair_shopr_id = attributes['id']
       end

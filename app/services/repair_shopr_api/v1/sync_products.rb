@@ -11,8 +11,7 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
       total_pages.times do |n|
         products = n.zero? ? payload['products'] : get_products(n + 1)['products']
         products.each do |product|
-          synced_product = RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs)
-          RepairShoprApi::V1::SyncProductImages.call(attributes: product, sync_logs: sync_logs) if synced_product
+          RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs)
         end
       end
       Rails.logger.info('Products synced')
