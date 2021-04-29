@@ -6,29 +6,31 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
       attributes ||= get_product(repair_shopr_id)
-      add_product_attributes_from_notes if attributes['notes'].present?
+      add_product_attributes_from_notes(attributes) if attributes['notes'].present?
 
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
       Spree::Variant.transaction do
-        # If product already exists in Solidus but,
-        # is disabled on RS, or does not belong to the RS "ecom" product category,
-        # we need to delete it from Solidus database if it exists, and 
-        variant_is_excluded_from_ecom = !attributes['product_category']&.include?(RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME)
         existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
-        if attributes['disabled'] || variant_is_excluded_from_ecom
+
+        # If variant needs to be excluded from Solidus, we can return and stop the syncing process here
+        if variant_needs_to_be_excluded?(attributes)
+          # But if the variant currently exists in Solidus database,
+          # we need to destroy it, increment the deleted product count, and stop the syncing process
           if existing_variant
-            product = existing_variant.product
-            existing_variant.destroy!
-            product.destroy if product.variants.blank?
+            destroy_variant_and_destroy_product_if_it_has_no_other_variants(existing_variant)
             sync_logs.deleted_products += 1
           end
           return
         end
-        destroy_variant_if_product_change(attributes, existing_variant) if existing_variant&.reload
 
-        # We need to nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
+        # If variant needs to be assigned to a new product,
+        # we need to destroy it, because there is currently no way to assign an existing variant to another product in Solidus.
+        # And we need to continue the syncing process in order to create the new variant and assign it to its new product
+        destroy_variant_and_destroy_product_if_it_has_no_other_variants(existing_variant) if existing_variant && variant_needs_to_be_assigned_to_new_product?(existing_variant, attributes)
+
+        # Nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
         @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
 
         initialize_product_and_variant(attributes)
@@ -58,15 +60,23 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
     private
 
-    # If a variant changes its product (If it goes to another model, or if it has been removed from a model),
-    # we need to destroy it, because there is no way to pass a variant from a model to another
-    # And if the product has no other variants, we need to destroy it as well
-    def destroy_variant_if_product_change(attributes, existing_variant)
-      return unless (attributes['model'] && existing_variant.product.name != attributes['model']) || (attributes['model'].blank? && !existing_variant.is_master?)
+    # If variant is disabled or does not belong to the "ecom" product category
+    # It means it needs to be excluded from solidus
+    def variant_needs_to_be_excluded?(attributes)
+      attributes['disabled'] || !attributes['product_category']&.include?(RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME)
+    end
 
-      product = existing_variant.product
-      existing_variant.destroy!
-      product.destroy if product.variants.blank?
+    # If a variant goes from one model to another (The current model name is different from the syncing model name),
+    # or if it is removed from a model (The syncing variant does not have model, but the current variant is not the master variant)
+    # It means this variant needs to be assigned to a new product
+    def variant_needs_to_be_assigned_to_new_product?(variant, attributes)
+      (attributes['model'] && variant.product.name != attributes['model']) || (attributes['model'].blank? && !variant.is_master?)
+    end
+
+    def destroy_variant_and_destroy_product_if_it_has_no_other_variants(variant)
+      product = variant.product
+      variant.destroy!
+      product.destroy! if product.variants.blank?
     end
 
     def initialize_product_and_variant(attributes)
