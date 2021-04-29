@@ -103,15 +103,19 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         @product.master.price = price_before_tax(attributes['price_retail'])
       end
 
-      @product.description = attributes['description']
-      # Add Spree::OptionValues to variant
+      @product.assign_attributes = {
+        description: attributes['description'],
+        meta_description: "#{@product.name} - #{attributes['description']}",
+      }
+
+      # Add Spree::OptionTypes to product
       @product.option_types = @variant_options ? @variant_options[:option_types] : []
 
       @product.save!
     end
 
     def assign_variant_attributes(attributes)
-      @variant.attributes = {
+      @variant.assign_attributes = {
         repair_shopr_name: attributes['name'],
         product_id: @product.id,
         is_master: attributes['model'].blank?,
@@ -164,7 +168,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
       brand_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands')
       brand_parent_taxon = brand_taxonomy.taxons.find_by(parent_id: nil)
-      taxon = Spree::Taxon.find_or_create_by!(name: brand, taxonomy_id: brand_taxonomy.id, parent_id: brand_parent_taxon.id)
+      taxon = Spree::Taxon.find_or_create_by!(name: brand, taxonomy_id: brand_taxonomy.id, parent_id: brand_parent_taxon.id) # TODO: memoize "Brand" taxonomy id
       Spree::Classification.find_or_initialize_by(product_id: @variant.product.id).update!(taxon_id: taxon.id)
     end
 
