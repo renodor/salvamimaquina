@@ -33,7 +33,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         update_product_stock(attributes['location_quantities'])
         update_product_classifications(attributes['product_category'], attributes['brand'])
 
-        RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs) unless variant_needs_to_be_excluded?(attributes)
+        RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
       end
       sync_logs.synced_products += 1
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
