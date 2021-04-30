@@ -19,6 +19,7 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
         product = variant.product
         variant.destroy!
         product.destroy! unless product.has_variants?
+        sync_logs.deleted_products += 1
       end
 
       Rails.logger.info('Products synced')
