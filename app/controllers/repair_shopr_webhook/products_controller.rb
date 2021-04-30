@@ -12,6 +12,7 @@ class RepairShoprWebhook::ProductsController < ApplicationController
       # Instead just get the product id and fetch attributes of this product directly on RepairShopr
       RepairShoprApi::V1::SyncProduct.call(sync_logs: RepairShoprProductsSyncLog.new, repair_shopr_id: params['attributes']['id'])
     elsif (variant = Spree::Variant.find_by(repair_shopr_id: params['attributes']['id']))
+      product = variant.product
       variant.destroy!
       product.destroy! unless product.has_variants?
     end
