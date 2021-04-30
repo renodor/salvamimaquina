@@ -17,7 +17,9 @@ namespace :setup_prod_db do
       backorderable_default: false
     )
 
-    Spree::StockLocation.where.not(repair_shopr_id: [1928, 1927]).destroy_all
+    Spree::StockLocation.where.not(repair_shopr_id: [1928, 1927])
+                        .or(Spree::StockLocation.where(repair_shopr_id: nil))
+                        .destroy_all
   end
 
   task :create_taxonomies do
