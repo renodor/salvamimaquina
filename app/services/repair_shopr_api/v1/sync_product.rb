@@ -12,18 +12,6 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
       Spree::Variant.transaction do
         existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
-
-        # If variant needs to be excluded from Solidus, we can return and stop the syncing process here
-        if variant_needs_to_be_excluded?(attributes)
-          # But if the variant currently exists in Solidus database,
-          # we need to destroy it, increment the deleted product count, and stop the syncing process
-          if existing_variant
-            destroy_variant_and_destroy_product_if_it_has_no_other_variants(existing_variant)
-            sync_logs.deleted_products += 1
-          end
-          return
-        end
-
         add_product_attributes_from_notes(attributes) if attributes['notes'].present?
 
         # If variant needs to be assigned to a new product,
