@@ -23,11 +23,6 @@ class Shop::Admin::SyncsController < ApplicationController
     redirect_to shop_admin_sync_path
   end
 
-  def sync_product
-    RepairShoprApi::V1::SyncProduct.call(sync_logs: @sync_logs, repair_shopr_id: params[:repair_shopr_product_id])
-    redirect_to shop_admin_sync_path
-  end
-
   private
 
   def set_sync_logs
