@@ -6,7 +6,6 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Fetch product attributes from RepairShopr,
       # or take the one given as an argument
       attributes ||= get_product(repair_shopr_id)
-      add_product_attributes_from_notes(attributes) if attributes['notes'].present?
 
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
@@ -24,6 +23,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
           end
           return
         end
+
+        add_product_attributes_from_notes(attributes) if attributes['notes'].present?
 
         # If variant needs to be assigned to a new product,
         # we need to destroy it, because there is currently no way to assign an existing variant to another product in Solidus.
