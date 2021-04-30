@@ -26,8 +26,27 @@ class RepairShoprApi::V1::Base
       request(http_method: :get, endpoint: 'me')
     end
 
-    def get_products(page = 1)
-      request(http_method: :get, endpoint: "products?page=#{page}")
+    # Only retrieve enabled products, belonging to "ecom" category or sub categories
+    def get_products
+      # Find all categories bellow "ecom" category, get their ids
+      product_categorie_ids = get_product_categories.map { |category| category['id'] }
+      products = []
+
+      # Only fetch products belonging to those categories
+      product_categorie_ids.each do |product_category_id|
+        payload = request(http_method: :get, endpoint: "products?category_id=#{product_category_id}")
+
+        # Fetch every pages
+        # For the first iteration (n == 0), we already have the payload, we got it in order to have the total pages
+        # For other iterations, we need to fetch the payload again at the correct page (starting at page 2)
+        # And each time we need to exclude disabled products
+        payload['meta']['total_pages'].times do |n|
+          payload = request(http_method: :get, endpoint: "products?category_id=#{product_category_id}&page=#{n + 1}") if n.positive?
+          products += payload['products'].reject { |product| product['disabled'] }
+        end
+      end
+
+      products
     end
 
     def get_product(id)
