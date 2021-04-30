@@ -15,6 +15,7 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
       # Destroy products that are on Solidus but where not fetched on RepairShopr
       # (They were probably disabled on RepairShoper, or removed from the ecom category)
       variants_to_destroy = Spree::Variant.where.not(repair_shopr_id: products.map { |product| product['id'] })
+                                          .or(Spree::Variant.where(repair_shopr_id: nil))
       variants_to_destroy.each do |variant|
         product = variant.product
         variant.destroy!
