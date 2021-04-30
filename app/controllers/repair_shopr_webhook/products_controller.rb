@@ -3,7 +3,7 @@ class RepairShoprWebhook::ProductsController < ApplicationController
 
   def product_updated
     # Only accept requests coming from the correct RS sender
-    return unless params['link'].include?("https://#{Rails.application.credentials.repair_shopr_subdomain_test}.repairshopr.com/products/")
+    return unless params['link'].include?("https://#{Rails.application.credentials.repair_shopr_subdomain}.repairshopr.com/products/")
 
     # Only sync products belonging to the "ecom" category
     return unless params['attributes']['product_categories'].includes?(RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME)
