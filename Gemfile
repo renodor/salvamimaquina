@@ -38,11 +38,16 @@ gem 'faraday'
 gem 'oj'
 
 # Exception management
-gem 'sentry-ruby'
 gem 'sentry-rails'
+gem 'sentry-ruby'
 
 # Image storage
 gem 'cloudinary', '~> 1.19'
+
+# I18n
+gem 'solidus_i18n', '~> 2.0'
+gem 'rails-i18n'
+gem 'kaminari-i18n', '~> 0.5.0'
 
 group :development, :test do
   # For debugging

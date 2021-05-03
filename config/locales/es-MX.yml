@@ -1,0 +1,7 @@
+es-MX:
+  spree:
+    billing_address: 'Dirección'
+    adjustment_labels:
+      tax_rates:
+        sales_tax: "%{name}"
+        sales_tax_with_rate: "%{name}"

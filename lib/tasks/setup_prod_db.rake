@@ -2,7 +2,14 @@
 
 # rubocop:disable Metrics/BlockLength
 namespace :setup_prod_db do
-  task run: %i[environment create_stock_locations create_taxonomies create_zone create_tax_category]
+  task run: %i[
+    environment
+    create_stock_locations
+    create_taxonomies
+    create_zone create_tax_category
+    create_panama_city_corregimientos
+    destroy_countries_and_states_out_of_panama
+  ]
 
   task :create_stock_locations do
     Rails.logger.info('Create Bella Vista and San Francisco Stock Locations')
@@ -52,6 +59,46 @@ namespace :setup_prod_db do
     itbms_tax_rate.tax_categories = [itbms_tax_category]
     itbms_tax_rate.calculator = calculator
     itbms_tax_rate.save!
+  end
+
+  task :create_panama_city_corregimientos do
+    Rails.logger.info('Create Panama City corregimientos')
+    panama_state_id = Spree::State.find_by(name: 'Panamá').id
+    corregimientos = [
+      '24 de Diciembre',
+      'Ancón',
+      'Betania',
+      'Bella Vista',
+      'Calidonia',
+      'Curundú',
+      'Don Bosco',
+      'El Chorrillo',
+      'Juan Díaz',
+      'Parque Lefevre',
+      'Pueblo Nuevo',
+      'Río Abajo',
+      'San Felipe',
+      'San Francisco',
+      'Santa Ana',
+      'Tocumen'
+    ]
+    district_ids = []
+
+    corregimientos.each do |corregimiento|
+      district = District.find_or_create_by!(name: corregimiento, spree_state_id: panama_state_id)
+      district_ids << district.id
+    end
+
+    District.where.not(id: district_ids).destroy_all
+  end
+
+  task :destroy_countries_and_states_out_of_panama do
+    Rails.logger.info('Destroy countries and states out of Panama')
+
+    panama_id = Spree::Country.find_by(name: 'Panama').id
+
+    Spree::Country.where.not(id: panama_id).destroy_all
+    Spree::State.where.not(country_id: panama_id).destroy_all
   end
 end
 # rubocop:enable Metrics/BlockLength

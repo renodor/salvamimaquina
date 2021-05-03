@@ -39,17 +39,6 @@
     <%= form.text_field :city, class: 'required', autocomplete: address_type + ' address-level2',  required: true %>
   </div>
 
-  <div class="field field-required" id=<%="#{address_id}country" %>>
-    <%= form.label :country_id, t('spree.country') %>
-    <span id=<%="#{address_id}country-selection" %>>
-      <%= form.collection_select :country_id, available_countries, :id, :name, {},
-          class: 'required',
-          autocomplete: address_type + ' country-name',
-          required: true
-        %>
-    </span>
-  </div>
-
   <% if Spree::Config[:address_requires_state] %>
     <div class="field field-required" id=<%="#{address_id}state" %>>
       <% have_states = !address.country.states.empty? %>
@@ -83,9 +72,11 @@
     </div>
   <% end %>
 
-  <div class="field <%= 'field-required' if address.require_zipcode? %>" id=<%="#{address_id}zipcode" %>>
-    <%= form.label :zipcode, t('spree.zip') %>
-    <%= form.text_field :zipcode, class: "#{'required' if address.require_zipcode?}", autocomplete: address_type + ' postal-code',  required: true %>
+  <div class="field" id=<%="#{address_id}country" %>>
+    <%= form.label :country_id, t('spree.country') %>
+    <br />
+    <span>Panamá</span>
+    <%= form.hidden_field :country_id, value: Spree::Country.find_by(name: 'Panama').id %>
   </div>
 
   <div class="field <%= 'field-required' if address.require_phone? %>" id=<%="#{address_id}phone" %>>
