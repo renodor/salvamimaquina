@@ -18,7 +18,9 @@
 
 
 // Internal imports
+import { addressForm } from '../components/address_form';
 import { initMapbox } from '../plugins/init_mapbox';
 
 // Call your functions here
+addressForm();
 initMapbox();

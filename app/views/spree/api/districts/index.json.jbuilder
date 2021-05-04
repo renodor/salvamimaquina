@@ -1,0 +1,1 @@
+json.districts(@districts)

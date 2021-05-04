@@ -1,4 +1,4 @@
-class Shop::Admin::SyncsController < ApplicationController
+class Spree::Admin::SyncsController < ApplicationController
   before_action :set_sync_logs, except: :index
   after_action :save_sync_logs, except: :index
 

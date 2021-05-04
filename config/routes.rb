@@ -5,13 +5,18 @@ Rails.application.routes.draw do
   #
   # We ask that you don't use the :as option here, as Solidus relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/shop'
-  namespace :shop do
+
+  Spree::Core::Engine.routes.draw do
     namespace :admin do
       get '/sync', to: 'syncs#index'
       get '/sync/everything', to: 'syncs#sync_everything'
       get '/sync/product_categories', to: 'syncs#sync_product_categories'
       get '/sync/products', to: 'syncs#sync_products'
       post '/sync/product', to: 'syncs#sync_product'
+    end
+
+    namespace :api, defaults: { format: 'json' } do
+      resources :districts, only: :index
     end
   end
 

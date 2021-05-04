@@ -85,7 +85,7 @@ namespace :setup_prod_db do
     district_ids = []
 
     corregimientos.each do |corregimiento|
-      district = District.find_or_create_by!(name: corregimiento, spree_state_id: panama_state_id)
+      district = District.find_or_create_by!(name: corregimiento, state_id: panama_state_id)
       district_ids << district.id
     end
 

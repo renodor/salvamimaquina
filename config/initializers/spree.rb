@@ -10,6 +10,9 @@ Spree.config do |config|
   # from address for transactional emails
   config.mails_from = "store@example.com"
 
+  # set Panama has the default country
+  config.default_country_iso = 'PA'
+
   # Use combined first and last name attribute in HTML views and API responses
   config.use_combined_first_and_last_name_in_address = true
 
