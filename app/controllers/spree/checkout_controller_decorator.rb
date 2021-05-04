@@ -32,7 +32,9 @@ module Spree::CheckoutControllerDecorator
     @order.bill_address ||= Spree::Address.build_default
     @order.ship_address ||= Spree::Address.build_default if @order.checkout_steps.include?('delivery')
 
-    @panama_state_id = Spree::State.find_by(name: 'Panamá').id
+    # Set Panama as a default state and default city
+    @order.ship_address.state ||= Spree::State.find_by(name: 'Panamá')
+    @order.ship_address.city ||= 'Panamá'
   end
 
   Spree::CheckoutController.prepend self

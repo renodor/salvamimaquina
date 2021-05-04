@@ -1,5 +1,6 @@
 es-MX:
   spree:
+    district: 'Corregimiento'
     billing_address: 'Dirección'
     adjustment_labels:
       tax_rates:
