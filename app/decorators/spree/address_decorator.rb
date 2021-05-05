@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module MyStore
+module Spree
   module AddressDecorator
     def self.prepended(base)
-      base.belongs_to :district
+      base.belongs_to :district, optional: true
     end
 
     def require_zipcode?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MyStore
+module Spree
   module StateDecorator
     def self.prepended(base)
       base.has_many :districts
