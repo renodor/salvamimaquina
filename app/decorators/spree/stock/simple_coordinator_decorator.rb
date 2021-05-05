@@ -4,7 +4,7 @@
 # The modification happend at line 34 and 35:
 # - we add an index argument to the iteration
 # - we assign a package_index to each package
-module MyStore
+module Spree
   module Stock
     module SimpleCoordinatorDecorator
       def build_shipments

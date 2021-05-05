@@ -83,7 +83,7 @@
     <span class="js-address-fields" style="display: none;">
       <%=
         form.collection_select(
-          :state_id, address.state.districts, :id, :name,
+          :district_id, address.state.districts, :id, :name,
           {
             class: have_states ? 'required' : '',
             style: have_states ? '' : 'display: none;',

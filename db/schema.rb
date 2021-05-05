@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_224801) do
+ActiveRecord::Schema.define(version: 2021_05_05_223300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,7 +110,9 @@ ActiveRecord::Schema.define(version: 2021_05_03_224801) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.string "name"
+    t.bigint "district_id"
     t.index ["country_id"], name: "index_spree_addresses_on_country_id"
+    t.index ["district_id"], name: "index_spree_addresses_on_district_id"
     t.index ["firstname"], name: "index_addresses_on_firstname"
     t.index ["lastname"], name: "index_addresses_on_lastname"
     t.index ["name"], name: "index_spree_addresses_on_name"

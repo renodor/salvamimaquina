@@ -5,7 +5,7 @@
 # so the first package of the order will have package_index = 0,
 # the second package_index = 1 etc...
 # We use this information later to create a shipping cost calculator that will add a price only to the first package
-module MyStore
+module Spree
   module Stock
     module PackageDecorator
       attr_accessor :shipment, :package_index
