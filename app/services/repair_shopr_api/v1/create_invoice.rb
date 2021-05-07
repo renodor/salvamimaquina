@@ -11,7 +11,6 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       repair_shopr_invoice[:line_items] = build_repair_shopr_line_items
       repair_shopr_invoice[:line_items] << build_repair_shopr_shipping
 
-      binding.pry
       post_invoices(repair_shopr_invoice)
       # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
     end

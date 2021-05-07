@@ -2,6 +2,7 @@ es-MX:
   spree:
     district: 'Corregimiento'
     billing_address: 'Dirección'
+    apply_code: 'Aplicar código'
     adjustment_labels:
       tax_rates:
         sales_tax: "%{name}"

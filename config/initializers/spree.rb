@@ -121,9 +121,9 @@ Spree::Api::Config.configure do |config|
   config.requires_authentication = true
 end
 
-Spree.user_class = "Spree::LegacyUser"
+Spree.user_class = 'Spree::LegacyUser'
 
-Rails.application.config.spree.calculators.shipping_methods << MyStore::Calculator::Shipping::CustomShippingCalculator
+Rails.application.config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::CustomShippingCalculator
 
 # Rules for avoiding to store the current path into session for redirects
 # When at least one rule is matched, the request path will not be stored
