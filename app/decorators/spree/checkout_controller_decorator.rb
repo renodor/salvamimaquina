@@ -3,7 +3,6 @@
 module Spree
   module CheckoutControllerDecorator
     def update_params
-      binding.pry
       case params[:state].to_sym
       when :address
         # We won't do a billing/shipping address distinction
