@@ -65,27 +65,94 @@ namespace :setup_prod_db do
     Rails.logger.info('Create Panama City corregimientos')
     panama_state_id = Spree::State.find_by(name: 'Panamá').id
     corregimientos = [
-      '24 de Diciembre',
-      'Ancón',
-      'Betania',
-      'Bella Vista',
-      'Calidonia',
-      'Curundú',
-      'Don Bosco',
-      'El Chorrillo',
-      'Juan Díaz',
-      'Parque Lefevre',
-      'Pueblo Nuevo',
-      'Río Abajo',
-      'San Felipe',
-      'San Francisco',
-      'Santa Ana',
-      'Tocumen'
+      {
+        name: '24 de Diciembre',
+        longitude: -79.360813,
+        latitude: 9.099316
+      },
+      {
+        name: 'Ancón',
+        longitude: -79.549556,
+        latitude: 8.959927
+      },
+      {
+        name: 'Betania',
+        longitude: -79.526553,
+        latitude: 9.012151
+      },
+      {
+        name: 'Bella Vista',
+        longitude: -79.526022,
+        latitude: 8.983972
+      },
+      {
+        name: 'Calidonia',
+        longitude: -79.535817,
+        latitude: 8.968804
+      },
+      {
+        name: 'Curundú',
+        longitude: -79.543629,
+        latitude: 8.969860
+      },
+      {
+        name: 'Don Bosco',
+        longitude: -79.4153652,
+        latitude: 9.0494445
+      },
+      {
+        name: 'El Chorrillo',
+        longitude: -79.543442,
+        latitude: 8.950293
+      },
+      {
+        name: 'Juan Diaz',
+        longitude: -79.4589348,
+        latitude: 9.036498
+      },
+      {
+        name: 'Parque Lefevre',
+        longitude: -79.491183,
+        latitude: 9.011381
+      },
+      {
+        name: 'Pueblo Nuevo',
+        longitude: -79.513834,
+        latitude: 9.008878
+      },
+      {
+        name: 'Rio Abajo',
+        longitude: -79.491915,
+        latitude: 9.024213
+      },
+      {
+        name: 'San Felipe',
+        longitude: -79.535048,
+        latitude: 8.952410
+      },
+      {
+        name: 'San Francisco',
+        longitude: -79.507848,
+        latitude: 8.992609
+      },
+      {
+        name: 'Santa Ana',
+        longitude: -79.540677,
+        latitude: 8.956486
+      },
+      {
+        name: 'Tocumen',
+        longitude: -79.388304,
+        latitude: 9.071253
+      }
     ]
+
+
     district_ids = []
 
     corregimientos.each do |corregimiento|
-      district = District.find_or_create_by!(name: corregimiento, state_id: panama_state_id)
+      district = District.find_or_initialize_by(name: corregimiento[:name], state_id: panama_state_id)
+      district.update!(latitude: corregimiento[:latitude], longitude: corregimiento[:longitude])
       district_ids << district.id
     end
 

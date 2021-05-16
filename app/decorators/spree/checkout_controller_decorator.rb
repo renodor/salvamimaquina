@@ -8,6 +8,7 @@ module Spree
         # We won't do a billing/shipping address distinction
         # Users will only fill one address (shipping), which will automatically be set as the billing address as well
         params[:order][:bill_address_attributes] = params[:order][:ship_address_attributes]
+
         massaged_params.require(:order).permit(
           permitted_checkout_address_attributes
         )
@@ -36,6 +37,14 @@ module Spree
       # Set Panama as a default state and default city
       @order.ship_address.state ||= Spree::State.find_by(name: 'Panamá')
       @order.ship_address.city ||= 'Panamá'
+    end
+
+    # The only reason to monkey patch this method is because it is in a before_action callback applied to all method,
+    # So we use it to pass mapbox_api_key to JS via gon
+    def load_order
+      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
+      @order = current_order
+      redirect_to(spree.cart_path) && return unless @order
     end
 
     Spree::CheckoutController.prepend self

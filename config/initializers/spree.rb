@@ -125,6 +125,8 @@ Spree.user_class = 'Spree::LegacyUser'
 
 Rails.application.config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::CustomShippingCalculator
 
+Spree::PermittedAttributes.address_attributes.push(:district_id, :latitude, :longitude)
+
 # Rules for avoiding to store the current path into session for redirects
 # When at least one rule is matched, the request path will not be stored
 # in session.
