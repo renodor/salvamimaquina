@@ -1,4 +1,4 @@
-<AuthorizeRequest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.firstatlanticcommerce.com/gateway/data">
+<AuthorizeRequest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> <!--  Add default namespace:  xmlns="http://schemas.firstatlanticcommerce.com/gateway/data"-->
   <TransactionDetails>
     <AcquirerId>464748</AcquirerId>
     <MerchantId>33303303</MerchantId>
