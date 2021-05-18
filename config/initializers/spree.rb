@@ -123,8 +123,13 @@ end
 
 Spree.user_class = 'Spree::LegacyUser'
 
+# Add custom shipping calculator
 Rails.application.config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::CustomShippingCalculator
 
+# Add custom payment method
+Rails.application.config.spree.payment_methods << Spree::PaymentMethod::BacCreditCard
+
+# Permit custom address attributes
 Spree::PermittedAttributes.address_attributes.push(:district_id, :latitude, :longitude)
 
 # Rules for avoiding to store the current path into session for redirects
