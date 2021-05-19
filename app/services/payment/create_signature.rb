@@ -1,1 +1,0 @@
-signature = "#{password}#{fac_id}#{acquirer_id}#{order_id}#{amount}#{purchase_currency}"

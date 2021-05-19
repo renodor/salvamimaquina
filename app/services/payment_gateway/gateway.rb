@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
-module Spree
-  class PaymentMethod::BacCreditCard < PaymentMethod::CreditCard
-    def gateway_class
-      self.class
+module Payment
+  class Gateway
+    def initialize(options)
+      ::Affirm.configure do |config|
+        config.public_api_key  = options[:public_api_key]
+        config.private_api_key = options[:private_api_key]
+        config.environment     = options[:test_mode] ? :sandbox : :production
+      end
     end
 
-    def authorize(money, source, options = {})
-      response = PaymentGateway::FirstAtlanticCommerce::Authorize.call
+    def authorize(_money, affirm_source, _options = {})
+      response = ::Affirm::Charge.authorize(affirm_source.token)
       if response.success?
         ActiveMerchant::Billing::Response.new(true, "Transaction approved", {}, authorization: response.id)
       else
@@ -42,8 +46,9 @@ module Spree
       end
     end
 
-    def purchase(money, source, options = {})
-      result = authorize(money, affirm_source, options)
+    def purchase(money, affirm_source, _options = {})
+      binding.pry
+      result = authorize(money, affirm_source, _options)
       return result unless result.success?
       capture(money, result.authorization, _options)
     end
