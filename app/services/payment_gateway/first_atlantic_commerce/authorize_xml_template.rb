@@ -1,7 +1,25 @@
-module PaiementGateway
-  module FirstAtlanticCommerce
-    module AuthorizeXmlTemplate
-      def build_authorize_xml_payload(acquirer_id:, merchant_id:, order_number:, amount:,)
+# frozen_string_literal: true
+
+require 'active_support/concern'
+
+module PaymentGateway
+  module FirstAtlanticCommerce::AuthorizeXmlTemplate
+    extend ActiveSupport::Concern
+
+    # rubocop:disable Metrics/BlockLength
+    # rubocop:disable Metrics/MethodLength
+    class_methods do
+      def build_authorize_xml_payload(
+        acquirer_id:,
+        merchant_id:,
+        order_number:,
+        amount:,
+        currency_code:,
+        signature:,
+        card_number:,
+        card_expiry_date:,
+        card_cvv:
+      )
         "<AuthorizeRequest xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.firstatlanticcommerce.com/gateway/data\">
           <TransactionDetails>
             <AcquirerId>#{acquirer_id}</AcquirerId>
@@ -9,19 +27,19 @@ module PaiementGateway
             <OrderNumber>#{order_number}</OrderNumber> <!-- We define it -->
             <TransactionCode>0</TransactionCode>
             <Amount>#{amount}</Amount> <!-- Always 12 characters. Ex: $12 would be 000000001200-->
-            <Currency>840</Currency>
+            <Currency>#{currency_code}</Currency>
             <CurrencyExponent>2</CurrencyExponent> <!-- Number of digits after the colon (decimals) -->
             <SignatureMethod>SHA1</SignatureMethod>
-            <Signature>0O+2adPDppKHQM89y5Xq2DgYcQs=</Signature>
+            <Signature>#{signature}</Signature>
             <IPAddress />
             <CustomData />
             <CustomerReference />
             <ExtensionData />
           </TransactionDetails>
           <CardDetails>
-            <CardNumber>4111111111111111</CardNumber>
-            <CardExpiryDate>0130</CardExpiryDate>
-            <CardCVV2>123</CardCVV2>
+            <CardNumber>#{card_number}</CardNumber>
+            <CardExpiryDate>#{card_expiry_date}</CardExpiryDate>
+            <CardCVV2>#{card_cvv}</CardCVV2>
             <IssueNumber />
             <StartDate />
             <Installments>0</Installments>
@@ -82,5 +100,7 @@ module PaiementGateway
         </AuthorizeRequest>"
       end
     end
+    # rubocop:enable Metrics/BlockLength
+    # rubocop:enable Metrics/MethodLength
   end
 end

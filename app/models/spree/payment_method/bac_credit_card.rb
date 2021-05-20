@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Spree
-  class PaymentMethod::BacCreditCard < PaymentMethod::CreditCard
+  class PaymentMethod::BacCreditCard < Spree::PaymentMethod::CreditCard
     def gateway_class
       self.class
     end
 
     def authorize(money, source, options = {})
-      response = PaymentGateway::FirstAtlanticCommerce::Authorize.call
+      response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(money, source, options)
       if response.success?
         ActiveMerchant::Billing::Response.new(true, "Transaction approved", {}, authorization: response.id)
       else
@@ -43,7 +43,8 @@ module Spree
     end
 
     def purchase(money, source, options = {})
-      result = authorize(money, affirm_source, options)
+      binding.pry
+      result = authorize(money, source, options)
       return result unless result.success?
       capture(money, result.authorization, _options)
     end

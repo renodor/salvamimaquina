@@ -147,7 +147,6 @@ namespace :setup_prod_db do
       }
     ]
 
-
     district_ids = []
 
     corregimientos.each do |corregimiento|
