@@ -3,24 +3,22 @@
 module PaymentGateway
   class FirstAtlanticCommerce::Tokenize < FirstAtlanticCommerce::Base
     class << self
-      def call(money, source, options)
-        # money = 3299
+      def call(card_number:, customer_reference:, expiry_date:)
+        tokenize(xml_template(card_number, customer_reference, expiry_date))
         binding.pry
-        # xml_payload = build_authorize_xml_payload(
-        #   acquirer_id: ACQUIRER_ID,
-        #   merchant_id: MERCHANT_ID,
-        #   order_number:,
-        #   amount:,
-        #   currency_code:,
-        #   signature:,
-        #   card_number:,
-        #   card_expiry_date:,
-        #   card_cvv:
-        # )
       end
 
-      def generate_signature(order_id, amount)
-        "#{PASSWORD}#{MERCHANT_ID}#{ACQUIRER_ID}#{order_id}#{amount}#{PURCHASE_CURRENCY}"
+      def xml_template(card_number, customer_reference, expiry_date)
+        "<TokenizeRequest>
+          <CardNumber>#{card_number}</CardNumber>
+          <CustomerReference>#{customer_reference}</CustomerReference>
+          <MerchantNumber>#{FirstAtlanticCommerce::Base::MERCHANT_ID}</MerchantNumber>
+          <Signature>#{signature}</Signature>
+        </TokenizeRequest>"
+      end
+
+      def signature
+        Digest::SHA1.base64digest("#{FirstAtlanticCommerce::Base::PASSWORD}#{FirstAtlanticCommerce::Base::MERCHANT_ID}#{FirstAtlanticCommerce::Base::ACQUIRER_ID}")
       end
     end
   end

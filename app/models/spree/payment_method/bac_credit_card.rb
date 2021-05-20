@@ -48,5 +48,13 @@ module Spree
       return result unless result.success?
       capture(money, result.authorization, _options)
     end
+
+    def tokenize(card_number:, customer_reference:, expiry_date:)
+      PaymentGateway::FirstAtlanticCommerce::Tokenize.call(
+        card_number: card_number,
+        customer_reference: customer_reference,
+        expiry_date: expiry_date
+      )
+    end
   end
 end
