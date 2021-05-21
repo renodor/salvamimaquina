@@ -17,7 +17,7 @@ module Spree
           permitted_checkout_delivery_attributes
         )
       when :payment
-        tokenize_credit_card(params[:payment_source])
+        # tokenize_credit_card(params[:payment_source])
         massaged_params.require(:order).permit(
           permitted_checkout_payment_attributes
         )

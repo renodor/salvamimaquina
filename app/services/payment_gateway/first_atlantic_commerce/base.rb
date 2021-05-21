@@ -6,7 +6,6 @@ module PaymentGateway
     ACQUIRER_ID = Rails.application.credentials.fac_acquirer_id
     MERCHANT_ID = Rails.application.credentials[Rails.env.production? ? :fac_merchant_id : :fac_merchant_id_test]
     PASSWORD = Rails.application.credentials[Rails.env.production? ? :fac_password : :fac_password_test]
-
     PURCHASE_CURRENCY = 840 # FAC code for USD
 
     class << self
@@ -28,7 +27,7 @@ module PaymentGateway
         Faraday.new(BASE_URL) do |client|
           client.request :url_encoded
           client.adapter Faraday.default_adapter # The default adapter is :net_http
-          client.headers['Content-Type'] = "text/xml"
+          client.headers['Content-Type'] = 'text/xml'
         end
       end
 
