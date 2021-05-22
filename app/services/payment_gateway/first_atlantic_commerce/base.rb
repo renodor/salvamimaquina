@@ -8,20 +8,31 @@ module PaymentGateway
     PASSWORD = Rails.application.credentials[Rails.env.production? ? :fac_password : :fac_password_test]
     PURCHASE_CURRENCY = 840 # FAC code for USD
 
-    class << self
+    RepairShoprApiError = Class.new(StandardError)
+    BadRequestError = Class.new(RepairShoprApiError)
+    UnauthorizedError = Class.new(RepairShoprApiError)
+    ForbiddenError = Class.new(RepairShoprApiError)
+    NotFoundError = Class.new(RepairShoprApiError)
+    UnprocessableEntityError = Class.new(RepairShoprApiError)
+    ApiError = Class.new(RepairShoprApiError)
 
+    HTTP_OK_CODE = 200
+    HTTP_BAD_REQUEST_CODE = 400
+    HTTP_UNAUTHORIZED_CODE = 401
+    HTTP_FORBIDDEN_CODE = 403
+    HTTP_NOT_FOUND_CODE = 404
+    HTTP_UNPROCESSABLE_ENTITY_CODE = 429
+
+    class << self
       private
 
-      def generate_signature(order_id, amount)
-        "#{PASSWORD}#{MERCHANT_ID}#{ACQUIRER_ID}#{order_id}#{amount}#{PURCHASE_CURRENCY}"
+      def authorize(xml_payload)
+        request(http_method: :post, endpoint: 'Authorize', params: xml_payload)
       end
 
       def tokenize(xml_payload)
-        binding.pry
         request(http_method: :post, endpoint: 'Tokenize', params: xml_payload)
-        binding.pry
       end
-
 
       def client
         Faraday.new(BASE_URL) do |client|
@@ -33,11 +44,27 @@ module PaymentGateway
 
       def request(http_method:, endpoint:, params: {})
         @response = client.public_send(http_method, endpoint, params)
-        parsed_response = Oj.load(@response.body)
 
-        return parsed_response if @response.status == HTTP_OK_CODE
+        return @response.body if @response.status == HTTP_OK_CODE
 
         raise error_class, "Code: #{@response.status}, response: #{@response.body}"
+      end
+
+      def error_class
+        case @response.status
+        when HTTP_BAD_REQUEST_CODE
+          BadRequestError
+        when HTTP_UNAUTHORIZED_CODE
+          UnauthorizedError
+        when HTTP_FORBIDDEN_CODE
+          ForbiddenError
+        when HTTP_NOT_FOUND_CODE
+          NotFoundError
+        when HTTP_UNPROCESSABLE_ENTITY_CODE
+          UnprocessableEntityError
+        else
+          ApiError
+        end
       end
     end
   end

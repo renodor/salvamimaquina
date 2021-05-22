@@ -43,7 +43,6 @@ module Spree
     end
 
     def purchase(money, source, options = {})
-      binding.pry
       result = authorize(money, source, options)
       return result unless result.success?
       capture(money, result.authorization, _options)

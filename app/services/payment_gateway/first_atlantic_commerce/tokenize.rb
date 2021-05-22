@@ -4,9 +4,14 @@ module PaymentGateway
   class FirstAtlanticCommerce::Tokenize < FirstAtlanticCommerce::Base
     class << self
       def call(card_number:, customer_reference:, expiry_date:)
-        binding.pry
-        tokenize(xml_template(card_number, customer_reference, expiry_date))
-        binding.pry
+        xml_response = tokenize(xml_template(card_number, customer_reference, expiry_date))
+        xml_parsed_response = Nokogiri::XML(xml_response).remove_namespaces!
+
+        if xml_parsed_response.xpath('//Success').text == 'true'
+          xml_parsed_response.xpath('//Token').text
+        else
+          'Token Error' # TODO: Handle token error
+        end
       end
 
       def xml_template(card_number, customer_reference, expiry_date)
