@@ -9,7 +9,7 @@ module Spree
     def authorize(money, source, options = {})
       response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(money, source, options)
       if response.success?
-        ActiveMerchant::Billing::Response.new(true, "Transaction approved", {}, authorization: response.id)
+        ActiveMerchant::Billing::Response.new(true, 'Transaction approved', {}, authorization: response.id)
       else
         ActiveMerchant::Billing::Response.new(false, response.error.message)
       end
@@ -18,7 +18,7 @@ module Spree
     def capture(_money, charge_id, _options = {})
       response = ::Affirm::Charge.capture(charge_id)
       if response.success?
-        ActiveMerchant::Billing::Response.new(true, "Transaction Captured", {}, authorization: charge_id)
+        ActiveMerchant::Billing::Response.new(true, 'Transaction Captured', {}, authorization: charge_id)
       else
         ActiveMerchant::Billing::Response.new(false, response.error.message)
       end
@@ -49,11 +49,15 @@ module Spree
     end
 
     def tokenize(card_number:, customer_reference:, expiry_date:)
-      PaymentGateway::FirstAtlanticCommerce::Tokenize.call(
+      response = PaymentGateway::FirstAtlanticCommerce::Tokenize.call(
         card_number: card_number,
         customer_reference: customer_reference,
         expiry_date: expiry_date
       )
+
+      if response[:success]
+        response[:token]
+      end
     end
   end
 end
