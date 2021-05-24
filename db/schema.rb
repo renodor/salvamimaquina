@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 2021_05_23_164735) do
     t.boolean "default", default: false, null: false
     t.integer "address_id"
     t.string "token"
-    t.string "cvv"
+    t.string "encoded_cvv"
     t.index ["payment_method_id"], name: "index_spree_credit_cards_on_payment_method_id"
     t.index ["user_id"], name: "index_spree_credit_cards_on_user_id"
   end

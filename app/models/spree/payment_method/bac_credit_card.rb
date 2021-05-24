@@ -55,9 +55,7 @@ module Spree
         expiry_date: expiry_date
       )
 
-      if response[:success]
-        response[:token]
-      end
+      ActiveMerchant::Billing::Response.new(response[:success], response[:error_message].presence || response[:token])
     end
   end
 end

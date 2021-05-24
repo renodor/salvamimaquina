@@ -2,16 +2,6 @@
 
 module Spree
   module CheckoutControllerDecorator
-    def transition_forward
-      tokenize_credit_card(params[:payment_source]) if @order.state == 'payment' && @order.credit_cards.present?
-
-      if @order.can_complete?
-        @order.complete
-      else
-        @order.next
-      end
-    end
-
     def update_params
       case params[:state].to_sym
       when :address
@@ -35,23 +25,6 @@ module Spree
           permitted_checkout_confirm_attributes
         )
       end
-    end
-
-    def tokenize_credit_card(payment_source)
-      credit_card_info = payment_source.values.first
-      payment_method = Spree::PaymentMethod.find(payment_source.keys.first.to_i)
-      token = payment_method.tokenize(
-        card_number: credit_card_info[:number].delete(' '),
-        customer_reference: @order.email, # This customer reference is used by FAC and should be unique per customer (card holder)
-        expiry_date: credit_card_info[:expiry].delete(' / ')
-      )
-
-      @order.credit_cards.first.update!(
-        token: token,
-        cvv: credit_card_info[:verification_value]
-      )
-
-      binding.pry
     end
 
     def before_address
