@@ -41,6 +41,7 @@ module Spree
 
     # The only reason to monkey patch this method is because it is in a before_action callback applied to all method,
     # So we use it to pass mapbox_api_key to JS via gon
+    # TODO: pass it only to needed steps...
     def load_order
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order = current_order

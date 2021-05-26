@@ -7,3 +7,13 @@ es-MX:
       tax_rates:
         sales_tax: "%{name}"
         sales_tax_with_rate: "%{name}"
+  activerecord:
+    attributes:
+      spree/credit_card:
+        base: ""
+    errors:
+      models:
+        spree/credit_card:
+          attributes:
+            base:
+              invalid_token: "No se puede validar su número de tarjeta"
