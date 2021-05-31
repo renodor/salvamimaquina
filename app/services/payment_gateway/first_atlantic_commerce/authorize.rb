@@ -15,9 +15,9 @@ module PaymentGateway
             amount: '000000001200',
             currency_code: FirstAtlanticCommerce::Base::PURCHASE_CURRENCY,
             signature: signature(options[:order_id], '000000001200'),
-            card_number: '1111111111111111',
-            card_expiry_date: '1123',
-            card_cvv: '123'
+            card_number: source[:token],
+            card_expiry_date: "#{source[:month]}#{source[:year][2..-1]}",
+            card_cvv: Base64.decode64(source[:encoded_cvv])
           )
 
           authorize(xml_payload)
