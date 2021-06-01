@@ -2,13 +2,12 @@
 
 module PaymentGateway
   module FirstAtlanticCommerce
-    class Authorize < FirstAtlanticCommerce::Base
-      include AuthorizeXmlTemplate
+    class Authorize3ds < FirstAtlanticCommerce::Base
+      include Authorize3dsXmlTemplate
 
       class << self
         def call(money, source, options)
-          binding.pry
-          xml_payload = build_authorize_xml_payload(
+          xml_payload = build_authorize3ds_xml_payload(
             acquirer_id: FirstAtlanticCommerce::Base::ACQUIRER_ID,
             merchant_id: FirstAtlanticCommerce::Base::MERCHANT_ID,
             order_number: options[:order_id],
@@ -20,7 +19,14 @@ module PaymentGateway
             card_cvv: Base64.decode64(source[:encoded_cvv])
           )
 
-          authorize(xml_payload)
+          xml_response = authorize3ds(xml_payload)
+          xml_parsed_response = Nokogiri::XML(xml_response).remove_namespaces!
+          html_form = xml_parsed_response.xpath('//HTMLFormData').text
+
+          {
+            success: html_form.present?,
+            html_form: html_form
+          }
         end
 
         def signature(order_id, amount)

@@ -26,8 +26,8 @@ module PaymentGateway
     class << self
       private
 
-      def authorize(xml_payload)
-        request(http_method: :post, endpoint: 'Authorize', params: xml_payload)
+      def authorize3ds(xml_payload)
+        request(http_method: :post, endpoint: 'Authorize3DS', params: xml_payload)
       end
 
       def tokenize(xml_payload)

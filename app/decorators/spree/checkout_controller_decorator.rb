@@ -39,6 +39,10 @@ module Spree
       @order.ship_address.city ||= 'Panamá'
     end
 
+    def before_confirm
+      binding.pry
+    end
+
     # The only reason to monkey patch this method is because it is in a before_action callback applied to all method,
     # So we use it to pass mapbox_api_key to JS via gon
     # TODO: pass it only to needed steps...
