@@ -11,13 +11,7 @@ module Spree
       if update_order
 
         assign_temp_address
-        if @order.state == 'payment' && @order.payments.present?
-          response = authorize_3ds
-          if response.success?
-            @html_form = response.params['html_form']
-            render :three_d_secure, layout: 'empty_layout' and return
-          end
-        end
+        return if @order.payments.present? && authorize_3ds
 
         unless transition_forward
           redirect_on_failure
@@ -89,19 +83,15 @@ module Spree
 
     def authorize_3ds
       payment = @order.payments.last
-      payment.payment_method.authorize3ds(@order.total, payment.source, "#{@order.number}-#{payment.number}")
-      # if response.success?
-      #   @html_form = response.params['html_form']
-      #   render :three_d_secure
-      # end
-    end
+      response = payment.payment_method.authorize3ds(@order.total, params[:payment_source][payment.payment_method_id.to_s], "#{@order.number}-#{payment.number}")
 
-    def ensure_order_is_not_skipping_states
-      return
-      # if params[:state]
-      #   redirect_to checkout_state_path(@order.state) if @order.can_go_to_state?(params[:state]) && !skip_state_validation?
-      #   @order.state = params[:state]
-      # end
+      if response.success?
+        @html_form = response.params['html_form']
+        render :three_d_secure, layout: 'empty_layout'
+        true
+      else
+        false
+      end
     end
 
     Spree::CheckoutController.prepend self

@@ -87,6 +87,7 @@ module StateMachines
             before_transition to: :payment, do: :add_default_payment_from_wallet
             before_transition to: :payment, do: :ensure_billing_address
 
+            before_transition to: :complete, do: :three_d_secure
             before_transition to: :confirm, do: :add_store_credit_payments
 
             # see also process_payments_before_complete below which needs to

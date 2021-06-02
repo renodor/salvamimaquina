@@ -6,8 +6,14 @@ module Spree
       self.class
     end
 
-    def authorize3ds(money, source, order_number)
-      response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(money, source, order_number)
+    def authorize3ds(amount, source, order_number)
+      response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
+        amount: amount,
+        card_number: source[:number].delete(' '),
+        card_expiry_date:  source[:expiry].delete(' / '),
+        card_cvv: source[:verification_value],
+        order_number: order_number
+      )
       ActiveMerchant::Billing::Response.new(response[:success], '3ds html form', { html_form: response[:html_form] })
     end
 
@@ -42,6 +48,7 @@ module Spree
       # result = authorize3ds(money, source, options)
       # return result unless result.success?
       # capture(money, result.authorization, _options)
+      ActiveMerchant::Billing::Response.new(true, 'Fake Success')
     end
 
     def tokenize(card_number:, customer_reference:, expiry_date:)
