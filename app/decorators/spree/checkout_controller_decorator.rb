@@ -2,6 +2,10 @@
 
 module Spree
   module CheckoutControllerDecorator
+    def self.prepended(base)
+      base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
+    end
+
     # Updates the order and advances to the next state (when possible.)
     def update
       if update_order
@@ -29,6 +33,10 @@ module Spree
       else
         render :edit
       end
+    end
+
+    def three_d_secure_response
+      binding.pry
     end
 
     private
@@ -88,8 +96,12 @@ module Spree
       # end
     end
 
-    def three_d_secure
-      raise
+    def ensure_order_is_not_skipping_states
+      return
+      # if params[:state]
+      #   redirect_to checkout_state_path(@order.state) if @order.can_go_to_state?(params[:state]) && !skip_state_validation?
+      #   @order.state = params[:state]
+      # end
     end
 
     Spree::CheckoutController.prepend self
