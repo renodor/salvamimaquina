@@ -10,17 +10,17 @@ class Spree::Admin::SyncsController < ApplicationController
 
   def sync_everything
     RepairShoprApi::V1::SyncEverything.call(sync_logs: @sync_logs)
-    redirect_to shop_admin_sync_path
+    redirect_to admin_sync_path
   end
 
   def sync_product_categories
     RepairShoprApi::V1::SyncProductCategories.call(sync_logs: @sync_logs)
-    redirect_to shop_admin_sync_path
+    redirect_to admin_sync_path
   end
 
   def sync_products
     RepairShoprApi::V1::SyncProducts.call(sync_logs: @sync_logs)
-    redirect_to shop_admin_sync_path
+    redirect_to admin_sync_path
   end
 
   private
