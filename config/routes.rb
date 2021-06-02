@@ -15,6 +15,10 @@ Rails.application.routes.draw do
       post '/sync/product', to: 'syncs#sync_product'
     end
 
+    namespace :checkout do
+      get '/three_d_secure', to: 'checkouts#three_d_secure'
+    end
+
     namespace :api, defaults: { format: 'json' } do
       resources :districts, only: :index
     end

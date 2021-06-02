@@ -6,9 +6,9 @@ module Spree
       self.class
     end
 
-    def authorize3ds(money, source, options = {})
-      response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(money, source, options)
-      ActiveMerchant::Billing::Response.new(response[:success], response[:html_form])
+    def authorize3ds(money, source, order_number)
+      response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(money, source, order_number)
+      ActiveMerchant::Billing::Response.new(response[:success], '3ds html form', { html_form: response[:html_form] })
     end
 
     def capture(_money, charge_id, _options = {})
@@ -39,7 +39,7 @@ module Spree
     end
 
     def purchase(money, source, options = {})
-      result = authorize3ds(money, source, options)
+      # result = authorize3ds(money, source, options)
       # return result unless result.success?
       # capture(money, result.authorization, _options)
     end

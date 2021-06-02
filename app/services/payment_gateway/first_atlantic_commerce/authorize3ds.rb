@@ -6,14 +6,14 @@ module PaymentGateway
       include Authorize3dsXmlTemplate
 
       class << self
-        def call(money, source, options)
+        def call(money, source, order_number)
           xml_payload = build_authorize3ds_xml_payload(
             acquirer_id: FirstAtlanticCommerce::Base::ACQUIRER_ID,
             merchant_id: FirstAtlanticCommerce::Base::MERCHANT_ID,
-            order_number: options[:order_id],
+            order_number: order_number,
             amount: '000000001200',
             currency_code: FirstAtlanticCommerce::Base::PURCHASE_CURRENCY,
-            signature: signature(options[:order_id], '000000001200'),
+            signature: signature(order_number, '000000001200'),
             card_number: source[:token],
             card_expiry_date: "#{source[:month]}#{source[:year][2..-1]}",
             card_cvv: Base64.decode64(source[:encoded_cvv])

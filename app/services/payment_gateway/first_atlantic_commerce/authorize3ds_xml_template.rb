@@ -27,7 +27,7 @@ module PaymentGateway
             <CardNumber>#{card_number}</CardNumber>
             <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://ecm.firstatlanticcommerce.com/FACPGTest/receiveInfo.aspx</MerchantResponseURL>
+            <MerchantResponseURL>https://salvamimaquina.herokuapp.com/shop/checkout/three_d_secure</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{acquirer_id}</AcquirerId>
               <Amount>#{amount}</Amount>

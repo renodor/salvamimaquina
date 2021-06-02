@@ -5,10 +5,10 @@ Spree.config do |config|
   # Core:
 
   # Default currency for new sites
-  config.currency = "USD"
+  config.currency = 'USD'
 
   # from address for transactional emails
-  config.mails_from = "store@example.com"
+  config.mails_from = 'store@example.com'
 
   # set Panama has the default country
   config.default_country_iso = 'PA'
@@ -18,6 +18,9 @@ Spree.config do |config|
 
   # Use legacy Spree::Order state machine
   config.use_legacy_order_state_machine = false
+
+  # Customized order state machine to remove the confirm checkout step
+  config.state_machines.order = '::StateMachines::Order'
 
   # Use the legacy address' state validation logic
   config.use_legacy_address_state_validator = false

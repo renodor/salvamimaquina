@@ -2,6 +2,37 @@
 
 module Spree
   module CheckoutControllerDecorator
+    # Updates the order and advances to the next state (when possible.)
+    def update
+      if update_order
+
+        assign_temp_address
+        if @order.state == 'payment' && @order.payments.present?
+          response = authorize_3ds
+          if response.success?
+            @html_form = response.params['html_form']
+            render :three_d_secure, layout: 'empty_layout' and return
+          end
+        end
+
+        unless transition_forward
+          redirect_on_failure
+          return
+        end
+
+        if @order.completed?
+          finalize_order
+        else
+          send_to_next_state
+        end
+
+      else
+        render :edit
+      end
+    end
+
+    private
+
     def update_params
       case params[:state].to_sym
       when :address
@@ -39,10 +70,6 @@ module Spree
       @order.ship_address.city ||= 'Panamá'
     end
 
-    def before_confirm
-      binding.pry
-    end
-
     # The only reason to monkey patch this method is because it is in a before_action callback applied to all method,
     # So we use it to pass mapbox_api_key to JS via gon
     # TODO: pass it only to needed steps...
@@ -50,6 +77,19 @@ module Spree
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order = current_order
       redirect_to(spree.cart_path) && return unless @order
+    end
+
+    def authorize_3ds
+      payment = @order.payments.last
+      payment.payment_method.authorize3ds(@order.total, payment.source, "#{@order.number}-#{payment.number}")
+      # if response.success?
+      #   @html_form = response.params['html_form']
+      #   render :three_d_secure
+      # end
+    end
+
+    def three_d_secure
+      raise
     end
 
     Spree::CheckoutController.prepend self
