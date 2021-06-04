@@ -6,12 +6,17 @@ module Spree
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
     end
 
+    def edit
+      binding.pry
+      @order.complete if @order.payments.last&.state == 'pending'
+    end
+
     # Updates the order and advances to the next state (when possible.)
     def update
       if update_order
 
         assign_temp_address
-        return if @order.payments.present? && authorize_3ds
+        return if @order.payments.present? && authorize_3ds # TODO: what to do if authorize_3ds fail?
 
         unless transition_forward
           redirect_on_failure
@@ -29,8 +34,20 @@ module Spree
       end
     end
 
+    # TODO: this logic should be inside a PaymentController or 3ds Controller
     def three_d_secure_response
-      binding.pry
+      payment = @order.payments.last
+      response = payment.payment_method.handle_authorize_3ds_response(params)
+
+      if response.success?
+        # By doing that the payment will transition to "pending" state
+        # which for Solidus means "The payment service provider has processed the payment, but the payment is not yet captured."
+        # Which basically means the payment has been authorized but not captured yet
+        payment.pend
+        redirect_to checkout_state_path(@order.state)
+      else
+        # TODO: add payment failure error and redirect to checkout payment step
+      end
     end
 
     private
@@ -81,12 +98,26 @@ module Spree
       redirect_to(spree.cart_path) && return unless @order
     end
 
+
+    def transition_forward
+      if @order.can_complete?
+        @order.complete
+      else
+        @order.next
+      end
+    end
+
+    # TODO: this logic should be inside a PaymentController or 3ds Controller
     def authorize_3ds
       payment = @order.payments.last
-      response = payment.payment_method.authorize3ds(@order.total, params[:payment_source][payment.payment_method_id.to_s], "#{@order.number}-#{payment.number}")
+      response = payment.payment_method.authorize_3ds(
+        amount: @order.total,
+        source: params[:payment_source][payment.payment_method_id.to_s],
+        order_number: "#{@order.number}-#{payment.number}"
+      )
 
       if response.success?
-        @html_form = response.params['html_form']
+        @html_form_3ds = response.params['html_form']
         render :three_d_secure, layout: 'empty_layout'
         true
       else

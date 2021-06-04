@@ -7,10 +7,6 @@ module Spree
       base.remove_checkout_step :confirm
     end
 
-    def three_d_secure
-      binding.pry
-    end
-
     Spree::Order.prepend self
   end
 end

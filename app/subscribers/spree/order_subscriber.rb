@@ -9,7 +9,7 @@ module Spree
 
     # This event will be fired every time an order is finalized
     def order_finalized(event)
-      RepairShoprApi::V1::CreateInvoice.call(event.payload[:order])
+      # RepairShoprApi::V1::CreateInvoice.call(event.payload[:order])
     end
   end
 end

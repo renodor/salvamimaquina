@@ -6,49 +6,25 @@ module Spree
       self.class
     end
 
-    def authorize3ds(amount, source, order_number)
+    def authorize_3ds(amount:, source:, order_number:)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
-        amount: amount,
+        amount: fac_formated_amount(amount),
         card_number: source[:number].delete(' '),
-        card_expiry_date:  source[:expiry].delete(' / '),
+        card_expiry_date: source[:expiry].delete(' / '),
         card_cvv: source[:verification_value],
         order_number: order_number
       )
+
       ActiveMerchant::Billing::Response.new(response[:success], '3ds html form', { html_form: response[:html_form] })
     end
 
-    def capture(_money, charge_id, _options = {})
-      response = ::Affirm::Charge.capture(charge_id)
-      if response.success?
-        ActiveMerchant::Billing::Response.new(true, 'Transaction Captured', {}, authorization: charge_id)
-      else
-        ActiveMerchant::Billing::Response.new(false, response.error.message)
-      end
+    def handle_authorize_3ds_response(authorize_response)
+      ActiveMerchant::Billing::Response.new(authorize_response['ResponseCode'] == '1', authorize_response['ReasonCodeDesc'], { reason_code: authorize_response['ReasonCode'] })
     end
 
-    def void(charge_id, _money, _options = {})
-      response = ::Affirm::Charge.void(charge_id)
-      if response.success?
-        return ActiveMerchant::Billing::Response.new(true, "Transaction Voided")
-      else
-        return ActiveMerchant::Billing::Response.new(false, response.error.message)
-      end
-    end
-
-    def credit(money, charge_id, _options = {})
-      response = ::Affirm::Charge.refund(charge_id, amount: money)
-      if response.success?
-        return ActiveMerchant::Billing::Response.new(true, "Transaction Credited with #{money}")
-      else
-        return ActiveMerchant::Billing::Response.new(false, response.error.message)
-      end
-    end
-
-    def purchase(money, source, options = {})
-      # result = authorize3ds(money, source, options)
-      # return result unless result.success?
-      # capture(money, result.authorization, _options)
-      ActiveMerchant::Billing::Response.new(true, 'Fake Success')
+    def capture(amount, order_number)
+      response = PaymentGateway::FirstAtlanticCommerce::Capture.call(amount: fac_formated_amount(amount), order_number: order_number)
+      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { reason_code: response[:reason_code] })
     end
 
     def tokenize(card_number:, customer_reference:, expiry_date:)
@@ -59,6 +35,16 @@ module Spree
       )
 
       ActiveMerchant::Billing::Response.new(response[:success], response[:error_message].presence || response[:token])
+    end
+
+    def purchase(amount, _source, options = {})
+      capture(amount, options[:order_id])
+    end
+
+    private
+
+    def fac_formated_amount(amount)
+      amount.to_s.delete('.').rjust(12, '0')
     end
   end
 end
