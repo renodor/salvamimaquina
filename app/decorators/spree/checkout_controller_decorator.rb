@@ -6,11 +6,6 @@ module Spree
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
     end
 
-    def edit
-      binding.pry
-      @order.complete if @order.payments.last&.state == 'pending'
-    end
-
     # Updates the order and advances to the next state (when possible.)
     def update
       if update_order
@@ -23,14 +18,18 @@ module Spree
           return
         end
 
-        if @order.completed?
-          finalize_order
-        else
-          send_to_next_state
-        end
+        finalize_order_if_completed
 
       else
         render :edit
+      end
+    end
+
+    def finalize_order_if_completed
+      if @order.completed?
+        finalize_order
+      else
+        send_to_next_state
       end
     end
 
@@ -39,18 +38,26 @@ module Spree
       payment = @order.payments.last
       response = payment.payment_method.handle_authorize_3ds_response(params)
 
-      if response.success?
-        # By doing that the payment will transition to "pending" state
-        # which for Solidus means "The payment service provider has processed the payment, but the payment is not yet captured."
-        # Which basically means the payment has been authorized but not captured yet
-        payment.pend
-        redirect_to checkout_state_path(@order.state)
+      # TODO: improve this logic, maybe don't need to use transition_forward and finalize_order_if_completed methods...
+      # Maybe just check the logic myself (@order.complete then finalize_order)
+      # But need to check all possible cases scenarios and redirect on failures (if transition can't go forward, if payment can't be captured, if order is not completed etc...)
+      if response.success? && transition_forward
+        finalize_order_if_completed
       else
         # TODO: add payment failure error and redirect to checkout payment step
       end
     end
 
     private
+
+    # TODO: remove from here (I didn't modified it from original solidus code base, it is here FYI)
+    def transition_forward
+      if @order.can_complete?
+        @order.complete
+      else
+        @order.next
+      end
+    end
 
     def update_params
       case params[:state].to_sym
@@ -96,15 +103,6 @@ module Spree
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order = current_order
       redirect_to(spree.cart_path) && return unless @order
-    end
-
-
-    def transition_forward
-      if @order.can_complete?
-        @order.complete
-      else
-        @order.next
-      end
     end
 
     # TODO: this logic should be inside a PaymentController or 3ds Controller
