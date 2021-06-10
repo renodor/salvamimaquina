@@ -24,7 +24,8 @@ module Spree
 
     def capture(amount, order_number)
       response = PaymentGateway::FirstAtlanticCommerce::Capture.call(amount: fac_formated_amount(amount), order_number: order_number)
-      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { reason_code: response[:reason_code] })
+      # ActiveMerchant::Billing::Response.new(response[:success], response[:message], { reason_code: response[:reason_code] })
+      ActiveMerchant::Billing::Response.new(false, response[:message], { reason_code: response[:reason_code] })
     end
 
     def tokenize(card_number:, customer_reference:, expiry_date:)

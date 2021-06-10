@@ -11,16 +11,32 @@ module Spree
       if update_order
 
         assign_temp_address
-        return if @order.payments.present? && authorize_3ds # TODO: what to do if authorize_3ds fail?
 
-        transition_and_complete_order_logic
+        return if @order.payments.present? && authorize_3ds
+
+        order_transition_and_completion_logic
 
       else
         render :edit
       end
     end
 
-    def transition_and_complete_order_logic
+    def three_d_secure_response
+      payment = @order.payments.last
+      response = ThreeDSecure.response(payment, params)
+
+      unless response.success?
+        # TODO: this needs to be handled directly by the Spree::Payment::Processing module...
+        payment.update!(state: 'failed')
+        @order.update!(payment_state: 'failed')
+      end
+
+      order_transition_and_completion_logic
+    end
+
+    private
+
+    def order_transition_and_completion_logic
       unless transition_forward
         redirect_on_failure
         return
@@ -32,20 +48,6 @@ module Spree
         send_to_next_state
       end
     end
-
-    # TODO: this logic should be inside a PaymentController or 3ds Controller
-    def three_d_secure_response
-      payment = @order.payments.last
-      response = payment.payment_method.handle_authorize_3ds_response(params)
-
-      # TODO: improve this logic, maybe don't need to use transition_forward and finalize_order_if_completed methods...
-      # Maybe just check the logic myself (@order.complete then finalize_order)
-      # But need to check all possible cases scenarios and redirect on failures (if transition can't go forward, if payment can't be captured, if order is not completed etc...)
-      transition_and_complete_order_logic if response.success?
-      # TODO: add else statement with payment failure error and redirect to checkout payment step
-    end
-
-    private
 
     # TODO: remove from here (I didn't modified it from original solidus code base, it is here FYI)
     def transition_forward
@@ -102,20 +104,17 @@ module Spree
       redirect_to(spree.cart_path) && return unless @order
     end
 
-    # TODO: this logic should be inside a PaymentController or 3ds Controller
     def authorize_3ds
       payment = @order.payments.last
-      response = payment.payment_method.authorize_3ds(
-        amount: @order.total,
-        source: params[:payment_source][payment.payment_method_id.to_s],
-        order_number: "#{@order.number}-#{payment.number}"
-      )
-
+      response = ThreeDSecure.authorize(@order, params[:payment_source][payment.payment_method_id.to_s])
       if response.success?
         @html_form_3ds = response.params['html_form']
         render :three_d_secure, layout: 'empty_layout'
         true
       else
+        # TODO: this needs to be handled directly by the Spree::Payment::Processing module...
+        payment.update!(state: 'failed')
+        @order.update!(payment_state: 'failed')
         false
       end
     end
