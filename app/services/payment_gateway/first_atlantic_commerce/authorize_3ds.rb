@@ -25,7 +25,7 @@ module PaymentGateway
             <CardNumber>#{card_number}</CardNumber>
             <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://46d5c6e2717d.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://28166f87cb75.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>

@@ -13,19 +13,19 @@ module Spree
         assign_temp_address
         return if @order.payments.present? && authorize_3ds # TODO: what to do if authorize_3ds fail?
 
-        unless transition_forward
-          redirect_on_failure
-          return
-        end
-
-        finalize_order_if_completed
+        transition_and_complete_order_logic
 
       else
         render :edit
       end
     end
 
-    def finalize_order_if_completed
+    def transition_and_complete_order_logic
+      unless transition_forward
+        redirect_on_failure
+        return
+      end
+
       if @order.completed?
         finalize_order
       else
@@ -41,11 +41,8 @@ module Spree
       # TODO: improve this logic, maybe don't need to use transition_forward and finalize_order_if_completed methods...
       # Maybe just check the logic myself (@order.complete then finalize_order)
       # But need to check all possible cases scenarios and redirect on failures (if transition can't go forward, if payment can't be captured, if order is not completed etc...)
-      if response.success? && transition_forward
-        finalize_order_if_completed
-      else
-        # TODO: add payment failure error and redirect to checkout payment step
-      end
+      transition_and_complete_order_logic if response.success?
+      # TODO: add else statement with payment failure error and redirect to checkout payment step
     end
 
     private
