@@ -49,15 +49,6 @@ module Spree
       end
     end
 
-    # TODO: remove from here (I didn't modified it from original solidus code base, it is here FYI)
-    def transition_forward
-      if @order.can_complete?
-        @order.complete
-      else
-        @order.next
-      end
-    end
-
     def update_params
       case params[:state].to_sym
       when :address
@@ -113,6 +104,7 @@ module Spree
         true
       else
         # TODO: this needs to be handled directly by the Spree::Payment::Processing module...
+        # TODO: add fac error message to payment
         payment.update!(state: 'failed')
         @order.update!(payment_state: 'failed')
         false

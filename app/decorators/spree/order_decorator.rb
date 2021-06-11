@@ -22,14 +22,7 @@ module Spree
         return false
       end
 
-      if process_payments!
-        true
-      else
-        saved_errors = errors[:base]
-        payment_failed!
-        saved_errors.each { |error| errors.add(:base, error) }
-        false
-      end
+      process_payments! ? true : false
     end
 
     Spree::Order.prepend self

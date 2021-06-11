@@ -7,11 +7,11 @@ module PaymentGateway
         def call(amount:, card_number:, card_expiry_date:, card_cvv:, order_number:)
           xml_response = authorize_3ds(xml_payload(amount, card_number, card_expiry_date, card_cvv, order_number))
           xml_parsed_response = Nokogiri::XML(xml_response).remove_namespaces!
-          html_form = xml_parsed_response.xpath('//HTMLFormData').text
 
           {
-            success: html_form.present?,
-            html_form: html_form
+            success: xml_parsed_response.xpath('//ResponseCode').text == '0',
+            message: xml_parsed_response.xpath('//ResponseCodeDescription').text,
+            html_form: xml_parsed_response.xpath('//HTMLFormData').text
           }
         end
 
@@ -25,7 +25,7 @@ module PaymentGateway
             <CardNumber>#{card_number}</CardNumber>
             <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://28166f87cb75.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://efcffc1d4caf.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>
