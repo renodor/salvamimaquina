@@ -75,6 +75,7 @@ module Spree
     end
 
     def before_address
+      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order.assign_default_user_addresses
       # If the user has a default address, the previous method call takes care
       # of setting that; but if he doesn't, we need to build an empty one here
@@ -86,11 +87,8 @@ module Spree
       @order.ship_address.city ||= 'Panamá'
     end
 
-    # The only reason to monkey patch this method is because it is in a before_action callback applied to all method,
-    # So we use it to pass mapbox_api_key to JS via gon
-    # TODO: pass it only to needed steps...
+    # TODO: remove from here, just here FYI
     def load_order
-      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order = current_order
       redirect_to(spree.cart_path) && return unless @order
     end
@@ -99,6 +97,7 @@ module Spree
       payment = @order.payments.last
       response = ThreeDSecure.authorize(@order, params[:payment_source][payment.payment_method_id.to_s])
       if response.success?
+
         @html_form_3ds = response.params['html_form']
         render :three_d_secure, layout: 'empty_layout'
         true
