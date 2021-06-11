@@ -28,7 +28,7 @@ class RepairShoprApi::V1::SyncProductImages < RepairShoprApi::V1::Base
         # We use this array later to identify product images that need to be deleted
         create_product_image(photo)
         sync_logs.synced_product_images += 1
-      rescue => e
+      rescue => e # rubocop:disable Style/RescueStandardError
         sync_logs.sync_errors << { product_image_repair_shopr_id: photo['id'], error: e.message }
       end
 
@@ -39,7 +39,7 @@ class RepairShoprApi::V1::SyncProductImages < RepairShoprApi::V1::Base
       Rails.logger.info("Product photos of product with RepairShopr ID: #{attributes['id']} synced")
 
       @variant.images
-    rescue => e
+    rescue => e # rubocop:disable Style/RescueStandardError
       sync_logs.sync_errors << { product_images_error: e.message }
       false
     end

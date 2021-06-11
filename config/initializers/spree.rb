@@ -1,3 +1,5 @@
+# frozen_string_literal:true
+
 # Configure Solidus Preferences
 # See http://docs.solidus.io/Spree/AppConfiguration.html for details
 
@@ -71,7 +73,6 @@ Spree.config do |config|
   # to a custom users role:
   # config.roles.assign_permissions :role_name, ['Spree::PermissionSets::CustomPermissionSet']
 
-
   # Frontend:
 
   # Custom logo for the frontend
@@ -79,7 +80,6 @@ Spree.config do |config|
 
   # Template to use when rendering layout
   # config.layout = "spree/layouts/spree_application"
-
 
   # Admin:
 

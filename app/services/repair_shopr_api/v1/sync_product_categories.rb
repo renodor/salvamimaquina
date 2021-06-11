@@ -28,7 +28,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       Rails.logger.info('Product categories synced')
 
       taxon_ids
-    rescue => e
+    rescue => e # rubocop:disable Style/RescueStandardError
       sync_logs.sync_errors << { product_categories_error: e.message }
       false
     end

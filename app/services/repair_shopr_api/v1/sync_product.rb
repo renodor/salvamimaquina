@@ -45,7 +45,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     rescue RepairShoprApi::V1::Base::NotFoundError
       sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
       false
-    rescue => e
+    rescue => e # rubocop:disable Style/RescueStandardError
       sync_logs.sync_errors << { error: e.message }
       false
     end
@@ -84,7 +84,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
       @product.assign_attributes(
         description: attributes['description'],
-        meta_description: "#{@product.name} - #{attributes['description']}",
+        meta_description: "#{@product.name} - #{attributes['description']}"
       )
 
       # Add Spree::OptionTypes to product
