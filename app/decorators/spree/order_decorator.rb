@@ -3,43 +3,19 @@
 module Spree
   module OrderDecorator
     def self.prepended(base)
-      base.insert_checkout_step :three_d_secure, after: :payment
       base.remove_checkout_step :confirm
     end
 
-    # def process_payments_before_complete
-    #   return if !payment_required?
+    def process_payments_before_complete
+      return unless payment_required?
 
-    #   if payments.valid.empty?
-    #     errors.add(:base, I18n.t('spree.no_payment_found'))
-    #     return false
-    #   end
-
-    #   if process_payments!
-    #     true
-    #   else
-    #     saved_errors = errors[:base]
-    #     payment_failed!
-    #     saved_errors.each { |error| errors.add(:base, error) }
-    #     false
-    #   end
-    # end
-
-    # def process_payments_with(method_name)
-    #   # Don't run if there is nothing to pay.
-    #   return true if payment_total >= total
-
-    #   unprocessed_payments.each do |payment|
-    #     break if payment_total >= total
-
-    #     # response = payment.public_send(method_name)
-    #     # return response if payment.processing? && payment.source.needs_3ds?
-    #     payment.public_send(method_name)
-    #   end
-    # rescue Core::GatewayError => error
-    #   result = !!Spree::Config[:allow_checkout_on_gateway_error]
-    #   errors.add(:base, error.message) && (return result)
-    # end
+      # In Solidus base code when payment failed order need to be send from "confirm" to "payment" state again
+      # But before doing it, order errors need to be saved and then reassigned otherwise it will be lost
+      # Here payment is our last order step, so if payment fail, order is already on "payment" step,
+      # But Solidus codebase will still reassign order errors, resulting in ctually assign all errors twice,
+      # So the purpose of this decorator is just to simplify this method and prevent order errors to be reassigned twice
+      process_payments! ? true : false
+    end
 
     Spree::Order.prepend self
   end

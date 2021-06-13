@@ -78,7 +78,7 @@ module StateMachines
           # Here is the modified line. We need that to successfully remove the "confirm" checkout step
           # TODO: find a way to decorate only the needed part and not monkey patch the whole file...
           event :complete do
-            transition to: :complete, from: :three_d_secure
+            transition to: :complete, from: :payment
           end
 
           if states[:payment]

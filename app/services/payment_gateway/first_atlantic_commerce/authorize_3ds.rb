@@ -4,8 +4,8 @@ module PaymentGateway
   module FirstAtlanticCommerce
     class Authorize3ds < FirstAtlanticCommerce::Base
       class << self
-        def call(amount:, token:, card_cvv:, order_number:)
-          xml_response = authorize_3ds(xml_payload(amount, token, card_cvv, order_number))
+        def call(amount:, card_number:, card_cvv:, card_expiry_date:, order_number:)
+          xml_response = authorize_3ds(xml_payload(amount, card_number, card_cvv, card_expiry_date, order_number))
           xml_parsed_response = Nokogiri::XML(xml_response).remove_namespaces!
 
           {
@@ -17,15 +17,15 @@ module PaymentGateway
 
         private
 
-        def xml_payload(amount, token, card_cvv, order_number)
+        def xml_payload(amount, card_number, card_cvv, card_expiry_date, order_number)
           "<Authorize3DSRequest xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.firstatlanticcommerce.com/gateway/data\">
             <CardDetails>
             <CardCVV2>#{card_cvv}</CardCVV2>
-            <CardExpiryDate>#{date_in_one_year}</CardExpiryDate>
-            <CardNumber>#{token}</CardNumber>
+            <CardExpiryDate>#{card_expiry_date}</CardExpiryDate>
+            <CardNumber>#{card_number}</CardNumber>
             <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://c84f71fd1ad4.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://d4f3c036200e.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>
@@ -41,11 +41,11 @@ module PaymentGateway
           </Authorize3DSRequest>"
         end
 
-        # If using a Tokenized Card Number, CardExpiryDate can be any future date
-        # It does not have to match actual card expiry date, but must not be blank or past.
-        def date_in_one_year
-          (Date.today + 365).strftime('%m%y')
-        end
+        # # If using a Tokenized Card Number, CardExpiryDate can be any future date
+        # # It does not have to match actual card expiry date, but must not be blank or past.
+        # def date_in_one_year
+        #   (Date.today + 365).strftime('%m%y')
+        # end
 
         def signature(order_number, amount)
           Digest::SHA1.base64digest("#{FirstAtlanticCommerce::Base::PASSWORD}#{FirstAtlanticCommerce::Base::MERCHANT_ID}#{FirstAtlanticCommerce::Base::ACQUIRER_ID}#{order_number}#{amount}#{FirstAtlanticCommerce::Base::PURCHASE_CURRENCY}")

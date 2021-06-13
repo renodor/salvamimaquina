@@ -12,7 +12,7 @@ module Spree
 
         assign_temp_address
 
-        # return if @order.payments.present? && authorize_3ds
+        return if @order.payments.present? && authorize_3ds
 
         order_transition_and_completion_logic
 
@@ -23,14 +23,7 @@ module Spree
 
     def three_d_secure_response
       payment = @order.payments.last
-      response = ThreeDSecure.response(payment, params)
-
-      unless response.success?
-        # TODO: this needs to be handled directly by the Spree::Payment::Processing module...
-        payment.update!(state: 'failed')
-        @order.update!(payment_state: 'failed')
-      end
-
+      payment.process_3ds_response(params)
       order_transition_and_completion_logic
     end
 
@@ -74,12 +67,6 @@ module Spree
       end
     end
 
-    def before_three_d_secure
-      payment = @order.payments.last
-      @html_form_3ds = payment.authorize_3ds!
-      render :three_d_secure, layout: 'empty_layout'
-    end
-
     def before_address
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order.assign_default_user_addresses
@@ -95,7 +82,7 @@ module Spree
 
     def authorize_3ds
       payment = @order.payments.last
-      @html_form_3ds = payment.authorize_3ds!(params[:payment_source][payment.payment_method_id.to_s])
+      @html_form_3ds = payment.authorize_3ds(params[:payment_source][payment.payment_method_id.to_s])
       if @html_form_3ds
         render :three_d_secure, layout: 'empty_layout'
         true
