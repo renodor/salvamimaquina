@@ -2,6 +2,13 @@
 
 module Spree
   module PaymentDecorator
+    # TODO: those authorize methods should be called directly by the "process_payments_before_complete" method inside Order model,
+    # Instead of being called directly... So that the whole native solidus payment flow is not altered
+    # (But not sure it is possible without having to tokenize credit cards)
+    def authorize(cc_info)
+      handle_payment_preconditions { gateway_action(cc_info, :authorize, nil) }
+    end
+
     def authorize_3ds(cc_info)
       handle_payment_preconditions { gateway_action(cc_info, :authorize_3ds, nil) }
     end

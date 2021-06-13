@@ -12,7 +12,12 @@ module Spree
 
         assign_temp_address
 
-        return if @order.payments.present? && authorize_3ds
+        if @order.payments.present?
+          payment = @order.payments.last
+          return if payment.source.needs_3ds? && authorize_3ds(payment)
+
+          payment.authorize(params[:payment_source][payment.payment_method_id.to_s])
+        end
 
         order_transition_and_completion_logic
 
@@ -22,7 +27,7 @@ module Spree
     end
 
     def three_d_secure_response
-      payment = @order.payments.last
+      payment = @order.payments.last # TODO: find payment with payment number
       payment.process_3ds_response(params)
       order_transition_and_completion_logic
     end
@@ -80,8 +85,7 @@ module Spree
       @order.ship_address.city ||= 'Panamá'
     end
 
-    def authorize_3ds
-      payment = @order.payments.last
+    def authorize_3ds(payment)
       @html_form_3ds = payment.authorize_3ds(params[:payment_source][payment.payment_method_id.to_s])
       if @html_form_3ds
         render :three_d_secure, layout: 'empty_layout'

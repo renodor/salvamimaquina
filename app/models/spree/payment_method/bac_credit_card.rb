@@ -6,6 +6,18 @@ module Spree
       self.class
     end
 
+    def authorize(amount, source, options)
+      response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(
+        amount: fac_formated_amount(amount),
+        card_number: source[:number].delete(' '),
+        card_expiry_date: source[:expiry].delete(' / '),
+        card_cvv: source[:verification_value],
+        order_number: options[:order_id]
+      )
+
+      ActiveMerchant::Billing::Response.new(response[:success], response[:message], {}, { authorization: response[:response_code] })
+    end
+
     def authorize_3ds(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
         amount: fac_formated_amount(amount),
@@ -37,7 +49,7 @@ module Spree
       ActiveMerchant::Billing::Response.new(response[:success], response[:error_message].presence || response[:token])
     end
 
-    def purchase(amount, _source, options = {})
+    def purchase(amount, source, options = {})
       capture(amount, options[:order_id])
     end
 
