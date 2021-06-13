@@ -18,6 +18,7 @@ module PaymentGateway
 
         private
 
+        # TODO: possibility to refacto this payload (almost similar) used by this class and Authorize3ds class as well
         def xml_payload(amount, card_number, card_cvv, card_expiry_date, order_number)
           "<AuthorizeRequest xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.firstatlanticcommerce.com/gateway/data\">
             <CardDetails>
@@ -42,6 +43,7 @@ module PaymentGateway
           </AuthorizeRequest>"
         end
 
+        # TODO: possibility to refacto this method used by this class and Authorize3ds class as well
         def signature(order_number, amount)
           Digest::SHA1.base64digest("#{FirstAtlanticCommerce::Base::PASSWORD}#{FirstAtlanticCommerce::Base::MERCHANT_ID}#{FirstAtlanticCommerce::Base::ACQUIRER_ID}#{order_number}#{amount}#{FirstAtlanticCommerce::Base::PURCHASE_CURRENCY}")
         end

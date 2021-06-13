@@ -10,8 +10,8 @@ module PaymentGateway
 
           {
             success: xml_parsed_response.xpath('//ResponseCode').text == '1', # FAC success response code = 1, error response code = 3
-            reason_code: xml_parsed_response.xpath('//ReasonCode').text,
-            message: xml_parsed_response.xpath('//ReasonCodeDescription').text
+            message: xml_parsed_response.xpath('//ReasonCodeDescription').text,
+            reason_code: xml_parsed_response.xpath('//ReasonCode').text
           }
         end
 

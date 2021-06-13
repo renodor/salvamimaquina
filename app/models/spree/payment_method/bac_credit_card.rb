@@ -49,7 +49,7 @@ module Spree
       ActiveMerchant::Billing::Response.new(response[:success], response[:error_message].presence || response[:token])
     end
 
-    def purchase(amount, source, options = {})
+    def purchase(amount, _source, options = {})
       capture(amount, options[:order_id])
     end
 
