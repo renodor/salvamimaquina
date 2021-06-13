@@ -4,7 +4,6 @@
 # The modification happend at line 34 and 35:
 # - we add an index argument to the iteration
 # - we assign a package_index to each package
-# TODO: use super keyword to monkey patch only what we need
 module Spree
   module Stock
     module SimpleCoordinatorDecorator

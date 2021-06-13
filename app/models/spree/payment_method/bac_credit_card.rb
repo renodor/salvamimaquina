@@ -6,16 +6,15 @@ module Spree
       self.class
     end
 
-    def authorize_3ds(amount:, source:, order_number:)
+    def authorize_3ds(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
         amount: fac_formated_amount(amount),
-        card_number: source[:number].delete(' '),
-        card_expiry_date: source[:expiry].delete(' / '),
-        card_cvv: source[:verification_value],
-        order_number: order_number
+        token: source.token,
+        card_cvv: Base64.decode64(source.encoded_cvv),
+        order_number: options[:order_id]
       )
 
-      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { html_form: response[:html_form] })
+      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { html_form: response[:html_form], type: :authorize_3ds_response })
     end
 
     def handle_authorize_3ds_response(authorize_response)

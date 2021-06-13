@@ -12,7 +12,7 @@ module Spree
 
         assign_temp_address
 
-        return if @order.payments.present? && authorize_3ds
+        # return if @order.payments.present? && authorize_3ds
 
         order_transition_and_completion_logic
 
@@ -74,6 +74,12 @@ module Spree
       end
     end
 
+    def before_three_d_secure
+      payment = @order.payments.last
+      @html_form_3ds = payment.authorize_3ds!
+      render :three_d_secure, layout: 'empty_layout'
+    end
+
     def before_address
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @order.assign_default_user_addresses
@@ -87,25 +93,13 @@ module Spree
       @order.ship_address.city ||= 'Panamá'
     end
 
-    # TODO: remove from here, just here FYI
-    def load_order
-      @order = current_order
-      redirect_to(spree.cart_path) && return unless @order
-    end
-
     def authorize_3ds
       payment = @order.payments.last
-      response = ThreeDSecure.authorize(@order, params[:payment_source][payment.payment_method_id.to_s])
-      if response.success?
-
-        @html_form_3ds = response.params['html_form']
+      @html_form_3ds = payment.authorize_3ds!(params[:payment_source][payment.payment_method_id.to_s])
+      if @html_form_3ds
         render :three_d_secure, layout: 'empty_layout'
         true
       else
-        # TODO: this needs to be handled directly by the Spree::Payment::Processing module...
-        # TODO: add fac error message to payment
-        payment.update!(state: 'failed')
-        @order.update!(payment_state: 'failed')
         false
       end
     end

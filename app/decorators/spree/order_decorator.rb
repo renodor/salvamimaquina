@@ -3,27 +3,43 @@
 module Spree
   module OrderDecorator
     def self.prepended(base)
+      base.insert_checkout_step :three_d_secure, after: :payment
       base.remove_checkout_step :confirm
     end
 
-    private
+    # def process_payments_before_complete
+    #   return if !payment_required?
 
-    def process_payments_before_complete
-      return unless payment_required?
+    #   if payments.valid.empty?
+    #     errors.add(:base, I18n.t('spree.no_payment_found'))
+    #     return false
+    #   end
 
-      # Because we am messing up with normal Order state machine we need to add this condition
-      # It happens if the authorize3Ds request does not succeed. The Spree::Payment::Processing module is still not reach,
-      # So we fallback in this method with a failed payment
-      if payment_state == 'failed'
-        errors.add(:base, I18n.t('spree.payment_processing_failed'))
-        return false
-      elsif payments.valid.empty?
-        errors.add(:base, I18n.t('spree.no_payment_found'))
-        return false
-      end
+    #   if process_payments!
+    #     true
+    #   else
+    #     saved_errors = errors[:base]
+    #     payment_failed!
+    #     saved_errors.each { |error| errors.add(:base, error) }
+    #     false
+    #   end
+    # end
 
-      process_payments! ? true : false
-    end
+    # def process_payments_with(method_name)
+    #   # Don't run if there is nothing to pay.
+    #   return true if payment_total >= total
+
+    #   unprocessed_payments.each do |payment|
+    #     break if payment_total >= total
+
+    #     # response = payment.public_send(method_name)
+    #     # return response if payment.processing? && payment.source.needs_3ds?
+    #     payment.public_send(method_name)
+    #   end
+    # rescue Core::GatewayError => error
+    #   result = !!Spree::Config[:allow_checkout_on_gateway_error]
+    #   errors.add(:base, error.message) && (return result)
+    # end
 
     Spree::Order.prepend self
   end

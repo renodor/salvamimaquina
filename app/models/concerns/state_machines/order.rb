@@ -9,11 +9,10 @@ module StateMachines
       klass.extend ClassMethods
     end
 
+    # rubocop:disable Metrics/ModuleLength
     module ClassMethods
       attr_accessor :previous_states
-      attr_writer :next_event_transitions
-      attr_writer :checkout_steps
-      attr_writer :removed_transitions
+      attr_writer :next_event_transitions, :checkout_steps, :removed_transitions
 
       def checkout_flow(&block)
         if block_given?
@@ -24,6 +23,7 @@ module StateMachines
         end
       end
 
+      # rubocop:disable Metrics/MethodLength
       def define_state_machine!
         self.checkout_steps = {}
         self.next_event_transitions = []
@@ -42,6 +42,8 @@ module StateMachines
         # To avoid multiple occurrences of the same transition being defined
         # On first definition, state_machines will not be defined
         state_machines.clear if respond_to?(:state_machines)
+
+        # rubocop:disable Metrics/BlockLength
         state_machine :state, initial: :cart, use_transactions: false do
           klass.next_event_transitions.each { |state| transition(state.merge(on: :next)) }
 
@@ -50,9 +52,9 @@ module StateMachines
             order.state = order.state
             order.state_changes.create(
               previous_state: transition.from,
-              next_state:     transition.to,
-              name:           'order',
-              user_id:        order.user_id
+              next_state: transition.to,
+              name: 'order',
+              user_id: order.user_id
             )
             order.save
           end
@@ -62,7 +64,7 @@ module StateMachines
           end
 
           event :return do
-            transition to: :returned, from: [:complete, :awaiting_return], if: :all_inventory_units_returned?
+            transition to: :returned, from: %i[complete awaiting_return], if: :all_inventory_units_returned?
           end
 
           event :resume do
@@ -76,7 +78,7 @@ module StateMachines
           # Here is the modified line. We need that to successfully remove the "confirm" checkout step
           # TODO: find a way to decorate only the needed part and not monkey patch the whole file...
           event :complete do
-            transition to: :complete, from: :payment
+            transition to: :complete, from: :three_d_secure
           end
 
           if states[:payment]
@@ -114,17 +116,17 @@ module StateMachines
           before_transition to: :complete, do: :ensure_promotions_eligible
           before_transition to: :complete, do: :ensure_line_item_variants_are_not_deleted
           before_transition to: :complete, do: :ensure_inventory_units
-          if states[:payment]
-            before_transition to: :complete, do: :process_payments_before_complete
-          end
+          before_transition to: :complete, do: :process_payments_before_complete if states[:payment]
 
           after_transition to: :complete, do: :finalize!
           after_transition to: :resumed,  do: :after_resume
           after_transition to: :canceled, do: :after_cancel
 
-          after_transition from: any - :cart, to: any - [:confirm, :complete] do |order|
+          # rubocop:disable Style/SymbolProc
+          after_transition from: any - :cart, to: any - %i[confirm complete] do |order|
             order.recalculate
           end
+          # rubocop:enable Style/SymbolProc
 
           after_transition do |order, transition|
             order.logger.debug "Order #{order.number} transitioned from #{transition.from} to #{transition.to} via #{transition.event}"
@@ -134,7 +136,9 @@ module StateMachines
             order.logger.debug "Order #{order.number} halted transition on event #{transition.event} state #{transition.from}: #{order.errors.full_messages.join}"
           end
         end
+        # rubocop:enable Metrics/BlockLength
       end
+      # rubocop:enable Metrics/MethodLength
 
       def go_to_state(name, options = {})
         checkout_steps[name] = options
@@ -213,19 +217,20 @@ module StateMachines
         @removed_transitions ||= []
       end
     end
+    # rubocop:enable Metrics/ModuleLength
 
     def checkout_steps
-      steps = self.class.checkout_steps.each_with_object([]) { |(step, options), checkout_steps|
+      steps = self.class.checkout_steps.each_with_object([]) do |(step, options), checkout_steps|
         next if options.include?(:if) && !options[:if].call(self)
 
         checkout_steps << step
-      }.map(&:to_s)
+      end.map(&:to_s)
       # Ensure there is always a complete step
-      steps << "complete" unless steps.include?("complete")
+      steps << 'complete' unless steps.include?('complete')
       steps
     end
 
-    def has_checkout_step?(step)
+    def has_checkout_step?(step) # rubocop:disable Naming/PredicateName
       step.present? && checkout_steps.include?(step)
     end
 
