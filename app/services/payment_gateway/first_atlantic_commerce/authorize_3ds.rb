@@ -3,6 +3,8 @@
 module PaymentGateway
   module FirstAtlanticCommerce
     class Authorize3ds < FirstAtlanticCommerce::Base
+      TEST_MODE = Rails.application.credentials.test_mode
+
       class << self
         def call(amount:, card_number:, card_cvv:, card_expiry_date:, order_number:)
           xml_response = authorize_3ds(xml_payload(amount, card_number, card_cvv, card_expiry_date, order_number))
@@ -25,7 +27,7 @@ module PaymentGateway
             <CardNumber>#{card_number}</CardNumber>
             <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://d4f3c036200e.ngrok.io/shop/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://#{TEST_MODE ? '6e8a023bcfae.ngrok.io' : ''}/shop/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>

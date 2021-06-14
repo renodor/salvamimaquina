@@ -2,10 +2,11 @@
 
 module PaymentGateway
   class FirstAtlanticCommerce::Base
-    BASE_URL = "https://#{Rails.env.production? ? 'marlin' : 'ecm'}.firstatlanticcommerce.com/PGServiceXML"
+    TEST_MODE = Rails.application.credentials.test_mode
+    BASE_URL = "https://#{TEST_MODE ? 'ecm' : 'marlin'}.firstatlanticcommerce.com/PGServiceXML"
     ACQUIRER_ID = Rails.application.credentials.fac_acquirer_id
-    MERCHANT_ID = Rails.application.credentials[Rails.env.production? ? :fac_merchant_id : :fac_merchant_id_test]
-    PASSWORD = Rails.application.credentials[Rails.env.production? ? :fac_password : :fac_password_test]
+    MERCHANT_ID = Rails.application.credentials[TEST_MODE ? :fac_merchant_id_test : :fac_merchant_id]
+    PASSWORD = Rails.application.credentials[TEST_MODE ? :fac_password_test : :fac_password]
     PURCHASE_CURRENCY = 840 # FAC code for USD
 
     RepairShoprApiError = Class.new(StandardError)

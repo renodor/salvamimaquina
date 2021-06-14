@@ -27,8 +27,7 @@ module Spree
     end
 
     def three_d_secure_response
-      payment = @order.payments.last # TODO: find payment with payment number
-      payment.process_3ds_response(params)
+      @order.payments.find_by(number: params[:OrderID].split('-').last).process_3ds_response(params)
       order_transition_and_completion_logic
     end
 
@@ -93,6 +92,14 @@ module Spree
       else
         false
       end
+    end
+
+    def load_order
+      @order = current_order
+      # Add an aditional net safety to find the @order if it can't be find with the cookie
+      # (It could happend when coming back from 3DS, the cookie may be lost between redirects, (even if it shouldn't...))
+      @order ||= Spree::Order.find_by(number: params[:OrderID].split('-').first)
+      redirect_to(spree.cart_path) && return unless @order
     end
 
     Spree::CheckoutController.prepend self

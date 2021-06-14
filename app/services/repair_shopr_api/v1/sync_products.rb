@@ -6,7 +6,6 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
       Rails.logger.info('Start to sync products')
 
       products = get_products
-
       # Sync all products
       products.each do |product|
         RepairShoprApi::V1::SyncProduct.call(attributes: product, sync_logs: sync_logs)

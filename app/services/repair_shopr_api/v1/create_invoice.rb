@@ -6,7 +6,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       @order = order
       @user_id = me['user_id'] # TODO: store this somewhere in an ENV variable... No need to call API if it won't change
 
-      @customer_repair_shopr_id = create_or_update_customer
+      @repair_shopr_customer_id = create_or_update_repair_shopr_customer
       repair_shopr_invoice = build_repair_shopr_invoice
       repair_shopr_invoice[:line_items] = build_repair_shopr_line_items
       repair_shopr_invoice[:line_items] << build_repair_shopr_shipping
@@ -15,7 +15,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
     end
 
-    def create_or_update_customer
+    def create_or_update_repair_shopr_customer
       ship_address = @order.ship_address
       customer_info = {
         email: @order.email,
@@ -29,19 +29,19 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         phone: ship_address.phone
       }
 
-      if (customer_repair_shopr_id = get_customer_by_email(@order.email)['id'])
-        update_customer(customer_repair_shopr_id, customer_info)
+      if (repair_shopr_customer = get_customer_by_email(@order.email))
+        update_customer(repair_shopr_customer['id'], customer_info)
       else
         customer_info[:referred_by] = 'ecom'
-        customer_repair_shopr_id = create_customer(customer_info)
+        repair_shopr_customer = create_customer(customer_info)
       end
 
-      customer_repair_shopr_id
+      repair_shopr_customer['id']
     end
 
     def build_repair_shopr_invoice
       {
-        customer_id: @customer_repair_shopr_id,
+        customer_id: @repair_shopr_customer_id,
         balance_due: @order.total,
         number: @order.number,
         date: @order.completed_at,
@@ -60,7 +60,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
           name: line_item.variant.description,
           product_id: line_item.variant.repair_shopr_id,
           quantity: line_item.quantity,
-          price: line_item.price * 1.07,
+          price: line_item.price,
           taxable: true,
           upc_code: line_item.variant.sku,
           tax_rate_id: line_item.tax_category.repair_shopr_id,
