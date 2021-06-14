@@ -42,6 +42,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
         taxon.update!(name: product_category['name'], description: product_category['description'])
         # Product category without "/" in ancestry has only one ancester, which is the root category "ecom"
         # So we can put it directly under the @categories_taxon
+        # TODO: solve bug here: now that we directly included the "ecom" category as well, we have a product category without ancestry...
         { taxon: taxon, parent: product_category['ancestry'].include?('/') ? product_category['ancestry'] : nil }
       end
     end
