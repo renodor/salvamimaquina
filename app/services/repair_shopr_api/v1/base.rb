@@ -29,8 +29,8 @@ class RepairShoprApi::V1::Base
 
     # Only retrieve enabled products, belonging to "ecom" category or sub categories
     def get_products
-      # Find all categories bellow "ecom" category, get their ids
-      product_categorie_ids = get_product_categories.map { |category| category['id'] }
+      # Find root category and all categories below, and get their ids
+      product_categorie_ids = get_product_categories(include_root_category: true).map { |category| category['id'] }
       products = []
 
       # Only fetch products belonging to those categories
@@ -54,14 +54,17 @@ class RepairShoprApi::V1::Base
       request(http_method: :get, endpoint: "products/#{id}")['product']
     end
 
-    def get_product_categories
+    def get_product_categories(include_root_category: false)
       product_categories = request(http_method: :get, endpoint: 'products/categories')['categories']
-      ecom_category = product_categories.detect { |product_category| product_category['name'] == RS_ROOT_CATEGORY_NAME }
+      root_category = product_categories.detect { |product_category| product_category['name'] == RS_ROOT_CATEGORY_NAME }
 
-      return [] unless ecom_category
+      return [] unless root_category
 
-      # Returns only categories below the root category "ecom"
-      product_categories.filter { |product_category| product_category == ecom_category || product_category['ancestry']&.include?(ecom_category['id'].to_s) }
+      # Get only categories below the root category
+      ecom_product_categories = product_categories.filter { |product_category| product_category['ancestry']&.include?(root_category['id'].to_s) }
+
+      # Return filtered categories including or not root category depending on given argument
+      include_root_category ? ecom_product_categories + [root_category] : ecom_product_categories
     end
 
     def post_invoices(invoice)

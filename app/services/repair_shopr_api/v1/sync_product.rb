@@ -42,7 +42,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     rescue ActiveRecord::ActiveRecordError => e
       sync_logs.sync_errors << { product_repair_shopr_id: attributes['id'], error: e }
       false
-    rescue RepairShoprApi::V1::Base::NotFoundError
+    rescue RepairShoprApi::V1::Base::NotFoundError # TODO: replace RepairShoprApi::V1::Base with self?
       sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
       false
     rescue => e # rubocop:disable Style/RescueStandardError
@@ -135,20 +135,24 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     end
 
     # Spree::Classification is the joining table between Spree::Product and Spree::Taxons
-    # If the product belong to a specific product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
-    # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
-    # (In RepairShopr a product can belong to only one product category, so to only one classification in Solidus)
-    def update_product_classifications(product_category, brand)
-      taxon_name = product_category == RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME ? 'Categories' : product_category.split(';').last
-      taxon = Spree::Taxon.find_by!(name: taxon_name, taxonomy_id: Spree::Taxonomy.find_by!(name: 'Categories').id) # TODO: memoize "Categories" taxonomy id
-      Spree::Classification.find_or_initialize_by(product_id: @variant.product.id).update!(taxon_id: taxon.id)
+    def update_product_classifications(product_category_name, brand)
+      @product.classifications.destroy_all # Easier to destroy and recreate all classifications... TODO: Maybe a way to improve that
+
+      # If the product belong to a specific product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
+      # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
+      categories_taxonomy = Spree::Taxonomy.find_by!(name: 'Categories') # TODO: memoize "Categories" taxonomy id
+      categories_parent_taxon = categories_taxonomy.taxons.find_by(parent_id: nil)
+      taxon_name = product_category_name == self::RS_ROOT_CATEGORY_NAME ? categories_parent_taxon.name : product_category_name.split(';').last
+      taxon = categories_taxonomy.taxons.find_or_create_by!(name: taxon_name) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
+      Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
 
       return unless brand
 
-      brand_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands')
-      brand_parent_taxon = brand_taxonomy.taxons.find_by(parent_id: nil)
-      taxon = Spree::Taxon.find_or_create_by!(name: brand, taxonomy_id: brand_taxonomy.id, parent_id: brand_parent_taxon.id) # TODO: memoize "Brand" taxonomy id
-      Spree::Classification.find_or_initialize_by(product_id: @variant.product.id).update!(taxon_id: taxon.id)
+      # Same with "brands" taxon. But brands taxons cannot have children, so it is slightly easier
+      brands_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands') # TODO: memoize "Brand" taxonomy id
+      brands_parent_taxon = brands_taxonomy.taxons.find_by(parent_id: nil) # TODO: memoize "Brand" parent taxon
+      taxon = brands_taxonomy.taxons.find_or_create_by!(name: brand, parent_id: brands_parent_taxon.id) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
+      Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
     end
 
     # Convert the product notes comming from RS into a Ruby hash
