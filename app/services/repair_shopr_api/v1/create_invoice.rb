@@ -19,14 +19,15 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       ship_address = @order.ship_address
       customer_info = {
         email: @order.email,
-        first_name: ship_address.firstname,
-        last_name: ship_address.lastname,
+        firstname: ship_address.firstname,
+        lastname: ship_address.lastname,
         fullname: ship_address.name,
         address: ship_address.address1,
         address_2: ship_address.address2,
-        city: ship_address.city,
+        city: "#{ship_address.district.name} - #{ship_address.city}",
         state: ship_address.state.name,
-        phone: ship_address.phone
+        phone: ship_address.phone,
+        notes: ship_address.google_maps_link
       }
 
       if (repair_shopr_customer = get_customer_by_email(@order.email))
@@ -49,7 +50,8 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         total: @order.total,
         tax: @order.additional_tax_total,
         is_paid: @order.payment_state == 'paid',
-        location_id: define_invoice_location_id(@order.shipments)
+        location_id: define_invoice_location_id(@order.shipments),
+        note: @order.ship_address.google_maps_link
       }
     end
 

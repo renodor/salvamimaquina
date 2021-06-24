@@ -10,6 +10,10 @@ module Spree
       false
     end
 
+    def google_maps_link
+      "http://www.google.com/maps/place/#{latitude},#{longitude}"
+    end
+
     Spree::Address.prepend self
   end
 end
