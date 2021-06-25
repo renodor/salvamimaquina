@@ -16,9 +16,7 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
     variants_to_destroy = Spree::Variant.where.not(repair_shopr_id: products.map { |product| product['id'] })
                                         .or(Spree::Variant.where(repair_shopr_id: nil, is_master: false))
     variants_to_destroy.each do |variant|
-      product = variant.product
-      variant.destroy!
-      product.destroy! unless product.has_variants?
+      variant.destroy_and_destroy_product_if_no_other_variants!
       sync_logs.deleted_products += 1
     end
 

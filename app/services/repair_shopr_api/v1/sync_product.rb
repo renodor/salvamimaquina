@@ -16,11 +16,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         # If variant needs to be assigned to a new product,
         # we need to destroy it and sync it again, because there is currently no way to assign an existing variant to another product in Solidus.
         existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
-        if existing_variant && variant_needs_to_be_assigned_to_new_product?(existing_variant, attributes)
-          product = existing_variant.product
-          existing_variant.destroy!
-          product.destroy! unless product.has_variants?
-        end
+        variant.destroy_and_destroy_product_if_no_other_variants! if existing_variant && variant_needs_to_be_assigned_to_new_product?(existing_variant, attributes)
 
         # Nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
         @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
