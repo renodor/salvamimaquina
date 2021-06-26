@@ -33,6 +33,13 @@ module Spree
 
     private
 
+    # When there is an error with payment we don't want to display the specific payment gateway error that can be not comprehensible by the user
+    # So we just display the flash message with a generic "payment gateway" error, to indicate something went wrong with payment
+    def redirect_on_failure
+      flash[:error] = @order.state == 'payment' ? t('spree.spree_gateway_error_flash_for_checkout') : @order.errors.full_messages.join("\n")
+      redirect_to(checkout_state_path(@order.state))
+    end
+
     def order_transition_and_completion_logic
       unless transition_forward
         redirect_on_failure
@@ -94,11 +101,23 @@ module Spree
       end
     end
 
+    # redirect_to instead of only render
+    # Because otherwise we render :edit but we are still in the #update method that has no corresponding route...
+    # So if user refresh page it causes a 404 error
+    # Another consequence is that @order.errors are lost during the redirect, which is actually what we want
+    # Indeed we want the flash message with a generic "payment gateway" error, to indicate something went wrong with payment,
+    # but we don't want to display the specific payment gateway error that can be not comprehensible by the user
+    def rescue_from_spree_gateway_error(exception)
+      flash[:error] = t('spree.spree_gateway_error_flash_for_checkout')
+      @order.errors.add(:base, exception.message)
+      redirect_to checkout_state_path(@order.state)
+    end
+
     def load_order
       @order = current_order
       # Add an aditional net safety to find the @order if it can't be find with the cookie
       # (It could happend when coming back from 3DS, the cookie may be lost between redirects, (even if it shouldn't...))
-      @order ||= Spree::Order.find_by(number: params[:OrderID].split('-').first)
+      @order ||= Spree::Order.find_by(number: params[:OrderID]&.split('-')&.first)
       redirect_to(spree.cart_path) && return unless @order
     end
 

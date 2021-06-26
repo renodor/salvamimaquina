@@ -12,7 +12,7 @@ module Spree
       # In Solidus base code when payment failed order need to be send from "confirm" to "payment" state again
       # But before doing it, order errors need to be saved and then reassigned otherwise it will be lost
       # Here payment is our last order step, so if payment fail, order is already on "payment" step,
-      # But Solidus codebase will still reassign order errors, resulting in ctually assign all errors twice,
+      # But Solidus codebase will still reassign order errors, resulting in actually assign all errors twice,
       # So the purpose of this decorator is just to simplify this method and prevent order errors to be reassigned twice
       process_payments! ? true : false
     end

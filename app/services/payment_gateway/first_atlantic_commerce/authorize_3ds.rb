@@ -13,7 +13,7 @@ module PaymentGateway
           {
             success: xml_parsed_response.xpath('//ResponseCode').text == '0',
             message: xml_parsed_response.xpath('//ResponseCodeDescription').text,
-            html_form: xml_parsed_response.xpath('//HTMLFormData').text
+            html_form: TEST_MODE ? test_mode_3ds_response_html_form(order_number) : xml_parsed_response.xpath('//HTMLFormData').text
           }
         end
 
@@ -27,7 +27,7 @@ module PaymentGateway
             <CardNumber>#{card_number}</CardNumber>
             <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://#{TEST_MODE ? '6e8a023bcfae.ngrok.io' : ''}/shop/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://#{TEST_MODE ? 'f52df5be6624.ngrok.io' : ''}/shop/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>
@@ -51,6 +51,18 @@ module PaymentGateway
 
         def signature(order_number, amount)
           Digest::SHA1.base64digest("#{FirstAtlanticCommerce::Base::PASSWORD}#{FirstAtlanticCommerce::Base::MERCHANT_ID}#{FirstAtlanticCommerce::Base::ACQUIRER_ID}#{order_number}#{amount}#{FirstAtlanticCommerce::Base::PURCHASE_CURRENCY}")
+        end
+
+        def test_mode_3ds_response_html_form(order_number)
+          "<form action=\"/shop/checkout/three_d_secure_response\" method=\"post\" data-remote=\"true\">
+            <p>Simulate 3DS Authorization</p>
+            <input type=\"radio\" id=\"success\" name=\"ResponseCode\" value=\"1\">
+            <label for=\"success\">Success (Payment will eventually fail anyway because capture won't be successful without real 3ds...)</label><br>
+            <input type=\"radio\" id=\"failure\" name=\"ResponseCode\" value=\"0\">
+            <label for=\"failure\">Failure</label><br>
+            <input type=\"hidden\" name=\"OrderID\" value=\"#{order_number.split('-').last}\">
+            <input type=\"submit\" name=\"title\">
+          </form>"
         end
       end
     end
