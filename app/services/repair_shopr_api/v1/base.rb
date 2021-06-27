@@ -67,10 +67,6 @@ class RepairShoprApi::V1::Base
       include_root_category ? ecom_product_categories + [root_category] : ecom_product_categories
     end
 
-    def post_invoices(invoice)
-      request(http_method: :post, endpoint: 'invoices', params: invoice)
-    end
-
     def get_customer_by_email(email)
       request(http_method: :get, endpoint: "customers?email=#{email}")['customers'].first
     end
@@ -81,6 +77,14 @@ class RepairShoprApi::V1::Base
 
     def update_customer(id, customer_info)
       request(http_method: :put, endpoint: "customers/#{id}", params: customer_info)
+    end
+
+    def post_invoices(invoice)
+      request(http_method: :post, endpoint: 'invoices', params: invoice)
+    end
+
+    def post_payments(payment)
+      request(http_method: :post, endpoint: 'payments', params: payment)
     end
     # rubocop:enable Naming/AccessorMethodName
 

@@ -11,8 +11,10 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       repair_shopr_invoice[:line_items] = build_repair_shopr_line_items
       repair_shopr_invoice[:line_items] << build_repair_shopr_shipping
 
-      post_invoices(repair_shopr_invoice)
+      invoice = post_invoices(repair_shopr_invoice)['invoice']
       # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
+
+      RepairShoprApi::V1::CreatePayment.call(invoice)
     end
 
     def create_or_update_repair_shopr_customer
@@ -51,7 +53,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         tax: @order.additional_tax_total,
         is_paid: @order.payment_state == 'paid',
         location_id: define_invoice_location_id(@order.shipments),
-        note: @order.ship_address.google_maps_link
+        note: "Sold from Ecommerce Website. To deliver to: #{@order.ship_address.google_maps_link}"
       }
     end
 
