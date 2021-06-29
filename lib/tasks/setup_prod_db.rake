@@ -9,6 +9,7 @@ namespace :setup_prod_db do
     create_zone create_tax_category
     create_panama_city_corregimientos
     destroy_countries_and_states_out_of_panama
+    create_payment_methods
   ]
 
   task :create_stock_locations do
@@ -165,6 +166,17 @@ namespace :setup_prod_db do
 
     Spree::Country.where.not(id: panama_id).destroy_all
     Spree::State.where.not(country_id: panama_id).destroy_all
+  end
+
+  task :create_payment_methods do
+    Rails.logger.info('Create payment methods')
+
+    bac_credit_card = Spree::PaymentMethod.find_or_initialize_by(type: 'Spree::PaymentMethod::BacCreditCard', name: 'Credit Card')
+    bac_credit_card.attributes = {
+      preferences: { server: 'fac', test_mode: false },
+      auto_capture: true
+    }
+    bac_credit_card.save!
   end
 end
 # rubocop:enable Metrics/BlockLength

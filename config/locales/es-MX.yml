@@ -8,6 +8,8 @@ es-MX:
       tax_rates:
         sales_tax: "%{name}"
         sales_tax_with_rate: "%{name}"
+    payment_methods:
+      credit_card: "Tarjeta de Crédito"
   activerecord:
     attributes:
       spree/credit_card:

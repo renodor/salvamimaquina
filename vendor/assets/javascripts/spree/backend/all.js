@@ -8,3 +8,5 @@
 //= require rails-ujs
 //= require spree/backend
 //= require_tree .
+//= require spree/backend/flatpickr
+//= require spree/backend/solidus_sale_prices

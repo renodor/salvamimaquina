@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/solidusio-contrib/solidus_sale_prices.git
+  revision: 6152f2485cb466b1a4451ca580d6e878d88ecffd
+  specs:
+    solidus_sale_prices (1.4.0)
+      deface (~> 1.0)
+      solidus_api (>= 1.0, < 3)
+      solidus_backend (>= 1.0, < 3)
+      solidus_core (>= 1.0, < 3)
+      solidus_support (~> 0.5)
+
+GIT
   remote: https://github.com/solidusio/solidus.git
   revision: 09c53ee00ee25450e76b474d713934b087af2bed
   branch: v2.11
@@ -488,6 +499,7 @@ DEPENDENCIES
   solidus!
   solidus_auth_devise
   solidus_i18n (~> 2.0)
+  solidus_sale_prices!
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

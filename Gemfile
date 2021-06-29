@@ -30,6 +30,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # Ecommerce Framework
 gem 'solidus', github: 'solidusio/solidus', branch: 'v2.11'
+gem 'solidus_sale_prices', github: 'solidusio-contrib/solidus_sale_prices'
+
 
 # HTTP client
 gem 'faraday'
