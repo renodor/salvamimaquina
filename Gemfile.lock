@@ -184,6 +184,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.8)
+    connection_pool (2.2.5)
     crass (1.0.6)
     deface (1.8.1)
       nokogiri (>= 1.6)
@@ -356,6 +357,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redis (4.3.1)
     regexp_parser (2.1.1)
     request_store (1.5.0)
       rack (>= 1.4)
@@ -407,6 +409,12 @@ GEM
     sentry-ruby-core (4.3.2)
       concurrent-ruby
       faraday
+    sidekiq (6.2.1)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      redis (>= 4.2.0)
+    sidekiq-failures (1.0.0)
+      sidekiq (>= 4.0.0)
     solidus_auth_devise (2.5.3)
       deface (~> 1.0)
       devise (~> 4.1)
@@ -496,6 +504,8 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
+  sidekiq
+  sidekiq-failures (~> 1.0)
   solidus!
   solidus_auth_devise
   solidus_i18n (~> 2.0)

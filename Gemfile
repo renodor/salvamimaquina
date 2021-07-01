@@ -54,6 +54,9 @@ gem 'kaminari-i18n', '~> 0.5.0'
 # Pass env variables to JS
 gem 'gon'
 
+gem 'sidekiq'
+gem 'sidekiq-failures', '~> 1.0'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'
