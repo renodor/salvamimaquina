@@ -9,7 +9,7 @@ class RepairShoprWebhook::ProductsController < ApplicationController
     repair_shopr_subdomain = test_mode ? Rails.application.credentials.repair_shopr_subdomain_test : Rails.application.credentials.repair_shopr_subdomain
 
     # Only accept requests coming from the correct RS sender
-    return unless params['link'].include?("https://#{repair_shopr_subdomain}.repairshopr.com/products/")
+    return unless params['link']&.include?("https://#{repair_shopr_subdomain}.repairshopr.com/products/")
 
     # Only sync products enabled and belonging to the "ecom" category
     # If it is not the case but the variant exists, we need to destroy it
