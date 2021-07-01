@@ -4,8 +4,12 @@ class RepairShoprWebhook::ProductsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def product_updated
+    # TODO: improve this "test mode" thing so that it is generic everywhere and we don't have to compute it every time we need it.
+    test_mode = Rails.application.credentials.test_mode
+    repair_shopr_subdomain = test_mode ? Rails.application.credentials.repair_shopr_subdomain_test : Rails.application.credentials.repair_shopr_subdomain
+
     # Only accept requests coming from the correct RS sender
-    return unless params['link'].include?("https://#{Rails.application.credentials.repair_shopr_subdomain}.repairshopr.com/products/")
+    return unless params['link'].include?("https://#{repair_shopr_subdomain}.repairshopr.com/products/")
 
     # Only sync products enabled and belonging to the "ecom" category
     # If it is not the case but the variant exists, we need to destroy it
