@@ -1,0 +1,9 @@
+<div id="district_members" data-hook="member">
+  <fieldset class="no-border-bottom">
+    <legend align="center"><%= plural_resource_name(Spree::District) %></legend>
+    <%= zone_form.field_container :district_ids do %>
+    <%= zone_form.label :district_ids, plural_resource_name(Spree::District) %><br>
+    <%= zone_form.collection_select :district_ids, @districts, :id, :district_with_state, {}, { multiple: true, class: "select2 fullwidth" } %>
+    <% end %>
+  </fieldset>
+</div>

@@ -10,7 +10,7 @@ module Spree
           state = Spree::State.find(params[:state_id])
           @districts = state.districts
         else
-          @districts = District.all
+          @districts = Spree::District.all
         end
       end
     end

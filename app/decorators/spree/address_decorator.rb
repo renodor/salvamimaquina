@@ -3,7 +3,7 @@
 module Spree
   module AddressDecorator
     def self.prepended(base)
-      base.belongs_to :district, optional: true
+      base.belongs_to :district, class_name: 'Spree::District', optional: true
     end
 
     def require_zipcode?

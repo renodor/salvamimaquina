@@ -31,6 +31,7 @@
 
 en:
   spree:
+    district_based: District Based
     admin:
       tab:
         sync_repair_shopr: Sync RepairShopr

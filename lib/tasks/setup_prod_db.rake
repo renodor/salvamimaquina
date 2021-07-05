@@ -152,12 +152,12 @@ namespace :setup_prod_db do
     district_ids = []
 
     corregimientos.each do |corregimiento|
-      district = District.find_or_initialize_by(name: corregimiento[:name], state_id: panama_state_id)
+      district = Spree::District.find_or_initialize_by(name: corregimiento[:name], state_id: panama_state_id)
       district.update!(latitude: corregimiento[:latitude], longitude: corregimiento[:longitude])
       district_ids << district.id
     end
 
-    District.where.not(id: district_ids).destroy_all
+    Spree::District.where.not(id: district_ids).destroy_all
   end
 
   task :destroy_countries_and_states_out_of_panama do

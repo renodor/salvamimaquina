@@ -1,0 +1,7 @@
+<!-- insert_bottom 'div[data-hook="type"] ul' -->
+<li>
+  <label>
+    <%= zone_form.radio_button('kind', 'district', { id: 'district_based' }) %>
+    <%= t('spree.district_based') %>
+  </label>
+</li>

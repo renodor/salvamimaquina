@@ -3,7 +3,7 @@
 module Spree
   module StateDecorator
     def self.prepended(base)
-      base.has_many :districts
+      base.has_many :districts, -> { order(:name) }, dependent: :destroy
     end
 
     Spree::State.prepend self
