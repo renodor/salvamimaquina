@@ -12,7 +12,7 @@ module Spree
 
         assign_temp_address
 
-        if @order.payments.present?
+        if @order.payments.present? && params[:payment_source]
           payment = @order.payments.last
           return if payment.source.needs_3ds? && authorize_3ds(payment)
 
