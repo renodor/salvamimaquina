@@ -1,6 +1,7 @@
 es-MX:
   spree:
     district: 'Corregimiento'
+    items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'
     billing_address: 'Dirección'
     apply_code: 'Aplicar código'
     order_number: "Número de orden: %{number}"
@@ -10,6 +11,9 @@ es-MX:
         sales_tax_with_rate: "%{name}"
     payment_methods:
       credit_card: "Tarjeta de Crédito"
+    helpers:
+      products:
+        price_diff_add_html: "%{amount_html} adicional"
   activerecord:
     attributes:
       spree/credit_card:
