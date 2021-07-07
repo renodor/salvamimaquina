@@ -33,6 +33,6 @@ class Spree::Admin::SyncsController < ApplicationController
 
   def save_sync_logs
     @sync_logs.save!
-    CaptureMessageToSentry.perform_later(self.class.name, extra: { sync_logs_errors: @sync_logs.sync_errors }) if @sync_logs.sync_errors.any?
+    Sentry.capture_message(self.class.name, { extra: { sync_logs_errors: @sync_logs.sync_errors } }) if @sync_logs.sync_errors.any?
   end
 end
