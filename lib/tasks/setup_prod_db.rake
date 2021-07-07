@@ -8,6 +8,7 @@ namespace :setup_prod_db do
     create_taxonomies
     create_zone create_tax_category
     create_panama_city_corregimientos
+    create_panama_city_zones
     destroy_countries_and_states_out_of_panama
     create_payment_methods
     create_free_shipping_promotion
@@ -35,13 +36,6 @@ namespace :setup_prod_db do
     Rails.logger.info('Create Categories Taxonomies')
     Spree::Taxonomy.find_or_create_by!(name: 'Categories').taxons.find_or_create_by!(name: 'Categories')
     Spree::Taxonomy.find_or_create_by!(name: 'Brands').taxons.find_or_create_by(name: 'Brands')
-  end
-
-  task :create_zone do
-    Rails.logger.info('Create Panama Zone')
-    panama = Spree::Country.find_by(name: 'Panama')
-    panama_zone = Spree::Zone.find_or_create_by(name: 'Panama')
-    Spree::ZoneMember.find_or_create_by(zoneable_type: panama.class.name, zoneable_id: panama.id, zone_id: panama_zone.id)
   end
 
   task :create_tax_category do
@@ -146,6 +140,11 @@ namespace :setup_prod_db do
         name: 'Tocumen',
         longitude: -79.388304,
         latitude: 9.071253
+      },
+      {
+        name: 'Costa Del Este',
+        logintude: -79.471627,
+        latitude: 9.013227
       }
     ]
 
@@ -158,6 +157,12 @@ namespace :setup_prod_db do
     end
 
     Spree::District.where.not(id: district_ids).destroy_all
+  end
+
+  task :create_panama_city_zones do
+    Rails.logger.info('Create Panama City Zones')
+
+    # TODO
   end
 
   task :destroy_countries_and_states_out_of_panama do
