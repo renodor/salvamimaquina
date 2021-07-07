@@ -52,13 +52,15 @@ module Spree
       else
         CaptureMessageToSentry.perform_later(
           payment_method.type,
-          extra: {
-            payment_gateway_error: response.message,
-            payment_gateway_response_code: response.authorization,
-            payment_gateway_reason_code: response.params['reason_code'],
-            payment_number: number,
-            order_number: order.number,
-            method_name: response.params['method_name']
+          {
+            extra: {
+              payment_gateway_error: response.message,
+              payment_gateway_response_code: response.authorization,
+              payment_gateway_reason_code: response.params['reason_code'],
+              payment_number: number,
+              order_number: order.number,
+              method_name: response.params['method_name']
+            }
           }
         )
         send(failure_state)
