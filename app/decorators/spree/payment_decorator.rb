@@ -50,7 +50,7 @@ module Spree
           send("#{success_state}!")
         end
       else
-        Sentry.capture_message(
+        CaptureMessageToSentry.perform_later(
           payment_method.type,
           extra: {
             payment_gateway_error: response.message,

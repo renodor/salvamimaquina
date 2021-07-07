@@ -42,6 +42,7 @@ gem 'oj'
 # Exception management
 gem 'sentry-rails'
 gem 'sentry-ruby'
+gem 'sentry-sidekiq'
 
 # Image storage
 gem 'cloudinary', '~> 1.19'
