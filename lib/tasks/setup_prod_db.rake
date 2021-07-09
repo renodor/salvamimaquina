@@ -162,7 +162,53 @@ namespace :setup_prod_db do
   task :create_panama_city_zones do
     Rails.logger.info('Create Panama City Zones')
 
-    # TODO
+    district_name_by_zones = {
+      zone1: ['Bella Vista', 'Calidonia', 'Curundú', 'San Francisco'],
+      zone2: ['Ancón', 'Betania', 'Costa Del Este', 'El Chorrillo', 'Parque Lefevre', 'Pueblo Nuevo', 'Rio Abajo', 'San Felipe', 'Santa Ana'],
+      zone3: ['24 de Diciembre', 'Don Bosco', 'Juan Diaz', 'Tocumen']
+    }
+
+    3.times do |n|
+      zone = Spree::Zone.find_or_create_by!(name: "Panama Zone #{n + 1}")
+      districts = Spree::District.where(name: district_name_by_zones["zone#{n + 1}".to_sym])
+      districts.each do |district|
+        Spree::ZoneMember.find_or_create_by!(zoneable_type: 'Spree::District', zoneable_id: district.id, zone_id: zone.id)
+      end
+    end
+  end
+
+  task :create_shipping_methods do
+    default_shipping_category = Spree::ShippingCategory.find_by!(name: 'Default')
+
+    Rails.logger.info('Create Panama City Shipping Methods by Zone')
+
+    Spree::Calculator::Shipping::CustomShippingCalculator.destroy_all
+
+    amount_per_zone = {
+      zone1: 3.9,
+      zone2: 5.5,
+      zone3: 9.5
+    }
+
+
+    3.times do |n|
+      shipping_method = Spree::ShippingMethod.find_or_initialize_by(name: "Panama Zone #{n + 1}")
+      zone = Spree::Zone.find_by!(name: "Panama Zone #{n + 1}")
+      shipping_method.shipping_categories = [default_shipping_category]
+      shipping_method.zones = [zone]
+      shipping_method.calculator = Spree::Calculator::Shipping::CustomShippingCalculator.find_or_initialize_by(preferences: { amount: amount_per_zone["zone#{n + 1}".to_sym] })
+      shipping_method.save!
+    end
+
+    Rails.logger.info('Create Pick-up in Store Shipping Methods')
+
+    Spree::Calculator::Shipping::FlatPercentItemTotal.destroy_all
+    ['Pick-up in store: Bella Vista', 'Pick-up in store: San Francisco'].each do |name|
+      shipping_method = Spree::ShippingMethod.find_or_initialize_by(name: name)
+      shipping_method.shipping_categories = [default_shipping_category]
+      shipping_method.calculator = Spree::Calculator::Shipping::FlatPercentItemTotal.find_or_initialize_by(preferences: { amount: 0 })
+      shipping_method.save!
+    end
   end
 
   task :destroy_countries_and_states_out_of_panama do
