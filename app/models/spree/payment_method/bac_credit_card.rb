@@ -9,10 +9,14 @@ module Spree
     def authorize(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(
         amount: fac_formated_amount(amount),
-        card_number: source[:number].delete(' '),
-        card_expiry_date: source[:expiry].delete(' / '),
-        card_cvv: source[:verification_value],
-        order_number: options[:order_id]
+        card_info: {
+          card_number: source[:number].delete(' '),
+          card_expiry_date: source[:expiry].delete(' / '),
+          card_cvv: source[:verification_value]
+        },
+        order_number: options[:order_id],
+        email: options[:email],
+        billing_address: options[:billing_address]
       )
 
       ActiveMerchant::Billing::Response.new(response[:success], response[:message], { method_name: 'Aut Request' }, { authorization: response[:response_code] })
@@ -21,10 +25,14 @@ module Spree
     def authorize_3ds(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
         amount: fac_formated_amount(amount),
-        card_number: source[:number].delete(' '),
-        card_expiry_date: source[:expiry].delete(' / '),
-        card_cvv: source[:verification_value],
-        order_number: options[:order_id]
+        card_info: {
+          card_number: source[:number].delete(' '),
+          card_expiry_date: source[:expiry].delete(' / '),
+          card_cvv: source[:verification_value]
+        },
+        order_number: options[:order_id],
+        email: options[:email],
+        billing_address: options[:billing_address]
       )
 
       ActiveMerchant::Billing::Response.new(response[:success], response[:message], { html_form: response[:html_form], type: :authorize_3ds_response, method_name: 'Aut3Ds Request' })
