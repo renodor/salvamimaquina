@@ -13,7 +13,7 @@ module PaymentGateway
           {
             success: xml_parsed_response.xpath('//ResponseCode').text == '0',
             message: xml_parsed_response.xpath('//ResponseCodeDescription').text,
-            html_form: xml_parsed_response.xpath('//HTMLFormData').text
+            html_form: TEST_MODE ? test_mode_3ds_response_html_form(order_number) : xml_parsed_response.xpath('//HTMLFormData').text
           }
         end
 

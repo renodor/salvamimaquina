@@ -9,7 +9,9 @@ module Spree
 
     # This event will be fired every time an order is finalized
     def order_finalized(event)
-      SendInvoiceToRsJob.perform_later(event.payload[:order])
+      order = event.payload[:order]
+      SendInvoiceToRsJob.perform_later(order)
+      UpdateProductPurchaseCountJob.perform_later(order)
     end
   end
 end

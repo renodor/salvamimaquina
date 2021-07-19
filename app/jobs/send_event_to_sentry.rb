@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO: rename to SendEventToSentryJob (everywhere...)
 class SendEventToSentry < ActiveJob::Base
   queue_as :default
 
