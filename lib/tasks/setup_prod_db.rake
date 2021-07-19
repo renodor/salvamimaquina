@@ -6,7 +6,7 @@ namespace :setup_prod_db do
     environment
     create_stock_locations
     create_taxonomies
-    create_zone create_tax_category
+    create_tax_category
     create_panama_city_corregimientos
     create_panama_city_zones
     destroy_countries_and_states_out_of_panama
@@ -36,25 +36,6 @@ namespace :setup_prod_db do
     Rails.logger.info('Create Categories Taxonomies')
     Spree::Taxonomy.find_or_create_by!(name: 'Categories').taxons.find_or_create_by!(name: 'Categories')
     Spree::Taxonomy.find_or_create_by!(name: 'Brands').taxons.find_or_create_by(name: 'Brands')
-  end
-
-  task :create_tax_category do
-    Rails.logger.info('Create ITBMS Tax Category and Tax Rate')
-    itbms_tax_category = Spree::TaxCategory.find_or_create_by(repair_shopr_id: 39_011)
-    itbms_tax_category.update!(name: 'ITBMS', is_default: true, tax_code: 'itbms')
-
-    calculator = Spree::Calculator.create!(type: 'Spree::Calculator::DefaultTax', calculable_type: 'Spree::TaxRate')
-
-    itbms_tax_rate = Spree::TaxRate.find_or_initialize_by(name: 'ITBMS')
-    itbms_tax_rate.assign_attributes(
-      amount: 0.07,
-      zone_id: Spree::Zone.find_by(name: 'Panama').id,
-      included_in_price: false,
-      show_rate_in_label: true
-    )
-    itbms_tax_rate.tax_categories = [itbms_tax_category]
-    itbms_tax_rate.calculator = calculator
-    itbms_tax_rate.save!
   end
 
   task :create_panama_city_corregimientos do
@@ -159,6 +140,14 @@ namespace :setup_prod_db do
     Spree::District.where.not(id: district_ids).destroy_all
   end
 
+  task :create_panama_zone do
+    Rails.logger.info('Create Panama Zone')
+
+    zone = Spree::Zone.find_or_create_by!(name: 'Panama')
+    country = Spree::Country.find_by(name: 'Panama')
+    Spree::ZoneMember.find_or_create_by!(zoneable_type: 'Spree::Country', zoneable_id: country.id, zone_id: zone.id)
+  end
+
   task :create_panama_city_zones do
     Rails.logger.info('Create Panama City Zones')
 
@@ -177,6 +166,25 @@ namespace :setup_prod_db do
     end
   end
 
+  task :create_tax_category do
+    Rails.logger.info('Create ITBMS Tax Category and Tax Rate')
+    itbms_tax_category = Spree::TaxCategory.find_or_create_by(repair_shopr_id: 39_011)
+    itbms_tax_category.update!(name: 'ITBMS', is_default: true, tax_code: 'itbms')
+
+    calculator = Spree::Calculator.create!(type: 'Spree::Calculator::DefaultTax', calculable_type: 'Spree::TaxRate')
+
+    itbms_tax_rate = Spree::TaxRate.find_or_initialize_by(name: 'ITBMS')
+    itbms_tax_rate.assign_attributes(
+      amount: 0.07,
+      zone_id: Spree::Zone.find_by!(name: 'Panama').id,
+      included_in_price: false,
+      show_rate_in_label: true
+    )
+    itbms_tax_rate.tax_categories = [itbms_tax_category]
+    itbms_tax_rate.calculator = calculator
+    itbms_tax_rate.save!
+  end
+
   task :create_shipping_methods do
     default_shipping_category = Spree::ShippingCategory.find_by!(name: 'Default')
 
@@ -189,7 +197,6 @@ namespace :setup_prod_db do
       zone2: 5.5,
       zone3: 9.5
     }
-
 
     3.times do |n|
       shipping_method = Spree::ShippingMethod.find_or_initialize_by(name: "Panama Zone #{n + 1}")
