@@ -57,6 +57,8 @@ gem 'gon'
 gem 'sidekiq'
 gem 'sidekiq-failures', '~> 1.0'
 
+gem 'jwt'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'

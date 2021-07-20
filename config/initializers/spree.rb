@@ -131,6 +131,7 @@ Rails.application.config.spree.calculators.shipping_methods << Spree::Calculator
 
 # Add custom payment method
 Rails.application.config.spree.payment_methods << Spree::PaymentMethod::BacCreditCard
+Rails.application.config.spree.payment_methods << Spree::PaymentMethod::BacClave
 
 # Permit custom address attributes
 Spree::PermittedAttributes.address_attributes.push(:district_id, :latitude, :longitude)
