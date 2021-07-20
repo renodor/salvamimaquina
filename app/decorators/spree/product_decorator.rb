@@ -7,11 +7,7 @@ module Spree
       base.scope :descend_by_purchase_count, -> { order(purchase_count: :desc) }
       base.scope :ascend_by_created_at, -> { order(created_at: :asc) }
       base.scope :descend_by_created_at, -> { order(created_at: :desc) }
-
-      # add_search_scope :on_sale do
-      #   where('spree_products.* , spree_prices.amount')
-      #                                 .order(Spree::Price.arel_table[:amount].asc)
-      # end
+      base.scope :on_sale, -> { joins(:sale_prices).where('start_at <= ? OR start_at IS NULL) AND (end_at >= ? OR end_at IS NULL', Time.now, Time.now).distinct }
     end
 
     Spree::Product.prepend self
