@@ -1,0 +1,27 @@
+hello
+
+<div id="divBtnCheckOut" wudt></div>
+
+<script
+src="https://csp.credomatic.com:50581/3DS/CheckOut/js/checkout.js"
+id="baccheckout">
+</script>
+
+<script>
+  const token = "eyJhbGciOiJIUzI1NiJ9.IntcIm5iZlwiOjE2MTA3Mjc3ODMsXCJleHBcIjoxNjEwNzI3OTYzLFwiaWF0XCI6MTYxMDcyNzc4MyxcImlzc1wiOlwianlZOHBRdS9PcEJvaEtwOWoxXCIsXCJ1bmlxdWVfbmFtZVwiOlwianlZOHBRdS9PcEJvaEtwOWoxXCIsXCJzdWJcIjpcIjEyMzQ1NjdcIixcImF1ZFwiOlwiQkNPXCIsXCJSZXF1ZXN0XCI6e1wib3JkZXJJZFwiOlwiMDkyNTE5NjkyXCIsXCJ0b3RhbEFtb3VudFwiOlwiMDcxNFwiLFwidGF4QW1vdW50XCI6XCIxMDBcIixcImNsaWVudElkXCI6XCJUZXN0LTAwMVwiLFwiaWRTZXNzaW9uXCI6XCIxZTdjMmY5Mi1iMGYxLTRlYWNhZWIzLTM0MjJiMjg1NzA1N1wiLFwidGVybWluYWxJZFwiOlwiRzAwMjU4ODlcIixcImludm9pY2VcIjpcIjEwMjMwMjgwOFwiLFwidHJhbnNhY3Rpb25UeXBlXCI6XCJBVVRIXCJ9fSI.aTvkaBqwour-otxeT1sEBeZx1BUUjUaHrCMh_1BuWEc"
+
+  checkout.isClave(true);
+  checkout.init({
+    accessKey: '4cxXfxZ4EyLbxYQCa8',
+    token: token,
+    callback: function (data) {
+      //enviar post al server.
+      console.log(`Token Response ${data.token}`)
+    },
+    renderButton: true,
+    buttonText: 'Pagar',
+    buttonContainerId: 'divBtnCheckOut',
+    buttonCustomCSS: 'btn btn-lg btn-block btn-warning ',
+  });
+</script>
+

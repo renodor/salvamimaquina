@@ -62,5 +62,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.hosts << '78f52a6629e1.ngrok.io'
+  config.hosts << 'csp.credomatic.com'
+  config.hosts << '200.122.167.211'
 end

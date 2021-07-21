@@ -1,0 +1,5 @@
+const initBacCheckout = () => {
+
+}
+
+export { initBacCheckout }

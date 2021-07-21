@@ -17,12 +17,19 @@ require("channels")
 // const imagePath = (name) => images(name, true)
 
 
-// Internal imports
+// Internal Components
 import { addressForm } from '../components/address_form';
+import { priceRangeSlider } from '../components/price_range_slider';
+
+// Internal Plugins
 import { initMapbox } from '../plugins/init_mapbox';
+import { initBacCheckout } from '../plugins/bac_checkout';
 
 // Call your functions here
 document.addEventListener('turbolinks:load', () => {
   addressForm();
+  priceRangeSlider();
+
   initMapbox();
+  initBacCheckout();
 })
