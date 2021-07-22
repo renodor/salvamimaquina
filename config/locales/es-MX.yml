@@ -1,5 +1,6 @@
 es-MX:
   spree:
+    on_sale_products: 'Productos rebajados'
     district: 'Corregimiento'
     items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'
     billing_address: 'Dirección'

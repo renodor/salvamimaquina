@@ -1,0 +1,13 @@
+<div class="navigation" data-hook="navigation">
+  <h6 class="filter-title"><%= I18n.t('spree.on_sale_products') %></h6>
+  <ul class="filter_choices">
+    <li class="nowrap">
+      <input type="checkbox"
+              id="on-sale-products"
+              name="scopes[on_sale]"
+              <%= params[:scopes] && params[:scopes][:on_sale] ? "checked" : "" %>
+      />
+      <label class="nowrap" for="on-sale-products"><%= I18n.t('spree.on_sale_products') %></label>
+    </li>
+  </ul>
+</div>
