@@ -15,6 +15,7 @@ es-MX:
     helpers:
       products:
         price_diff_add_html: "%{amount_html} adicional"
+        price_diff_subtract_html: "%{amount_html} menos"
   activerecord:
     attributes:
       spree/credit_card:
