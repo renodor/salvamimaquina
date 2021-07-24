@@ -7,7 +7,13 @@
         <ul>
           <% @product.variants_and_option_values_for(current_pricing_options).each_with_index do |variant, index| %>
             <li>
-              <%= radio_button_tag "variant_id", variant.id, index == 0, 'data-price' => variant.price_for(current_pricing_options)  %>
+              <%= 
+                radio_button_tag "variant_id",
+                variant.id,
+                index == 0,
+                'data-price' => variant.price_for(current_pricing_options),
+                'data-discount-price' => variant.on_sale? ? variant.price_for(current_pricing_options, sale_price: true) : nil
+              %>
               <%= label_tag "variant_id_#{ variant.id }" do %>
                 <span class="variant-description">
                   <%= variant_options variant %>
@@ -28,12 +34,20 @@
       <%= hidden_field_tag "variant_id", @product.master.id %>
     <% end %>
 
-    <div data-hook="product_price" class="columns five <%= !@product.has_variants? ? 'alpha' : 'omega' %>">
+    <% variant = @product.has_variants? ? @product.variants.first : @product.master %>
+    <div data-hook="product_price" class="columns five omega">
       <div id="product-price">
         <h6 class="product-section-title"><%= t('spree.price') %></h6>
         <div>
-          <span class="price selling" itemprop="price" content="<%= @product.price_for(current_pricing_options).to_d %>">
-            <%= Spree::Money.new(@product.cheapest_variant_price_record.price, { currency: @product.cheapest_variant_price_record.currency }) %>
+          <% if variant.on_sale? %>
+            <% discount_price = variant.price_for(current_pricing_options, sale_price: true) %>
+            <span class="price selling discount" itemprop="price" content="<%= discount_price.to_d %>">
+              <%= discount_price.to_html %>
+            </span>
+          <% end %>
+          <% price = variant.price_for(current_pricing_options) %>
+          <span class="price selling original <%= variant.on_sale? ? 'crossed' : '' %>" itemprop="price" content="<%= price.to_d %>">
+            <%= price.to_html %>
           </span>
           <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
         </div>

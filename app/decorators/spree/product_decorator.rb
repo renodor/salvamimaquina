@@ -10,8 +10,8 @@ module Spree
       base.scope :on_sale, -> { joins(:sale_prices).where('start_at <= ? OR start_at IS NULL) AND (end_at >= ? OR end_at IS NULL', Time.now, Time.now).distinct }
     end
 
-    def cheapest_variant_price_record
-      prices.min_by(&:amount)
+    def cheapest_variant
+      prices.min_by(&:amount).variant
     end
 
     def any_on_sale_variant?
