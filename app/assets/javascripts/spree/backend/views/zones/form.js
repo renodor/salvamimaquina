@@ -3,8 +3,8 @@ Spree.Views.Zones.Form = Backbone.View.extend({
     'click [name="zone[kind]"]': 'render'
   },
 
-  render: function () {
-    var kind = this.$('[name="zone[kind]"]:checked').val() || 'state';
+  render: function() {
+    const kind = this.$('[name="zone[kind]"]:checked').val() || 'state';
     this.$('[name="zone[kind]"]').val([kind]);
 
     $('#state_members').toggleClass('hidden', kind !== 'state');
@@ -16,4 +16,4 @@ Spree.Views.Zones.Form = Backbone.View.extend({
     $('#district_members').toggleClass('hidden', kind !== 'district');
     $('#district_members :input').prop('disabled', kind !== 'district');
   }
-})
+});

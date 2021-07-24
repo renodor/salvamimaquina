@@ -1,5 +1,5 @@
 const initBacCheckout = () => {
 
-}
+};
 
-export { initBacCheckout }
+export { initBacCheckout };

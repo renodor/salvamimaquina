@@ -8,4 +8,4 @@ pre-commit:
       glob: "*.rb"
       run: rubocop --force-exclusion {files}
     eslint:
-      run: eslint './app'
+      run: eslint ./app/assets/javascripts/** ./app/javascript/**

@@ -16,7 +16,7 @@ const priceRangeSlider = () => {
 
         currentValues[0].innerHTML= `$${slide1}`;
         currentValues[1].innerHTML= `$${slide2}`;
-      }
+      };
     });
 
     // numbers.forEach((number) => {
@@ -35,6 +35,6 @@ const priceRangeSlider = () => {
     //   }
     // });
   }
-}
+};
 
-export { priceRangeSlider }
+export { priceRangeSlider };

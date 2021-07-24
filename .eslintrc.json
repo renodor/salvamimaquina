@@ -11,9 +11,11 @@
         "sourceType": "module"
     },
     "rules": {
-      "max-len": ["error", 120, 2, {
+      "max-len": ["error", 200, 2, {
           "ignoreComments": true
         }
-      ]
+      ],
+      "comma-dangle": ["error", "never"],
+      "object-curly-spacing": ["error", "always"]
     }
 }

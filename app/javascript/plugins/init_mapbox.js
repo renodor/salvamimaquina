@@ -1,9 +1,9 @@
 // Importing mapbox-gl with a bang (!mapbox-gl) exclude mapbox-gl from being transpiled by webpack
-import mapboxgl from '!mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import mapboxgl from '!mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const initMapbox = () => {
-  const mapElement = document.getElementById('map')
+  const mapElement = document.getElementById('map');
 
   // Shown on the address page when defining shipping address
   if (mapElement) {
@@ -28,10 +28,10 @@ const initMapbox = () => {
 
     // Create a new draggable market on the map, and put it by default in the center of Panama
     const marker = new mapboxgl.Marker({
-      draggable: true,
+      draggable: true
     })
-      .setLngLat([-79.528142, 8.975448])
-      .addTo(map);
+        .setLngLat([-79.528142, 8.975448])
+        .addTo(map);
 
     // Every time the marker is dragged, call updateCoordinates method
     marker.on('dragend', updateCoordinates);
@@ -40,9 +40,9 @@ const initMapbox = () => {
     // and update the map each time it changes
     const corregimientoInput = document.getElementById('order_ship_address_attributes_district_id');
     corregimientoInput.addEventListener('change', (event) => {
-      const indexOfSelectedDistrict = corregimientoInput.options.selectedIndex
-      const latitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.latitude)
-      const longitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.longitude)
+      const indexOfSelectedDistrict = corregimientoInput.options.selectedIndex;
+      const latitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.latitude);
+      const longitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.longitude);
       // Then we need to do 3 things :
       // - put the marker on the center of the selected area
       // - resize the map
@@ -55,20 +55,20 @@ const initMapbox = () => {
 
 
     // Prevent form submission if map marker have not been set
-    const submitAddressBtn = document.querySelector('#checkout_form_address input[type=submit]')
+    const submitAddressBtn = document.querySelector('#checkout_form_address input[type=submit]');
     submitAddressBtn.addEventListener('click', (event) => {
       if (!latitudeInput.value || !longitudeInput.value) {
-        event.preventDefault()
-        mapElement.insertAdjacentHTML('beforebegin', 'Please set the pin on our exact location')
+        event.preventDefault();
+        mapElement.insertAdjacentHTML('beforebegin', 'Please set the pin on our exact location');
       }
-    })
+    });
   }
 
-  const staticMapElement = document.getElementById('static-map')
+  const staticMapElement = document.getElementById('static-map');
 
   // Shown on the confirmation page when displaying the shipping address
   if (staticMapElement) {
-    const { latitude, longitude } = staticMapElement.dataset
+    const { latitude, longitude } = staticMapElement.dataset;
     // initialize a mapbox map with shipping address coordinate
     mapboxgl.accessToken = gon.mapbox_api_key;
     const map = new mapboxgl.Map({
@@ -79,9 +79,9 @@ const initMapbox = () => {
     });
 
     new mapboxgl.Marker()
-      .setLngLat([longitude, latitude])
-      .addTo(map);
+        .setLngLat([longitude, latitude])
+        .addTo(map);
   }
-}
+};
 
-export { initMapbox }
+export { initMapbox };
