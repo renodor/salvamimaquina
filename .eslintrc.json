@@ -11,5 +11,9 @@
         "sourceType": "module"
     },
     "rules": {
+      "max-len": ["error", 120, 2, {
+          "ignoreComments": true
+        }
+      ]
     }
 }

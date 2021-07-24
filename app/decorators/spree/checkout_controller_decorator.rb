@@ -4,7 +4,7 @@ module Spree
   module CheckoutControllerDecorator
     def self.prepended(base)
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
-      base.layout 'empty_layout', only: :bac_checkout
+      # base.layout 'empty_layout', only: [:bac_checkout]
     end
 
     def bac_checkout

@@ -14,10 +14,6 @@ module Spree
       prices.min_by(&:amount).variant
     end
 
-    def any_on_sale_variant?
-      variants_including_master.detect(&:on_sale?).present?
-    end
-
     Spree::Product.prepend self
   end
 end

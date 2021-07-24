@@ -11,8 +11,8 @@
                 radio_button_tag "variant_id",
                 variant.id,
                 index == 0,
-                'data-price' => variant.price_for(current_pricing_options),
-                'data-discount-price' => variant.on_sale? ? variant.price_for(current_pricing_options, sale_price: true) : nil
+                'data-price' => variant.price_for(current_pricing_options, sale_price: false),
+                'data-discount-price' => variant.on_sale? ? variant.price_for(current_pricing_options) : nil
               %>
               <%= label_tag "variant_id_#{ variant.id }" do %>
                 <span class="variant-description">
@@ -39,13 +39,11 @@
       <div id="product-price">
         <h6 class="product-section-title"><%= t('spree.price') %></h6>
         <div>
-          <% if variant.on_sale? %>
-            <% discount_price = variant.price_for(current_pricing_options, sale_price: true) %>
-            <span class="price selling discount" itemprop="price" content="<%= discount_price.to_d %>">
-              <%= discount_price.to_html %>
-            </span>
-          <% end %>
-          <% price = variant.price_for(current_pricing_options) %>
+          <% discount_price = variant.price_for(current_pricing_options) %>
+          <span class="price selling discount <%= variant.on_sale? ? '' : 'display-none' %>" itemprop="price" content="<%= discount_price.to_d %>">
+            <%= discount_price.to_html %>
+          </span>
+          <% price = variant.price_for(current_pricing_options, sale_price: false) %>
           <span class="price selling original <%= variant.on_sale? ? 'crossed' : '' %>" itemprop="price" content="<%= price.to_d %>">
             <%= price.to_html %>
           </span>
