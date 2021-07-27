@@ -7,13 +7,16 @@ module Spree
 
       return [] unless products.any?
 
-      products_ordered_by_price = products.ascend_by_master_price
-      lowest_price = products_ordered_by_price.first.price.floor
-      highest_price = products_ordered_by_price.last.price.ceil
+      variants = []
+      products.each { |product| variants += product.variants_including_master }
+      variants_ordered_by_price = variants.sort_by(&:price)
+      lowest_price = variants_ordered_by_price.first.price.floor
+      highest_price = variants_ordered_by_price.last.price.ceil
 
       if params[:search] && params[:search][:price_between]
-        current_min = params[:search][:price_between].min
-        current_max = params[:search][:price_between].max
+        parsed_prices = params[:search][:price_between].map(&:to_i)
+        current_min = parsed_prices.min
+        current_max = parsed_prices.max
       end
 
       {

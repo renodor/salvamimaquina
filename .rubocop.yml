@@ -63,10 +63,10 @@ Metrics/ClassLength:
   Max: 200
 
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 15
 
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 15
 
 Layout/LineLength:
   Max: 300
