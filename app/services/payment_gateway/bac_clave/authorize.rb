@@ -9,21 +9,21 @@ module PaymentGateway
       class << self
         def generate_token
           payload = {
-            "exp": 1627997069,
-            "iat": 1627910677,
-            "iss": "4cxXfxZ4EyLbxYQCa8",
-            "unique_name": "4cxXfxZ4EyLbxYQCa8",
-            "sub": "SALVAMIMAQUINA",
-            "aud": "BCO",
-            "Request": {
-              "orderId": "PANKCSALVAMIMAQUINA-1234567890",
-              "totalAmount": "107",
-              "terminalId": "TEST0103",
-              "invoice": "Invoice12345",
-              "transactionType": "SALE",
-              "taxAmount": "007",
-              "clientId": "111",
-              "idSession": "109282970972098"
+            'exp' => (Time.current + 10.hours).to_i,
+            'iat' => Time.current.to_i,
+            'iss' => '4cxXfxZ4EyLbxYQCa8',
+            'unique_name' => '4cxXfxZ4EyLbxYQCa8',
+            'sub' => 'SALVAMIMAQUINA',
+            'aud' => 'BCO',
+            'Request' => {
+              'orderId' => 'PANKCSALVAMIMAQUINA-1234567890',
+              'totalAmount' => '107',
+              'terminalId' => 'TEST0103',
+              'invoice' => 'Invoice12345',
+              'transactionType' => 'SALE',
+              'taxAmount' => '007',
+              'clientId' => '111',
+              'idSession' => '109282970972098'
             }
           }.to_json
 
