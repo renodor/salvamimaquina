@@ -3,9 +3,16 @@
 module Spree
   module ProductFiltersHelper
     def price_range_slider
-      products = @taxon&.products || Spree::Product.all
+      products = []
 
-      return [] unless products.any?
+      if @taxon
+        products += @taxon.products if @taxon.products.present?
+        @taxon.children.each { |children_taxon| products += children_taxon.products } # TODO: use recursive to do it for grand-children, grand-grand-children etc...
+      else
+        products = Spree::Product.all
+      end
+
+      return nil unless products.any?
 
       variants = []
       products.each { |product| variants += product.variants_including_master }

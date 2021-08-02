@@ -3,10 +3,10 @@
 class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
   class << self
     def call(sync_logs:)
-      # Product categories (taxons) all belong to one parent taxon named "Categories",
-      # that itself belong to one parent taxonomy names "Categories"
-      @categories_taxonomy = Spree::Taxonomy.find_by(name: 'Categories') || raise('Categories Taxonomy is needed')
-      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy.id) || raise('Categories Taxon is needed')
+      # Product categories (taxons) all belong to one parent taxon named "Brands",
+      # that itself belong to one parent taxonomy names "Brands"
+      @brands_taxonomy = Spree::Taxonomy.find_by(name: 'Brands') || raise('Brands Taxonomy is needed')
+      @brands_taxon = Spree::Taxon.find_by(name: 'Brands', taxonomy_id: @brands_taxonomy.id) || raise('Brands Taxon is needed')
 
       # Fetch all product categories from RepairShopr
       # (Only the categories below the root category "ecom" will be returned)
@@ -18,9 +18,9 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
         taxons_and_parents = create_or_update_taxons_and_flatten_hierarchy(product_categories)
         taxon_ids = update_taxons_hierarchy(taxons_and_parents)
 
-        # All taxons, belonging to categories taxonomy, that are not present in the taxon_ids array or is not the categories_taxon
+        # All taxons, belonging to brands taxonomy, that are not present in the taxon_ids array or is not the brands_taxon
         # need to be deleted (It means they have been deleted from RepairShopr)
-        deleted_taxons = @categories_taxonomy.taxons.where.not(id: taxon_ids + [@categories_taxon.id]).destroy_all
+        deleted_taxons = @brands_taxonomy.taxons.where.not(id: taxon_ids + [@brands_taxon.id]).destroy_all
       end
 
       sync_logs.synced_product_categories = taxon_ids.size
@@ -38,10 +38,10 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
     # (We need this first step because we can't put a taxon below a parent that does not exist yet...)
     def create_or_update_taxons_and_flatten_hierarchy(product_categories)
       product_categories.map do |product_category|
-        taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @categories_taxonomy.id)
+        taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @brands_taxonomy.id)
         taxon.update!(name: product_category['name'], description: product_category['description'])
         # Product category without "/" in ancestry has only one ancester, which is the root category "ecom"
-        # So we can put it directly under the @categories_taxon
+        # So we can put it directly under the @brands_taxon
         # TODO: solve bug here: now that we directly included the "ecom" category as well, we have a product category without ancestry...
         { taxon: taxon, parent: product_category['ancestry'].include?('/') ? product_category['ancestry'] : nil }
       end
@@ -55,7 +55,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
           taxon_parent = Spree::Taxon.find_by(repair_shopr_id: taxon_and_parent[:parent].split('/').last.to_i)
           taxon_and_parent[:taxon].move_to_child_of(taxon_parent)
         else
-          taxon_and_parent[:taxon].move_to_child_of(@categories_taxon)
+          taxon_and_parent[:taxon].move_to_child_of(@brands_taxon)
         end
 
         taxon_and_parent[:taxon].id

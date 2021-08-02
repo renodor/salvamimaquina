@@ -27,7 +27,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         assign_variant_attributes(attributes)
 
         update_product_stock(attributes['location_quantities'])
-        update_product_classifications(attributes['product_category'], attributes['brand'])
+        update_product_classifications(attributes['product_category'])
 
         RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
       end
@@ -48,16 +48,16 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
     private
 
-    # If a variant goes from one model to another (The current model name is different from the syncing model name),
-    # or if it is removed from a model (The syncing variant does not have model, but the current variant is not the master variant)
+    # If a variant goes from one product to another (The current product name is different from the syncing product name),
+    # or if it is removed from a product (The syncing variant does not have a product, but the current variant is not the master variant)
     # It means this variant needs to be assigned to a new product
     def variant_needs_to_be_assigned_to_new_product?(variant, attributes)
-      (attributes['model'] && variant.product.name != attributes['model']) || (attributes['model'].blank? && !variant.is_master?)
+      (attributes['parent_product'] && variant.product.name != attributes['parent_product']) || (attributes['parent_product'].blank? && !variant.is_master?)
     end
 
     def initialize_product_and_variant(attributes)
-      if attributes['model']
-        @product = Spree::Product.find_or_initialize_by(name: attributes['model'])
+      if attributes['parent_product']
+        @product = Spree::Product.find_or_initialize_by(name: attributes['parent_product'])
         @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
       else
         @product = Spree::Variant.find_by(repair_shopr_id: attributes['id'])&.product || Spree::Product.new
@@ -93,7 +93,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       @variant.assign_attributes(
         repair_shopr_name: attributes['name'],
         product_id: @product.id,
-        is_master: attributes['model'].blank?,
+        is_master: attributes['parent_product'].blank?,
         sku: attributes['upc_code'] || '',
         cost_price: attributes['price_cost'],
         weight: attributes['weight'],
@@ -105,6 +105,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Add Spree::OptionValues to variant
       @variant.option_values = @variant_options ? @variant_options[:option_values] : []
       @variant.price = price_before_tax(attributes['price_retail'])
+      @variant.condition = attributes['condition'] == 'refurbished' ? 'refurbished' : 'original'
 
       @variant.save!
     end
@@ -131,25 +132,16 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     end
 
     # Spree::Classification is the joining table between Spree::Product and Spree::Taxons
-    def update_product_classifications(product_category_name, brand)
+    def update_product_classifications(product_category_name)
       @product.classifications.destroy_all # Easier to destroy and recreate all classifications... TODO: Maybe a way to improve that
 
+      # Currently the only Taxonomy we have is Brands (So all products are first of all, classified by brand)
       # If the product belong to a specific product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
-      # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
-      categories_taxonomy = Spree::Taxonomy.find_by!(name: 'Categories') # TODO: memoize "Categories" taxonomy id
-      categories_parent_taxon = categories_taxonomy.taxons.find_by(parent_id: nil)
-      taxon_name = product_category_name == self::RS_ROOT_CATEGORY_NAME ? categories_parent_taxon.name : product_category_name.split(';').last
-      taxon = categories_taxonomy.taxons.find_or_create_by!(name: taxon_name) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
-      Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
-
-      return unless brand
-
-      # Same with "brands" taxon. But brands taxons cannot have children, so it is slightly easier
-      brands_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands') # TODO: memoize "Brand" taxonomy id
-      brands_parent_taxon = brands_taxonomy.taxons.find_by(parent_id: nil) # TODO: memoize "Brand" parent taxon
-
-      # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
-      taxon = brands_taxonomy.taxons.find_or_create_by!(name: brand, parent_id: brands_parent_taxon.id)
+      # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Brands" on Solidus
+      brands_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands') # TODO: memoize "Brands" taxonomy id
+      brands_parent_taxon = brands_taxonomy.taxons.find_by(parent_id: nil)
+      taxon_name = product_category_name == self::RS_ROOT_CATEGORY_NAME ? brands_parent_taxon.name : product_category_name.split(';').last
+      taxon = brands_taxonomy.taxons.find_or_create_by!(name: taxon_name) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
       Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
     end
 
@@ -163,7 +155,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         attribute_type = attribute_array[0].strip
         attribute_value = attribute_array[1].strip
 
-        if %w[model brand weight height width depth].include?(attribute_type)
+        if %w[parent_product brand weight height width depth].include?(attribute_type)
           attributes[attribute_type] = attribute_value
         else
           attributes['variant_options'][attribute_type] = attribute_value

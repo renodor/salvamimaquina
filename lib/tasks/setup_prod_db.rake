@@ -34,8 +34,10 @@ namespace :setup_prod_db do
 
   task :create_taxonomies do
     Rails.logger.info('Create Categories Taxonomies')
-    Spree::Taxonomy.find_or_create_by!(name: 'Brands').taxons.find_or_create_by(name: 'Brands', position: 1)
-    Spree::Taxonomy.find_or_create_by!(name: 'Categories').taxons.find_or_create_by!(name: 'Categories', position: 2)
+    brand_taxonomy = Spree::Taxonomy.find_or_create_by!(name: 'Brands', position: 1)
+    brand_taxonomy.taxons.find_or_create_by(name: 'Brands', position: 1)
+
+    Spree::Taxonomy.where.not(id: brand_taxonomy.id).destroy_all
   end
 
   task :create_panama_city_corregimientos do

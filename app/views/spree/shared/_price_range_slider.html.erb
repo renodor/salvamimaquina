@@ -1,11 +1,13 @@
-<div class="navigation" data-hook="navigation">
-  <h6 class="filter-title"><%= I18n.t('spree.price_range') %></h6>
-  <div class="price-range-slider">
-    <div class="current-values">
-      <span>$<%= price_range_slider[:current_min] %></span>
-      <span>$<%= price_range_slider[:current_max] %></span>
+<% if price_range_slider %>
+  <div class="navigation" data-hook="navigation">
+    <h6 class="filter-title"><%= I18n.t('spree.price_range') %></h6>
+    <div class="price-range-slider">
+      <div class="current-values">
+        <span>$<%= price_range_slider[:current_min] %></span>
+        <span>$<%= price_range_slider[:current_max] %></span>
+      </div>
+      <input value="<%= price_range_slider[:current_min] %>" min="<%= price_range_slider[:min] %>" max="<%= price_range_slider[:max] %>" step="1" type="range" name="search[price_between][]" class="first">
+      <input value="<%= price_range_slider[:current_max] %>" min="<%= price_range_slider[:min] %>" max="<%= price_range_slider[:max] %>" step="1" type="range" name="search[price_between][]">
     </div>
-    <input value="<%= price_range_slider[:current_min] %>" min="<%= price_range_slider[:min] %>" max="<%= price_range_slider[:max] %>" step="1" type="range" name="search[price_between][]" class="first">
-    <input value="<%= price_range_slider[:current_max] %>" min="<%= price_range_slider[:min] %>" max="<%= price_range_slider[:max] %>" step="1" type="range" name="search[price_between][]">
   </div>
-</div>
+<% end %>

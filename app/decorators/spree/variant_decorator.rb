@@ -4,6 +4,7 @@ module Spree
   module VariantDecorator
     def self.prepended(base)
       base.validates :repair_shopr_id, uniqueness: true, allow_nil: true
+      base.enum condition: { original: 0, refurbished: 1 }
     end
 
     def destroy_and_destroy_product_if_no_other_variants!

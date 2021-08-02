@@ -20,13 +20,6 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
       sync_logs.deleted_products += 1
     end
 
-    # Destroy brands taxons that don't have any products
-    # This need to be done here because brand taxons are created through RepairShopr product notes, because it is not a RS native feature
-    # (On the contrary categories taxons are created through RepairShopr product categories and can be easily sync (and thus destroyed if needed) through the sync product categories feature)
-    brands_taxonomy = Spree::Taxonomy.includes(taxons: :products).find_by!(name: 'Brands') # TODO: memoize that... It can even be initialized at the beginning of this class and passed along to RepairShoprApi::V1::SyncProduct
-    brands_taxons = brands_taxonomy.taxons.where.not(parent_id: nil)
-    brands_taxons.each { |brands_taxon| brands_taxon.destroy! if brands_taxon.products.blank? }
-
     Rails.logger.info('Products synced')
   end
 end
