@@ -147,7 +147,9 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # Same with "brands" taxon. But brands taxons cannot have children, so it is slightly easier
       brands_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands') # TODO: memoize "Brand" taxonomy id
       brands_parent_taxon = brands_taxonomy.taxons.find_by(parent_id: nil) # TODO: memoize "Brand" parent taxon
-      taxon = brands_taxonomy.taxons.find_or_create_by!(name: brand, parent_id: brands_parent_taxon.id) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
+
+      # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
+      taxon = brands_taxonomy.taxons.find_or_create_by!(name: brand, parent_id: brands_parent_taxon.id)
       Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
     end
 
