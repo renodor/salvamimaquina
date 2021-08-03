@@ -3,14 +3,7 @@
 module Spree
   module ProductFiltersHelper
     def price_range_slider
-      products = []
-
-      if @taxon
-        products += @taxon.products if @taxon.products.present?
-        @taxon.children.each { |children_taxon| products += children_taxon.products } # TODO: use recursive to do it for grand-children, grand-grand-children etc...
-      else
-        products = Spree::Product.all
-      end
+      products = @taxon&.all_products.presence || Spree::Product.all
 
       return nil unless products.any?
 

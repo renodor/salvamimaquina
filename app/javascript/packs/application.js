@@ -16,6 +16,8 @@ require('channels');
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
+// Packages
+import 'bootstrap';
 
 // Internal Components
 import { addressForm } from '../components/address_form';

@@ -1,4 +1,6 @@
 es-MX:
+  home: 'Inicio'
+  shop: 'Tienda'
   spree:
     brands: 'Marcas'
     on_sale_products: 'Productos rebajados'

@@ -1,7 +1,7 @@
 const addressForm = () => {
-  Spree.ready(function($) {
-    const stateField = document.querySelector('#sstate');
-    if (stateField) {
+  const stateField = document.querySelector('#sstate');
+  if (stateField) {
+    Spree.ready(function($) {
       stateField.querySelector('select').addEventListener('change', (event) => {
         const stateId = event.currentTarget.value;
         $.get(
@@ -18,8 +18,8 @@ const addressForm = () => {
             }
         );
       });
-    }
-  });
+    });
+  }
 };
 
 export { addressForm };

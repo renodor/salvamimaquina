@@ -25,7 +25,7 @@ module PaymentGateway
               'clientId' => '111',
               'idSession' => '109282970972098'
             }
-          }.to_json
+          }
 
           JWT.encode(payload, BAC_PRIVATE_KEY, 'HS256')
         end

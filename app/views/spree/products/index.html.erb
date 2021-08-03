@@ -9,7 +9,9 @@
 <% end %>
 
 
-<% if params[:keywords] %>
+<%
+=begin%>
+ <% if params[:keywords] %>
 
   <div data-hook="search_results">
     <% if @products.empty? %>
@@ -19,9 +21,16 @@
     <% end %>
   </div>
 
-<% else %>
+<% else %> 
+<%
+=end%>
 
-  <div data-hook="homepage_products">
-    <%= render partial: 'spree/shared/products', locals: { products: @products, taxon: @taxon } %>
-  </div>
-<% end %>
+  <% @brands.each do |brand| %>
+    <h2><%= brand.name %></h2>
+    <% brand.children.each do |child| %>
+      <%= child.name %>
+      <%= cl_image_tag(child.icon.try(:key), width: 400, height: 300, crop: :fill) %>
+    <% end %>
+  <% end %>
+
+<%# end %>
