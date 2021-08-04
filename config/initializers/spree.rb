@@ -116,7 +116,7 @@ Spree::Backend::Config.configure do |config|
     [:sync_repair_shopr],
     'arrow-down',
     condition: -> { current_spree_user&.admin? },
-    url: '/shop/admin/sync'
+    url: '/admin/sync'
   )
 end
 

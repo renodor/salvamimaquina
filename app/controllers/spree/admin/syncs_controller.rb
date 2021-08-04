@@ -5,7 +5,7 @@ class Spree::Admin::SyncsController < ApplicationController
   after_action :save_sync_logs, except: :index
 
   def index
-    redirect_to '/shop/admin/login' and return unless current_spree_user&.admin?
+    redirect_to '/admin/login' and return unless current_spree_user&.admin?
 
     @sync_logs = RepairShoprProductsSyncLog.all.order(created_at: :desc)
   end

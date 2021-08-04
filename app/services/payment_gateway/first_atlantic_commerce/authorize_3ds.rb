@@ -64,7 +64,7 @@ module PaymentGateway
         end
 
         def test_mode_3ds_response_html_form(order_number)
-          "<form action=\"/shop/checkout/three_d_secure_response\" method=\"post\" data-remote=\"true\">
+          "<form action=\"/checkout/three_d_secure_response\" method=\"post\" data-remote=\"true\">
             <p>Simulate 3DS Authorization</p>
             <input type=\"radio\" id=\"success\" name=\"ResponseCode\" value=\"1\">
             <label for=\"success\">Success (Payment will eventually fail anyway because capture won't be successful without real 3ds...)</label><br>

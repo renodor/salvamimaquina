@@ -1,0 +1,42 @@
+#sidebar {
+  border: 1px solid $light-gray;
+  padding: 20px 10px;
+  #taxonomies {
+    .taxonomy-root {
+      border-bottom: none;
+      margin-bottom: 10px;
+    }
+    .accordion .accordion-item {
+      .accordion-header .accordion-button {
+        padding: 10px;
+        &:focus {
+          box-shadow: none;
+        }
+        &:hover, &:not(.collapsed) {
+          color: $dark-gray;
+          background-color: white;
+          box-shadow: none;
+          &::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black' %3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e")
+          }
+        }
+      }
+      .accordion-body {
+        padding: 5px 0;
+        .sub-taxon {
+          display: block;
+          width: 100%;
+          padding: 5px 10px;
+          margin: 5px 0;
+          color: $dark-gray;
+          text-decoration: none;
+          transition: ease .4s color, ease .4s background-color;
+          &:hover, &.active {
+            color: $green;
+            background-color: $light-green
+          }
+        }
+      }
+    }
+  }
+}
