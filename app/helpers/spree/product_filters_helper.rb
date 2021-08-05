@@ -26,5 +26,23 @@ module Spree
         current_max: current_max || highest_price
       }
     end
+
+    def model_filter
+      products = @taxon&.all_products.presence
+
+      return nil unless products
+
+      models = {}
+      products.each do |product|
+        option_values = product.variant_option_values_by_option_type[model_option_type]
+        option_values&.each { |option_value| models[option_value.name] = option_value.id }
+      end
+
+      models
+    end
+
+    def model_option_type
+      Spree::OptionType.find_by(name: 'model')
+    end
   end
 end

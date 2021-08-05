@@ -3,6 +3,7 @@ es-MX:
   shop: 'Tienda'
   spree:
     brands: 'Marcas'
+    models: 'Modelos'
     on_sale_products: 'Productos rebajados'
     district: 'Corregimiento'
     items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'

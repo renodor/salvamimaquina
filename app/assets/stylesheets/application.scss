@@ -10,8 +10,8 @@
 @import "components/container";
 @import "components/header";
 @import "components/navbar";
-@import "components/brand_grid";
-@import "components/sidebar";
+@import "spree/frontend/brand_grid";
+@import "spree/frontend/sidebar";
 @import "spree/frontend/price_range_slider";
 
 .crossed {

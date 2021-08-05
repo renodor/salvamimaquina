@@ -11,7 +11,7 @@
                 <%= taxon.name %>
               </button>
             </h2>
-            <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.taxonomy == taxonomy ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
+            <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == taxon ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
               <div class="accordion-body">
                 <% taxon.children.each do |sub_taxon| %>
                   <%= link_to sub_taxon.name, spree.nested_taxons_path(sub_taxon), class: "sub-taxon #{@taxon == sub_taxon ? 'active' : ''}" %>
@@ -25,3 +25,6 @@
     <% end %>
   <% end %>
 </nav>
+
+<div class=transition-test>
+</div>

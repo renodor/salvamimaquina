@@ -1,6 +1,7 @@
 <%= form_tag '', method: :get, id: 'sidebar_products_search' do %>
   <%= hidden_field_tag 'per_page', params[:per_page] %>
-  <%= render partial: 'spree/shared/price_range_slider' %>
-  <%= render partial: 'spree/shared/on_sale_products_filter' %>
+  <%= render partial: 'spree/shared/filters/model_filter' %>
+  <%= render partial: 'spree/shared/filters/price_range_slider' %>
+  <%= render partial: 'spree/shared/filters/on_sale_products_filter' %>
   <%= submit_tag t('spree.search'), name: nil %>
 <% end %>

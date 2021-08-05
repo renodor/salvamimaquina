@@ -9,6 +9,11 @@ module Spree
       base.scope :descend_by_created_at, -> { order(created_at: :desc) }
       base.scope :on_sale, -> { joins(:sale_prices).where('start_at <= ? OR start_at IS NULL) AND (end_at >= ? OR end_at IS NULL', Time.now, Time.now).distinct }
 
+      base.add_search_scope :with_option do |option_type_id, option_value_id| # option_value_id can be one single id or an array of ids, it works the same
+        joins(:option_types, variants_including_master: :option_values)
+          .where(option_types: { id: option_type_id }, option_values: { id: option_value_id })
+      end
+
       base.add_search_scope :price_between do |min, max|
         current_time = Time.now
 

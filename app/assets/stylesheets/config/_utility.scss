@@ -1,3 +1,9 @@
+@mixin default-transition($properties...) {
+    transition-property: $properties;
+    transition-duration: .3s;
+    transition-timing-function: ease;
+}
+
 .full-absolute {
   position: absolute;
   top: 0;

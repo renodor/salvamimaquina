@@ -10,7 +10,7 @@
   .brand-category {
     padding: 15px;
     border: 1px solid transparent;
-    transition: ease .4s box-shadow, ease .4s border-color;
+    @include default-transition(box-shadow, border-color);
     &:hover {
       box-shadow: 0 0 3px 0px #b0b3b285;
       border-color: $light-gray
