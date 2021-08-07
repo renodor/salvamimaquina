@@ -8,13 +8,13 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
               <button class="accordion-button <%= @taxon.parent == taxon ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="<%= "#flush-collapse#{i}" %>" aria-expanded="false" aria-controls="<%= "flush-collapse#{i}" %>">
-                <%= taxon.name %>
+                <%= taxon.name.capitalize %>
               </button>
             </h2>
             <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == taxon ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
               <div class="accordion-body">
                 <% taxon.children.each do |sub_taxon| %>
-                  <%= link_to sub_taxon.name, spree.nested_taxons_path(sub_taxon), class: "sub-taxon #{@taxon == sub_taxon ? 'active' : ''}" %>
+                  <%= link_to sub_taxon.name.capitalize, spree.nested_taxons_path(sub_taxon), class: "sub-taxon #{@taxon == sub_taxon ? 'active' : ''}" %>
                 <% end %>
               </div>
             </div>
