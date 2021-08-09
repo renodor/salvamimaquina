@@ -10,7 +10,7 @@ module Spree
       respond_to do |format|
         format.html
         format.json do
-          render json: products_with_aditional_data
+          render json: { products: products_with_aditional_data, noProductsMessage: t('spree.no_products_found') }
         end
       end
     end

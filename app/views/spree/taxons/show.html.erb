@@ -1,4 +1,4 @@
-<h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
+<h1 class="taxon-title flex-1"><%= @taxon.name.capitalize %></h1>
 
 <% content_for :sidebar do %>
   <div data-hook="taxon_sidebar_navigation">
@@ -11,11 +11,15 @@
   <%= render partial: 'spree/shared/products', locals: { products: @products, taxon: @taxon } %>
 </div>
 
-<% unless params[:keywords].present? %>
+<%
+=begin%>
+ <% unless params[:keywords].present? %>
   <div data-hook="taxon_children">
     <% cache [I18n.locale, @taxon] do %>
       <%= render partial: 'taxon', collection: @taxon.children %>
     <% end %>
   </div>
-<% end %>
+<% end %> 
+<%
+=end%>
 

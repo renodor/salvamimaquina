@@ -2,29 +2,39 @@ const productFilter = () => {
   const sidebarProductSearch = document.getElementById('sidebar_products_search');
 
   if (sidebarProductSearch) {
-    sidebarProductSearch.addEventListener('submit', (event) => {
-      const formData = new FormData(sidebarProductSearch);
-      const queryString = new URLSearchParams(formData).toString();
+    sidebarProductSearch.querySelectorAll('input').forEach((input) => {
+      input.addEventListener('change', (event) => {
+        const formData = new FormData(sidebarProductSearch);
+        const queryString = new URLSearchParams(formData).toString();
 
-      fetch(`/t/brands/apple/iphone?${queryString}`, { headers: { 'accept': 'application/json' } })
-          .then((response) => response.json())
-          .then((products) => {
-            updateProducts(products);
+        fetch(`/t/brands/apple/iphone?${queryString}`, { headers: { 'accept': 'application/json' } })
+            .then((response) => response.json())
+            .then(({ products, noProductsMessage }) => {
+              products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
             // TODO: update url params (without reloading the page), so that if user refresh or share link it won't loose filters
-          });
+            });
+      });
     });
+
+    const displayNoProductsMessage = (noProductMessage) => {
+      document.getElementById('products').innerHTML = `
+        <div data-hook="products_search_results_heading_no_results_found">
+          ${noProductMessage}
+        </div>
+      `;
+    };
 
     const updateProducts = (products) => {
       const productList = document.getElementById('products');
       productList.innerHTML = '';
-      products.forEach((product) => {
-        productList.insertAdjacentHTML('beforeend', productCardHtml(product));
+      products.forEach((product, index) => {
+        productList.insertAdjacentHTML('beforeend', productCardHtml(product, index));
       });
     };
 
-    const productCardHtml = (product) => {
+    const productCardHtml = (product, index) => {
       return `
-      <li id=\"product_${product.id}\" class="columns three" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+      <li id=\"product_${product.id}\" class="columns three ${index === 0 ? 'alpha' : ''}" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
         <div class="product-image">
           <a href="#">IMAGE</a>
         </div>

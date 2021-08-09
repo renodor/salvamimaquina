@@ -4,7 +4,7 @@
 
 <% if image_url = image.try(:url, size)  %>
   <% if image_alt = image.try(:alt) %>
-    <%= image_tag image_url, { alt: image_alt, itemprop: itemprop }.merge(options) %>
+    <%= image_tag image_url, { alt: image_alt, itemprop: itemprop, height: '300' }.merge(options) %>
   <% else %>
     <%= image_tag image_url, { itemprop: itemprop }.merge(options) %>
   <% end %>
