@@ -34,27 +34,36 @@ const productFilter = () => {
 
     const productCardHtml = (product, index) => {
       return `
-      <li id=\"product_${product.id}\" class="columns three ${index === 0 ? 'alpha' : ''}" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
-        <div class="product-image">
-          <a href="#">IMAGE</a>
-        </div>
-        <a href=${product.url} class="info" itemprop="name" title=${product.name}>${product.name}</a>
-        <span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          ${product.cheapest_variant_onsale ? discountPriceHtml(product.discount_price, product.discount_price_html_tag) : ''}
-          <span class="price selling ${product.cheapest_variant_onsale ? 'crossed' : ''} itemprop="price" content="${product.price}">
-            ${product.price_html_tag}
+        <li id=\"product_${product.id}\" class="columns three ${index === 0 ? 'alpha' : ''}" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+          <div class="product-image">
+            ${productImageHtml(product.image_url)}
+          </div>
+          <div class="product-name">${product.name}</div>
+          <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            ${product.cheapest_variant_onsale ? discountPriceHtml(product.discount_price, product.discount_price_html_tag) : ''}
+            <span class="price selling ${product.cheapest_variant_onsale ? 'crossed' : ''} itemprop="price" content="${product.price}">
+              ${product.price_html_tag}
+            </span>
           </span>
-        </span>
-      </li >
-    `;
+          <a href=${product.url} class="product-link full-absolute" itemprop="name" title=${product.name}></a>
+        </li >
+      `;
     };
 
     const discountPriceHtml = (discountPrice, discountPriceHtmlTag) => {
       return `
-      <span class="price selling" itemprop="price" content="${discountPrice}">
-        ${discountPriceHtmlTag}
-      </span >
-    `;
+        <span class="price selling" itemprop="price" content="${discountPrice}">
+          ${discountPriceHtmlTag}
+        </span >
+      `;
+    };
+
+    const productImageHtml = (imageUrl) => {
+      if (imageUrl) {
+        return `<img src="${imageUrl}">`;
+      } else {
+        return '<div class="image-placeholder" style="height: 300px;"></div>'; // TODO: import this component from controller
+      }
     };
   };
 };

@@ -21,8 +21,11 @@ module Spree
       @products.map do |product|
         discount_price = product.cheapest_variant.price_for(current_pricing_options)
         price = product.cheapest_variant.price_for(current_pricing_options, sale_price: false)
+        product_image_key = product.gallery.images.first&.attachment&.key
+        product_image_url = product_image_key ? "https://res-5.cloudinary.com/detkhu57i/image/upload/c_fit,h_300/#{product.gallery.images.first&.attachment&.key}" : nil # TODO: don't harcode this link
         aditional_data = {
           url: spree.product_path(product, taxon_id: @taxon.try(:id)),
+          image_url: product_image_url,
           cheapest_variant_onsale: product.cheapest_variant.on_sale?,
           discount_price: discount_price.to_d,
           discount_price_html_tag: discount_price.to_html,
