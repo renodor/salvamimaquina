@@ -4,13 +4,15 @@
     <% if @product.variants_and_option_values_for(current_pricing_options).any? %>
       <div id="product-variants">
         <ul>
-          <% first_product_index = 0 %>
+          <% first_product_index = 0 # TODO: change this ugly logic %>
+          <% available_variant_count = 0 # used later to check if at least any variant is available... TODO: change this ugly logic %>
           <% @product.variants_and_option_values_for(current_pricing_options).each_with_index do |variant, index| %>
             <% unless variant.can_supply? %>
               <% first_product_index = index + 1 %>
               <% next %>
             <% end %>
 
+            <% available_variant_count += 1 %>
             <li>
               <%= 
                 radio_button_tag "variant_id",
@@ -55,16 +57,19 @@
 
         <% if @product.master.can_supply? %>
           <link itemprop="availability" href="http://schema.org/InStock" />
-        <% elsif @product.variants.empty? %>
-          <br />
-          <span class="out-of-stock"><%= t('spree.out_of_stock') %></span>
         <% end %>
       </div>
 
       <div class="add-to-cart">
-        <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
-        <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit do %>
-          <%= t('spree.buy').upcase %>
+        <% if  @product.master.can_supply? || available_variant_count&.positive? %>
+          <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
+          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit do %>
+            <%= t('spree.buy').upcase %>
+          <% end %>
+        <% else %>
+          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit, disabled: true do %>
+            <%= t('spree.out_of_stock').upcase %>
+          <% end %>
         <% end %>
       </div>
     </div>

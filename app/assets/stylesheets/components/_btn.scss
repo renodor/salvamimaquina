@@ -10,4 +10,10 @@
     opacity: 1;
     background-color: $green;
   }
+  &:disabled {
+    background-color: $green;
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: initial;
+  }
 }

@@ -31,6 +31,7 @@ es-MX:
       green: 'Verde'
     capacity: 'Capacidad'
     product_information: 'Información del Producto'
+    out_of_stock: 'Agotado'
   activerecord:
     attributes:
       spree/credit_card:
