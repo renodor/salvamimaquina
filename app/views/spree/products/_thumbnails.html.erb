@@ -5,7 +5,9 @@
     <% @product.gallery.images.each do |image| %>
       <% next if image.viewable_id != @product.master.id %>
       <li class='tmb-all tmb-<%= image.viewable_id %>'>
-        <%= link_to(image_tag(image.url(:mini)), image.url(:product)) %>
+        <%= link_to cl_image_path(image.attachment&.key) do %>
+          <%= cl_image_tag image.attachment&.key, height: 48, crop: :fit, itemprop: "image" %>
+        <% end %>
       </li>
     <% end %>
 
@@ -13,7 +15,9 @@
       <% @product.gallery.images.each do |image| %>
         <% next if image.viewable_id == @product.master.id %>
         <li class='vtmb tmb-<%= image.viewable_id %>'>
-          <%= link_to(image_tag(image.url(:mini)), image.url(:product)) %>
+          <%= link_to cl_image_path(image.attachment&.key) do %>
+            <%= cl_image_tag image.attachment&.key, height: 48, crop: :fit, itemprop: "image" %>
+          <% end %>
         </li>
       <% end %>
     <% end %>

@@ -1,6 +1,6 @@
 <% if model_filter.present? %>
   <div class="navigation product-filter" data-hook="navigation">
-    <h6 class="filter-title"><%= I18n.t('spree.models') %></h6>
+    <h6 class="filter-title"><%= t('spree.model', count: model_filter.size) %></h6>
     <ul class="filter_choices">
       <% model_filter.each do |model_name, model_id| %>
         <li>

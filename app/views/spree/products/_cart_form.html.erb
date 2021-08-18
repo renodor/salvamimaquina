@@ -2,29 +2,33 @@
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
     <% if @product.variants_and_option_values_for(current_pricing_options).any? %>
-      <div id="product-variants" class="columns five alpha">
-        <h6 class="product-section-title"><%= t('spree.variants') %></h6>
+      <div id="product-variants">
         <ul>
+          <% first_product_index = 0 %>
           <% @product.variants_and_option_values_for(current_pricing_options).each_with_index do |variant, index| %>
+            <% unless variant.can_supply? %>
+              <% first_product_index = index + 1 %>
+              <% next %>
+            <% end %>
+
             <li>
               <%= 
                 radio_button_tag "variant_id",
                 variant.id,
-                index == 0,
+                index == first_product_index,
                 'data-price' => variant.price_for(current_pricing_options, sale_price: false),
-                'data-discount-price' => variant.on_sale? ? variant.price_for(current_pricing_options) : nil
+                'data-discount-price' => variant.on_sale? ? variant.price_for(current_pricing_options) : nil,
+                disabled: !variant.can_supply?
               %>
               <%= label_tag "variant_id_#{ variant.id }" do %>
                 <span class="variant-description">
-                  <%= variant_options variant %>
+                  <%= variant.translated_option_values_without_model %>
                 </span>
-                <% if variant_price variant %>
-                  <span class="price diff"><%= variant_price variant %></span>
-                <% end %>
-
-                <% unless variant.can_supply? %>
-                  <span class="out-of-stock"><%= t('spree.out_of_stock') %></span>
-                <% end %>
+                <%# if variant_price variant %>
+                  <!-- <span class="price diff"> -->
+                    <%#= variant_price variant %>
+                  <!-- </span> -->
+                <%# end %>
               <% end %>
             </li>
           <% end %>
@@ -35,9 +39,8 @@
     <% end %>
 
     <% variant = @product.has_variants? ? @product.variants.first : @product.master %>
-    <div data-hook="product_price" class="columns five omega">
+    <div data-hook="product_price">
       <div id="product-price">
-        <h6 class="product-section-title"><%= t('spree.price') %></h6>
         <div>
           <% discount_price = variant.price_for(current_pricing_options) %>
           <span class="price selling discount <%= variant.on_sale? ? '' : 'display-none' %>" itemprop="price" content="<%= discount_price.to_d %>">
@@ -59,9 +62,9 @@
       </div>
 
       <div class="add-to-cart">
-        <%= number_field_tag :quantity, 1, class: 'title', min: 1 %>
-        <%= button_tag class: 'large primary', id: 'add-to-cart-button', type: :submit do %>
-          <%= t('spree.add_to_cart') %>
+        <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
+        <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit do %>
+          <%= t('spree.buy').upcase %>
         <% end %>
       </div>
     </div>

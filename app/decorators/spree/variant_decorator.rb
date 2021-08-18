@@ -13,6 +13,19 @@ module Spree
       product.destroy! unless product.reload.has_variants?
     end
 
+    def translated_option_values_without_model
+      values = []
+      option_values.each do |option_value|
+        next if option_value.option_type.name == 'model'
+
+        values << I18n.t!("spree.#{option_value.option_type.name}.#{option_value.presentation}").capitalize
+      rescue I18n::MissingTranslationData
+        values << option_value.presentation.capitalize
+      end
+
+      values.join(' - ')
+    end
+
     Spree::Variant.prepend self
   end
 end

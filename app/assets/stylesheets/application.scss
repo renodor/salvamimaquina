@@ -1,20 +1,24 @@
 // Packages
-@import "bootstrap/scss/bootstrap";
+@import 'bootstrap/scss/bootstrap';
 
 // Config
-@import "config/utility";
-@import "config/colors";
-@import "config/bootstrap_variables";
+@import 'config/utility';
+@import 'config/colors';
+@import 'config/bootstrap_variables';
 
 // Components
-@import "components/container";
-@import "components/header";
-@import "components/navbar";
-@import "spree/frontend/brand_grid";
-@import "spree/frontend/sidebar";
-@import "spree/frontend/product_grid";
-@import "spree/frontend/image_placeholder";
-@import "spree/frontend/price_range_slider";
+@import 'components/container';
+@import 'components/header';
+@import 'components/navbar';
+@import 'components/btn';
+
+// Spree Components
+@import 'spree/frontend/brand_grid';
+@import 'spree/frontend/sidebar';
+@import 'spree/frontend/product_grid';
+@import 'spree/frontend/product_show';
+@import 'spree/frontend/image_placeholder';
+@import 'spree/frontend/price_range_slider';
 
 .crossed {
   text-decoration: line-through;

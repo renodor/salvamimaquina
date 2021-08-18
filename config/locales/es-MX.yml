@@ -3,7 +3,10 @@ es-MX:
   shop: 'Tienda'
   spree:
     brands: 'Marcas'
-    models: 'Modelos'
+    model:
+      one: 'Modelo'
+      other: 'Modelos'
+    buy: 'Comprar'
     on_sale_products: 'Productos rebajados'
     district: 'Corregimiento'
     items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'
@@ -20,6 +23,14 @@ es-MX:
       products:
         price_diff_add_html: "%{amount_html} adicional"
         price_diff_subtract_html: "%{amount_html} menos"
+    color:
+      black: 'Negro'
+      white: 'Blanco'
+      pink: 'Rosado'
+      golden: 'Dorado'
+      green: 'Verde'
+    capacity: 'Capacidad'
+    product_information: 'Información del Producto'
   activerecord:
     attributes:
       spree/credit_card:
