@@ -1,8 +1,4 @@
 #cart {
-  h1 {
-    margin-bottom: 30px;
-    font-size: 35px;
-  }
   #cart-detail {
     thead {
       background-color: rgba(189, 189,189, .13);
@@ -36,7 +32,7 @@
         text-align: center;
         a {
           color: $gray;
-          @include default-transition(color)
+          @include default-transition(color);
           &:hover {
             color: $body-color
           }

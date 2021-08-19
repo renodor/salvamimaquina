@@ -1,0 +1,9 @@
+.field_with_errors {
+  input {
+    border-color: $red;
+  }
+}
+
+input:focus, input:active {
+  border-color: $green!important;
+}

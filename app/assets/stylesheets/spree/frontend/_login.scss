@@ -1,0 +1,27 @@
+#registration {
+  display: flex;
+  justify-content: space-between;
+  #account, #guest_checkout {
+    width: 500px;
+  }
+}
+#existing-customer, #new-customer, #forgot-password {
+  max-width: 500px;
+  a {
+    color: $body-color;
+    @include default-transition(color);
+    &:hover {
+      color: $green;
+    }
+  }
+}
+
+input.login-input {
+  margin: 10px 0;
+  padding: 15px;
+  width: 100%;
+  font-size: 16px;
+  &::placeholder {
+    font-size: 16px;
+  }
+}

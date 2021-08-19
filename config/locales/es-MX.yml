@@ -2,6 +2,7 @@ es-MX:
   home: 'Inicio'
   shop: 'Tienda'
   spree:
+    email: 'Correo'
     brands: 'Marcas'
     model:
       one: 'Modelo'
@@ -34,6 +35,7 @@ es-MX:
     out_of_stock: 'Agotado'
     shopping_cart: 'Mi Carrito'
     checkout: 'Ordenar'
+    create_account: 'Crear cuenta'
   activerecord:
     attributes:
       spree/credit_card:
@@ -44,3 +46,9 @@ es-MX:
           attributes:
             base:
               invalid_token: "No se puede validar su número de tarjeta"
+  devise:
+    failure:
+      invalid: 'Correo o contraseña invalida'
+    user_passwords:
+      spree_user:
+        send_instructions: 'Si existe una cuenta con este correo, va a recibir un correo con las instrucciones para cambiar su contraseña'
