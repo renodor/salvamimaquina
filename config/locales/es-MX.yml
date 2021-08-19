@@ -32,6 +32,8 @@ es-MX:
     capacity: 'Capacidad'
     product_information: 'Información del Producto'
     out_of_stock: 'Agotado'
+    shopping_cart: 'Mi Carrito'
+    checkout: 'Ordenar'
   activerecord:
     attributes:
       spree/credit_card:

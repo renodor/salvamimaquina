@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     namespace :api, defaults: { format: 'json' } do
       resources :districts, only: :index
     end
+
+    delete '/frontend/orders/:order_id/line_items/:id', to: 'frontend/line_items#destroy', as: :frontend_line_item
   end
 
   namespace :repair_shopr_webhook do

@@ -24,6 +24,7 @@ import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
 import { productShowCartForm } from '../components/product_show_cart_form';
 import { productFilter } from '../components/product_filter';
+import { cart } from '../components/cart';
 
 // Internal Plugins
 import { initMapbox } from '../plugins/init_mapbox';
@@ -35,6 +36,7 @@ document.addEventListener('turbolinks:load', () => {
   priceRangeSlider();
   productShowCartForm();
   productFilter();
+  cart();
 
   initMapbox();
   initBacCheckout();

@@ -24,7 +24,7 @@
               %>
               <%= label_tag "variant_id_#{ variant.id }" do %>
                 <span class="variant-description">
-                  <%= variant.translated_option_values_without_model %>
+                  <%= variant.translated_option_values %>
                 </span>
                 <%# if variant_price variant %>
                   <!-- <span class="price diff"> -->
@@ -37,6 +37,9 @@
         </ul>
       </div>
     <% else %>
+      <div class="master-description">
+        <%= @product.master.translated_option_values %>
+      </div>
       <%= hidden_field_tag "variant_id", @product.master.id %>
     <% end %>
 
@@ -62,7 +65,7 @@
 
       <div class="add-to-cart">
         <% if  @product.master.can_supply? || available_variant_count&.positive? %>
-          <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
+          <%#= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
           <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit do %>
             <%= t('spree.buy').upcase %>
           <% end %>
