@@ -1,7 +1,37 @@
 .navbar {
+  padding-left: 0;
   padding-top: 0;
   padding-bottom: 0;
+  .container-fluid {
+    padding-left: 0;
+  }
   .navbar-nav .nav-item .nav-link {
     text-transform: uppercase;
+  }
+  .navbar-cart-link {
+    color: $green;
+    position: relative;
+    opacity: 0.8;
+    @include default-transition(opacity);
+    &:hover {
+      opacity: 1;
+    }
+    svg {
+      margin-bottom: 5px;
+    }
+    .navbar-cart-quantity {
+      position: absolute;
+      right: 6px;
+      bottom: 9px;
+      border-radius: 50%;
+      background-color: $green;
+      color: white;
+      height: 16px;
+      width: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
   }
 }

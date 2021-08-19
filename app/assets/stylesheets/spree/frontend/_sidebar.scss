@@ -18,7 +18,7 @@
           box-shadow: none;
         }
         &:hover, &:not(.collapsed) {
-          color: $dark-gray;
+          color: $body-color;
           background-color: white;
           box-shadow: none;
           &::after {
@@ -33,7 +33,7 @@
           width: 100%;
           padding: 5px 10px;
           margin: 5px 0;
-          color: $dark-gray;
+          color: $body-color;
           text-decoration: none;
           @include default-transition(color, background-color);
           &:hover, &.active {
@@ -46,7 +46,7 @@
   }
   #sidebar_products_search {
     .filter-title {
-      color: $dark-gray;
+      color: $body-color;
       font-weight: 500;
       border-bottom: none;
       padding: 0 10px;

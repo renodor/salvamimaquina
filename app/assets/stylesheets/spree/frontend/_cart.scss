@@ -17,7 +17,7 @@
       }
       .cart-item-description {
         h4 a {
-          color: $dark-gray;
+          color: $body-color;
           text-decoration: none;
           &:hover {
             text-decoration: underline;
@@ -38,13 +38,17 @@
           color: $gray;
           @include default-transition(color)
           &:hover {
-            color: $dark-gray
+            color: $body-color
           }
         }
       }
     }
     .cart-subtotal, .cart-total {
       background-color: $light-gray;
+      h5 {
+        margin-bottom: 0;
+        color: $body-color;
+      }
     }
   }
   .cart-buttons {
