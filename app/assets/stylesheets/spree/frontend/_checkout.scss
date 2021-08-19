@@ -1,0 +1,45 @@
+#checkout {
+  .progress-steps {
+    list-style-type: none;
+    counter-reset: item;
+    li {
+      display: flex;
+      background-color: transparent;
+      &::before {
+        content: counter(item) " ";
+        counter-increment: item;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        color: white;
+        margin-right: 8px;
+      }
+      &.current {
+        color: $green;
+        &::before {
+          background-color: $green;
+        }
+      }
+      &.completed {
+        a {
+          color: $dark-gray;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        &::before {
+          background-color: $dark-gray
+        }
+      }
+      &.next, &.last {
+        color: $gray;
+        &::before {
+          background-color: $gray
+        }
+      }
+    }
+  }
+}

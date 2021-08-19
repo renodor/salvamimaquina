@@ -36,3 +36,4 @@ en:
     admin:
       tab:
         sync_repair_shopr: Sync RepairShopr
+    different_billing_address: 'If you need a different billing address please contact us'

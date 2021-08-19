@@ -1,6 +1,6 @@
-<div class="columns omega six" data-hook="shipping_fieldset_wrapper">
+<div data-hook="shipping_fieldset_wrapper">
   <fieldset id="shipping" data-hook>
-    * If you need a different billing address please contact us.
+    <span><%= t('spree.different_billing_address') %></span>
     <%= form.fields_for :ship_address do |ship_form| %>
     <legend align="center"><%= t('spree.shipping_address') %></legend>
     <%= render partial: 'spree/address/form', locals: { form: ship_form, address_type: 'shipping', address: @order.ship_address } %>

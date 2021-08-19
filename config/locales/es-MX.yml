@@ -36,6 +36,7 @@ es-MX:
     shopping_cart: 'Mi Carrito'
     checkout: 'Ordenar'
     create_account: 'Crear cuenta'
+    different_billing_address: 'Por favor contáctenos si necesita una dirección de envío diferente de la de facturación'
   activerecord:
     attributes:
       spree/credit_card:
