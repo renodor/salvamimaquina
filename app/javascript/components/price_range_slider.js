@@ -18,22 +18,6 @@ const priceRangeSlider = () => {
         currentValues[1].innerHTML= `$${slide2}`;
       };
     });
-
-    // numbers.forEach((number) => {
-    //   number.oninput = () => {
-    //     const number1 = parseFloat(numbers[0].value);
-    //     const number2 = parseFloat(numbers[1].value);
-
-    //     if (number1 > number2) {
-    //       const saveNumber = number1;
-    //       numbers[0].value = number2;
-    //       numbers[1].value = saveNumber;
-    //     }
-
-    //     ranges[0].value = number1;
-    //     ranges[1].value = number2;
-    //   }
-    // });
   }
 };
 

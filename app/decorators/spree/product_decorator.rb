@@ -15,6 +15,8 @@ module Spree
       end
 
       base.add_search_scope :price_between do |min, max|
+        min, max = max, min if min.to_i > max.to_i
+
         current_time = Time.now
 
         is_on_sale = '(spree_sale_prices.start_at <= ? OR spree_sale_prices.start_at IS NULL) AND (spree_sale_prices.end_at >= ? OR spree_sale_prices.end_at IS NULL)'
