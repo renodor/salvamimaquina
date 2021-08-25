@@ -6,9 +6,10 @@ namespace :setup_prod_db do
     environment
     create_stock_locations
     create_taxonomies
-    create_tax_category
     create_panama_city_corregimientos
     create_panama_city_zones
+    create_tax_category
+    create_shipping_methods
     destroy_countries_and_states_out_of_panama
     create_payment_methods
     create_free_shipping_promotion
@@ -192,6 +193,8 @@ namespace :setup_prod_db do
 
     Rails.logger.info('Create Panama City Shipping Methods by Zone')
 
+    Spree::ShippingMethod.destroy_all
+
     Spree::Calculator::Shipping::CustomShippingCalculator.destroy_all
 
     amount_per_zone = {
@@ -201,11 +204,15 @@ namespace :setup_prod_db do
     }
 
     3.times do |n|
-      shipping_method = Spree::ShippingMethod.find_or_initialize_by(name: "Panama Zone #{n + 1}")
+      shipping_method = Spree::ShippingMethod.new(name: "Panama Zone #{n + 1}")
       zone = Spree::Zone.find_by!(name: "Panama Zone #{n + 1}")
-      shipping_method.shipping_categories = [default_shipping_category]
-      shipping_method.zones = [zone]
-      shipping_method.calculator = Spree::Calculator::Shipping::CustomShippingCalculator.find_or_initialize_by(preferences: { amount: amount_per_zone["zone#{n + 1}".to_sym] })
+      shipping_method.attributes = {
+        shipping_categories: [default_shipping_category],
+        zones: [zone],
+        service_level: 'delivery',
+        code: n + 1
+      }
+      shipping_method.calculator = Spree::Calculator::Shipping::CustomShippingCalculator.new(preferences: { amount: amount_per_zone["zone#{n + 1}".to_sym] })
       shipping_method.save!
     end
 
@@ -213,9 +220,13 @@ namespace :setup_prod_db do
 
     Spree::Calculator::Shipping::FlatPercentItemTotal.destroy_all
     ['Pick-up in store: Bella Vista', 'Pick-up in store: San Francisco'].each do |name|
-      shipping_method = Spree::ShippingMethod.find_or_initialize_by(name: name)
-      shipping_method.shipping_categories = [default_shipping_category]
-      shipping_method.calculator = Spree::Calculator::Shipping::FlatPercentItemTotal.find_or_initialize_by(preferences: { amount: 0 })
+      shipping_method = Spree::ShippingMethod.new(name: name)
+      shipping_method.attributes = {
+        shipping_categories: [default_shipping_category],
+        zones: [Spree::Zone.find_by(name: 'Panama')],
+        admin_name: name.split(': ').last,
+      }
+      shipping_method.calculator = Spree::Calculator::Shipping::FlatPercentItemTotal.new(preferences: { amount: 0 })
       shipping_method.save!
     end
   end

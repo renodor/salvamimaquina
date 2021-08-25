@@ -36,7 +36,13 @@ es-MX:
     shopping_cart: 'Mi Carrito'
     checkout: 'Ordenar'
     create_account: 'Crear cuenta'
-    different_billing_address: 'Por favor contáctenos si necesita una dirección de envío diferente de la de facturación'
+    different_billing_address: 'Por favor contáctenos si necesita una dirección de envío diferente de la de facturación.'
+    street_address_2: 'Punto de referencia'
+    missing_map_pin: 'Elegir punto en el mapa'
+    choose_shipping_method: 'Elegir método de envío'
+    shipping_methods:
+      pickup_in_store: "Recoger en la tienda de %{store_name}"
+      delivery_zone: "Entrega en Ciudad de Panamá, Zona %{zone_number}"
   activerecord:
     attributes:
       spree/credit_card:
@@ -53,3 +59,4 @@ es-MX:
     user_passwords:
       spree_user:
         send_instructions: 'Si existe una cuenta con este correo, va a recibir un correo con las instrucciones para cambiar su contraseña'
+  panama: 'Panamá'

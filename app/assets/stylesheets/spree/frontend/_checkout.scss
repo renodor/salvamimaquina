@@ -5,9 +5,11 @@
     li {
       display: flex;
       background-color: transparent;
+      color: $gray;
       &::before {
         content: counter(item) " ";
         counter-increment: item;
+        background-color: $gray;
         border-radius: 50%;
         width: 25px;
         height: 25px;
@@ -34,12 +36,92 @@
           background-color: $dark-gray
         }
       }
-      &.next, &.last {
-        color: $gray;
-        &::before {
-          background-color: $gray
+    }
+  }
+  input, select {
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    &::placeholder {
+      font-size: 16px;
+    }
+    &.disabled {
+      background-color: $light-gray;
+      color: $dark-gray;
+      &:focus, &:active {
+        border-color: $light-gray!important;
+      }
+    }
+  }
+  select {
+    height: 46px;
+    background-color: white;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+  #billing, #shipping, #shipping_method, #payment, #order_details, #order_summary {
+    border: none;
+    padding: 0;
+  }
+  #shipping {
+    .row {
+      margin-bottom: 10px;
+    }
+  }
+  #shipping_method {
+    table.stock-contents {
+      width: 100%;
+      thead th {
+        font-size: 16px;
+        font-weight: 700;
+        padding: 5px 10px;
+      }
+      tbody tr td {
+        text-align: left;
+      }
+    }
+    .item-original-price {
+      font-weight: 300;
+      font-size: 15px;
+      padding: 0 10px;
+    }
+    .stock-shipping-method-title {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: $light-gray;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .shipping-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      .shipping-method {
+        margin: 10px;
+        input[type='radio'] {
+          display: none;
+        }
+        input[type='radio']:checked + .shipping-method-label, .shipping-method-label:hover {
+          background-color: $light-green;
+          color: $green;
+        }
+        .shipping-method-label {
+          padding: 10px;
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          .rate-cost {
+            font-weight: 700;
+          }
         }
       }
     }
+  }
+  #checkout-summary {
+    height: 100%;
+    margin-top: 10px;
+    padding: 20px;
   }
 }

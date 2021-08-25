@@ -1,6 +1,6 @@
 <% order = order_form.object %>
 <%= render 'spree/shared/error_messages', target: order %>
-<table id="cart-detail">
+<table id="cart-detail"> <!-- TODO: replace this table with a css grid or flexbox... -->
   <thead>
     <tr data-hook="cart_items_headers">
       <th class="cart-item-description-header" colspan="2"><%= t('spree.item') %></th>

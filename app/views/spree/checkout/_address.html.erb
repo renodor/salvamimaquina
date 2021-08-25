@@ -1,20 +1,19 @@
 <div data-hook="shipping_fieldset_wrapper">
   <fieldset id="shipping" data-hook>
-    <span><%= t('spree.different_billing_address') %></span>
     <%= form.fields_for :ship_address do |ship_form| %>
-    <legend align="center"><%= t('spree.shipping_address') %></legend>
-    <%= render partial: 'spree/address/form', locals: { form: ship_form, address_type: 'shipping', address: @order.ship_address } %>
+      <%= render partial: 'spree/address/form', locals: { form: ship_form, address_type: 'shipping', address: @order.ship_address } %>
     <% end %>
   </fieldset>
 </div>
 
+<div id="missing-map-pin" class=""><%= t('spree.missing_map_pin') %></div>
 <div id="map" style="width: 100%; height: 600px;">
 </div>
 
 <hr class="clear" />
 
 <div class="form-buttons" data-hook="buttons">
-  <%= submit_tag t('spree.save_and_continue'), class: 'continue button primary' %>
+  <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary' %>
   <% if try_spree_current_user %>
   <span data-hook="save_user_address">
     &nbsp; &nbsp;
@@ -23,3 +22,5 @@
   </span>
   <% end %>
 </div>
+<br>
+<small><%= t('spree.different_billing_address') %></small>

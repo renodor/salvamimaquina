@@ -4,6 +4,12 @@
   }
 }
 
-input:focus, input:active {
-  border-color: $green!important;
+input, textarea, select {
+  border-color: $light-gray!important;
+  &:focus, &:active {
+    border-color: $green!important;
+  }
+  &.error {
+    border-color: $red!important;
+  }
 }

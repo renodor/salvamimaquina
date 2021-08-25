@@ -59,7 +59,8 @@ const initMapbox = () => {
     submitAddressBtn.addEventListener('click', (event) => {
       if (!latitudeInput.value || !longitudeInput.value) {
         event.preventDefault();
-        mapElement.insertAdjacentHTML('beforebegin', 'Please set the pin on our exact location');
+        document.getElementById('missing-map-pin').style.color = '#FD1015';
+        mapElement.style.border = '1px solid red';
       }
     });
   }

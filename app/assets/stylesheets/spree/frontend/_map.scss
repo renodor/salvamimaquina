@@ -1,3 +1,10 @@
-#map .mapboxgl-marker {
-  cursor: pointer;
+#map {
+  border: 1px solid transparent;
+  .mapboxgl-marker {
+    cursor: pointer;
+  }
+}
+
+#missing-map-pin {
+  margin-bottom: 10px;
 }

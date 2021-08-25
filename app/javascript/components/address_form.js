@@ -1,6 +1,8 @@
 const addressForm = () => {
-  const stateField = document.querySelector('#sstate');
-  if (stateField) {
+  const addressForm = document.getElementById('checkout_form_address');
+
+  if (addressForm) {
+    const stateField = document.querySelector('#sstate');
     Spree.ready(function($) {
       stateField.querySelector('select').addEventListener('change', (event) => {
         const stateId = event.currentTarget.value;
@@ -17,6 +19,19 @@ const addressForm = () => {
               }
             }
         );
+      });
+    });
+
+    const inputs = addressForm.querySelectorAll('input, select, textarea');
+    inputs.forEach((input) => {
+      input.addEventListener('invalid', (event) => {
+        input.classList.add('error');
+      });
+
+      input.addEventListener('blur', (event) => {
+        if (input.checkValidity()) {
+          input.classList.remove('error');
+        }
       });
     });
   }
