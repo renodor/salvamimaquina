@@ -69,6 +69,8 @@ module Spree
           permitted_checkout_address_attributes
         )
       when :delivery
+        equalize_shipments_shipping_methods if @order.shipments.size == 2
+
         massaged_params.require(:order).permit(
           permitted_checkout_delivery_attributes
         )
@@ -124,6 +126,17 @@ module Spree
       # (It could happend when coming back from 3DS, the cookie may be lost between redirects, (even if it shouldn't...))
       @order ||= Spree::Order.find_by(number: params[:OrderID]&.split('-')&.first)
       redirect_to(spree.cart_path) && return unless @order
+    end
+
+    # If the order have splitted packages (products shipped from Bella Vista and others from San Francisco), we don't want the user to see it and pay 2 shippings.
+    # So on front end we are displaying only the first package, and user will choose the shipping method of the first package only.
+    # In this method we make sure that, if there are 2 packages, the second one will have the same shipping method than the first one.
+    # (Because otherwise 2nd package will always have a default shipping method)
+    def equalize_shipments_shipping_methods
+      shipment_attributes = params[:order][:shipments_attributes]
+      first_shipment_shipping_method_id = Spree::ShippingRate.find(shipment_attributes['0'][:selected_shipping_rate_id]).shipping_method.id
+      second_shipment_corresponding_shipping_rate_id = Spree::Shipment.find(shipment_attributes['1'][:id]).shipping_rates.find_by(shipping_method_id: first_shipment_shipping_method_id).id
+      shipment_attributes['1'][:selected_shipping_rate_id] = second_shipment_corresponding_shipping_rate_id
     end
 
     Spree::CheckoutController.prepend self

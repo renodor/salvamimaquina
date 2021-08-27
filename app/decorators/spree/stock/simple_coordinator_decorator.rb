@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # We need to monkey patch the whole #build_shipments method in order to assigne a package_index to every packages of our orders
-# The modification happend at line 34 and 35:
+# The modification happend at line 36 and 37:
 # - we add an index argument to the iteration
 # - we assign a package_index to each package
 module Spree
@@ -36,7 +36,7 @@ module Spree
         packages.each_with_index.map do |package, index|
           package.package_index = index
           shipment = package.shipment = package.to_shipment
-          shipment.shipping_rates = Spree::Config.stock.estimator_class.new.shipping_rates(package)
+          shipment.shipping_rates = Spree::Config.stock.estimator_class.new.shipping_rates(package) # TODO: find a way not to have a default shipping method... So that at checkout users always have to choose one
           shipment
         end
       end
