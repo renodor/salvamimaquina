@@ -2,6 +2,8 @@ const addressForm = () => {
   const addressForm = document.getElementById('checkout_form_address');
 
   if (addressForm) {
+    // Update district lists regarding what state is selected
+    // (Currently useless because only one state is available)
     const stateField = document.querySelector('#sstate');
     Spree.ready(function($) {
       stateField.querySelector('select').addEventListener('change', (event) => {

@@ -28,5 +28,11 @@ module Spree
       end
       content_tag('ul', raw(items.join("\n")), class: 'progress-steps', id: "checkout-step-#{@order.state}")
     end
+
+    def district_select_options(address)
+      address.state.districts.map do |district|
+        [district.name, district.id, { data: { latitude: district.latitude, longitude: district.longitude } }]
+      end
+    end
   end
 end

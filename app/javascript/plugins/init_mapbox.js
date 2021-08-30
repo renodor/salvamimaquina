@@ -17,6 +17,18 @@ const initMapbox = () => {
       longitudeInput.value = marker.getLngLat().lng;
     };
 
+    // Update de displayed map by doing 3 things:
+    // - puting the marker on the center of the selected area
+    // - resizing the map
+    // - puting the center of the map on the selected area
+    // - Nullify latitude and longitude hidden fields value, to be sure user will move the marker
+    const updateMap = (latitude, longitude) => {
+      marker.setLngLat([longitude, latitude]);
+      map.resize();
+      map.flyTo({ center: [longitude, latitude] });
+      latitudeInput.value = longitudeInput.value = null;
+    };
+
     // initialize a mapbox map in the center of Panama
     mapboxgl.accessToken = gon.mapbox_api_key;
     const map = new mapboxgl.Map({
@@ -36,6 +48,12 @@ const initMapbox = () => {
     // Every time the marker is dragged, call updateCoordinates method
     marker.on('dragend', updateCoordinates);
 
+    // When loading the page, call updateMap() if a point on the map has already been defined
+    // (It happens if user select a point on the map, validates, and then comes back to the page)
+    if (latitudeInput.value && longitudeInput.value) {
+      updateMap(latitudeInput.value, longitudeInput.value);
+    }
+
     // Add en event listener on the area (corregimiento) input
     // and update the map each time it changes
     const corregimientoInput = document.getElementById('order_ship_address_attributes_district_id');
@@ -43,14 +61,7 @@ const initMapbox = () => {
       const indexOfSelectedDistrict = corregimientoInput.options.selectedIndex;
       const latitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.latitude);
       const longitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.longitude);
-      // Then we need to do 3 things :
-      // - put the marker on the center of the selected area
-      // - resize the map
-      // - put the center of the map on the selected area
-      marker.setLngLat([longitude, latitude]);
-      map.resize();
-      map.flyTo({ center: [longitude, latitude] });
-      latitudeInput.value = longitudeInput.value = null;
+      updateMap(latitude, longitude);
     });
 
 

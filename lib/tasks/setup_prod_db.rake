@@ -127,7 +127,7 @@ namespace :setup_prod_db do
       },
       {
         name: 'Costa Del Este',
-        logintude: -79.471627,
+        longitude: -79.471627,
         latitude: 9.013227
       }
     ]
