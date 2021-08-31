@@ -1,6 +1,6 @@
 // Importing mapbox-gl with a bang (!mapbox-gl) exclude mapbox-gl from being transpiled by webpack
 import mapboxgl from '!mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 const initMapbox = () => {
   const mapElement = document.getElementById('map');
