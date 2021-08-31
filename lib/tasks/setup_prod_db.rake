@@ -243,6 +243,8 @@ namespace :setup_prod_db do
   task :create_payment_methods do
     Rails.logger.info('Create payment methods')
 
+    Spree::PaymentMethod.destroy_all
+
     bac_credit_card = Spree::PaymentMethod.find_or_initialize_by(type: 'Spree::PaymentMethod::BacCreditCard', name: 'Credit Card')
     bac_credit_card.attributes = {
       preferences: { server: 'fac', test_mode: false },
