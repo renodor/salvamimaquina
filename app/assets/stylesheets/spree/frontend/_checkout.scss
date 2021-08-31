@@ -60,6 +60,30 @@
       outline: none;
     }
   }
+  #payment-wrapper {
+    display: flex;
+    justify-content: center;
+    #payment-method-fields {
+      .payment-icons {
+        display: flex;
+        svg {
+          margin: 0 5px;
+        }
+      }
+    }
+    #payment-methods {
+      padding-left: 0;
+      .card_number {
+        position: relative;
+        svg {
+          position: absolute;
+          top: 25px;
+          right: 25px;
+          fill: $gray;
+        }
+      }
+    }
+  }
   #billing, #shipping, #shipping_method, #payment, #order_details, #order_summary {
     border: none;
     padding: 0;
@@ -122,6 +146,9 @@
         }
       }
     }
+  }
+  #checkout_form_payment {
+    width: 400px;
   }
   #checkout-summary {
     height: 100%;

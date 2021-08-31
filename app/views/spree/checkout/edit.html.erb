@@ -7,7 +7,7 @@
   </div>
 
   <div class="row" data-hook="checkout_content">
-    <div class="col-md-9" data-hook="checkout_form_wrapper">
+    <div id="<%= @order.state %>-wrapper" class="col-md-9" data-hook="checkout_form_wrapper">
       <%= form_for @order, url: update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}" } do |form| %>
         <% if @order.state == 'address' || !@order.email? %>
           <div class="field field-required" style='clear: both'>

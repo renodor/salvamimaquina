@@ -43,6 +43,8 @@ es-MX:
     shipping_methods:
       pickup_in_store: "Recoger en la tienda de %{store_name}"
       delivery_zone: "Entrega a domicilio, en Ciudad de Panamá Zona %{zone_number}"
+    name_on_card: "Nombre en la tarjeta"
+    card_code: "Código CVV de la tarjeta"
   activerecord:
     attributes:
       spree/credit_card:
