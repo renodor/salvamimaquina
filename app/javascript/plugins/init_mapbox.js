@@ -21,12 +21,10 @@ const initMapbox = () => {
     // - puting the marker on the center of the selected area
     // - resizing the map
     // - puting the center of the map on the selected area
-    // - Nullify latitude and longitude hidden fields value, to be sure user will move the marker
     const updateMap = (latitude, longitude) => {
       marker.setLngLat([longitude, latitude]);
       map.resize();
       map.flyTo({ center: [longitude, latitude] });
-      latitudeInput.value = longitudeInput.value = null;
     };
 
     // initialize a mapbox map in the center of Panama
@@ -56,12 +54,14 @@ const initMapbox = () => {
 
     // Add en event listener on the area (corregimiento) input
     // and update the map each time it changes
+    // + Nullify latitude and longitude hidden fields value, to be sure user will move the marker
     const corregimientoInput = document.getElementById('order_ship_address_attributes_district_id');
     corregimientoInput.addEventListener('change', (event) => {
       const indexOfSelectedDistrict = corregimientoInput.options.selectedIndex;
       const latitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.latitude);
       const longitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.longitude);
       updateMap(latitude, longitude);
+      latitudeInput.value = longitudeInput.value = null;
     });
 
 
