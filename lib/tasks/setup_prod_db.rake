@@ -219,16 +219,32 @@ namespace :setup_prod_db do
     Rails.logger.info('Create Pick-up in Store Shipping Methods')
 
     Spree::Calculator::Shipping::FlatPercentItemTotal.destroy_all
-    ['Pick-up in store: Bella Vista', 'Pick-up in store: San Francisco'].each do |name|
-      shipping_method = Spree::ShippingMethod.new(name: name)
-      shipping_method.attributes = {
-        shipping_categories: [default_shipping_category],
-        zones: [Spree::Zone.find_by(name: 'Panama')],
-        admin_name: name.split(': ').last,
-      }
-      shipping_method.calculator = Spree::Calculator::Shipping::FlatPercentItemTotal.new(preferences: { amount: 0 })
-      shipping_method.save!
-    end
+
+    panama_zone = Spree::Zone.find_by(name: 'Panama')
+
+    bella_vista_pickup = Spree::ShippingMethod.new(
+      name: 'Pick-up in store: Bella Vista',
+      shipping_categories: [default_shipping_category],
+      zones: [panama_zone],
+      admin_name: 'Bella Vista',
+      latitude: 8.9805139,
+      longitude: -79.5268223,
+      google_map_link: 'https://g.page/SalvaMiMaquina?share'
+    )
+    bella_vista_pickup.calculator = Spree::Calculator::Shipping::FlatPercentItemTotal.new(preferences: { amount: 0 })
+    bella_vista_pickup.save!
+
+    san_francisco_pickup = Spree::ShippingMethod.new(
+      name: 'Pick-up in store: San Francisco',
+      shipping_categories: [default_shipping_category],
+      zones: [panama_zone],
+      admin_name: 'San Francisco',
+      latitude: 8.9946759,
+      longitude: -79.5018423,
+      google_map_link: 'https://goo.gl/maps/vkQKG5ywQj5z2VqB8'
+    )
+    san_francisco_pickup.calculator = Spree::Calculator::Shipping::FlatPercentItemTotal.new(preferences: { amount: 0 })
+    san_francisco_pickup.save!
   end
 
   task :destroy_countries_and_states_out_of_panama do

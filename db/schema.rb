@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_214230) do
+ActiveRecord::Schema.define(version: 2021_09_01_092117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -860,6 +860,9 @@ ActiveRecord::Schema.define(version: 2021_08_02_214230) do
     t.string "carrier"
     t.string "service_level"
     t.boolean "available_to_users", default: true
+    t.float "latitude"
+    t.float "longitude"
+    t.text "google_map_link"
     t.index ["tax_category_id"], name: "index_spree_shipping_methods_on_tax_category_id"
   end
 

@@ -39,8 +39,8 @@
           <!-- Now that we have only one payment method, no need to let the user choose... TODO: when adding CLAVE payment method, display different possible choices -->
           <div class="payment-icons">
             <%= svg 'visa' %>
-            <%= svg 'master_card' %>
-            <%= svg 'amex' %>
+            <%= svg 'master' %>
+            <%= svg 'american_express' %>
             <%= hidden_field_tag "order[payments_attributes][][payment_method_id]", method.id %>
           </div>
           <%#= t(method.name.tr(' ', '_').downcase, scope: 'spree.payment_methods', default: method.name) %>

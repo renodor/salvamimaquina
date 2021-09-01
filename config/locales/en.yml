@@ -31,6 +31,10 @@
 
 en:
   spree:
+    address: 'Address'
+    item:
+      one: 'Item'
+      other: 'Item'
     on_sale_products: 'On sale products'
     district_based: District Based
     admin:

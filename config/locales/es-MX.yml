@@ -4,9 +4,13 @@ es-MX:
   spree:
     email: 'Correo'
     brands: 'Marcas'
+    address: 'Dirección'
     model:
       one: 'Modelo'
       other: 'Modelos'
+    item:
+      one: 'Artículo'
+      other: 'Artículos'
     buy: 'Comprar'
     on_sale_products: 'Productos rebajados'
     district: 'Corregimiento'
@@ -46,6 +50,7 @@ es-MX:
     name_on_card: "Nombre en la tarjeta"
     card_code: "Código CVV de la tarjeta"
     transaction_secured: "Todas las transacciones están aseguradas"
+    ending_in: "Termina con:"
     cvv_explaination: "Código de seguridqd de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente."
     spree_gateway_error_flash_for_checkout: "Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo."
     thank_you_for_your_order: "Gracias por su pedido !"

@@ -1,29 +1,36 @@
-<div class="row steps-data">
+<div class="order-steps">
 
-  <% if order.has_checkout_step?("address") %>
-  <% if order.has_checkout_step?("delivery") %>
-  <div class="columns alpha four" data-hook="order-ship-address">
-    <h6><%= t('spree.shipping_address') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:address) unless order.completed? %></h6>
-    <%= render partial: 'spree/shared/address', locals: { address: order.ship_address } %>
-  </div>
-
-  <div class="columns alpha four" data-hook="order-shipment">
-    <h6><%= t('spree.shipments') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:delivery) unless order.completed? %></h6>
-    <div class="delivery">
-      <% order.shipments.each do |shipment| %>
-      <div>
-        <i class='fa fa-truck'></i>
-        <%= t('spree.shipment_details', stock_location: shipment.stock_location.name, shipping_method: shipment.selected_shipping_rate.name) %>
+  <% if order.has_checkout_step?("address") && order.has_checkout_step?("delivery") %>
+    <% shipping_method = order.shipments.first.shipping_method %>
+    <% if shipping_method.service_level == 'delivery' %>
+      <div class="order-step" data-hook="order-ship-address">
+        <h6><%= t('spree.shipping_address') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:address) unless order.completed? %></h6>
+        <%= render partial: 'spree/shared/address', locals: { address: order.ship_address } %>
       </div>
-      <% end %>
+    <% end %>
+
+    <div class="order-step" data-hook="order-shipment">
+      <h6><%= t('spree.shipment') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:delivery) unless order.completed? %></h6>
+      <div class="delivery">
+        <% if shipping_method.service_level == 'delivery' %>
+          <i class='fa fa-truck'></i>
+          <%= t('spree.shipping_methods.delivery_zone', zone_number: shipping_method.code) %>
+        <% else %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+            </svg>
+            <span>
+              <%= t('spree.shipping_methods.pickup_in_store', store_name: shipping_method.admin_name) %>:
+              <%= link_to t('spree.address'), shipping_method.google_map_link, target: '_blank' %>
+            </span>
+        <% end %>
+      </div>
+      <%#= render(partial: 'spree/shared/shipment_tracking', locals: {order: order}) if order.shipped? %>
     </div>
-    <%= render(partial: 'spree/shared/shipment_tracking', locals: {order: order}) if order.shipped? %>
-  </div>
-  <% end %>
   <% end %>
 
   <% if order.has_checkout_step?("payment") %>
-  <div class="columns omega four">
+  <div class="order-step">
     <h6><%= t('spree.payment_information') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:payment) unless order.completed? %></h6>
     <div class="payment-info">
       <% order.payments.valid.each do |payment| %>
@@ -33,11 +40,13 @@
   </div>
   <% end %>
 </div>
+<% if shipping_method.service_level == 'delivery' %>
+  <div id="static-map" style="width: 100%; height: 300px;" data-latitude="<%= order.ship_address.latitude %>" data-longitude="<%= order.ship_address.longitude %>"></div>
+<% else %>
+  <div id="static-map" style="width: 100%; height: 300px;" data-latitude="<%= shipping_method.latitude %>" data-longitude="<%= shipping_method.longitude %>"></div>
+<% end %>
 
-<div id="static-map" style="width: 300px; height: 300px;" data-latitude="<%= order.ship_address.latitude %>" data-longitude="<%= order.ship_address.longitude %>"></div>
-<hr />
-
-<table id='line-items' class="index columns alpha omega sixteen" data-hook="order_details">
+<table id='line-items' class="order-detail" data-hook="order_details">
   <col width="15%" valign="middle" halign="center">
   <col width="70%" valign="middle">
   <col width="5%" valign="middle" halign="center">
@@ -46,20 +55,18 @@
 
   <thead data-hook>
     <tr data-hook="order_details_line_items_headers">
-      <th colspan="2"><%= t('spree.item') %></th>
+      <th colspan="2"><%= t('spree.item', count: order.line_items.count) %></th>
       <th class="price"><%= t('spree.price') %></th>
       <th class="qty"><%= t('spree.qty') %></th>
       <th class="total"><span><%= t('spree.total') %></span></th>
     </tr>
   </thead>
 
-  <tbody data-hook>
+  <tbody data-hook> <!-- TODO: replace this table with a css grid or flexbox... -->
     <% order.line_items.each do |item| %>
     <tr data-hook="order_details_line_item_row">
       <td data-hook="order_item_image">
-        <%= link_to(render('spree/shared/image',
-                             image: (item.variant.gallery.images.first || item.variant.product.gallery.images.first),
-                             size: :small), item.variant.product) %>
+        <%= cl_image_tag item.variant.gallery.images.first&.attachment&.key, height: 150, crop: :fit %>
       </td>
       <td data-hook="order_item_description">
         <h4><%= item.variant.product.name %></h4>
@@ -102,7 +109,12 @@
   <tfoot id='shipment-total'>
     <% order.shipments.group_by { |s| s.selected_shipping_rate.name }.each do |name, shipments| %>
     <tr class="total" data-hook='shipment-row'>
-      <td colspan="4"><%= t('spree.shipping') %>: <strong><%= name %></strong></td>
+      <td colspan="4">
+        <%= t('spree.shipping') %>:
+        <strong>
+          <%= shipping_method.service_level == 'delivery' ? t('spree.shipping_methods.delivery_zone', zone_number: shipping_method.code) : t('spree.shipping_methods.pickup_in_store', store_name: shipping_method.admin_name) %>
+        </strong>
+      </td>
       <td class="total"><span><%= Spree::Money.new(shipments.sum(&:total_before_tax), currency: order.currency).to_html %></span></td>
     </tr>
     <% end %>

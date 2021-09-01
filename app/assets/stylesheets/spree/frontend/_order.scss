@@ -1,0 +1,25 @@
+#order {
+  .order-steps {
+    display: flex;
+    margin-bottom: 20px;
+    .order-step {
+      width: 100%;
+      margin-right: 20px;
+      border-right: 1px solid $light-gray;
+      &:last-child {
+        margin-right: 0;
+        border: none;
+      }
+      h6 {
+        font-weight: 600;
+      }
+      a {
+        color: $green;
+      }
+    }
+  }
+  .order-detail {
+    width: 100%;
+    margin-top: 30px;
+  }
+}
