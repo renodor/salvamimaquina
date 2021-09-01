@@ -4,6 +4,7 @@
 namespace :setup_prod_db do
   task run: %i[
     environment
+    create_store
     create_stock_locations
     create_taxonomies
     create_panama_city_corregimientos
@@ -14,6 +15,20 @@ namespace :setup_prod_db do
     create_payment_methods
     create_free_shipping_promotion
   ]
+
+  task :create_store do
+    store = Spree::Store.find(1)
+
+    store.update!(
+      name: 'Salva Mi Maquina',
+      url: 'www.salvamimaquina.com',
+      mail_from_address: 'contact@example.com',
+      default_currency: 'USD',
+      code: 'salvamimaquina',
+      default: true,
+      available_locales: ['es-MX']
+    )
+  end
 
   task :create_stock_locations do
     Rails.logger.info('Create Bella Vista and San Francisco Stock Locations')
@@ -270,7 +285,8 @@ namespace :setup_prod_db do
   end
 
   task :create_free_shipping_promotion do
-    promotion = Spree::Promotion.find_or_create_by!(name: 'Free Shipping Threshold')
+    promotion = Spree::Promotion.find_or_create_by!(name: 'Entrega Gratis')
+    promotion.apply_automatically = true
     promotion.actions.find_or_create_by!(type: 'Spree::Promotion::Actions::FreeShipping')
     promotion.rules.find_or_create_by(
       type: 'Spree::Promotion::Rules::ItemTotal',

@@ -1,0 +1,75 @@
+<div style="font-family: sans-serif; color: #33333A; padding: 0 30px 30px 30px;">
+  <div style="height: 100px; display: flex; justify-content: center; margin-bottom: 10px;">
+    <%= image_tag 'logo-smm.png', width: '100px' %>
+  </div>
+
+  <h1 style="background-color: #f2fff3; font-size: 24px; text-align: center"><%= t('spree.thank_you_for_your_order') %></h1>
+
+  <div style="margin: 30px 0">
+    <% if @order.shipments.first.shipping_method.service_level == 'delivery' %>
+      <p><b><%= t('spree.shipping_information') %></b></p>
+      <p><%= @address.name %></p>
+      <p><%= @address.address1 %></p>
+      <% if address_detail = @address.address2 %>
+        <p><%= address_detail %></p>
+      <% end %>
+      <p><%= @address.district.name %></p>
+      <p><%= @address.state.name %></p>
+      <p><%= @address.country.name %></p>
+      <p><%= @address.phone %></p>
+      <p><a target='_blank' href="http://www.google.com/maps/place/<%= @address.latitude %>, <%= @address.longitude %>">Ver en el mapa</a></p>
+    <% else %>
+      <p>
+        <%= t('spree.shipping_methods.pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>: 
+        <a target='_blank' href="<%= @order.shipments.first.shipping_method.google_map_link %>"><%= t('spree.address') %></a>
+      </p>
+    <% end %>
+  </div>
+
+  <div>
+    <p><b><%= t('spree.order_information') %> <span style="background-color: #f2fff3; padding: 5px 10px; border-radius: 2px;">#<%= @order.number %></span></b></p>
+    <% @order.line_items.each do |line_item| %>
+      <div style="display:flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
+        <div style="margin-right: 20px;">
+          <%= cl_image_tag line_item.variant.gallery.images.first&.attachment&.key || line_item.variant.product.gallery.images.first&.attachment&.key, height: 150, width: 150, crop: :fill %>
+        </div>
+        <div>
+          <p style="margin: 0 0 5px 0;"><b><%= line_item.variant.product.name %></b><%= line_item.variant.sku.present? ? " (#{line_item.variant.sku})" : '' %></p>
+          <p style="margin: 0 0 5px 0;"><b><%= line_item.variant.options_text %></b></p>
+          <p style="margin: 0 0 5px 0;"><%= number_to_currency(line_item.variant.price, precision: 2) %></p>
+          <p style="margin: 0 0 5px 0;"><%= t('spree.quantity') %>: <%= line_item.quantity %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div style="font-family: sans-serif; background-color: #eee; color: #33333A; padding: 10px 30px;">
+  <p><%= t('.product_quantity', count: @order.item_count) %>: <%= @order.item_count %></p>
+  <p><%= t('.subtotal') %>: <%= @order.display_item_total %></p>
+  <% if @order.all_adjustments.eligible.tax.exists? %>
+    <% @order.all_adjustments.eligible.tax.group_by(&:label).each do |label, adjustments| %>
+      <p><%= label %>: <%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %></p>
+    <% end %>
+  <% end %>
+  <% @order.adjustments.eligible.each do |adjustment| %>
+    <% next if (adjustment.source_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
+    <p>
+      <%= adjustment.label %>: <%= adjustment.display_amount %>
+    </p>
+  <% end %>
+  <p>
+    <%= t('spree.shipping') %>: <%= number_to_currency(@order.shipments.first.cost, precision: 2) %>
+  </p>
+  <% if @order.line_item_adjustments.exists? && @order.all_adjustments.promotion.eligible.exists? %>
+    <% @order.all_adjustments.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
+      <p>
+        <%= label %>: <%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %>
+      </p>
+    <% end %>
+  <% end %>
+  <p><b><%= t('.total') %>: <%= number_to_currency(@order.total, precision: 2) %></b></p>
+</div>
+<div style="text-align: center; font-family: sans-serif; padding: 30px 60px;">
+  <p><%= t('.disclaimer') %></p>
+  <a href="http://www.salvamimaquina.com/">www.salvamimaquina.com</a>
+</div>

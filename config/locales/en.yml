@@ -43,8 +43,14 @@ en:
     different_billing_address: 'If you need a different billing address please contact us;'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'
+    shipping_information: 'Shipping information'
     shipping_methods:
       pickup_in_store: "Pick-up in %{store_name} store"
       delivery_zone: "Delivery in Panama City, Zone %{zone_number}"
     transaction_secured: "All transactions are secured"
     cvv_explaination: "3-digit security code usually found on the back of your card. American Express cards have a 4-digit code located on the front."
+    thank_you_for_your_order: "Thank you for your order!"
+    order_mailer:
+      confirm_email:
+        product_quantity: 'Product quantity'
+        disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'

@@ -76,6 +76,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
+  # To simulate sending emails
+  gem 'letter_opener', group: :development
+
   gem 'rubocop', require: false
 end
 
