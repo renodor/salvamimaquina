@@ -23,19 +23,6 @@ const addressForm = () => {
         );
       });
     });
-
-    const inputs = addressForm.querySelectorAll('input, select, textarea');
-    inputs.forEach((input) => {
-      input.addEventListener('invalid', (event) => {
-        input.classList.add('error');
-      });
-
-      input.addEventListener('blur', (event) => {
-        if (input.checkValidity()) {
-          input.classList.remove('error');
-        }
-      });
-    });
   }
 };
 

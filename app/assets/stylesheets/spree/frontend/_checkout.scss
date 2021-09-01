@@ -73,13 +73,16 @@
     }
     #payment-methods {
       padding-left: 0;
-      .card_number {
-        position: relative;
-        svg {
-          position: absolute;
-          top: 25px;
-          right: 25px;
-          fill: $gray;
+      .card_number, .card_code {
+        display: flex;
+        .has-tooltip {
+          padding: 10px 15px;
+          border-top: 1px solid $light-gray;
+          border-right: 1px solid $light-gray;
+          border-bottom: 1px solid $light-gray;
+          svg {
+            fill: $gray;
+          }
         }
       }
     }

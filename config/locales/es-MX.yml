@@ -45,6 +45,10 @@ es-MX:
       delivery_zone: "Entrega a domicilio, en Ciudad de Panamá Zona %{zone_number}"
     name_on_card: "Nombre en la tarjeta"
     card_code: "Código CVV de la tarjeta"
+    transaction_secured: "Todas las transacciones están aseguradas"
+    cvv_explaination: "Código de seguridqd de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente."
+    spree_gateway_error_flash_for_checkout: "Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo."
+    thank_you_for_your_order: "Gracias por su pedido !"
   activerecord:
     attributes:
       spree/credit_card:

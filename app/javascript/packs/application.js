@@ -20,12 +20,12 @@ require('channels');
 import 'bootstrap';
 
 // Internal Components
+import { checkoutForm } from '../components/checkout_form';
 import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
 import { productShowCartForm } from '../components/product_show_cart_form';
 import { productFilter } from '../components/product_filter';
 import { cart } from '../components/cart';
-import { tooltips } from '../components/tooltips';
 
 // Internal Plugins
 import { initMapbox } from '../plugins/init_mapbox';
@@ -33,12 +33,12 @@ import { initBacCheckout } from '../plugins/bac_checkout';
 
 // Call your functions here
 document.addEventListener('turbolinks:load', () => {
+  checkoutForm();
   addressForm();
   priceRangeSlider();
   productShowCartForm();
   productFilter();
   cart();
-  tooltips();
 
   initMapbox();
   initBacCheckout();

@@ -56,13 +56,10 @@
         </li>
       <% end %>
     </ul>
-    <br style="clear:both;" />
   </div>
 </fieldset>
 
-<br class="space" />
-
 <div class="form-buttons" data-hook="buttons">
-  <%= submit_tag t('spree.save_and_continue'), class: 'continue button primary' %>
+  <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary' %>
   <script>Spree.disableSaveOnClick();</script>
 </div>
