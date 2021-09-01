@@ -74,7 +74,7 @@
             </colgroup>
             <thead>
               <th></th>
-              <th align='left'><%= t('spree.item') %></th>
+              <th align='left'><%= t('spree.item', count: @order.line_items.size) %></th>
               <th><%= t('spree.qty') %></th>
               <th><%= t('spree.price') %></th>
             </thead>

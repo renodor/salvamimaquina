@@ -34,7 +34,7 @@ en:
     address: 'Address'
     item:
       one: 'Item'
-      other: 'Item'
+      other: 'Items'
     on_sale_products: 'On sale products'
     district_based: District Based
     admin:

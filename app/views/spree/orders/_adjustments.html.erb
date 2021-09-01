@@ -9,14 +9,21 @@
     <%= render "spree/orders/adjustment_row", label: label, adjustments: adjustments, type: t('spree.tax') %>
   <% end %>
 
-  <% @order.shipments.each do |shipment| %>
-    <tr>
-      <td colspan="3" align='right'><h5><%= t('spree.shipping') %>: <%= shipment.shipping_method.name %></h5></td>
-      <td colspan='2'>
-        <h5><%= shipment.display_total_before_tax %></h5>
-      </td>
-    </tr>
-  <% end %>
+  <% shipment = @order.shipments.first %>
+  <tr>
+    <td colspan="3" align='right'>
+      <h5>
+        <%= t('spree.shipping') %>:
+        <%= shipment.shipping_method.service_level == 'delivery' ?
+          t('spree.shipping_methods.delivery_zone', zone_number: shipment.shipping_method.code) :
+          t('spree.shipping_methods.pickup_in_store', store_name: shipment.shipping_method.admin_name)
+        %>
+      </h5>
+    </td>
+    <td colspan='2'>
+      <h5><%= shipment.display_total_before_tax %></h5>
+    </td>
+  </tr>
 
   <% @order.adjustments.eligible.group_by(&:label).each do |label, adjustments| %>
     <%= render "spree/orders/adjustment_row", label: label, adjustments: adjustments, type: t('spree.adjustment') %>

@@ -46,6 +46,13 @@
         color: $body-color;
       }
     }
+    #cart_adjustments {
+      h5 {
+        font-weight: 400;
+        font-size: 17px;
+        margin: 10px 0;
+      }
+    }
   }
   .cart-buttons {
     text-align: right;

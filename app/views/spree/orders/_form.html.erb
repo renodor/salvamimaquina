@@ -3,7 +3,7 @@
 <table id="cart-detail"> <!-- TODO: replace this table with a css grid or flexbox... -->
   <thead>
     <tr data-hook="cart_items_headers">
-      <th class="cart-item-description-header" colspan="2"><%= t('spree.item') %></th>
+      <th class="cart-item-description-header" colspan="2"><%= t('spree.item', count: order.line_items.size) %></th>
       <!-- <th class="cart-item-price-header"><%#= t('spree.price') %></th> -->
       <th class="cart-item-quantity-header"><%= t('spree.qty') %></th>
       <th class="cart-item-total-header"><%= t('spree.total') %></th>
