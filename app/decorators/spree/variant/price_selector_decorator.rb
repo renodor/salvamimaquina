@@ -13,6 +13,8 @@ module Spree::Variant::PriceSelectorDecorator
       ) && price.currency == price_options.desired_attributes[:currency]
     end
 
+    return nil unless valid_price_record
+
     price = sale_price ? valid_price_record.price : valid_price_record.original_price
     Spree::Money.new(price, { currency: valid_price_record.currency })
   end
