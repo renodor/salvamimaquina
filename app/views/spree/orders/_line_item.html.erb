@@ -16,12 +16,6 @@
         <%#= line_item_description_text(line_item.description) %>
       <!-- </span> -->
     </td>
-    <!-- <td class="cart-item-price" data-hook="cart_item_price"> -->
-      <%#= line_item.single_money.to_html %>
-      <%# if variant.on_sale? %>
-          <!-- <span class="crossed"><%= variant.price_for(current_pricing_options, sale_price: false).to_html %></span> -->
-      <%# end %>
-    <!-- </td> -->
     <td class="cart-item-quantity" data-hook="cart_item_quantity">
       <%= line_item.quantity %>
       <%#= item_form.number_field :quantity, min: 0, class: "line_item_quantity", size: 5 %>

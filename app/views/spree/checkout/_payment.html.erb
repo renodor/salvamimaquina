@@ -1,6 +1,8 @@
 <fieldset id="payment" data-hook>
   <div data-hook="checkout_payment_step">
-    <!-- <% if @wallet_payment_sources.present? %>
+    <%
+=begin%>
+ <% if @wallet_payment_sources.present? %>
       <div class="card_options">
         <%= radio_button_tag 'use_existing_card', 'yes', true %>
         <label for="use_existing_card_yes">
@@ -31,8 +33,9 @@
             </tbody>
           </table>
         </div>
-      </div>
-    <% end %> -->
+      </div> 
+<%
+=end%>
 
     <div id="payment-method-fields" data-hook>
       <% @order.available_payment_methods.each do |method| %>

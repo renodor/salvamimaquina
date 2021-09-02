@@ -11,11 +11,15 @@
 
     <p data-hook="links">
       <%= link_to t('spree.back_to_store').upcase, spree.root_path, class: "btn btn-primary" %>
-      <!-- <% unless order_just_completed?(@order) %>
+      <%
+=begin%>
+ <% unless order_just_completed?(@order) %>
         <% if try_spree_current_user && respond_to?(:account_path) %>
           <%= link_to t('spree.my_account'), spree.account_path, class: "button" %>
         <% end %>
-      <% end %> -->
+      <% end %> 
+<%
+=end%>
     </p>
   </div>
 </fieldset>
