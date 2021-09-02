@@ -62,6 +62,9 @@ gem 'jwt'
 # To allow CORS for some domains
 gem 'rack-cors'
 
+# Transactional emails
+gem 'postmark-rails'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'
