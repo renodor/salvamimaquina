@@ -1,0 +1,17 @@
+#homepage-banner {
+  background-color: $light-gray;
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, $light-gray 58%);
+  height: 500px;
+  width: 100%;
+  .container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    .homepage-banner-text {
+      flex-grow: 1;
+    }
+    img {
+      height: 400px;
+    }
+  }
+}
