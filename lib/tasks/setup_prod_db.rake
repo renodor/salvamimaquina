@@ -22,7 +22,7 @@ namespace :setup_prod_db do
     store.update!(
       name: 'Salva Mi Maquina',
       url: 'www.salvamimaquina.com',
-      mail_from_address: 'contact@example.com',
+      mail_from_address: 'marketing@salvamimaquina.com',
       default_currency: 'USD',
       code: 'salvamimaquina',
       default: true,
