@@ -69,6 +69,7 @@ es-MX:
         product_quantity:
           one: 'Cantidad de producto'
           other: 'Cantidad de productos'
+        see_on_map: 'Ver en el mapa'
         disclaimer: 'Importante: En el caso de no estar presente a la hora de entrega nos comunicaremos al teléfono incluido es su pedido.'
   activerecord:
     attributes:

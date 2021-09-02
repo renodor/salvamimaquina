@@ -53,4 +53,5 @@ en:
     order_mailer:
       confirm_email:
         product_quantity: 'Product quantity'
+        see_on_map: 'See on the map'
         disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'
