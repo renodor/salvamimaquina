@@ -1,9 +1,14 @@
 <div id="homepage-banner">
   <div class="container">
     <div class="homepage-banner-text">
-      <p>Salva Mi Maquina</p>
-      <p>Somos expertos en dispositivos Apple!</p>
-      <p>Un solo lugar para todo lo que necesitas.</p>
+      <h1>Salva Mi Maquina</h1>
+      <h2><%= t('home_page.apple_experts') %></h2>
+      <p><%= t('home_page.all_what_you_need') %></p>
+      <div class="homepage-banner-ctas">
+        <%= link_to t('shop'), products_path, class: 'btn btn-primary rounded' %>
+        <%= link_to t('trade_in'), '#', class: 'btn btn-primary rounded' %>
+        <%= link_to t('reparation'), '#', class: 'btn btn-primary rounded' %>
+      </div>
     </div>
     <div class="">
       <%= image_tag 'homepage-banner.png' %>

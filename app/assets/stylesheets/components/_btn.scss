@@ -7,6 +7,13 @@
   font-size: 1rem!important;
   font-weight: initial!important;
   @include default-transition(background-color);
+  &.rounded {
+    border-radius: 6px!important;
+  }
+  &.large {
+    padding-left: 60px!important;
+    padding-right: 60px!important;
+  }
   &:hover, &:focus, &:active {
     background-color: $dark-green!important;
   }

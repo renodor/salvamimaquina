@@ -4,6 +4,12 @@
     transition-timing-function: ease;
 }
 
+.centered-flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .full-absolute {
   position: absolute;
   top: 0;

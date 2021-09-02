@@ -6,6 +6,10 @@ module Spree
       base.layout 'homepage'
     end
 
+    def index
+      @products = Spree::Product.where(highlight: true).limit(4)
+    end
+
     Spree::HomeController.prepend self
   end
 end

@@ -80,7 +80,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
       @product.assign_attributes(
         description: attributes['description'],
-        meta_description: "#{@product.name} - #{attributes['description']}"
+        meta_description: "#{@product.name} - #{attributes['description']}",
+        highlight: attributes['highlight'].present?
       )
 
       # Add Spree::OptionTypes to product
@@ -155,7 +156,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         attribute_type = attribute_array[0].strip
         attribute_value = attribute_array[1].strip
 
-        if %w[parent_product brand weight height width depth].include?(attribute_type)
+        if %w[parent_product brand weight height width depth highlight].include?(attribute_type)
           attributes[attribute_type] = attribute_value
         else
           attributes['variant_options'][attribute_type] = attribute_value
