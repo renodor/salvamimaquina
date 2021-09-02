@@ -30,6 +30,9 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  panama: 'Panama'
+  trade_in: 'Trade in'
+  reparation: 'Reparation'
   spree:
     address: 'Address'
     item:
@@ -68,6 +71,9 @@ en:
       feature_three_text: 'We will notify you automatically when your device is ready. We offer up until 1 year warranty.'
     shop_name: 'Salva Mi Maquina shop'
     best_at_best_price: 'Best of Apple products, at best prices!'
-  panama: 'Panama'
-  trade_in: 'Trade in'
-  reparation: 'Reparation'
+  simple_form:
+    options:
+      reparation_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'

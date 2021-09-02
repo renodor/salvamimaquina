@@ -25,6 +25,10 @@ Rails.application.routes.draw do
     end
 
     delete '/frontend/orders/:order_id/line_items/:id', to: 'frontend/line_items#destroy', as: :frontend_line_item
+
+    resources :reparation_categories, only: [:index] do
+      resources :reparation_requests, only: %i[new create]
+    end
   end
 
   namespace :repair_shopr_webhook do

@@ -1,6 +1,10 @@
 es-MX:
   home: 'Inicio'
   shop: 'Tienda'
+  panama: 'Panamá'
+  trade_in: 'Trade in'
+  reparation: 'Reparación'
+  send: 'Envíar'
   spree:
     email: 'Correo'
     brands: 'Marcas'
@@ -75,6 +79,9 @@ es-MX:
     attributes:
       spree/credit_card:
         base: ""
+      reparation_request:
+        shops:
+          bella_vista: 'Bella Vista'
     errors:
       models:
         spree/credit_card:
@@ -103,6 +110,9 @@ es-MX:
       feature_three_text: 'Se le notificará automáticamente cuando su equipo esté listo. Se beneficiará de una garantía de hasta 1 año.'
     shop_name: 'Tienda Salva Mi Maquina'
     best_at_best_price: 'Lo mejor de Apple, ¡al mejor precio!'
-  panama: 'Panamá'
-  trade_in: 'Trade in'
-  reparation: 'Reparación'
+  simple_form:
+    options:
+      reparation_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'

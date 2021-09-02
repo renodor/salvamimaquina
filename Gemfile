@@ -65,6 +65,8 @@ gem 'rack-cors'
 # Transactional emails
 gem 'postmark-rails'
 
+gem 'simple_form'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'

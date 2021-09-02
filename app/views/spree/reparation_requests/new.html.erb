@@ -1,0 +1,11 @@
+<h1><%= @category.name %></h1>
+
+<%= simple_form_for [@category, @reparation_request] do |f| %>
+  <%= f.input :product, collection: @category.products %>
+  <%= f.input :damage, collection: @category.damages %>
+  <%= f.input :shop, collection: ReparationRequest.shops.symbolize_keys.keys %>
+  <%= f.input :name %>
+  <%= f.input :email %>
+  <%= f.input :comment %>
+  <%= f.submit t('send'), class: 'btn btn-primary' %>
+<% end %>

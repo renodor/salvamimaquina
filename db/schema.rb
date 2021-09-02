@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_02_141933) do
+ActiveRecord::Schema.define(version: 2021_09_02_221235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,27 @@ ActiveRecord::Schema.define(version: 2021_09_02_141933) do
     t.jsonb "sync_errors", default: []
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "reparation_categories", force: :cascade do |t|
+    t.string "name"
+    t.string "products", default: [], array: true
+    t.string "damages", default: [], array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "reparation_requests", force: :cascade do |t|
+    t.bigint "reparation_category_id", null: false
+    t.string "damage"
+    t.integer "shop"
+    t.string "name"
+    t.string "email"
+    t.text "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "product"
+    t.index ["reparation_category_id"], name: "index_reparation_requests_on_reparation_category_id"
   end
 
   create_table "spree_addresses", id: :serial, force: :cascade do |t|
@@ -1276,6 +1297,7 @@ ActiveRecord::Schema.define(version: 2021_09_02_141933) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "reparation_requests", "reparation_categories"
   add_foreign_key "spree_districts", "spree_states", column: "state_id", on_delete: :cascade
   add_foreign_key "spree_promotion_code_batches", "spree_promotions", column: "promotion_id"
   add_foreign_key "spree_promotion_codes", "spree_promotion_code_batches", column: "promotion_code_batch_id"

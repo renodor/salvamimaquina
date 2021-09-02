@@ -428,6 +428,9 @@ GEM
       redis (>= 4.2.0)
     sidekiq-failures (1.0.0)
       sidekiq (>= 4.0.0)
+    simple_form (5.1.0)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     solidus_auth_devise (2.5.3)
       deface (~> 1.0)
       devise (~> 4.1)
@@ -523,6 +526,7 @@ DEPENDENCIES
   sentry-ruby
   sidekiq
   sidekiq-failures (~> 1.0)
+  simple_form
   solidus!
   solidus_auth_devise
   solidus_i18n (~> 2.0)
