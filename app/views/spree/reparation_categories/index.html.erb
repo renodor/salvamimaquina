@@ -1,3 +1,12 @@
-<% @categories.each do |category| %>
-  <%= link_to category.name, new_reparation_category_reparation_request_path(category.id) %>
-<% end %>
+  <div id="reparation-categories" class="container">
+    <h2> <%= t('choose_reparation_category') %></h2>
+    <div id="reparation-categories-grid">
+      <% @categories.each do |category| %>
+        <div class="reparation-category centered-flexbox horizontal-flexbox position-relative">
+          <p class="reparation-category-name"><%= category.name %></p>
+          <%= cl_image_tag(category.photo.try(:key), width: 350, height: 200, crop: :fill) %>
+          <%= link_to '', new_reparation_category_reparation_request_path(category), class: 'full-absolute' %>
+        </div>
+      <% end %>
+    </div>
+  </div>

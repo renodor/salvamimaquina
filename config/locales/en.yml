@@ -43,6 +43,9 @@ en:
     admin:
       tab:
         sync_repair_shopr: Sync RepairShopr
+        reparations: 'Reparations'
+        reparation_categories: 'Reparation Categories'
+        reparation_requests: 'Reparation Requests'
     different_billing_address: 'If you need a different billing address please contact us;'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'
@@ -77,3 +80,5 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+  reparation:
+    choose_reparation_category: 'What type of equipment do you need to repair?'

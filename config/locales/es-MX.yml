@@ -3,8 +3,11 @@ es-MX:
   shop: 'Tienda'
   panama: 'Panamá'
   trade_in: 'Trade in'
-  reparation: 'Reparación'
   send: 'Envíar'
+  reparation: 'Reparación'
+  choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
+  thanks_for_your_request: 'Gracias por su solicitud'
+  contact_soon: 'Estaremos en contacto rapidamente.'
   spree:
     email: 'Correo'
     brands: 'Marcas'

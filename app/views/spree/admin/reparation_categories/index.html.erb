@@ -1,0 +1,41 @@
+<% admin_breadcrumb('Reparation Categories') %>
+
+<% content_for :page_actions do %>
+  <% if can? :create, ReparationCategory %>
+    <li>
+      <%= link_to 'New Reparation Category', spree.new_admin_reparation_category_path, class: 'btn btn-primary' %>
+    </li>
+  <% end %>
+<% end %>
+
+<table>
+   <thead>
+      <tr>
+         <th>Name</th>
+         <th>Products</th>
+         <th>Damages</th>
+         <th>Photo</th>
+         <th></th>
+      </tr>
+   </thead>
+   <tbody>
+    <% @categories.each do |category| %>
+      <tr>
+        <td><%= category.name %></td>
+        <td><%= category.products.join(', ').truncate(60) %></td>
+        <td><%= category.damages.join(', ').truncate(60) %></td>
+        <td>
+          <%= category.photo.key ? link_to('Photo link', cl_image_path(category.photo.key), target: '_blank') : '' %>
+        </td>
+        <td class="actions">
+          <% if can?(:edit, category) %>
+            <%= link_to_edit category, no_text: true, url: edit_admin_reparation_category_url(category) %>
+          <% end %>
+          <% if can?(:destroy, category) %>
+            <%= link_to "delete", admin_reparation_category_url(category), method: :delete %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+   </tbody>
+</table>

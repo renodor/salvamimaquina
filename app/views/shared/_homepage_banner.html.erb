@@ -6,8 +6,8 @@
       <p><%= t('home_page.all_what_you_need') %></p>
       <div class="homepage-banner-ctas">
         <%= link_to t('shop'), products_path, class: 'btn btn-primary rounded' %>
-        <%= link_to t('trade_in'), '#', class: 'btn btn-primary rounded' %>
-        <%= link_to t('reparation'), '#', class: 'btn btn-primary rounded' %>
+        <%#= link_to t('trade_in'), '#', class: 'btn btn-primary rounded' %>
+        <%= link_to t('reparation'), reparation_categories_path, class: 'btn btn-primary rounded' %>
       </div>
     </div>
     <div class="">

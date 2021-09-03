@@ -112,12 +112,23 @@ Spree::Backend::Config.configure do |config|
   # Uncomment and change the following configuration if you want to add
   # a new menu item:
   #
-  config.menu_items << config.class::MenuItem.new(
-    [:sync_repair_shopr],
-    'arrow-down',
-    condition: -> { current_spree_user&.admin? },
-    url: '/admin/sync'
-  )
+
+  config.menu_items += [
+    config.class::MenuItem.new(
+      %i[reparation_categories reparation_requests],
+      'laptop',
+      condition: -> { current_spree_user&.admin? },
+      url: '/admin/reparation_categories',
+      partial: 'spree/admin/shared/reparations_sub_menu',
+      label: :reparations
+    ),
+    config.class::MenuItem.new(
+      [:sync_repair_shopr],
+      'refresh',
+      condition: -> { current_spree_user&.admin? },
+      url: '/admin/sync'
+    )
+  ]
 end
 
 Spree::Api::Config.configure do |config|

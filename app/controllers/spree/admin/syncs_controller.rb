@@ -1,6 +1,6 @@
 # frozen_string_literal:true
 
-class Spree::Admin::SyncsController < ApplicationController
+class Spree::Admin::SyncsController < Spree::Admin::BaseController
   before_action :set_sync_logs, except: :index
   after_action :save_sync_logs, except: :index
 

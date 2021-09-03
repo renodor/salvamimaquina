@@ -10,6 +10,10 @@
   justify-content: center;
 }
 
+.horizontal-flexbox {
+  flex-direction: column;
+}
+
 .full-absolute {
   position: absolute;
   top: 0;

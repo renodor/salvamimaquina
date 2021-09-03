@@ -11,8 +11,6 @@
 @import 'components/container';
 @import 'components/header';
 @import 'components/navbar';
-@import 'components/homepage_banner';
-@import 'components/homepage_block';
 @import 'components/btn';
 @import 'components/flash';
 @import 'components/form';
@@ -32,6 +30,10 @@
 @import 'spree/frontend/order';
 @import 'spree/frontend/map';
 
+// Pages
+@import 'pages/homepage';
+@import 'pages/reparations';
+
 h1 {
   font-size: 30px;
   margin-bottom: 30px;
@@ -43,4 +45,8 @@ h1 {
 
 #content {
   padding: 0;
+}
+
+#wrapper {
+  min-height: calc(100vh - 110px - 100px);
 }

@@ -1,0 +1,30 @@
+<% admin_breadcrumb('Reparation Requests') %>
+
+<table>
+   <thead>
+      <tr>
+         <th>Product Type</th>
+         <th>Product</th>
+         <th>Damage</th>
+         <th>Name</th>
+         <th>Email</th>
+         <th>Shop</th>
+         <th>Comment</th>
+         <th></th>
+      </tr>
+   </thead>
+   <tbody>
+    <% @reparation_requests.each do |reparation_request| %>
+      <tr>
+        <td><%= reparation_request.reparation_category.name %></td>
+        <td><%= reparation_request.product %></td>
+        <td><%= reparation_request.damage %></td>
+        <td><%= reparation_request.name %></td>
+        <td><%= reparation_request.email %></td>
+        <td><%= reparation_request.shop %></td>
+        <td><%= reparation_request.comment %></td>
+        <td>
+      </tr>
+    <% end %>
+   </tbody>
+</table>
