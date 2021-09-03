@@ -33,6 +33,10 @@ en:
   panama: 'Panama'
   trade_in: 'Trade in'
   reparation: 'Reparation'
+  choose_reparation_category: 'What type of equipment do you need to repair?'
+  reparation_explanation: 'Include specific information about your device, like the year, the model, the operative system, and add a short description of the issue you are facing.'
+  thanks_for_your_request: 'Thanks for your request'
+  contact_soon: 'We will contact you soon'
   spree:
     address: 'Address'
     item:
@@ -80,5 +84,3 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
-  reparation:
-    choose_reparation_category: 'What type of equipment do you need to repair?'

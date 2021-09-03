@@ -1,11 +1,15 @@
-<h1><%= @category.name %></h1>
+<div id="reparation-request" class="centered-flexbox horizontal-flexbox">
+  <h1><%= @category.name %></h1>
+  <%= cl_image_tag @category.photo.key, height: 200, width: 300, crop: :fill %>
 
-<%= simple_form_for [@category, @reparation_request] do |f| %>
-  <%= f.input :product, collection: @category.products %>
-  <%= f.input :damage, collection: @category.damages %>
-  <%= f.input :shop, collection: ReparationRequest.shops.symbolize_keys.keys %>
-  <%= f.input :name %>
-  <%= f.input :email %>
-  <%= f.input :comment %>
-  <%= f.submit t('send'), class: 'btn btn-primary' %>
-<% end %>
+  <%= simple_form_for [@category, @reparation_request] do |f| %>
+    <%= f.input :product, collection: @category.products %>
+    <%= f.input :damage, collection: @category.damages %>
+    <%= f.input :shop, collection: ReparationRequest.shops.symbolize_keys.keys %>
+    <%= f.input :name %>
+    <%= f.input :email %>
+    <p><%= t('reparation_explanation') %></p>
+    <%= f.input :comment, label: false %>
+    <%= f.submit t('send'), class: 'btn btn-primary w-100' %>
+  <% end %>
+</div>

@@ -6,6 +6,7 @@ es-MX:
   send: 'Envíar'
   reparation: 'Reparación'
   choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
+  reparation_explanation: 'Incluir datos específicos del dispositivo como año, modelo y sistema operativo, además de una breve descripción del problema:'
   thanks_for_your_request: 'Gracias por su solicitud'
   contact_soon: 'Estaremos en contacto rapidamente.'
   spree:
@@ -83,6 +84,12 @@ es-MX:
       spree/credit_card:
         base: ""
       reparation_request:
+        product: 'Producto'
+        damage: 'Daño'
+        shop: 'Sucursal'
+        name: 'Nombre'
+        email: 'Correo'
+        comment: 'Comentario'
         shops:
           bella_vista: 'Bella Vista'
     errors:

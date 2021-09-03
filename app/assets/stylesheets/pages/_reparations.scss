@@ -24,6 +24,25 @@
   }
 }
 
+#reparation-request {
+  img {
+    margin-bottom: 30px;
+  }
+  form {
+    width: 600px;
+    .form-group {
+      margin-bottom: 20px;
+      label {
+        margin-bottom: 5px;
+      }
+    }
+    #reparation_request_comment {
+      height: 150px;
+      width: 100%;
+    }
+  }
+}
+
 #reparation-thank-you {
   margin-top: 80px;
   div {

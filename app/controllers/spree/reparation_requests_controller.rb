@@ -13,6 +13,7 @@ module Spree
       if @reparation_request.save
         redirect_to reparation_requests_thank_you_path
       else
+        @category = ReparationCategory.find(params[:reparation_category_id])
         render :new
       end
     end
