@@ -30,13 +30,20 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  home: 'Inicio'
+  shop: 'Tienda'
   panama: 'Panama'
   trade_in: 'Trade in'
   reparation: 'Reparation'
   choose_reparation_category: 'What type of equipment do you need to repair?'
   reparation_explanation: 'Include specific information about your device, like the year, the model, the operative system, and add a short description of the issue you are facing.'
   thanks_for_your_request: 'Thanks for your request'
+  contact: 'Contact'
+  contact_us: 'Contact us'
   contact_soon: 'We will contact you soon'
+  message_sent: 'Thanks for your message, we will contact you soon.'
+  business_hours: 'Business hours'
+  closed: 'Closed'
   spree:
     address: 'Address'
     item:

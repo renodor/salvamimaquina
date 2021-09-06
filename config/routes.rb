@@ -32,6 +32,8 @@ Rails.application.routes.draw do
       resources :reparation_requests, only: %i[new create]
     end
     get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
+    get 'contact', to: 'home#contact'
+    post 'create_user_message', to: 'home#create_user_message'
   end
 
   namespace :repair_shopr_webhook do

@@ -8,7 +8,12 @@ es-MX:
   choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
   reparation_explanation: 'Incluir datos específicos del dispositivo como año, modelo y sistema operativo, además de una breve descripción del problema:'
   thanks_for_your_request: 'Gracias por su solicitud'
+  contact: 'Contacto'
+  contact_us: 'Contactarnos'
   contact_soon: 'Estaremos en contacto rapidamente.'
+  message_sent: 'Gracias por su mensaje, le estaremos contactando pronto.'
+  business_hours: 'Horarios'
+  closed: 'Cerrado'
   spree:
     email: 'Correo'
     brands: 'Marcas'
@@ -126,3 +131,8 @@ es-MX:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+    placeholders:
+      user_message:
+        name: 'Nombre'
+        email: 'Correo'
+        message: 'Mensaje'

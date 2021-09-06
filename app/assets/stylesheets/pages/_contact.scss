@@ -1,0 +1,31 @@
+#contact-form {
+  margin-bottom: 30px;
+  form {
+    width: 50%;
+    input, textarea {
+      padding: 15px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    textarea {
+      height: 150px;
+    }
+  }
+}
+
+#shops {
+  .shop {
+    margin: 20px;
+    h2 {
+      margin-top: 10px;
+      font-weight: 200;
+    }
+  }
+}
+
+#business-hours {
+  .business-day {
+    width: 110px;
+    display: inline-block;
+  }
+}

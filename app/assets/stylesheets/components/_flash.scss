@@ -9,7 +9,7 @@
   &.error {
     background-color: $dark-gray;
   }
-  &.notice {
+  &.notice, &.success {
     background-color: $green
   }
 }

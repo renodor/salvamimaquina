@@ -86,6 +86,10 @@ class RepairShoprApi::V1::Base
     def post_payments(payment)
       request(http_method: :post, endpoint: 'payments', params: payment)
     end
+
+    def get_business_hours
+      request(http_method: :get, endpoint: 'settings')['business_hours']
+    end
     # rubocop:enable Naming/AccessorMethodName
 
     private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_02_221235) do
+ActiveRecord::Schema.define(version: 2021_09_06_125337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1293,6 +1293,14 @@ ActiveRecord::Schema.define(version: 2021_09_02_221235) do
     t.integer "zone_members_count", default: 0
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
+  end
+
+  create_table "user_messages", force: :cascade do |t|
+    t.string "email"
+    t.string "name"
+    t.text "message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
