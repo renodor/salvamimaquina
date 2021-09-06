@@ -35,8 +35,6 @@
   <div class="homepage-block" data-hook="homepage_products">
     <h2 class="homepage-title"><%= t('home_page.shop_name').upcase %></h2>
     <h3 class="homepage-subtitle"><%= t('home_page.best_at_best_price') %></h3>
-    <% cache(cache_key_for_products) do %>
-      <%= render partial: 'spree/shared/products', locals: { products: @products } %>
-    <% end %>
+    <%= render partial: 'spree/shared/products', locals: { products: @products } %>
   </div>
 </div>

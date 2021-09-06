@@ -15,7 +15,7 @@
     <div class="container">
       <%= render partial: 'spree/shared/header' %>
 
-      <div id="wrapper">
+      <div id="wrapper" class="<%= content_for?(:sidebar) ? 'display-flex' : '' %>">
         <%#= taxon_breadcrumbs(@taxon) %>
         <%= render partial: 'spree/shared/sidebar' if content_for? :sidebar %>
         <!-- <div id="content" class="columns <%#= !content_for?(:sidebar) ? "sixteen" : "twelve omega" %>" data-hook> -->
