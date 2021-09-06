@@ -20,6 +20,7 @@ require('channels');
 import 'bootstrap';
 
 // Internal Components
+import { navbar } from '../components/navbar';
 import { checkoutForm } from '../components/checkout_form';
 import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
@@ -33,6 +34,7 @@ import { initBacCheckout } from '../plugins/bac_checkout';
 
 // Call your functions here
 document.addEventListener('turbolinks:load', () => {
+  navbar();
   checkoutForm();
   addressForm();
   priceRangeSlider();
