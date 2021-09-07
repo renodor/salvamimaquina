@@ -10,8 +10,19 @@
         width: 150px;
       }
     }
-    .navbar-nav .nav-item .nav-link {
-      text-transform: uppercase;
+    .navbar-toggler {
+      border: none;
+      &:focus {
+        box-shadow: none;
+      }
+      &:hover {
+        background-color: white;
+      }
+    }
+    .navbar-collapse {
+      .navbar-nav .nav-item .nav-link {
+        text-transform: uppercase;
+      }
     }
     .navbar-cart-link {
       color: $green;
@@ -58,6 +69,16 @@
     display: block;
     &.active {
       right: 0;
+    }
+    .navbar-close {
+      display: flex;
+      justify-content: flex-end;
+      .navbar-toggler {
+        padding: 20px;
+      }
+    }
+    .navbar-nav {
+      text-align: center;
     }
   }
 }
