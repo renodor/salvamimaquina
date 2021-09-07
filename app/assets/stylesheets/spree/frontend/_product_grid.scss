@@ -16,6 +16,9 @@ ul#products {
     .product-image {
       padding: 0;
       border: none;
+      img {
+        width: 100%;
+      }
     }
     .product-name {
       height: auto;

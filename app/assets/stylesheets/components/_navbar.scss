@@ -18,6 +18,14 @@
       &:hover {
         background-color: white;
       }
+      .navbar-toggler-icon {
+        background-image: none;
+        svg {
+          width: 30px;
+          height: 30px;
+          fill: $dark-gray;
+        }
+      }
     }
     .navbar-collapse {
       .navbar-nav .nav-item .nav-link {
@@ -67,6 +75,7 @@
     background-color: white;
     transition: right .5s;
     display: block;
+    border-left: 1px solid $gray;
     &.active {
       right: 0;
     }

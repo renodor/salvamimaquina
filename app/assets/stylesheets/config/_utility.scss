@@ -37,3 +37,15 @@
 .w-100 {
   width: 100%;
 }
+
+@media ($max-m) {
+  .hidden-m {
+    display: none;
+  }
+}
+
+@media ($min-m) {
+  .show-m {
+    display: none;
+  }
+}

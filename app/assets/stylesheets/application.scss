@@ -3,10 +3,10 @@
 @import 'mapbox-gl/dist/mapbox-gl';
 
 // Config
+@import 'config/breakpoints';
 @import 'config/utility';
 @import 'config/colors';
 @import 'config/bootstrap_variables';
-@import 'config/breakpoints';
 
 // Components
 @import 'components/container';
@@ -35,6 +35,10 @@
 @import 'pages/reparations';
 @import 'pages/contact';
 
+body {
+  color: $dark-gray;
+}
+
 h1 {
   font-size: 30px;
   margin-bottom: 30px;
@@ -50,6 +54,15 @@ h1 {
 
 #wrapper {
   min-height: calc(100vh - 110px - 150px);
+  &.sidebar-layout {
+    display: flex;
+  }
+}
+
+@media ($max-m) {
+  #wrapper.sidebar-layout {
+    flex-direction: column;
+  }
 }
 
 @media only screen and (max-width: 479px) {

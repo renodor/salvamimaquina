@@ -29,7 +29,7 @@
         <% cache(@taxon.present? ? [I18n.locale, current_pricing_options, @taxon, product] : [I18n.locale, current_pricing_options, product]) do %>
           <div class="product-image">
             <% if product.gallery.images.any? %>
-              <%= cl_image_tag product.gallery.images.first&.attachment&.key, height: 200, width: 200, crop: :fill %>
+              <%= cl_image_tag product.gallery.images.first&.attachment&.key, width: 200, crop: :fill %>
             <% else %>
               <div class="image-placeholder" style="height: 300px;"></div>
             <% end %>

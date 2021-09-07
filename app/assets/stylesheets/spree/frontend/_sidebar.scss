@@ -1,10 +1,13 @@
 #sidebar {
+  width: 200px;
   border: 1px solid $light-gray;
+  margin-right: 20px;
   padding: 20px 10px;
   #taxonomies {
     padding-bottom: 20px;
     margin-bottom: 25px;
     border-bottom: 1px solid $light-gray;
+    text-align: left;
     .taxonomy-root {
       border-bottom: none;
       margin-bottom: 10px;
@@ -86,6 +89,24 @@
         background-color: $light-green;
         svg {
           display: block;
+        }
+      }
+    }
+  }
+}
+
+@media ($max-m) {
+  #sidebar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    #product-filters-modal {
+      #product-filters-modal-toggle {
+        display: flex;
+        align-items: center;
+        svg {
+          fill: $dark-gray;
+          margin-right: 15px;
         }
       }
     }
