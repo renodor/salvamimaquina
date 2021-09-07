@@ -20,6 +20,9 @@
         padding: 0;
         margin-bottom: 20px;
       }
+      img {
+        width: 100%;
+      }
     }
   }
 }
@@ -58,27 +61,23 @@
   }
 }
 
-@media ($max-xl) {
+@media ($max-m) {
   #reparation-categories #reparation-categories-grid {
     grid-template-columns: 1fr 1fr;
   }
-}
 
-@media ($max-l) {
-  #reparation-categories #reparation-categories-grid {
-    grid-template-columns: 1fr;
-    padding-left: 0;
-    padding-right: 0;
+  #reparation-request form {
+    width: 100%;
   }
 }
 
 @media ($max-s) {
-  #reparation-categories #reparation-categories-grid .reparation-category {
+  #reparation-categories #reparation-categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #reparation-request img {
     width: 280px;
-    margin: 0 auto;
-    img {
-      height: 100%;
-      width: 100%;
-    }
+    height: 100%;
   }
 }

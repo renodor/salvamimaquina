@@ -13,17 +13,17 @@
 <% else %> 
 <%
 =end%>
-
+<div id="brands">
   <% @brands.each do |brand| %>
-    <div class="container brand-grid">
+    <div class="brand">
       <h2><%= brand.name.capitalize %></h2>
-      <div class="row">
+      <div class="brand-categories">
         <% brand.children.each do |child| %>
           <% next unless child.depth - brand.depth == 1 %>
-          <div class="col-3">
+          <div>
             <div class="position-relative brand-category">
-              <span><%= branded_name(child) %></span>
-              <%= cl_image_tag(child.icon.try(:key)) %>
+              <p><%= branded_name(child) %></p>
+              <%= cl_image_tag(child.icon.try(:key), width: 500, crop: :fill) %>
               <%= link_to '', spree.nested_taxons_path(child), class: 'full-absolute' %>
             </div>
           </div>
@@ -31,5 +31,6 @@
       </div>
     </div>
   <% end %>
+</div>
 
 <%# end %>
