@@ -57,3 +57,28 @@
     }
   }
 }
+
+@media ($max-xl) {
+  #reparation-categories #reparation-categories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media ($max-l) {
+  #reparation-categories #reparation-categories-grid {
+    grid-template-columns: 1fr;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media ($max-s) {
+  #reparation-categories #reparation-categories-grid .reparation-category {
+    width: 280px;
+    margin: 0 auto;
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
