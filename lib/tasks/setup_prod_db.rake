@@ -8,6 +8,7 @@ namespace :setup_prod_db do
     create_stock_locations
     create_taxonomies
     create_panama_city_corregimientos
+    create_panama_zone
     create_panama_city_zones
     create_tax_category
     create_shipping_methods
