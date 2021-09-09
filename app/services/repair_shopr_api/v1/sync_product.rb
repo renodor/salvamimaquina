@@ -153,8 +153,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       attributes['variant_options'] = {}
       attributes['notes'].split("\r\n").map do |attribute|
         attribute_array = attribute.split(/:|=/)
-        attribute_type = attribute_array[0].strip
-        attribute_value = attribute_array[1].strip
+        attribute_type = attribute_array[0].strip.downcase
+        attribute_value = attribute_array[1].strip.downcase
 
         if %w[parent_product brand weight height width depth highlight].include?(attribute_type)
           attributes[attribute_type] = attribute_value
