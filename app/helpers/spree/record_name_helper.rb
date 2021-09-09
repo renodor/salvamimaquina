@@ -12,8 +12,11 @@ module Spree
     end
 
     def is_an_apple_record?(record)
-      (record.is_a?(Spree::Taxon) && record.parent.name == 'apple') ||
-      (record.is_a?(Spree::Product) && Taxon.find_by(name: 'apple').all_products.include?(record)) # TODO: cache Apple taxon
+      apple_taxon = Spree::Taxon.where(name: ['apple', 'Apple']).first # TODO: cache that and improve the logic
+      return false unless apple_taxon
+
+      (record.is_a?(Spree::Taxon) && record.parent == apple_taxon) ||
+      (record.is_a?(Spree::Product) && apple_taxon.all_products.include?(record)) 
     end
   end
 end
