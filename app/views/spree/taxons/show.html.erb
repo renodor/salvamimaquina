@@ -3,7 +3,7 @@
 <% content_for :sidebar do %>
   <div class="hidden-m">
     <%= render partial: 'spree/shared/taxonomies' %>
-    <%= render partial: 'spree/shared/filters' %>
+    <%= render partial: 'spree/shared/filters', locals: { mobile_version: false } %> <!-- Needed to differentiate input ids for labels to work (because the same form is duplicated)-->
   </div>
 
   <div id="product-filters-modal" class="show-m">
@@ -24,7 +24,7 @@
           <div class="modal-body">
             <div data-hook="taxon_sidebar_navigation">
               <%= render partial: 'spree/shared/taxonomies' %>
-              <%= render partial: 'spree/shared/filters' %>
+              <%= render partial: 'spree/shared/filters', locals: { mobile_version: true } %> <!-- Needed to differentiate input ids for labels to work (because the same form is duplicated)-->
             </div>
           </div>
         </div>

@@ -4,23 +4,15 @@
     <% if @product.variants_and_option_values_for(current_pricing_options).any? %>
       <div id="product-variants">
         <ul>
-          <% first_product_index = 0 # TODO: change this ugly logic %>
-          <% available_variant_count = 0 # used later to check if at least any variant is available... TODO: change this ugly logic %>
           <% @product.variants_and_option_values_for(current_pricing_options).each_with_index do |variant, index| %>
-            <% unless variant.can_supply? %>
-              <% first_product_index = index + 1 %>
-              <% next %>
-            <% end %>
-
-            <% available_variant_count += 1 %>
             <li>
-              <%= 
+              <%=
                 radio_button_tag "variant_id",
                 variant.id,
-                index == first_product_index,
+                index == 0,
                 'data-price' => variant.price_for(current_pricing_options, sale_price: false),
                 'data-discount-price' => variant.on_sale? ? variant.price_for(current_pricing_options) : nil,
-                disabled: !variant.can_supply?
+                'data-has-stock' => variant.can_supply?
               %>
               <%= label_tag "variant_id_#{ variant.id }" do %>
                 <span class="variant-description">
@@ -64,7 +56,7 @@
       </div>
 
       <div class="add-to-cart">
-        <% if  @product.master.can_supply? || available_variant_count&.positive? %>
+        <% if  @product.master.can_supply? %>
           <%#= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
           <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit do %>
             <%= t('spree.buy').upcase %>

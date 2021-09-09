@@ -1,21 +1,30 @@
 const productFilter = () => {
-  const sidebarProductSearch = document.getElementById('sidebar_products_search');
+  const sidebar = document.getElementById('sidebar');
 
-  if (sidebarProductSearch) {
-    sidebarProductSearch.querySelectorAll('input').forEach((input) => {
-      input.addEventListener('change', (event) => {
-        const formData = new FormData(sidebarProductSearch);
-        const queryString = new URLSearchParams(formData).toString();
+  if (sidebar) {
+    const sidebarProductSearches = document.querySelectorAll('#sidebar_products_search');
+    sidebarProductSearches.forEach((sidebarProductSearch) => {
+      const form = sidebarProductSearch;
+      sidebarProductSearch.querySelectorAll('input').forEach((input) => {
+        // Fetch new products each time a product filter is selected
+        input.addEventListener('change', (event) => {
+          const formData = new FormData(form);
+          const queryString = new URLSearchParams(formData).toString();
 
-        fetch(`/t/brands/apple/iphone?${queryString}`, { headers: { 'accept': 'application/json' } })
-            .then((response) => response.json())
-            .then(({ products, noProductsMessage }) => {
-              products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
-            // TODO: update url params (without reloading the page), so that if user refresh or share link it won't loose filters
-            });
+          fetch(`${location.pathname}?${queryString}`, { headers: { 'accept': 'application/json' } })
+              .then((response) => response.json())
+              .then(({ products, noProductsMessage }) => {
+                products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
+              // TODO: update url params (without reloading the page), so that if user refresh or share link it won't loose filters
+              });
+
+          // If on mobile, filters are in a modal, and we need to close that modal once filters are applied
+          $('#productFiltersModal').modal('hide');
+        });
       });
-    });
+    })
 
+    // To display if no products are found
     const displayNoProductsMessage = (noProductMessage) => {
       document.getElementById('products').innerHTML = `
         <div data-hook="products_search_results_heading_no_results_found">
@@ -24,6 +33,7 @@ const productFilter = () => {
       `;
     };
 
+    // Display all newly found products
     const updateProducts = (products) => {
       const productList = document.getElementById('products');
       productList.innerHTML = '';
@@ -32,6 +42,7 @@ const productFilter = () => {
       });
     };
 
+    // HTML of a product card to display on front end
     const productCardHtml = (product, index) => {
       return `
         <li id=\"product_${product.id}\" class="columns three ${index === 0 ? 'alpha' : ''}" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
@@ -50,6 +61,7 @@ const productFilter = () => {
       `;
     };
 
+    // HTML of a discount price to display if a product is on sale
     const discountPriceHtml = (discountPrice, discountPriceHtmlTag) => {
       return `
         <span class="price selling" itemprop="price" content="${discountPrice}">
@@ -58,6 +70,7 @@ const productFilter = () => {
       `;
     };
 
+    // HTML of a product image
     const productImageHtml = (imageUrl) => {
       if (imageUrl) {
         return `<img src="${imageUrl}">`;
