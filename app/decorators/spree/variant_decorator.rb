@@ -15,7 +15,7 @@ module Spree
 
     def translated_option_values(show_model: false)
       values = []
-      option_values.each do |option_value|
+      option_values.order(:option_type_id).each do |option_value|
         next if option_value.option_type.name == 'model' && show_model == false
 
         values << I18n.t!("spree.#{option_value.option_type.name}.#{option_value.presentation}").capitalize
