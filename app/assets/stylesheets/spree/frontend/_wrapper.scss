@@ -1,0 +1,21 @@
+#wrapper {
+  min-height: calc(100vh - 110px - 150px);
+  &.sidebar-layout {
+    display: flex;
+  }
+  #content {
+    padding: 0;
+  }
+}
+
+@media ($max-m) {
+  #wrapper.sidebar-layout {
+      flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 479px) {
+  #content {
+      text-align: initial;
+  }
+}

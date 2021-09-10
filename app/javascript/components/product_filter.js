@@ -22,12 +22,12 @@ const productFilter = () => {
           $('#productFiltersModal').modal('hide');
         });
       });
-    })
+    });
 
     // To display if no products are found
     const displayNoProductsMessage = (noProductMessage) => {
       document.getElementById('products').innerHTML = `
-        <div data-hook="products_search_results_heading_no_results_found">
+        <div class="no-products-found" data-hook="products_search_results_heading_no_results_found">
           ${noProductMessage}
         </div>
       `;
@@ -45,7 +45,7 @@ const productFilter = () => {
     // HTML of a product card to display on front end
     const productCardHtml = (product, index) => {
       return `
-        <li id=\"product_${product.id}\" class="columns three ${index === 0 ? 'alpha' : ''}" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+        <li id=\"product_${product.id}\" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
           <div class="product-image">
             ${productImageHtml(product.image_url)}
           </div>
@@ -75,7 +75,7 @@ const productFilter = () => {
       if (imageUrl) {
         return `<img src="${imageUrl}">`;
       } else {
-        return '<div class="image-placeholder" style="height: 300px;"></div>'; // TODO: import this component from controller
+        return '<div class="image-placeholder" style="width: 200px; height: 200px"></div>'; // TODO: use cloudinary fallback default image instead
       }
     };
   };

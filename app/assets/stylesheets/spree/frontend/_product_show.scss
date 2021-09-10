@@ -5,9 +5,14 @@
     margin-bottom: 30px;
     #product-left-part {
       width: 60%;
+      margin-right: 20px;
       #product-images {
         #main-image {
           border: none;
+          padding: 30px;
+          img {
+            min-height: 0;
+          }
         }
         #thumbnails {
           #product-thumbnails li {
@@ -53,7 +58,7 @@
         #product-price {
           .price {
             font-weight: 400;
-            padding: 0 5px;
+            padding: 0 5px 0 0;
             &.crossed {
               font-size: 15px;
               font-weight: 300;
@@ -67,6 +72,27 @@
           button {
             width: 140px;
           }
+        }
+      }
+    }
+  }
+}
+
+@media ($max-s) {
+  #product-show {
+    #product-top-part {
+      flex-direction: column;
+      align-items: center;
+      #product-left-part {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+      #product-right-part {
+        width: 100%;
+        margin-bottom: 20px;
+        #product-description .add-to-cart button {
+          width: 100%;
         }
       }
     }

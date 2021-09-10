@@ -4,10 +4,10 @@
 
     <div id="product-top-part">
       <div id="product-left-part" data-hook="product_left_part">
-        <div class="row" data-hook="product_left_part_wrap">
+        <div data-hook="product_left_part_wrap">
           <div id="product-images" data-hook="product_images">
             <div id="main-image" data-hook>
-              <%= cl_image_tag @product.gallery.images.first&.attachment&.key, height: 300, crop: :fit, itemprop: "image" %>
+              <%= cl_image_tag @product.gallery.images.first&.attachment&.key, width: 600, crop: :fit, itemprop: "image" %>
             </div>
             <div id="thumbnails" data-hook>
               <%= render partial: 'thumbnails' %>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div id="product-right-part" data-hook="product_right_part">
-        <div class="row" data-hook="product_right_part_wrap">
+        <div data-hook="product_right_part_wrap">
           <div id="product-description" data-hook="product_description">
             <h1 class="product-title" itemprop="name"><%= branded_name(@product.name) %></h1>
 

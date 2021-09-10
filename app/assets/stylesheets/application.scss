@@ -18,6 +18,7 @@
 @import 'components/footer';
 
 // Spree Components
+@import 'spree/frontend/wrapper';
 @import 'spree/frontend/login';
 @import 'spree/frontend/brand_grid';
 @import 'spree/frontend/sidebar';
@@ -46,27 +47,4 @@ h1 {
 
 #errorExplanation {
   display: none; // TODO: WARNING, don't hide that by default... But try to have better design of error explanations...
-}
-
-#content {
-  padding: 0;
-}
-
-#wrapper {
-  min-height: calc(100vh - 110px - 150px);
-  &.sidebar-layout {
-    display: flex;
-  }
-}
-
-@media ($max-m) {
-  #wrapper.sidebar-layout {
-    flex-direction: column;
-  }
-}
-
-@media only screen and (max-width: 479px) {
-  #content {
-    text-align: initial;
-  }
 }
