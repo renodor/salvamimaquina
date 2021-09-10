@@ -1,4 +1,4 @@
-const productShow = () => {
+const productShowAtcBtn = () => {
   const cartForm = document.getElementById('cart-form');
 
   if (cartForm) {
@@ -34,4 +34,4 @@ const productShow = () => {
   }
 };
 
-export { productShow };
+export { productShowAtcBtn };

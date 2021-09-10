@@ -24,7 +24,8 @@ import { navbar } from '../components/navbar';
 import { checkoutForm } from '../components/checkout_form';
 import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
-import { productShow } from '../components/product_show';
+import { productShowVariants } from '../components/product_show_variants';
+import { productShowAtcBtn } from '../components/product_show_atc_btn';
 import { productFilter } from '../components/product_filter';
 import { cart } from '../components/cart';
 
@@ -38,7 +39,8 @@ document.addEventListener('turbolinks:load', () => {
   checkoutForm();
   addressForm();
   priceRangeSlider();
-  productShow();
+  productShowVariants();
+  productShowAtcBtn();
   productFilter();
   cart();
 
