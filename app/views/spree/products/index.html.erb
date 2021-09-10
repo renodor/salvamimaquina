@@ -22,7 +22,7 @@
           <% next unless child.depth - brand.depth == 1 %>
           <div>
             <div class="position-relative brand-category">
-              <p><%= branded_name(child) %></p>
+              <p><%= branded_name(child.name) %></p>
               <%= cl_image_tag(child.icon.try(:key), width: 500, crop: :fill) %>
               <%= link_to '', spree.nested_taxons_path(child), class: 'full-absolute' %>
             </div>
