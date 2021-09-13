@@ -12,12 +12,13 @@
   <% else %>
 
     <div data-hook="outside_cart_form">
-      <%= form_for @order, url: update_cart_path, html: {id: 'update-cart'} do |order_form| %>
+      <%= form_for @order, url: update_cart_path, html: { id: 'update-cart' } do |order_form| %>
         <div data-hook="inside_cart_form">
 
           <div data-hook="cart_items">
             <%= render 'spree/orders/form', order_form: order_form %>
           </div>
+           <%= render 'spree/checkout/summary', order: @order %>
 
           <div class="cart-buttons" data-hook="cart_buttons">
             <%#= button_tag t("spree.update"), class: "primary", id: "update-button" %>
