@@ -27,7 +27,8 @@ namespace :setup_prod_db do
       default_currency: 'USD',
       code: 'salvamimaquina',
       default: true,
-      available_locales: ['es-MX']
+      available_locales: ['es-MX'],
+      cart_tax_country_iso: 'PA'
     )
   end
 
