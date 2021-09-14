@@ -1,25 +1,24 @@
-<fieldset id="" data-hook>
-  <% if order_just_completed?(@order) %>
-    <span><%= t('spree.thank_you_for_your_order') %></span>
-  <% end %>
+<div id="order-wrapper">
+  <%# if order_just_completed?(@order) %>
+    <p><%= t('spree.thank_you_for_your_order') %></p>
+  <%# end %>
   <h1><%= accurate_title %></h1>
 
-  <div id="order" data-hook>
+  <div id="order">
     <%= render partial: 'spree/shared/order_details', locals: { order: @order } %>
+    <div class="line-items">
+      <h3><%= t('spree.item', count: @order.line_items.count) %></h3>
+      <% @order.line_items.each do |line_item| %>
+        <%= render 'spree/orders/line_item', line_item: line_item, static: true %>
+      <% end %>
+    </div>
 
-    <br class="clear" />
+    <div id="checkout-summary" data-hook="checkout_summary_box">
+      <%= render partial: 'spree/checkout/summary', locals: { order: @order } %>
+    </div>
 
-    <p data-hook="links">
+    <div id="order-back-link" data-hook="links">
       <%= link_to t('spree.back_to_store').upcase, spree.root_path, class: "btn btn-primary" %>
-      <%
-=begin%>
- <% unless order_just_completed?(@order) %>
-        <% if try_spree_current_user && respond_to?(:account_path) %>
-          <%= link_to t('spree.my_account'), spree.account_path, class: "button" %>
-        <% end %>
-      <% end %> 
-<%
-=end%>
-    </p>
+    </div>
   </div>
-</fieldset>
+</div>

@@ -1,65 +1,47 @@
 #cart {
-  #cart-detail {
-    thead {
-      background-color: rgba(189, 189,189, .13);
+  #inside-cart-form {
+    display: flex;
+    .line-items {
+      flex-basis: 70%;
+      margin-right: 20px;
     }
-    .cart-item-description-header {
-      width: 75%;
-    }
-    .line-item {
-      background-color: white;
-      td {
-        border-bottom: 1px solid $light-gray;
-      }
-      .cart-item-description {
-        h4 a {
-          color: $body-color;
-          text-decoration: none;
-          &:hover {
-            text-decoration: underline;
-          }
+    #checkout-summary {
+      flex-basis: 30%;
+      height: 100%;
+      .cart-buttons {
+        margin-top: 20px;
+        button {
+          text-transform: uppercase;
         }
-      }
-      .cart-item-total {
-        font-weight: 400!important;
-        .cart-item-original-price {
-          font-weight: 300;
-          font-size: 15px;
-          padding: 0 10px;
-        }
-      }
-      .delete-line-item {
-        text-align: center;
-        a {
-          color: $gray;
-          @include default-transition(color);
-          &:hover {
-            color: $body-color
-          }
-        }
-      }
-    }
-    .cart-subtotal, .cart-total {
-      background-color: $light-gray;
-      h5 {
-        margin-bottom: 0;
-        color: $body-color;
-      }
-    }
-    #cart_adjustments {
-      h5 {
-        font-weight: 400;
-        font-size: 17px;
-        margin: 10px 0;
       }
     }
   }
-  .cart-buttons {
-    text-align: right;
-    margin-top: 20px;
-    button {
-      width: 20%;
-      text-transform: uppercase;
+}
+
+@media($max-l) {
+  #cart {
+    #inside-cart-form {
+      flex-direction: column;
+      .line-items {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+@media($max-s) {
+  #cart {
+    #inside-cart-form {
+      .line-items {
+        .line-item {
+          flex-direction: column;
+          .line-item-image {
+            margin-right: 0;
+            margin-bottom: 20px;
+            text-align: center;
+          }
+        }
+      }
     }
   }
 }

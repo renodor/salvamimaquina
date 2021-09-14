@@ -24,9 +24,9 @@ module Spree
         css_classes << 'current' if state == @order.state
         css_classes << 'first' if state_index.zero?
         css_classes << 'last' if state_index == states.length - 1
-        content_tag('li', content_tag('span', text), class: css_classes) # include separated classes instead of the original joined ones
+        content_tag('div', content_tag('span', text), class: css_classes) # include separated classes instead of the original joined ones
       end
-      content_tag('ul', raw(items.join("\n")), class: 'progress-steps', id: "checkout-step-#{@order.state}")
+      content_tag('div', raw(items.join("\n")), class: 'progress-steps', id: "checkout-step-#{@order.state}")
     end
 
     def district_select_options(address)

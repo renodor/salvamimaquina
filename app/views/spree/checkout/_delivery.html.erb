@@ -1,116 +1,40 @@
-<fieldset id='shipping_method' data-hook>
-  <div class="inner" data-hook="shipping_method_inner">
-    <div id="methods">
-      <%= form.fields_for :shipments do |ship_form| %>
-        <% if ship_form.object == @order.shipments.first %>
-          <div class="shipment">
-            <%
-=begin%>
- <h3 class="stock-location" data-hook="stock-location">
-              <%= t('spree.package_from') %>
-              <strong class="stock-location-name" data-hook="stock-location-name"><%= ship_form.object.stock_location.name %></strong>
-            </h3>
-
-            <table class="stock-contents" data-hook="stock-contents"> TODO: replace this table with a css grid or flexbox...
-              <thead>
-                <th align='left' colspan="2"><%= t('spree.item') %></th>
-                <th><%= t('spree.qty') %></th>
-                <th><%= t('spree.price') %></th>
-              </thead>
-              <tbody>
-                <% ship_form.object.manifest.each do |item| %>
-                  <tr class="stock-item">
-                    <td class="item-image">
-                      <%= cl_image_tag item.variant.gallery.images.first&.attachment&.key, height: 100, crop: :fit %>
-                    </td>
-                    <td class="item-name"><%= item.variant.name %></td>
-                    <td class="item-qty"><%= item.quantity %></td>
-                    <td class="item-price">
-                      <%= item.variant.display_amount.to_html unless item.quantity.nil? %>
-                      <% if item.variant.on_sale? %>
-                        <span class="item-original-price crossed"><%= item.variant.original_price %></span>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table> 
-<%
-=end%>
-
-            <h5 class="stock-shipping-method-title"><%= t('spree.choose_shipping_method') %></h5>
-            <div class="radios shipping-methods">
-              <% ship_form.object.shipping_rates.each do |rate| %>
-                <label class="shipping-method">
-                  <%= ship_form.radio_button :selected_shipping_rate_id, rate.id %>
-                  <div class="shipping-method-label">
-                    <span>
-                      <% if rate.shipping_method.service_level == 'delivery' %>
-                        <%= t('spree.shipping_methods.delivery_zone', zone_number: rate.shipping_method.code) %>
-                      <% else %>
-                        <%= t('spree.shipping_methods.pickup_in_store', store_name: rate.shipping_method.admin_name) %></span>
-                      <% end %>
-                    </span>
-                    <span class="rate-cost"><%= rate.display_cost %></span>
-                  </div>
-                </label>
-              <% end %>
-            </div>
-          </div>
-        <% else %>
-          <!-- We hide the second package and put a hidden tag with the correct params name and empty value,
-          that will be populated after in CheckoutControllerDecorator#equalize_shipments_shipping_methods -->
-          <%= hidden_field_tag "order[shipments_attributes][1][selected_shipping_rate_id]" %>
-        <% end %>
-      <% end %>
-
-      <% if @differentiator.try(:missing?) %>
-        <div class="shipment unshippable">
-          <h3 class="stock-location" data-hook="stock-location">
-            <%= t('spree.unshippable_items') %>
-          </h3>
-          <table class="stock-contents" data-hook="stock-missing">
-            <colgroup>
-              <col style="width: 10%;" />
-              <col style="width: 60%;" />
-              <col style="width: 10%;" />
-              <col style="width: 20%;" />
-            </colgroup>
-            <thead>
-              <th></th>
-              <th align='left'><%= t('spree.item', count: @order.line_items.size) %></th>
-              <th><%= t('spree.qty') %></th>
-              <th><%= t('spree.price') %></th>
-            </thead>
-            <tbody>
-              <% @differentiator.missing.each do |variant, quantity| %>
-                <tr class="stock-item">
-                  <td class="item-image">
-                    <%= render 'spree/shared/image',
-                      image: (variant.gallery.images.first || variant.product.gallery.images.first),
-                      size: :mini %>
-                  </td>
-                  <td class="item-name"><%= variant.name %></td>
-                  <td class="item-qty"><%= quantity %></td>
-                  <td class="item-price"><%= display_price(variant) %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+<div id="shipments">
+  <%= form.fields_for :shipments do |ship_form| %>
+    <% if ship_form.object == @order.shipments.first %>
+      <div class="shipment">
+        <h5><%= t('spree.choose_shipping_method') %></h5>
+        <div class="radios shipping-methods">
+          <% ship_form.object.shipping_rates.each do |rate| %>
+            <label class="shipping-method">
+              <%= ship_form.radio_button :selected_shipping_rate_id, rate.id %>
+              <div class="shipping-method-label">
+                <span>
+                  <% if rate.shipping_method.service_level == 'delivery' %>
+                    <%= t('spree.shipping_methods.delivery_zone', zone_number: rate.shipping_method.code) %>
+                  <% else %>
+                    <%= t('spree.shipping_methods.pickup_in_store', store_name: rate.shipping_method.admin_name) %></span>
+                  <% end %>
+                </span>
+                <span class="rate-cost"><%= rate.display_cost %></span>
+              </div>
+            </label>
+          <% end %>
         </div>
-      <% end %>
-
-    </div>
-    <% if Spree::Config[:shipping_instructions] %>
-      <p id="minstrs" data-hook>
-        <%= form.label :special_instructions, t('spree.shipping_instructions') %><br />
-        <%= form.text_area :special_instructions, cols: 40, rows: 7 %>
-      </p>
+      </div>
+    <% else %>
+      <!-- We hide the second package and put a hidden tag with the correct params name and empty value,
+      that will be populated after in CheckoutControllerDecorator#equalize_shipments_shipping_methods -->
+      <%= hidden_field_tag "order[shipments_attributes][1][selected_shipping_rate_id]" %>
     <% end %>
-  </div>
-</fieldset>
+  <% end %>
+</div>
 
-<br />
+<% if Spree::Config[:shipping_instructions] %>
+  <p id="minstrs" data-hook>
+    <%= form.label :special_instructions, t('spree.shipping_instructions') %><br />
+    <%= form.text_area :special_instructions, cols: 40, rows: 7 %>
+  </p>
+<% end %>
 
 <div class="form-buttons" data-hook="buttons">
   <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary' %>

@@ -27,7 +27,6 @@
   <% end %>
 
   <% @order.adjustments.eligible.group_by(&:label).each do |label, adjustments| %>
-    <% raise %>
     <%= render "spree/orders/adjustment_row", label: label, adjustments: adjustments, type: t('spree.adjustment') %>
   <% end %>
 </tbody>

@@ -1,0 +1,30 @@
+#checkout-summary {
+  background-color: #f3f3f3;
+  padding: 20px;
+  margin: 0;
+  h3 {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .checkout-summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .checkout-summary-element {
+      &:first-child {
+        flex-basis: 70%;
+        text-align: left;
+      }
+      &:last-child {
+        flex-basis: 30%;
+        text-align: right;
+      }
+    }
+  }
+}

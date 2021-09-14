@@ -24,6 +24,9 @@ es-MX:
     item:
       one: 'Artículo'
       other: 'Artículos'
+    product:
+      one: 'Producto'
+      other: 'Productos'
     buy: 'Comprar'
     on_sale_products: 'Productos rebajados'
     district: 'Corregimiento'
@@ -31,6 +34,7 @@ es-MX:
     billing_address: 'Dirección'
     apply_code: 'Aplicar código'
     order_number: "Número de orden: %{number}"
+    order_total: 'Total'
     payment_methods:
       credit_card: "Tarjeta de Crédito"
     helpers:
