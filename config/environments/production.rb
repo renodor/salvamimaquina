@@ -66,7 +66,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :postmark
   config.action_mailer.postmark_settings = {
-    api_token: Rails.application.secrets.postmark_api_token
+    api_token: Rails.application.credentials.postmark_api_token
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
