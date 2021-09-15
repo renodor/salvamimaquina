@@ -1,6 +1,6 @@
 <div style="font-family: sans-serif; color: #33333A; padding: 0 30px 30px 30px;">
   <div style="height: 100px; display: flex; justify-content: center; margin-bottom: 10px;">
-    <%= image_url 'logo-smm.png', width: '100px' %>
+    <%= image_tag 'logo-smm.png', width: '100px' %>
   </div>
 
   <h1 style="background-color: #f2fff3; font-size: 24px; text-align: center"><%= t('spree.thank_you_for_your_order') %></h1>
@@ -29,12 +29,12 @@
   <div>
     <p><b><%= t('spree.order_information') %>: <span style="background-color: #f2fff3; padding: 5px 10px; border-radius: 2px;">#<%= @order.number %></span></b></p>
     <% @order.line_items.each do |line_item| %>
-      <div style="display:flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <div style="margin-right: 20px; padding: 10px; flex-shrink: 0;">
+      <div style="margin-bottom: 20px; border: 1px solid rgba(0, 0, 0, .125); padding: 20px;">
+        <p style="margin: 0 0 5px 0; font-size: 16px;"><b><%= line_item.variant.product.name %></b><%= line_item.variant.sku.present? ? " (#{line_item.variant.sku})" : '' %></p>
+        <div style="width: 150px; height: 150px; margin: 20px 0;">
           <%= cl_image_tag line_item.variant.gallery.images.first&.attachment&.key || line_item.variant.product.gallery.images.first&.attachment&.key, height: 150, width: 150, crop: :fill %>
         </div>
         <div>
-          <p style="margin: 0 0 5px 0;"><b><%= line_item.variant.product.name %></b><%= line_item.variant.sku.present? ? " (#{line_item.variant.sku})" : '' %></p>
           <p style="margin: 0 0 5px 0;"><%= line_item.variant.options_text %></p>
           <p style="margin: 0 0 5px 0;"><%= number_to_currency(line_item.variant.price, precision: 2) %></p>
           <p style="margin: 0 0 5px 0;"><%= t('spree.quantity') %>: <%= line_item.quantity %></p>
@@ -44,34 +44,29 @@
   </div>
 </div>
 <div style="font-family: sans-serif; background-color: #eee; color: #33333A; padding: 20px 30px;">
-  <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-    <span style="text-align: left;"><%= @order.item_count %> <%= t('spree.product', count: @order.item_count) %></span>
-    <span style="text-align: right;"><%= @order.display_item_total %></span>
-  </div>
+  <p>
+    <%= @order.item_count %> <%= t('spree.product', count: @order.item_count) %>: <%= @order.display_item_total %>
+  </p>
   <% if @order.all_adjustments.eligible.tax.exists? %>
     <% @order.all_adjustments.eligible.tax.group_by(&:label).each do |label, adjustments| %>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <span style="text-align: left;"><%= label %></span>
-        <span style="text-align: right;"><%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %></span>
-      </div>
+      <p>
+        <%= label %>: <%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %>
+      </p>
     <% end %>
   <% end %>
-  <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-    <span style="text-align: left;"><%= t('spree.shipping') %></span>
-    <span style="text-align: right;"><%= number_to_currency(@order.shipments.first.cost, precision: 2) %></span>
-  </div>
+  <p>
+    <%= t('spree.shipping') %>: <%= number_to_currency(@order.shipments.first.cost, precision: 2) %>
+  </p>
   <% if @order.line_item_adjustments.exists? && @order.all_adjustments.promotion.eligible.exists? %>
     <% @order.all_adjustments.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <span style="text-align: left;"><%= label %></span>
-        <span style="text-align: right;"><%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %></span>
-      </div>
+      <p>
+        <%= label %>: <%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %>
+      </p>
     <% end %>
   <% end %>
-  <div style="display: flex; justify-content: space-between; margin-bottom: 0;">
-    <span style="text-align: left;"><strong><%= t('spree.order_total') %></strong></span>
-    <span style="text-align: right;"><strong><%= number_to_currency(@order.total, precision: 2) %></strong></span>
-  </div>
+  <p style=" margin-bottom: 0;">
+    <strong><%= t('spree.order_total') %>: <%= number_to_currency(@order.total, precision: 2) %></strong>
+  </p>
 </div>
 <div style="text-align: center; font-family: sans-serif; padding: 30px 60px;">
   <p><%= t('.disclaimer') %></p>
