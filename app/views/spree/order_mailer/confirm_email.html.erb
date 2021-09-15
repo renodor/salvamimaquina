@@ -30,12 +30,12 @@
     <p><b><%= t('spree.order_information') %>: <span style="background-color: #f2fff3; padding: 5px 10px; border-radius: 2px;">#<%= @order.number %></span></b></p>
     <% @order.line_items.each do |line_item| %>
       <div style="display:flex; justify-content: flex-start; align-items: center; margin-bottom: 10px;">
-        <div style="margin-right: 20px;">
+        <div style="margin-right: 20px; padding: 10px; flex-shrink: 0;">
           <%= cl_image_tag line_item.variant.gallery.images.first&.attachment&.key || line_item.variant.product.gallery.images.first&.attachment&.key, height: 150, width: 150, crop: :fill %>
         </div>
         <div>
           <p style="margin: 0 0 5px 0;"><b><%= line_item.variant.product.name %></b><%= line_item.variant.sku.present? ? " (#{line_item.variant.sku})" : '' %></p>
-          <p style="margin: 0 0 5px 0;"><b><%= line_item.variant.options_text %></b></p>
+          <p style="margin: 0 0 5px 0;"><%= line_item.variant.options_text %></p>
           <p style="margin: 0 0 5px 0;"><%= number_to_currency(line_item.variant.price, precision: 2) %></p>
           <p style="margin: 0 0 5px 0;"><%= t('spree.quantity') %>: <%= line_item.quantity %></p>
         </div>
@@ -43,31 +43,35 @@
     <% end %>
   </div>
 </div>
-<div style="font-family: sans-serif; background-color: #eee; color: #33333A; padding: 10px 30px;">
-  <p><%= t('.product_quantity', count: @order.item_count) %>: <%= @order.item_count %></p>
-  <p><%= t('.subtotal') %>: <%= @order.display_item_total %></p>
+<div style="font-family: sans-serif; background-color: #eee; color: #33333A; padding: 20px 30px;">
+  <p style="display: flex; justify-content: space-between;">
+    <span style="text-align: left;"><%= @order.item_count %> <%= t('spree.product', count: @order.item_count) %></span>
+    <span style="text-align: right;"><%= @order.display_item_total %></span>
+  </p>
   <% if @order.all_adjustments.eligible.tax.exists? %>
     <% @order.all_adjustments.eligible.tax.group_by(&:label).each do |label, adjustments| %>
-      <p><%= label %>: <%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %></p>
-    <% end %>
-  <% end %>
-  <% @order.adjustments.eligible.each do |adjustment| %>
-    <% next if (adjustment.source_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
-    <p>
-      <%= adjustment.label %>: <%= adjustment.display_amount %>
-    </p>
-  <% end %>
-  <p>
-    <%= t('spree.shipping') %>: <%= number_to_currency(@order.shipments.first.cost, precision: 2) %>
-  </p>
-  <% if @order.line_item_adjustments.exists? && @order.all_adjustments.promotion.eligible.exists? %>
-    <% @order.all_adjustments.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
-      <p>
-        <%= label %>: <%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %>
+      <p style="display: flex; justify-content: space-between;">
+        <span style="text-align: left;"><%= label %></span>
+        <span style="text-align: right;"><%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %></span>
       </p>
     <% end %>
   <% end %>
-  <p><b><%= t('.total') %>: <%= number_to_currency(@order.total, precision: 2) %></b></p>
+  <p style="display: flex; justify-content: space-between;">
+    <span style="text-align: left;"><%= t('spree.shipping') %></span>
+    <span style="text-align: right;"><%= number_to_currency(@order.shipments.first.cost, precision: 2) %></span>
+  </p>
+  <% if @order.line_item_adjustments.exists? && @order.all_adjustments.promotion.eligible.exists? %>
+    <% @order.all_adjustments.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
+      <p style="display: flex; justify-content: space-between;">
+        <span style="text-align: left;"><%= label %></span>
+        <span style="text-align: right;"><%= Spree::Money.new(adjustments.sum(&:amount), currency: @order.currency) %></span>
+      </p>
+    <% end %>
+  <% end %>
+  <p style="display: flex; justify-content: space-between; margin-bottom: 0;">
+    <span style="text-align: left;"><strong><%= t('spree.order_total') %></strong></span>
+    <span style="text-align: right;"><strong><%= number_to_currency(@order.total, precision: 2) %></strong></span>
+  </p>
 </div>
 <div style="text-align: center; font-family: sans-serif; padding: 30px 60px;">
   <p><%= t('.disclaimer') %></p>

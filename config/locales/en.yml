@@ -49,6 +49,9 @@ en:
     item:
       one: 'Item'
       other: 'Items'
+    product:
+      one: 'Product'
+      other: 'Products'
     on_sale_products: 'On sale products'
     district_based: District Based
     admin:
@@ -69,8 +72,6 @@ en:
     thank_you_for_your_order: "Thank you for your order!"
     order_mailer:
       confirm_email:
-        product_quantity: 'Product quantity'
-        see_on_map: 'See on the map'
         disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'
   home_page:
     apple_experts: 'We are experts in Apple products'

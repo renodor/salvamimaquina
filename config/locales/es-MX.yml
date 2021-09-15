@@ -83,11 +83,8 @@ es-MX:
         vat_refund_with_rate: 'Reintegro: %{name} %{amount} (Incluido en el Precio)'
     order_mailer:
       confirm_email:
-        product_quantity:
-          one: 'Cantidad de producto'
-          other: 'Cantidad de productos'
         see_on_map: 'Ver en el mapa'
-        disclaimer: 'Importante: En el caso de no estar presente a la hora de entrega nos comunicaremos al teléfono incluido es su pedido.'
+        disclaimer: 'Importante: En el caso de no estar presente a la hora de entrega nos comunicaremos al teléfono incluido en su pedido.'
   activerecord:
     attributes:
       spree/credit_card:
