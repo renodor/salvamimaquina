@@ -55,6 +55,7 @@
       border-bottom: none;
       padding: 0 10px;
       margin-bottom: 10px;
+      text-align: left;
     }
     .product-filter {
       margin-bottom: 25px;
@@ -93,6 +94,26 @@
         background-color: $light-green;
         svg {
           display: block;
+        }
+      }
+      #color-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 15px 10px 0 10px;
+        .color-filter-label {
+          width: 32px;
+          height: 32px;
+          border: 2px solid transparent;
+          cursor: pointer;
+          opacity: 0.6;
+          outline: 1px solid #bdbdbd;
+          @include default-transition(opacity, border);
+        }
+        input[type='checkbox']:checked + .color-filter-label {
+          border: 2px solid $dark-gray;
+          opacity: 1;
+          outline: 0;
         }
       }
     }

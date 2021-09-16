@@ -13,17 +13,24 @@ module Spree
       product.destroy! unless product.reload.has_variants?
     end
 
-    def translated_option_values(show_model: false)
-      values = []
-      option_values.order(:option_type_id).each do |option_value|
+    # Modify Spree::Variant#options_text to be able to:
+    # - show or not option type
+    # - show or not model
+    # - translate option type and option value if possible
+    # - use branded_name for option_value
+    def options_text(show_option_type: false, show_model: false)
+      option_values.includes(:option_type).order(:option_type_id).map do |option_value|
         next if option_value.option_type.name == 'model' && show_model == false
 
-        values << I18n.t!("spree.#{option_value.option_type.name}.#{option_value.presentation}").capitalize
-      rescue I18n::MissingTranslationData
-        values << option_value.presentation.capitalize
-      end
+        if option_value.option_type.name == 'color'
+          value = I18n.t("spree.colors.#{option_value.name}", default: nil) || option_value.presentation.capitalize
+        else
+          value = ApplicationController.helpers.branded_name(option_value.presentation) # TODO: not good to use helper in module like that...
+        end
 
-      values.join(' - ')
+        type = I18n.t("spree.#{option_value.option_type.name}", count: 1, default: nil) || option_value.option_type.presentation.capitalize
+        show_option_type ? "#{type}: #{value}" : value
+      end.compact.join(', ')
     end
 
     Spree::Variant.prepend self

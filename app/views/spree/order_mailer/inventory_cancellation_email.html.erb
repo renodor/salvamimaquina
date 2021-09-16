@@ -15,7 +15,7 @@
           <tr>
             <td><%= item.variant.sku %></td>
             <td><%= item.variant.product.name %></td>
-            <td><%= item.variant.options_text -%></td>
+            <td><%= item.variant.options_text(show_option_type: true, show_model: true) -%></td>
           </tr>
         <% end %>
       </table>

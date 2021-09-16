@@ -16,7 +16,7 @@
               %>
               <%= label_tag "variant_id_#{ variant.id }" do %>
                 <span class="variant-description">
-                  <%= variant.translated_option_values %>
+                  <%= variant.options_text %>
                 </span>
                 <%# if variant_price variant %>
                   <!-- <span class="price diff"> -->
@@ -30,7 +30,7 @@
       </div>
     <% else %>
       <div class="master-description">
-        <%= @product.master.translated_option_values %>
+        <%= @product.master.options_text %>
       </div>
       <%= hidden_field_tag "variant_id", @product.master.id %>
     <% end %>

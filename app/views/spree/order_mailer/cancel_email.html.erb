@@ -16,7 +16,7 @@
             <td><%= item.variant.sku %></td>
             <td>
               <%= item.variant.product.name %>
-              <%= item.variant.options_text -%>
+              <%= item.variant.options_text(show_option_type: true, show_model: true) -%>
             </td>
             <td>(<%=item.quantity%>) @ <%= item.single_money %> = <%= item.display_amount %></td>
           </tr>

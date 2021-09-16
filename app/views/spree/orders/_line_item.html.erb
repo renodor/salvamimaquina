@@ -6,7 +6,7 @@
   <div class="line-item-description" data-hook="cart_item_description">
     <h4><%= link_to line_item.name, product_path(variant.product) %></h4>
     <% if variant.option_values.any? %>
-      <p><%= variant.translated_option_values %></p>
+      <p><%= variant.options_text %></p>
     <% end %>
     <% if line_item.insufficient_stock? %>
       <span class="out-of-stock">

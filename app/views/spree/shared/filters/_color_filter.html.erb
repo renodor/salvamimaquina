@@ -1,0 +1,19 @@
+<% if color_filter.present? %>
+  <div class="navigation product-filter" data-hook="navigation">
+    <h6 class="filter-title"><%= t('spree.color', count: color_filter.size) %></h6>
+    <div id="color-filter" class="filter_choices">
+      <% color_filter.each do |color, color_id| %>
+        <div>
+          <input type="checkbox"
+                  id="<%= mobile_version ? "#{color_id}-mobile" : color_id %>"
+                  name="<%= "search[with_option][#{color_option_type.id}][]" %>"
+                  value="<%= color_id %>"
+                  <%= params.dig(:search, :with_option, color_option_type.id.to_s)&.include?(color_id.to_s) ? "checked" : "" %>
+          />
+          <label class="color-filter-label" style="background-color: <%= color_code(color) %>;" for="<%= mobile_version ? "#{color_id}-mobile" : color_id %>">
+          </label>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -35,7 +35,7 @@
           <%= cl_image_tag line_item.variant.gallery.images.first&.attachment&.key || line_item.variant.product.gallery.images.first&.attachment&.key, height: 150, width: 150, crop: :fill %>
         </div>
         <div>
-          <p style="margin: 0 0 5px 0;"><%= line_item.variant.options_text %></p>
+          <p style="margin: 0 0 5px 0;"><%= line_item.variant.options_text(show_option_type: true, show_model: true) %></p>
           <p style="margin: 0 0 5px 0;"><%= number_to_currency(line_item.variant.price, precision: 2) %></p>
           <p style="margin: 0 0 5px 0;"><%= t('spree.quantity') %>: <%= line_item.quantity %></p>
         </div>

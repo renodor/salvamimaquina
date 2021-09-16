@@ -23,7 +23,7 @@
 <%= t('spree.order_information') %>: #<%= @order.number %>
 <% @order.line_items.each do |line_item| %>
   <%= line_item.variant.product.name %><%= line_item.variant.sku.present? ? " (#{line_item.variant.sku})" : '' %>
-  <%= line_item.variant.options_text %>
+  <%= line_item.variant.options_text(show_option_type: true, show_model: true) %>
   <%= number_to_currency(line_item.variant.price, precision: 2) %>
   <%= t('spree.quantity') %>: <%= line_item.quantity %>
   ______________________________

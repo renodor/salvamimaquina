@@ -6,5 +6,5 @@
 <%= t('spree.order_mailer.inventory_cancellation.order_summary_canceled') %>
 ============================================================
 <% @inventory_units.each do |item| %>
-  <%= item.variant.sku %> <%= raw(item.variant.product.name) %> <%= raw(item.variant.options_text) -%>
+  <%= item.variant.sku %> <%= raw(item.variant.product.name) %> <%= raw(item.variant.options_text(show_option_type: true, show_model: true)) -%>
 <% end %>
