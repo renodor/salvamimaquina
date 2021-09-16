@@ -21,7 +21,7 @@ module Spree
     def create_user_message
       @user_message = UserMessage.new(user_message_params)
       if @user_message.save
-        UserMessageMailer.contact_message(@user_message).deliver
+        UserMessageMailer.contact_message(@user_message).deliver_later
         flash.notice = t('message_sent')
         redirect_to contact_path
       else

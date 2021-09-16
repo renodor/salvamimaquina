@@ -16,6 +16,7 @@
 #shops {
   .shop {
     margin: 20px;
+    width: 100%;
     h2 {
       margin-top: 10px;
       font-weight: 200;
@@ -27,5 +28,21 @@
   .business-day {
     width: 110px;
     display: inline-block;
+  }
+}
+
+@media ($max-l) {
+  #shops {
+    flex-direction: column;
+  }
+}
+
+@media ($max-m) {
+  #shops iframe {
+    width: 100%;
+  }
+
+  #contact-form form {
+    width: 100%;
   }
 }

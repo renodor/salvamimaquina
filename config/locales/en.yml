@@ -44,6 +44,13 @@ en:
   message_sent: 'Thanks for your message, we will contact you soon.'
   business_hours: 'Business hours'
   closed: 'Closed'
+  monday: 'Monday'
+  tuesday: 'Tuesday'
+  wednesday: 'Wednesday'
+  thursday: 'Thursday'
+  friday: 'Friday'
+  saturday: 'Saturday'
+  sunday: 'Sunday'
   spree:
     address: 'Address'
     item:
