@@ -64,6 +64,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.hosts << 'csp.credomatic.com'
-  config.hosts << '200.122.167.211'
+  # Enable serving of images from an asset server for emails
+  config.action_mailer.asset_host = 'localhost:3000'
 end

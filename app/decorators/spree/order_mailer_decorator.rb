@@ -2,6 +2,10 @@
 
 module Spree
   module OrderMailerDecorator
+    def self.prepended(base)
+      base.helper 'spree/name'
+    end
+
     def confirm_email(order, resend = false) # rubocop:disable Style/OptionalBooleanParameter
       @order = order
       @address = @order.ship_address

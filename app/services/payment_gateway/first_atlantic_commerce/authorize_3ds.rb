@@ -3,7 +3,7 @@
 module PaymentGateway
   module FirstAtlanticCommerce
     class Authorize3ds < FirstAtlanticCommerce::Base
-      TEST_MODE = Rails.application.credentials.test_mode
+      TEST_MODE = Rails.application.credentials.fac_payment_test_mode
 
       class << self
         def call(amount:, card_info:, order_number:, email:, billing_address:)

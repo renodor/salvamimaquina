@@ -2,7 +2,7 @@
 
 module PaymentGateway
   class FirstAtlanticCommerce::Base
-    TEST_MODE = Rails.application.credentials.test_mode
+    TEST_MODE = Rails.application.credentials.fac_payment_test_mode
     BASE_URL = "https://#{TEST_MODE ? 'ecm' : 'marlin'}.firstatlanticcommerce.com/PGServiceXML"
     ACQUIRER_ID = Rails.application.credentials.fac_acquirer_id
     MERCHANT_ID = Rails.application.credentials[TEST_MODE ? :fac_merchant_id_test : :fac_merchant_id]

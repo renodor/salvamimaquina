@@ -5,7 +5,7 @@ class RepairShoprWebhook::ProductsController < ApplicationController
 
   def product_updated
     # TODO: improve this "test mode" thing so that it is generic everywhere and we don't have to compute it every time we need it.
-    test_mode = Rails.application.credentials.test_mode
+    test_mode = Rails.application.credentials.repair_shopr_test_mode
     repair_shopr_subdomain = test_mode ? Rails.application.credentials.repair_shopr_subdomain_test : Rails.application.credentials.repair_shopr_subdomain
 
     # Only accept requests coming from the correct RS sender
