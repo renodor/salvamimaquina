@@ -20,7 +20,8 @@ module Spree
       turquoise: '#5FDAE2',
       coral: '#F65F45',
       mallow: '#D3CFDC',
-      space_gray: '#4e575a'
+      space_gray: '#4e575a',
+      graphite: '#323535'
     }
 
     def price_range_slider
