@@ -15,7 +15,7 @@ module Spree
       pink: '#EFC4C0',
       gray: '#adadad',
       brown: '#683E2C',
-      golden: '#fff190',
+      gold: '#fff190',
       beige: '#DBC5A4',
       turquoise: '#5FDAE2',
       coral: '#F65F45',
