@@ -49,40 +49,18 @@ module Spree
       }
     end
 
-    def model_filter
+    def checkbox_product_filter(option_type)
       products = @taxon&.all_products.presence
 
       return nil unless products
 
-      models = {}
+      variant_options = {}
       products.each do |product|
-        option_values = product.variant_option_values_by_option_type[model_option_type]
-        option_values&.each { |option_value| models[option_value.name] = option_value.id }
+        option_values = product.variant_option_values_by_option_type[Spree::OptionType.find_by(name: option_type)]
+        option_values&.each { |option_value|  variant_options[option_value.name] = option_value.id }
       end
 
-      models
-    end
-
-    def color_filter
-      products = @taxon&.all_products.presence
-
-      return nil unless products
-
-      colors = {}
-      products.each do |product|
-        option_values = product.variant_option_values_by_option_type[color_option_type]
-        option_values&.each { |option_value| colors[option_value.name] = option_value.id }
-      end
-
-      colors
-    end
-
-    def model_option_type
-      Spree::OptionType.find_by(name: 'model') # TODO: cache that...
-    end
-
-    def color_option_type
-      Spree::OptionType.find_by(name: 'color') # TODO: cache that...
+      variant_options
     end
 
     def color_code(color)

@@ -1,3 +1,6 @@
+<!-- TODO: can be refacto in the same partial with capacity_filter, and model_filter -->
+<% color_filter = checkbox_product_filter('color') %>
+<% color_option_type = Spree::OptionType.find_by(name: 'color') %>
 <% if color_filter.present? %>
   <div class="navigation product-filter" data-hook="navigation">
     <h6 class="filter-title"><%= t('spree.color', count: color_filter.size) %></h6>
