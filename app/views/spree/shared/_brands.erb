@@ -1,0 +1,26 @@
+<% max_level = 2 %>
+<nav id="brands" class="sidebar-item " data-hook>
+  <h6><%= t("spree.brands") %></h6>
+  <div class="accordion accordion-flush" id="taxonomyAccordion">
+    <% @brands.each_with_index do |brand, i| %>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
+          <button class="accordion-button <%= @taxon.parent == brand ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="<%= "#flush-collapse#{i}" %>" aria-expanded="false" aria-controls="<%= "flush-collapse#{i}" %>">
+            <%= brand.name.capitalize %>
+          </button>
+        </h2>
+        <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == brand ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
+          <div class="accordion-body">
+            <% brand.children.each do |category| %>
+              <%= link_to branded_name(category.name), spree.nested_taxons_path(category), class: "sub-taxon #{@taxon == category ? 'active' : ''}" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <%#= taxons_tree(taxonomy.root, @taxon, max_level) %>
+</nav>
+
+<div class=transition-test>
+</div>

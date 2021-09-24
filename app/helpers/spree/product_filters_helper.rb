@@ -49,14 +49,16 @@ module Spree
     end
 
     def checkbox_product_filter(option_type)
-      products = @taxon&.all_products.presence
+      variants = @taxon&.all_variants&.includes(:option_values)
 
-      return nil unless products
+      return nil unless variants
+
+      option_type_id = Spree::OptionType.find_by(name: option_type).id
 
       variant_options = {}
-      products.each do |product|
-        option_values = product.variant_option_values_by_option_type[Spree::OptionType.find_by(name: option_type)]
-        option_values&.each { |option_value| variant_options[option_value.name] = option_value.id }
+      variants.each do |variant|
+        option_value = variant.option_values.detect { |ov| ov.option_type_id == option_type_id }
+        variant_options[option_value.name] = option_value.id if option_value.present?
       end
 
       variant_options
