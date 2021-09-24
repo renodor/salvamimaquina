@@ -1,20 +1,15 @@
 <h1 class="taxon-title flex-1"><%= branded_name(@taxon.name) %></h1>
-
 <% content_for :sidebar do %>
-  <div class="hidden-m">
-    <%= render partial: 'spree/shared/taxonomies' %>
-    <%= render partial: 'spree/shared/filters', locals: { mobile_version: false } %> <!-- Needed to differentiate input ids for labels to work (because the same form is duplicated)-->
-  </div>
-
-  <div id="product-filters-modal" class="show-m">
-    <span id="product-filters-modal-toggle" data-bs-toggle="modal" data-bs-target="#productFiltersModal">
+  <div id="product-filters-modal">
+    <span id="product-filters-modal-toggle" class="show-m" data-bs-toggle="modal" data-bs-target="#productFiltersModal">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
       </svg>
       <%= t('spree.filter') %>
     </span>
 
-    <div class="modal fade" id="productFiltersModal" tabindex="-1" aria-labelledby="productFiltersModalLabel" aria-hidden="true">
+    <!-- Bootstrap modal classes (modal fade) will be added/removed by JS depending on the screen size -->
+    <div class="" id="productFiltersModal" tabindex="-1" aria-labelledby="productFiltersModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
@@ -23,8 +18,8 @@
           </div>
           <div class="modal-body">
             <div data-hook="taxon_sidebar_navigation">
-              <%= render partial: 'spree/shared/taxonomies' %>
-              <%= render partial: 'spree/shared/filters', locals: { mobile_version: true } %> <!-- Needed to differentiate input ids for labels to work (because the same form is duplicated)-->
+              <%= render 'spree/shared/taxonomies' %>
+              <%= render 'spree/shared/filters' %>
             </div>
           </div>
         </div>

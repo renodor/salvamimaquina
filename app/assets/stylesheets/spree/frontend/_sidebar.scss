@@ -1,5 +1,6 @@
 #sidebar {
   width: 200px;
+  height: 100%;
   border: 1px solid $light-gray;
   margin-right: 20px;
   padding: 20px 10px;
@@ -132,6 +133,26 @@
         svg {
           fill: $dark-gray;
           margin-right: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media ($min-m) {
+  #sidebar {
+    #product-filters-modal #productFiltersModal{
+      .modal-dialog {
+        margin: 0;
+        .modal-content {
+          border: none;
+          border-radius: 0;
+          .modal-header {
+            display: none;
+          }
+          .modal-body {
+            padding: 0;
+          }
         }
       }
     }

@@ -1,28 +1,26 @@
 <% max_level = 2 %>
 <nav id="taxonomies" class="sidebar-item " data-hook>
   <% @taxonomies.each do |taxonomy| %>
-    <% cache [I18n.locale, taxonomy, @taxon, max_level] do %>
-      <h6 class='taxonomy-root'><%= t("spree.#{taxonomy.name.downcase}") %></h6>
-      <div class="accordion accordion-flush" id="taxonomyAccordion">
-        <% taxonomy.root.children.each_with_index do |taxon, i| %>
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
-              <button class="accordion-button <%= @taxon.parent == taxon ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="<%= "#flush-collapse#{i}" %>" aria-expanded="false" aria-controls="<%= "flush-collapse#{i}" %>">
-                <%= taxon.name.capitalize %>
-              </button>
-            </h2>
-            <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == taxon ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
-              <div class="accordion-body">
-                <% taxon.children.each do |sub_taxon| %>
-                  <%= link_to branded_name(sub_taxon.name), spree.nested_taxons_path(sub_taxon), class: "sub-taxon #{@taxon == sub_taxon ? 'active' : ''}" %>
-                <% end %>
-              </div>
+    <h6 class='taxonomy-root'><%= t("spree.#{taxonomy.name.downcase}") %></h6>
+    <div class="accordion accordion-flush" id="taxonomyAccordion">
+      <% taxonomy.root.children.each_with_index do |taxon, i| %>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
+            <button class="accordion-button <%= @taxon.parent == taxon ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="<%= "#flush-collapse#{i}" %>" aria-expanded="false" aria-controls="<%= "flush-collapse#{i}" %>">
+              <%= taxon.name.capitalize %>
+            </button>
+          </h2>
+          <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == taxon ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
+            <div class="accordion-body">
+              <% taxon.children.each do |sub_taxon| %>
+                <%= link_to branded_name(sub_taxon.name), spree.nested_taxons_path(sub_taxon), class: "sub-taxon #{@taxon == sub_taxon ? 'active' : ''}" %>
+              <% end %>
             </div>
           </div>
-        <% end %>
-      </div>
-      <%#= taxons_tree(taxonomy.root, @taxon, max_level) %>
-    <% end %>
+        </div>
+      <% end %>
+    </div>
+    <%#= taxons_tree(taxonomy.root, @taxon, max_level) %>
   <% end %>
 </nav>
 

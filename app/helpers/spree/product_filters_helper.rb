@@ -22,18 +22,17 @@ module Spree
       mallow: '#D3CFDC',
       space_gray: '#4e575a',
       graphite: '#323535'
-    }
+    }.freeze
 
-    def price_range_slider
-      products = @taxon&.all_products.presence || Spree::Product.all
+    def build_price_range_slider_values
+      variant_ids = @taxon&.all_variants&.pluck(:id)
 
-      return nil unless products.any?
+      return nil unless variant_ids.present?
 
-      variants = []
-      products.each { |product| variants += product.variants_including_master }
-      variants_ordered_by_price = variants.sort_by(&:price)
-      lowest_price = variants_ordered_by_price.first.price.floor
-      highest_price = variants_ordered_by_price.last.price.ceil
+      prices = Spree::Price.includes(:active_sale_prices).where(variant_id: variant_ids).sort_by(&:price)
+
+      lowest_price = prices[0].price.floor
+      highest_price = prices[-1].price.ceil
 
       if params[:search] && params[:search][:price_between]
         parsed_prices = params[:search][:price_between].map(&:to_i)
@@ -57,7 +56,7 @@ module Spree
       variant_options = {}
       products.each do |product|
         option_values = product.variant_option_values_by_option_type[Spree::OptionType.find_by(name: option_type)]
-        option_values&.each { |option_value|  variant_options[option_value.name] = option_value.id }
+        option_values&.each { |option_value| variant_options[option_value.name] = option_value.id }
       end
 
       variant_options

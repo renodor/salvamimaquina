@@ -26,30 +26,28 @@
     <% products.each do |product| %>
       <% url = spree.product_path(product, taxon_id: @taxon.try(:id)) %>
       <li id="product_<%= product.id %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
-        <% cache(@taxon.present? ? [I18n.locale, current_pricing_options, @taxon, product] : [I18n.locale, current_pricing_options, product]) do %>
-          <div class="product-image">
-            <% if product.gallery.images.any? %>
-              <%= cl_image_tag product.gallery.images.first&.attachment&.key, width: 540, crop: :fill %>
-            <% else %>
-              <div class="image-placeholder" style="width: 200px; height: 200px"></div>
-            <% end %>
-            <%#= render('spree/shared/image', image: product.gallery.images.first, size: :product, itemprop: "image") %>
-          </div>
-          <div class="product-name"><%= branded_name(product.name) %></div>
-          <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-            <% if product.cheapest_variant.on_sale? %>
-              <% discount_price = product.cheapest_variant.price_for(current_pricing_options) %>
-              <span class="price selling" itemprop="price" content="<%= discount_price.to_d %>">
-                <%= discount_price.to_html %>
-              </span>
-            <% end %>
-            <% price = product.cheapest_variant.price_for(current_pricing_options, sale_price: false) %>
-            <span class="price selling <%= product.cheapest_variant.on_sale? ? 'crossed' : '' %>" itemprop="price" content="<%= price.to_d %>">
-              <%= price.to_html %>
+        <div class="product-image">
+          <% if product.gallery.images.any? %>
+            <%= cl_image_tag product.gallery.images.first&.attachment&.key, width: 540, crop: :fill %>
+          <% else %>
+            <div class="image-placeholder" style="width: 200px; height: 200px"></div>
+          <% end %>
+          <%#= render('spree/shared/image', image: product.gallery.images.first, size: :product, itemprop: "image") %>
+        </div>
+        <div class="product-name"><%= branded_name(product.name) %></div>
+        <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <% if product.cheapest_variant.on_sale? %>
+            <% discount_price = product.cheapest_variant.price_for(current_pricing_options) %>
+            <span class="price selling" itemprop="price" content="<%= discount_price.to_d %>">
+              <%= discount_price.to_html %>
             </span>
-            <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
+          <% end %>
+          <% price = product.cheapest_variant.price_for(current_pricing_options, sale_price: false) %>
+          <span class="price selling <%= product.cheapest_variant.on_sale? ? 'crossed' : '' %>" itemprop="price" content="<%= price.to_d %>">
+            <%= price.to_html %>
           </span>
-        <% end %>
+          <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
+        </span>
         <%= link_to '', url, class: 'product-link full-absolute', itemprop: "name", title: product.name %>
       </li>
     <% end %>

@@ -1,4 +1,4 @@
-// method to open/close the sidebar cart
+// method to open/close the navbar on mobile
 const navbar = () => {
   const navbarTogglers = document.querySelectorAll('.navbar-toggler');
   const navbarCollapse = document.querySelector('.navbar-collapse');

@@ -26,6 +26,7 @@ import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
 import { productShowVariants } from '../components/product_show_variants';
 import { productShowAtcBtn } from '../components/product_show_atc_btn';
+import { productFiltersModal } from '../components/product_filters_modal';
 import { productFilter } from '../components/product_filter';
 import { cart } from '../components/cart';
 
@@ -41,6 +42,7 @@ document.addEventListener('turbolinks:load', () => {
   priceRangeSlider();
   productShowVariants();
   productShowAtcBtn();
+  productFiltersModal();
   productFilter();
   cart();
 

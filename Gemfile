@@ -85,6 +85,9 @@ group :development do
   gem 'letter_opener', group: :development
 
   gem 'rubocop', require: false
+
+  # Find N+1 queries
+  gem 'bullet'
 end
 
 group :test do
