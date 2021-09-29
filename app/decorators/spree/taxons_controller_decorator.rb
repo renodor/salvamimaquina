@@ -4,7 +4,8 @@ module Spree
   module TaxonsControllerDecorator
     def show
       @searcher = build_searcher(params.merge(taxon: @taxon.id, include_images: true))
-      @products = @searcher.retrieve_products
+      @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: { attachment_attachment: :blob } }, { prices: :active_sale_prices }])
+
       @brands = Spree::Taxon.includes(children: :children).find_by(name: 'Brands').children
 
       respond_to do |format|
@@ -20,18 +21,16 @@ module Spree
     def products_with_aditional_data
       @products.map do |product|
         product.name = helpers.branded_name(product.name)
-        discount_price = product.cheapest_variant.price_for(current_pricing_options)
-        price = product.cheapest_variant.price_for(current_pricing_options, sale_price: false)
-        product_image_key = product.gallery.images.first&.attachment&.key
-        product_image_url = product_image_key ? "https://res-5.cloudinary.com/detkhu57i/image/upload/c_fill,w_540/#{product.gallery.images.first&.attachment&.key}" : nil # TODO: don't harcode this link
+        cheapest_variant = product.cheapest_variant
+        product_image_key = cheapest_variant.images.first&.attachment&.key
         aditional_data = {
           url: spree.product_path(product, taxon_id: @taxon.try(:id)),
-          image_url: product_image_url,
-          cheapest_variant_onsale: product.cheapest_variant.on_sale?,
-          discount_price: discount_price.to_d,
-          discount_price_html_tag: discount_price.to_html,
-          price: price.to_d,
-          price_html_tag: price.to_html
+          image_url: product_image_key ? "https://res-5.cloudinary.com/detkhu57i/image/upload/c_fill,w_540/#{product_image_key}" : nil, # TODO: don't harcode this link,
+          cheapest_variant_onsale: cheapest_variant.on_sale?,
+          discount_price: cheapest_variant.price,
+          discount_price_html_tag: ActionController::Base.helpers.number_to_currency(cheapest_variant.price),
+          price: cheapest_variant.original_price,
+          price_html_tag: ActionController::Base.helpers.number_to_currency(cheapest_variant.original_price)
         }
 
         product.as_json.merge(aditional_data)

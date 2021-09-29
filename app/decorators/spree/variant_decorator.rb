@@ -22,15 +22,32 @@ module Spree
       option_values.includes(:option_type).order(:option_type_id).map do |option_value|
         next if option_value.option_type.name == 'model' && show_model == false
 
-        if option_value.option_type.name == 'color'
-          value = I18n.t("spree.colors.#{option_value.name}", default: nil) || option_value.presentation.capitalize
-        else
-          value = ApplicationController.helpers.branded_name(option_value.presentation) # TODO: not good to use helper in module like that...
-        end
+        value = if option_value.option_type.name == 'color'
+                  I18n.t("spree.colors.#{option_value.name}", default: nil) || option_value.presentation.capitalize
+                else
+                  ApplicationController.helpers.branded_name(option_value.presentation) # TODO: not good to use helper in module like that...
+                end
 
         type = I18n.t("spree.#{option_value.option_type.name}", count: 1, default: nil) || option_value.option_type.presentation.capitalize
         show_option_type ? "#{type}: #{value}" : value
       end.compact.join(', ')
+    end
+
+    # Simplify price method to avoid using Spree::DefaultPrice module
+    # (We don't need it has our store only has 1 currency, and variants can only have one price)
+    def price
+      prices.take.price
+    end
+
+    # Redecorate Solidus Sales Price gem methods (https://github.com/solidusio-contrib/solidus_sale_prices)
+    # to use :active_sale_prices relation in order to be able to includes it in ActiveRecord queries and thus avoid N+1
+    # and to avoid using Spree::DefaultPrice module
+    def on_sale?
+      prices.take.active_sale_prices.present?
+    end
+
+    def original_price
+      prices.take.original_price
     end
 
     Spree::Variant.prepend self

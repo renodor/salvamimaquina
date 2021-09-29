@@ -9,9 +9,8 @@
   <% end %>
 <% end %>
 
-
 <div data-hook="products_search_results_heading">
-  <% if products.empty? %>
+  <% if products.blank? %>
     <div class="no-products-found" data-hook="products_search_results_heading_no_results_found">
       <%= t('spree.no_products_found') %>
     </div>
@@ -21,14 +20,15 @@
     </div>
   <% end %>
 </div>
-<% if products.any? %>
+<% if products.present? %>
   <ul id="products" class="inline product-listing" data-hook>
     <% products.each do |product| %>
       <% url = spree.product_path(product, taxon_id: @taxon.try(:id)) %>
+      <% cheapest_variant = product.cheapest_variant %>
       <li id="product_<%= product.id %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
         <div class="product-image">
-          <% if product.gallery.images.any? %>
-            <%= cl_image_tag product.gallery.images.first&.attachment&.key, width: 540, crop: :fill %>
+          <% if cheapest_variant.images.present? %>
+            <%= cl_image_tag cheapest_variant.images.first&.attachment&.key, width: 540, crop: :fill %>
           <% else %>
             <div class="image-placeholder" style="width: 200px; height: 200px"></div>
           <% end %>
@@ -36,15 +36,14 @@
         </div>
         <div class="product-name"><%= branded_name(product.name) %></div>
         <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <% if product.cheapest_variant.on_sale? %>
-            <% discount_price = product.cheapest_variant.price_for(current_pricing_options) %>
-            <span class="price selling" itemprop="price" content="<%= discount_price.to_d %>">
-              <%= discount_price.to_html %>
+          <% cheapest_variant_is_on_sale = cheapest_variant.on_sale? %>
+          <% if cheapest_variant_is_on_sale %>
+            <span class="price selling" itemprop="price" content="<%= cheapest_variant.price %>">
+              <%= number_to_currency(cheapest_variant.price) %>
             </span>
           <% end %>
-          <% price = product.cheapest_variant.price_for(current_pricing_options, sale_price: false) %>
-          <span class="price selling <%= product.cheapest_variant.on_sale? ? 'crossed' : '' %>" itemprop="price" content="<%= price.to_d %>">
-            <%= price.to_html %>
+          <span class="price selling <%= cheapest_variant_is_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= cheapest_variant.original_price %>">
+            <%= number_to_currency(cheapest_variant.original_price) %>
           </span>
           <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
         </span>
@@ -57,4 +56,3 @@
 <% if paginated_products.respond_to?(:total_pages) %>
   <%= paginate paginated_products %>
 <% end %>
-
