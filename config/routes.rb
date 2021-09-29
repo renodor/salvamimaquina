@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     resources :reparation_categories, only: [:index] do
       resources :reparation_requests, only: %i[new create]
     end
+
+    get '/t/filter_products', to: 'taxons#filter_products'
     get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
     get 'contact', to: 'home#contact'
     post 'create_user_message', to: 'home#create_user_message'

@@ -11,7 +11,7 @@ const productFilter = () => {
           const formData = new FormData(form);
           const queryString = new URLSearchParams(formData).toString();
 
-          fetch(`${location.pathname}?${queryString}`, { headers: { 'accept': 'application/json' } })
+          fetch(`/t/filter_products?${queryString}`, { headers: { 'accept': 'application/json' } })
               .then((response) => response.json())
               .then(({ products, noProductsMessage }) => {
                 products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);

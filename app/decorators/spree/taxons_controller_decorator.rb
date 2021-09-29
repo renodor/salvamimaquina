@@ -2,21 +2,24 @@
 
 module Spree
   module TaxonsControllerDecorator
+    def self.prepended(base)
+      base.before_action :load_taxon, :retrieve_products
+    end
+
     def show
-      @searcher = build_searcher(params.merge(taxon: @taxon.id, include_images: true))
-      @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: { attachment_attachment: :blob } }, { prices: :active_sale_prices }])
-
       @brands = Spree::Taxon.includes(children: :children).find_by(name: 'Brands').children
+    end
 
-      respond_to do |format|
-        format.html
-        format.json do
-          render json: { products: products_with_aditional_data, noProductsMessage: t('spree.no_products_found') }
-        end
-      end
+    def filter_products
+      render json: { products: products_with_aditional_data, noProductsMessage: t('spree.no_products_found') }
     end
 
     private
+
+    def retrieve_products
+      @searcher = build_searcher(params.merge(taxon: @taxon.id))
+      @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: { attachment_attachment: :blob } }, { prices: :active_sale_prices }])
+    end
 
     def products_with_aditional_data
       @products.map do |product|
