@@ -71,11 +71,11 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     def assign_product_attributes(attributes)
       if @product.new_record?
         @product.available_on = Date.today
-        @product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id
+        @product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id # TODO: memoize that
 
         # Spree::Product.master needs a price for Spree::Product to be valid, so we have to put one here
         # however, if there are several variants, this master price will never really be used
-        @product.master.price = price_before_tax(attributes['price_retail'])
+        @product.master.prices << Spree::Price.new(amount: price_before_tax(attributes['price_retail']), currency: 'USD')
       end
 
       @product.assign_attributes(

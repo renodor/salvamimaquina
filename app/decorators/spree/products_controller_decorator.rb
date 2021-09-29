@@ -3,8 +3,7 @@
 module Spree
   module ProductsControllerDecorator
     def index
-      super
-
+      @taxonomies = Spree::Taxonomy.includes(root: :children)
       @brands = Spree::Taxon.find_by(name: 'Brands').children
     end
 

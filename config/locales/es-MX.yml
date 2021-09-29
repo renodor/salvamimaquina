@@ -71,6 +71,8 @@ es-MX:
       mallow: 'Malva'
       space_gray: 'Space gray'
       graphite: 'Grafito'
+      night_green: 'Verde noche'
+      matt_black: 'Negro mate'
     capacity: 'Capacidad'
     keyboard: 'Teclado'
     product_information: 'Información del Producto'
