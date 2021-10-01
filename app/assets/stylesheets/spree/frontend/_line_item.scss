@@ -20,6 +20,10 @@
       margin: 0;
       padding: 5px 0;
     }
+    .out-of-stock {
+      background-color: $dark-red;
+      font-weight: 500;
+    }
     .line-item-total {
       font-weight: 400!important;
       .line-item-original-price {
