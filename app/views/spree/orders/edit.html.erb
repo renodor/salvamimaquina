@@ -15,7 +15,7 @@
       <div id="inside-cart-form" data-hook="inside_cart_form">
         <div class="line-items" data-hook="cart_items">
           <%= render 'spree/shared/error_messages', target: order_form.object %>
-          <% order_form.object.line_items.each do |line_item| %>
+          <% order_form.object.line_items.includes(variant: [:product, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
             <%= order_form.fields_for :line_items, line_item do |item_form| -%>
               <%= render 'spree/orders/line_item', line_item: line_item, static: false %>
             <% end %>

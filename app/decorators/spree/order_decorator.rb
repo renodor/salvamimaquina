@@ -17,6 +17,11 @@ module Spree
       process_payments! ? true : false
     end
 
+    # Includes relations to avoid N+1
+    def insufficient_stock_lines
+      line_items.includes(variant: :stock_items).select(&:insufficient_stock?)
+    end
+
     Spree::Order.prepend self
   end
 end

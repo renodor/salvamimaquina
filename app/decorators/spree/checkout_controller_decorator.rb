@@ -98,6 +98,32 @@ module Spree
       @order.ship_address.city ||= 'Panamá'
     end
 
+    # Includes needed relations to avoid N+1
+    def before_delivery
+      return if params[:order].present?
+
+      packages = @order.shipments.includes(:stock_location, shipping_rates: %i[shipping_method taxes]).map(&:to_package)
+      @differentiator = Spree::Stock::Differentiator.new(@order, packages)
+    end
+
+    # Includes needed relations to avoid N+1
+    def before_payment
+      return unless @order.checkout_steps.include? 'delivery'
+
+      packages = @order.shipments.includes(:stock_location).map(&:to_package)
+      @differentiator = Spree::Stock::Differentiator.new(@order, packages)
+      @differentiator.missing.each do |variant, quantity|
+        @order.contents.remove(variant, quantity)
+      end
+
+      # Will be needed if we want user to be able to save payment methods
+      # if try_spree_current_user.respond_to?(:wallet)
+      #   @wallet_payment_sources = try_spree_current_user.wallet.wallet_payment_sources
+      #   @default_wallet_payment_source = @wallet_payment_sources.detect(&:default) ||
+      #                                    @wallet_payment_sources.first
+      # end
+    end
+
     def authorize_3ds(payment)
       @html_form_3ds = payment.authorize_3ds(params[:payment_source][payment.payment_method_id.to_s])
       if @html_form_3ds

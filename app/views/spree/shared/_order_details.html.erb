@@ -1,12 +1,10 @@
-<% if order.has_checkout_step?("address") && order.has_checkout_step?("delivery") %>
-  <% shipping_method = order.shipments.first.shipping_method %>
+<% if order.has_checkout_step?('address') && order.has_checkout_step?('delivery') %>
+  <% shipping_method = order.shipments.includes(shipping_rates: :shipping_method).first.shipping_method %>
   <% order_with_delivery = shipping_method.service_level == 'delivery' %>
 <% end %>
 
 <div class="order-steps <%= order_with_delivery ? 'three-steps' : 'two-steps' %>">
-
   <% if shipping_method %>
-    <% shipping_method = order.shipments.first.shipping_method %>
     <% if order_with_delivery %>
       <div class="order-step" data-hook="order-ship-address">
         <h6>

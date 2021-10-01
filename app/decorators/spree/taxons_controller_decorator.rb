@@ -18,7 +18,7 @@ module Spree
 
     def retrieve_products
       @searcher = build_searcher(params.merge(taxon: @taxon.id))
-      @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: { attachment_attachment: :blob } }, { prices: :active_sale_prices }])
+      @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
     end
 
     def products_with_aditional_data

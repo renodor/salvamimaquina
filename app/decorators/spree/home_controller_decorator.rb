@@ -7,7 +7,11 @@ module Spree
     end
 
     def index
-      @products = Spree::Product.where(highlight: true).limit(4)
+      @products = Spree::Product
+                  .includes(variants_including_master: [prices: :active_sale_prices, images: [attachment_attachment: :blob]])
+                  .where(highlight: true)
+                  .limit(4)
+
       respond_to do |format|
         format.html { render layout: 'homepage' }
       end

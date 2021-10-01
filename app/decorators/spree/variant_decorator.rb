@@ -19,16 +19,17 @@ module Spree
     # - translate option type and option value if possible
     # - use branded_name for option_value
     def options_text(show_option_type: false, show_model: false)
-      option_values.includes(:option_type).order(:option_type_id).map do |option_value|
-        next if option_value.option_type.name == 'model' && show_model == false
+      option_values.map do |option_value|
+        option_type = option_value.option_type
+        next if option_type.name == 'model' && show_model == false
 
-        value = if option_value.option_type.name == 'color'
+        value = if option_type.name == 'color'
                   I18n.t("spree.colors.#{option_value.name}", default: nil) || option_value.presentation.capitalize
                 else
                   ApplicationController.helpers.branded_name(option_value.presentation) # TODO: not good to use helper in module like that...
                 end
 
-        type = I18n.t("spree.#{option_value.option_type.name}", count: 1, default: nil) || option_value.option_type.presentation.capitalize
+        type = I18n.t("spree.#{option_type.name}", count: 1, default: nil) || option_type.presentation.capitalize
         show_option_type ? "#{type}: #{value}" : value
       end.compact.join(', ')
     end
@@ -48,6 +49,15 @@ module Spree
 
     def original_price
       prices.take.original_price
+    end
+
+    # Simplify Spree::Variant#can_supply method has we don't need all built in solidus options
+    # We chose to use ActiveRecord#pluck and then Array#sum instead of ActiveRecord#sum directly,
+    # So that we can includes stock_items beforehand and thus avoiding N+1
+    # Because even if we includes stock_items, doing an ActiveRecord#sum will call the database
+    # (It is discutable if using ActiveRecord#sum would be more performant anyway even if it creates more DB calls...)
+    def can_supply?(quantity = 1)
+      stock_items.pluck(:count_on_hand).sum >= quantity
     end
 
     Spree::Variant.prepend self

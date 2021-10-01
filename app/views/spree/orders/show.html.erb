@@ -8,7 +8,7 @@
     <%= render partial: 'spree/shared/order_details', locals: { order: @order } %>
     <div class="line-items">
       <h3><%= t('spree.item', count: @order.line_items.count) %></h3>
-      <% @order.line_items.each do |line_item| %>
+      <% @order.line_items.includes(variant: [:product, :stock_items, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
         <%= render 'spree/orders/line_item', line_item: line_item, static: true %>
       <% end %>
     </div>

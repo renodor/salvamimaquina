@@ -1,7 +1,7 @@
 <% variant = line_item.variant -%>
 <div class="line-item" data-id="<%= line_item.id %>">
   <div class="line-item-image" data-hook="cart_item_image">
-    <%= cl_image_tag variant.gallery.images.first&.attachment&.key || variant.product.gallery.images.first&.attachment&.key, height: 150, crop: :fit %>
+    <%= cl_image_tag variant.images.first&.attachment&.key || variant.product.gallery.images.first&.attachment&.key, height: 150, crop: :fit %>
   </div>
   <div class="line-item-description" data-hook="cart_item_description">
     <h4><%= link_to line_item.name, product_path(variant.product) %></h4>
@@ -10,7 +10,7 @@
     <% end %>
     <% if line_item.insufficient_stock? %>
       <span class="out-of-stock">
-        <%= t('spree.out_of_stock') %>&nbsp;&nbsp;<br />
+        <%= t('spree.not_enough_stock') %>&nbsp;&nbsp;<br />
       </span>
     <% end %>
     <!-- <span class="line-item-description" data-hook="line_item_description"> -->

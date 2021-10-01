@@ -3,7 +3,7 @@
 module Spree
   class ReparationCategoriesController < Spree::StoreController
     def index
-      @categories = ReparationCategory.all
+      @categories = ReparationCategory.includes(photo_attachment: :blob).all
     end
   end
 end

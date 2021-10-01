@@ -4,7 +4,7 @@
       <div class="shipment">
         <h5><%= t('spree.choose_shipping_method') %></h5>
         <div class="radios shipping-methods">
-          <% ship_form.object.shipping_rates.each do |rate| %>
+          <% ship_form.object.shipping_rates.includes(:taxes, :shipping_method).each do |rate| %>
             <label class="shipping-method">
               <%= ship_form.radio_button :selected_shipping_rate_id, rate.id %>
               <div class="shipping-method-label">
