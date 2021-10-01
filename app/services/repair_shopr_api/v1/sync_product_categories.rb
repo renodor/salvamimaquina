@@ -34,14 +34,14 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
     end
 
     # First find or create taxons from RepairShopr product categories
-    # and for each product categories return an object with its taxons and its product category parent id
+    # and for each product categories return an hash with its corresponding taxon and its product category parent
     # (We need this first step because we can't put a taxon below a parent that does not exist yet...)
     def create_or_update_taxons_and_flatten_hierarchy(product_categories)
       product_categories.map do |product_category|
         taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @brands_taxonomy.id)
         taxon.update!(name: product_category['name'], description: product_category['description'])
-        # Product category without "/" in ancestry has only one ancester, which is the root category "ecom"
-        # So we can put it directly under the @brands_taxon
+        # Product category without "/" in ancestry has only one ancester, which is necessarly the root category "ecom"
+        # So in our current hierarchy, it will be directly under the @brands_taxon
         { taxon: taxon, parent: product_category['ancestry'].include?('/') ? product_category['ancestry'] : nil }
       end
     end
@@ -52,9 +52,9 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       taxons_and_parents.map do |taxon_and_parent|
         if taxon_and_parent[:parent]
           taxon_parent = Spree::Taxon.find_by(repair_shopr_id: taxon_and_parent[:parent].split('/').last.to_i)
-          taxon_and_parent[:taxon].move_to_child_of(taxon_parent)
+          taxon_and_parent[:taxon].update!(parent: taxon_parent)
         else
-          taxon_and_parent[:taxon].move_to_child_of(@brands_taxon)
+          taxon_and_parent[:taxon].update!(parent: @brands_taxon)
         end
 
         taxon_and_parent[:taxon].id
