@@ -1,0 +1,7 @@
+<!-- TODO: use this in front-end also (not only in admin). And use this "size" variable to define image and placeholder size-->
+<% size ||= :mini %>
+<% if image_key = image&.attachment&.key %>
+  <%= cl_image_tag(image_key) %>
+<% else %>
+  <span class="image-placeholder <%= size %>"></span>
+<% end %>
