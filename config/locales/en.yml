@@ -59,6 +59,12 @@ en:
     product:
       one: 'Product'
       other: 'Products'
+    sort_products: 'Sort products'
+    ascend_by_price: 'Lowest prices'
+    descend_by_price: 'Highest prices'
+    newest: 'Newest'
+    oldest: 'Oldest'
+    best_seller: 'Best seller'
     on_sale_products: 'On sale products'
     district_based: District Based
     admin:

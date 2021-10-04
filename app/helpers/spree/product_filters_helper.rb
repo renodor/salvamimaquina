@@ -21,7 +21,9 @@ module Spree
       coral: '#F65F45',
       mallow: '#D3CFDC',
       space_gray: '#4e575a',
-      graphite: '#323535'
+      graphite: '#323535',
+      night_green: '#366644',
+      matt_black: '#3b3b3b'
     }.freeze
 
     def build_price_range_slider_values

@@ -26,8 +26,9 @@ import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
 import { productShowVariants } from '../components/product_show_variants';
 import { productShowAtcBtn } from '../components/product_show_atc_btn';
+import { productSorting } from '../components/product_sorting';
 import { productFiltersModal } from '../components/product_filters_modal';
-import { productFilter } from '../components/product_filter';
+import { productFilters } from '../components/product_filters';
 import { cart } from '../components/cart';
 
 // Internal Plugins
@@ -42,8 +43,9 @@ document.addEventListener('turbolinks:load', () => {
   priceRangeSlider();
   productShowVariants();
   productShowAtcBtn();
+  productSorting();
   productFiltersModal();
-  productFilter();
+  productFilters();
   cart();
 
   initMapbox();

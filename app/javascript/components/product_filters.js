@@ -1,28 +1,39 @@
-const productFilter = () => {
+// This module will refresh products on product grid regarding what product filter and product order is selected
+const productFilters = () => {
   const sidebar = document.getElementById('sidebar');
 
   if (sidebar) {
-    const sidebarProductSearches = document.querySelectorAll('#sidebar_products_search');
-    sidebarProductSearches.forEach((sidebarProductSearch) => {
-      const form = sidebarProductSearch;
-      sidebarProductSearch.querySelectorAll('input').forEach((input) => {
-        // Fetch new products each time a product filter is selected
-        input.addEventListener('change', (event) => {
-          const formData = new FormData(form);
-          const queryString = new URLSearchParams(formData).toString();
+    // Get product filter form
+    const productsFiltersForm = document.querySelector('#sidebar_products_search');
+    // Get product sort form
+    const productsSortingForm = document.querySelector('#products-sorting-form');
 
-          fetch(`/t/filter_products?${queryString}`, { headers: { 'accept': 'application/json' } })
-              .then((response) => response.json())
-              .then(({ products, noProductsMessage }) => {
-                products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
-              // TODO: update url params (without reloading the page), so that if user refresh or share link it won't loose filters
-              });
-
+    // Fetch new products each time a product filter or a product sort is selected
+    [productsSortingForm, productsFiltersForm].forEach((form) => {
+      Array.from(form.elements).forEach((formElement) => {
+        formElement.addEventListener('change', (event) => {
+          fetchProductsfromFormData();
           // If on mobile, filters are in a modal, and we need to close that modal once filters are applied
           $('#productFiltersModal').modal('hide');
         });
       });
     });
+
+    const fetchProductsfromFormData = () => {
+      // Build query string from product filter form data and product sort form data
+      const productsSortingFormData = new FormData(productsSortingForm);
+      const productFiltersFormData = new FormData(productsFiltersForm);
+      const queryString = new URLSearchParams(productFiltersFormData);
+      queryString.append('sort_products', productsSortingFormData.get('sort_products'));
+
+      // Fetch new products from those form data
+      fetch(`/t/filter_products?${queryString.toString()}`, { headers: { 'accept': 'application/json' } })
+          .then((response) => response.json())
+          .then(({ products, noProductsMessage }) => {
+            products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
+            // TODO: update url params (without reloading the page), so that if user refresh or share link it won't loose filters
+          });
+    };
 
     // To display if no products are found
     const displayNoProductsMessage = (noProductMessage) => {
@@ -81,4 +92,4 @@ const productFilter = () => {
   };
 };
 
-export { productFilter };
+export { productFilters };
