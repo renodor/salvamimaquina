@@ -36,6 +36,7 @@ es-MX:
       other: 'Productos'
     buy: 'Comprar'
     sort_products: 'Ordenar productos'
+    sort: 'Ordenar'
     ascend_by_price: 'Precio más bajo'
     descend_by_price: 'Precio más alto'
     newest: 'Más nuevo'

@@ -5,24 +5,29 @@ const productFilters = () => {
   if (sidebar) {
     // Get product filter form
     const productsFiltersForm = document.querySelector('#sidebar_products_search');
-    // Get product sort form
-    const productsSortingForm = document.querySelector('#products-sorting-form');
+    // Get products sorting forms
+    const productsSortingFormDesktop = document.querySelector('.products-sorting-form.desktop');
+    const productsSortingFormMobile = document.querySelector('.products-sorting-form.mobile');
 
     // Fetch new products each time a product filter or a product sort is selected
-    [productsSortingForm, productsFiltersForm].forEach((form) => {
+    [productsFiltersForm, productsSortingFormDesktop, productsSortingFormMobile].forEach((form) => {
       Array.from(form.elements).forEach((formElement) => {
         formElement.addEventListener('change', (event) => {
           fetchProductsfromFormData();
           // If on mobile, filters are in a modal, and we need to close that modal once filters are applied
-          $('#productFiltersModal').modal('hide');
+          if (window.innerWidth <= 767) {
+            $('#productFiltersModal').modal('hide');
+          }
         });
       });
     });
 
     const fetchProductsfromFormData = () => {
-      // Build query string from product filter form data and product sort form data
-      const productsSortingFormData = new FormData(productsSortingForm);
+      // If on mobile get products sorting form mobile data, otherwise get products sorting form desktop data
+      const productsSortingFormData = new FormData(window.innerWidth <= 767 ? productsSortingFormMobile : productsSortingFormDesktop);
+      // Get product filter form data
       const productFiltersFormData = new FormData(productsFiltersForm);
+      // Build query string from product filter form data and product sort form data
       const queryString = new URLSearchParams(productFiltersFormData);
       queryString.append('sort_products', productsSortingFormData.get('sort_products'));
 

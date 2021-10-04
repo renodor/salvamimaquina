@@ -1,7 +1,7 @@
 <% max_level = 2 %>
 <nav id="brands" class="sidebar-item " data-hook>
   <h6><%= t("spree.brands") %></h6>
-  <div class="accordion accordion-flush" id="taxonomyAccordion">
+  <div class="accordion accordion-flush" id="brandsAccordion">
     <% @brands.each_with_index do |brand, i| %>
       <div class="accordion-item">
         <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
@@ -9,10 +9,10 @@
             <%= brand.name.capitalize %>
           </button>
         </h2>
-        <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == brand ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#taxonomyAccordion">
+        <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == brand ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#brandsAccordion">
           <div class="accordion-body">
             <% brand.children.each do |category| %>
-              <%= link_to branded_name(category.name), spree.nested_taxons_path(category), class: "sub-taxon #{@taxon == category ? 'active' : ''}" %>
+              <%= link_to branded_name(category.name), spree.nested_taxons_path(category), class: "accordion-element #{@taxon == category ? 'active' : ''}" %>
             <% end %>
           </div>
         </div>
