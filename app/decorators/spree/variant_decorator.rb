@@ -37,7 +37,13 @@ module Spree
     # Simplify price method to avoid using Spree::DefaultPrice module
     # (We don't need it has our store only has 1 currency, and variants can only have one price)
     def price
-      prices.take.price
+      prices&.take&.price || initialize_price
+    end
+
+    def initialize_price
+      price = Spree::Price.new(Spree::Config.default_pricing_options.desired_attributes)
+      price.variant_id = id
+      nil
     end
 
     # Redecorate Solidus Sales Price gem methods (https://github.com/solidusio-contrib/solidus_sale_prices)
