@@ -27,7 +27,7 @@ module PaymentGateway
               <CardNumber>#{card_info[:card_number]}</CardNumber>
               <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://#{TEST_MODE ? '78f52a6629e1.ngrok.io' : 'salvamimaquina.herokuapp.com'}/shop/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://#{TEST_MODE ? '78f52a6629e1.ngrok.io' : 'salvamimaquina.herokuapp.com'}/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>
