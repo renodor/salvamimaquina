@@ -3,27 +3,27 @@
 module Spree
   module ProductFiltersHelper
     COLORS = {
-      red: '#BB0B2D',
-      blue: '#41A9E1',
+      rojo: '#BB0B2D',
+      azul: '#41A9E1',
       silver: '#E9E9E9',
-      black: '#000000',
-      white: '#FCFBFE',
-      yellow: '#F6D04A',
-      orange: '#ff9c23',
-      green: '#98E164',
-      purple: '#d99fea',
-      pink: '#EFC4C0',
-      gray: '#adadad',
-      brown: '#683E2C',
+      negro: '#000000',
+      blanco: '#FCFBFE',
+      amarillo: '#F6D04A',
+      naranja: '#ff9c23',
+      verde: '#98E164',
+      morado: '#d99fea',
+      rosado: '#EFC4C0',
+      gris: '#adadad',
+      marron: '#683E2C',
       gold: '#fff190',
       beige: '#DBC5A4',
-      turquoise: '#5FDAE2',
+      turquesa: '#5FDAE2',
       coral: '#F65F45',
       mallow: '#D3CFDC',
       space_gray: '#4e575a',
-      graphite: '#323535',
-      night_green: '#366644',
-      matt_black: '#3b3b3b'
+      grafito: '#323535',
+      verde_noche: '#366644',
+      negro_mate: '#3b3b3b'
     }.freeze
 
     def build_price_range_slider_values
@@ -67,7 +67,7 @@ module Spree
     end
 
     def color_code(color)
-      COLORS[color.to_sym]
+      COLORS[color.downcase.tr(' ', '_').to_sym]
     end
   end
 end

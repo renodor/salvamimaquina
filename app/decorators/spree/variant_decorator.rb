@@ -16,19 +16,13 @@ module Spree
     # Modify Spree::Variant#options_text to be able to:
     # - show or not option type
     # - show or not model
-    # - translate option type and option value if possible
-    # - use branded_name for option_value
+    # - translate option type
     def options_text(show_option_type: false, show_model: false)
       option_values.map do |option_value|
         option_type = option_value.option_type
         next if option_type.name == 'model' && show_model == false
 
-        value = if option_type.name == 'color'
-                  I18n.t("spree.colors.#{option_value.name}", default: nil) || option_value.presentation.capitalize
-                else
-                  ApplicationController.helpers.branded_name(option_value.presentation) # TODO: not good to use helper in module like that...
-                end
-
+        value = option_value.presentation.capitalize
         type = I18n.t("spree.#{option_type.name}", count: 1, default: nil) || option_type.presentation.capitalize
         show_option_type ? "#{type}: #{value}" : value
       end.compact.join(', ')

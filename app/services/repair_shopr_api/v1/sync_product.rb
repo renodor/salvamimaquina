@@ -158,8 +158,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         if %w[parent_product brand weight height width depth highlight].include?(attribute_type)
           attributes[attribute_type] = attribute_value
         else
-          # If the attribute_type is a color we try to translate it from Spanish to English, to be sure that we only have option values in english
-          attributes['variant_options'][attribute_type] = I18n.t('spree.colors', locale: 'es-MX').key(attribute_value.capitalize)&.to_s || attribute_value
+          attributes['variant_options'][attribute_type] = attribute_value
         end
       end
     end
