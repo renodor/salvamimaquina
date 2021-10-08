@@ -34,7 +34,7 @@
           <% end %>
           <%#= render('spree/shared/image', image: product.gallery.images.first, size: :product, itemprop: "image") %>
         </div>
-        <div class="product-name"><%= branded_name(product.name) %></div>
+        <div class="product-name"><%= product.name %></div>
         <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
           <% cheapest_variant_is_on_sale = cheapest_variant.on_sale? %>
           <% if cheapest_variant_is_on_sale %>

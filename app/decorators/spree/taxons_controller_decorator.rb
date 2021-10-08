@@ -41,7 +41,6 @@ module Spree
 
     def products_with_aditional_data
       @products.map do |product|
-        product.name = helpers.branded_name(product.name)
         cheapest_variant = product.cheapest_variant
         product_image_key = cheapest_variant.images.first&.attachment&.key
         aditional_data = {

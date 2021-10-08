@@ -19,7 +19,7 @@
             <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == category ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#categoriesAccordion">
               <div class="accordion-body">
                 <% category.children.each do |sub_category| %>
-                  <%= link_to branded_name(sub_category.name), spree.nested_taxons_path(sub_category), class: "accordion-element #{@taxon == sub_category ? 'active' : ''}" %>
+                  <%= link_to sub_category.name, spree.nested_taxons_path(sub_category), class: "accordion-element #{@taxon == sub_category ? 'active' : ''}" %>
                 <% end %>
               </div>
             </div>

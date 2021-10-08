@@ -4,7 +4,7 @@
     <%= cl_image_tag variant.images.first&.attachment&.key || variant.product.gallery.images.first&.attachment&.key, height: 150, crop: :fit %>
   </div>
   <div class="line-item-description" data-hook="cart_item_description">
-    <h4><%= link_to branded_name(line_item.name), product_path(variant.product) %></h4>
+    <h4><%= link_to line_item.name, product_path(variant.product) %></h4>
     <% if variant.option_values.any? %>
       <p><%= variant.options_text %></p>
     <% end %>

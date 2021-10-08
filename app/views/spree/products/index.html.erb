@@ -18,7 +18,7 @@
   <div id="categories-grid">
     <% @categories_taxon.children.each do |category| %>
       <div class="position-relative category">
-        <p><%= branded_name(category.name) %></p>
+        <p><%= category.name %></p>
         <%= cl_image_tag(category.icon.try(:key), width: 500, crop: :fill) %>
         <%= link_to '', spree.nested_taxons_path(category), class: 'full-absolute' %>
       </div>
