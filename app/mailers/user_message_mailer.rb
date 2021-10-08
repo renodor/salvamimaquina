@@ -3,6 +3,6 @@
 class UserMessageMailer < ApplicationMailer
   def contact_message(contact)
     @contact = contact
-    mail to: 'marketing@salvamimaquina.com', subject: 'New Message from salvamimaquina.com'
+    mail to: 'administracion@salvamimaquina.com', subject: 'New Message from salvamimaquina.com'
   end
 end
