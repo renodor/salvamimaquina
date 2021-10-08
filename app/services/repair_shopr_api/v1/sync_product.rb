@@ -135,13 +135,13 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     def update_product_classifications(product_category_name)
       @product.classifications.destroy_all # Easier to destroy and recreate all classifications... TODO: Maybe a way to improve that
 
-      # Currently the only Taxonomy we have is Brands (So all products are first of all, classified by brand)
+      # Currently the only Taxonomy we have is Categories (So all products are first of all, classified by category)
       # If the product belong to a specific product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
-      # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Brands" on Solidus
-      brands_taxonomy = Spree::Taxonomy.find_by!(name: 'Brands') # TODO: memoize "Brands" taxonomy id
-      brands_parent_taxon = brands_taxonomy.taxons.find_by(parent_id: nil)
-      taxon_name = product_category_name == self::RS_ROOT_CATEGORY_NAME ? brands_parent_taxon.name : product_category_name.split(';').last
-      taxon = brands_taxonomy.taxons.find_or_create_by!(name: taxon_name) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
+      # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
+      categories_taxonomy = Spree::Taxonomy.find_by!(name: 'Categories') # TODO: memoize "Categories" taxonomy id
+      categories_parent_taxon = categories_taxonomy.taxons.find_by(parent_id: nil)
+      taxon_name = product_category_name == self::RS_ROOT_CATEGORY_NAME ? categories_parent_taxon.name : product_category_name.split(';').last
+      taxon = categories_taxonomy.taxons.find_or_create_by!(name: taxon_name) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
       Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
     end
 

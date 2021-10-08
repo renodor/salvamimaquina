@@ -43,7 +43,7 @@ const productFilters = () => {
     // To display if no products are found
     const displayNoProductsMessage = (noProductMessage) => {
       document.getElementById('products').innerHTML = `
-        <div class="no-products-found" data-hook="products_search_results_heading_no_results_found">
+        <div data-hook="products_search_results_heading_no_results_found">
           ${noProductMessage}
         </div>
       `;

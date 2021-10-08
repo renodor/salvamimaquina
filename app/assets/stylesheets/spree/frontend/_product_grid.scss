@@ -52,10 +52,6 @@ ul#products {
   }
 }
 
-.no-products-found {
-  padding-left: 20px;
-}
-
 @media ($max-l) {
   ul#products {
     grid-template-columns: 1fr 1fr;
