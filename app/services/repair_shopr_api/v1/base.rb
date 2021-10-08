@@ -68,7 +68,7 @@ class RepairShoprApi::V1::Base
     end
 
     def get_customer_by_email(email)
-      request(http_method: :get, endpoint: "customers?email=#{email}")['customers'].first
+      request(http_method: :get, endpoint: "customers?include_disabled=true&email=#{email}")['customers'].first
     end
 
     def create_customer(customer_info)

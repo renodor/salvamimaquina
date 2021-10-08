@@ -29,7 +29,8 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         city: "#{ship_address.district.name} - #{ship_address.city}",
         state: ship_address.state.name,
         phone: ship_address.phone,
-        notes: ship_address.google_maps_link
+        notes: ship_address.google_maps_link,
+        disabled: false
       }
 
       if (repair_shopr_customer = get_customer_by_email(@order.email))
