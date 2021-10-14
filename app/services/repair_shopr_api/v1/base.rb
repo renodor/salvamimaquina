@@ -83,6 +83,10 @@ class RepairShoprApi::V1::Base
       request(http_method: :post, endpoint: 'invoices', params: invoice)
     end
 
+    def post_line_items(invoice_id, line_item)
+      request(http_method: :post, endpoint: "invoices/#{invoice_id}/line_items", params: line_item)
+    end
+
     def post_payments(payment)
       request(http_method: :post, endpoint: 'payments', params: payment)
     end

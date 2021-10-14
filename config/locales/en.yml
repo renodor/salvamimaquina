@@ -59,6 +59,7 @@ en:
     product:
       one: 'Product'
       other: 'Products'
+    buy: 'Buy'
     sort_products: 'Sort products'
     ascend_by_price: 'Lowest prices'
     descend_by_price: 'Highest prices'
@@ -67,6 +68,7 @@ en:
     best_seller: 'Best seller'
     on_sale_products: 'On sale products'
     district_based: District Based
+    not_enough_stock: 'Not enough stock'
     admin:
       tab:
         sync_repair_shopr: Sync RepairShopr

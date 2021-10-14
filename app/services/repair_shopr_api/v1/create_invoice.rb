@@ -14,6 +14,19 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       invoice = post_invoices(repair_shopr_invoice)['invoice']
       # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
 
+      # RepairShopr will take line item prices with ITBMS and calculate the price without taxes from that and then re-calculate the price with ITBMS...
+      # During this calcul some cents could be added or removed from the order sub-total (because of roundup...)
+      # So we could end up with a RepairShopr invoice with a different total than the Solidus order total...
+      # In that case we need to add a new "adjustment" line items to RepairShopr invoice to equalize both totals
+      total_order = order.total
+      total_invoice = invoice['total'].to_d
+      if total_order != total_invoice
+        absolute_difference = (total_order - total_invoice).abs
+        invoice_adjustment = total_order > total_invoice ? absolute_difference : -absolute_difference
+        post_line_items(invoice['id'], build_repair_shopr_adjustment_line_items(invoice_adjustment))
+        invoice['total'] = (total_invoice + invoice_adjustment).to_s
+      end
+
       RepairShoprApi::V1::CreatePayment.call(invoice)
     end
 
@@ -65,7 +78,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
           name: line_item.variant.description,
           product_id: line_item.variant.repair_shopr_id,
           quantity: line_item.quantity,
-          price: line_item.price,
+          price: line_item.variant.price * 1.07,
           taxable: true,
           upc_code: line_item.variant.sku,
           tax_rate_id: line_item.tax_category.repair_shopr_id,
@@ -77,10 +90,20 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
     def build_repair_shopr_shipping
       {
         item: 'Shipping',
-        name: 'Shipping Cost',
+        name: 'Costo de entrega',
         quantity: 1,
         taxable: false,
         price: @order.shipment_total
+      }
+    end
+
+    def build_repair_shopr_adjustment_line_items(adjustment)
+      {
+        item: 'Adjustment',
+        name: 'Ajuste calculo ITBMS',
+        quantity: 1,
+        taxable: false,
+        price: adjustment
       }
     end
 
