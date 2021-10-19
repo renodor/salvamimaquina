@@ -1,0 +1,37 @@
+<% admin_breadcrumb('Banners') %>
+
+<% content_for :page_actions do %>
+  <% if can? :create, Banner %>
+    <li>
+      <%= link_to 'New Banner', spree.new_admin_banner_path, class: 'btn btn-primary' %>
+    </li>
+  <% end %>
+<% end %>
+
+<table>
+   <thead>
+      <tr>
+         <th>Location</th>
+         <th>Photo</th>
+         <th></th>
+      </tr>
+   </thead>
+   <tbody>
+    <% @banners.each do |banner| %>
+      <tr>
+        <td><%= banner.location.capitalize %></td>
+        <td>
+          <%= banner.photo.key ? link_to('Photo link', cl_image_path(banner.photo.key), target: '_blank') : '' %>
+        </td>
+        <td class="actions">
+          <% if can?(:edit, banner) %>
+            <%= link_to_edit banner, no_text: true, url: edit_admin_banner_url(banner) %>
+          <% end %>
+          <% if can?(:destroy, banner) %>
+            <%= link_to "delete", admin_banner_url(banner), method: :delete %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+   </tbody>
+</table>

@@ -15,8 +15,9 @@ Rails.application.routes.draw do
       get '/sync/product_categories', to: 'syncs#sync_product_categories'
       get '/sync/products', to: 'syncs#sync_products'
       post '/sync/product', to: 'syncs#sync_product'
-      resources :reparation_categories, except: [:show]
+      resources :reparation_categories, except: :show
       resources :reparation_requests, only: %i[index show]
+      resources :banners, except: :show
     end
 
     post '/checkout/three_d_secure_response', to: 'checkout#three_d_secure_response'

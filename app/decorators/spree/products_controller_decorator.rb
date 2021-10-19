@@ -5,6 +5,7 @@ module Spree
     def index
       @taxonomies = Spree::Taxonomy.includes(root: :children)
       @categories_taxon = Spree::Taxon.includes(children: :icon_attachment).find_by(name: 'Categories')
+      @banner = Banner.find_by(location: :shop)
     end
 
     def show

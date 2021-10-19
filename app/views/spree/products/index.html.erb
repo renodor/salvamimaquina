@@ -13,6 +13,9 @@
 <% else %> 
 <%
 =end%>
+<div class="banner">
+  <%= cl_image_tag(@banner.photo.key, width: 1296, height: 200) %>
+</div>
 <div id="categories">
   <h2><%= @categories_taxon.name.capitalize %></h2>
   <div id="categories-grid">
