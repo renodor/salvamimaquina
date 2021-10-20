@@ -15,11 +15,9 @@ module Spree
           .where(option_types: { id: option_type_id }, option_values: { id: option_value_id })
       end
 
-      # Modify the solidus in_taxon scope to retrieve ONLY product from the given taxon and not from its descendent taxons as well
-      # Our store currently have a structure with only 1 taxon level, so it was creating unnecessary complexity and errors on some complexe SQL queries
-      # !!!! This will need to be modified if we want to have a more complexe taxon structure with more than 1 level !!!!
+      # Modify the solidus in_taxon scope to remove ordering and thus greatly simplify its SQL
       base.add_search_scope :in_taxon do |taxon|
-        joins(:taxons).where('spree_taxons' => { id: taxon.id })
+        joins(:taxons).where('spree_taxons' => { id: taxon.self_and_descendants.pluck(:id) })
       end
 
       # TODO: simplify that using active_sale_prices scope? or recreating an intermediate model like "DefaultPrice" which always return the current price of a product/variant

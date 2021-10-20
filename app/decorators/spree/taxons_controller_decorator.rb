@@ -45,7 +45,7 @@ module Spree
         product_image_key = cheapest_variant.images.first&.attachment&.key
         aditional_data = {
           url: spree.product_path(product, taxon_id: @taxon.try(:id)),
-          image_url: product_image_key ? "https://res-5.cloudinary.com/detkhu57i/image/upload/c_fill,w_540/#{product_image_key}" : nil, # TODO: don't harcode this link,
+          image_url: product_image_key ? ActionController::Base.helpers.cl_image_path(product_image_key) : nil,
           cheapest_variant_onsale: cheapest_variant.on_sale?,
           discount_price: cheapest_variant.price,
           discount_price_html_tag: ActionController::Base.helpers.number_to_currency(cheapest_variant.price),

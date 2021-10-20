@@ -6,17 +6,13 @@
       <div class="accordion-item">
         <% if category.children.present? %>
             <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
-              <button
-                class="accordion-button with-children <%= @taxon.parent == category ? '' : 'collapsed' %>" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="<%= "#flush-collapse#{i}" %>"
-                aria-expanded="false"
-                aria-controls="<%= "flush-collapse#{i}" %>"
-              >
-                <%= category.name.capitalize %>
-              </button>
+              <%=
+                link_to category.name.capitalize,
+                spree.nested_taxons_path(category),
+                class: "accordion-button with-children #{@taxon.parent == category || @taxon == category ? '' : 'collapsed'}"
+              %>
             </h2>
-            <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == category ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#categoriesAccordion">
+            <div id="<%= "flush-collapse#{i}" %>" class="accordion-collapse collapse <%= @taxon.parent == category || @taxon == category ? 'show' : '' %>" aria-labelledby="<%= "flush-heading#{i}" %>" data-bs-parent="#categoriesAccordion">
               <div class="accordion-body">
                 <% category.children.each do |sub_category| %>
                   <%= link_to sub_category.name, spree.nested_taxons_path(sub_category), class: "accordion-element #{@taxon == sub_category ? 'active' : ''}" %>
