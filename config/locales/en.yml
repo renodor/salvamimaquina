@@ -75,6 +75,7 @@ en:
         reparations: 'Reparations'
         reparation_categories: 'Reparation Categories'
         reparation_requests: 'Reparation Requests'
+        banners: 'Banners'
     different_billing_address: 'If you need a different billing address please contact us;'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'

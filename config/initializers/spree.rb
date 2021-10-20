@@ -127,6 +127,12 @@ Spree::Backend::Config.configure do |config|
       'refresh',
       condition: -> { current_spree_user&.admin? },
       url: '/admin/sync'
+    ),
+    config.class::MenuItem.new(
+      [:banners],
+      'picture-o',
+      condition: -> { current_spree_user&.admin? },
+      url: '/admin/banners'
     )
   ]
 end
