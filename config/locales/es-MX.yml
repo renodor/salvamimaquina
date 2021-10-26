@@ -161,6 +161,14 @@ es-MX:
       feature_three_text: 'Se le notificará automáticamente cuando su equipo esté listo. Se beneficiará de una garantía de hasta 1 año.'
     shop_name: 'Tienda Salva Mi Maquina'
     best_at_best_price: 'Lo mejor de Apple, ¡al mejor precio!'
+  footer:
+    social: 'Redes'
+    shops: 'Tiendas'
+    ecommerce: 'Ecommerce'
+    locations: 'Ubicaciones'
+    open_times: 'Horarios de aperturas'
+    shipping_prices_zones_and_times: 'Zonas precios y tiempos de entrega'
+    payment_methods: 'Métodos de pago'
   simple_form:
     options:
       reparation_request:

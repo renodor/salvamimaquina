@@ -1,6 +1,25 @@
-<footer id="footer" data-hook>
-  <div id="footer-left" class="columns alpha eight" data-hook>
-    <p><%#= t 'spree.powered_by' %></p>
+<footer id="footer">
+  <div id="footer-content" class="container">
+    <div>
+      <h5><%= t('footer.social') %></h5>
+      <div id="footer-social-grid">
+        <%= svg 'facebook' %>
+        <%= svg 'instagram' %>
+        <%= svg 'whatsapp' %>
+        <%= svg 'twitter' %>
+      </div>
+    </div>
+    <div>
+      <h5><%= t('footer.shops') %></h5>
+      <p><%= t('footer.locations') %></p>
+      <p><%= t('footer.open_times') %></p>
+      <p><%= t('contact_us') %></p>
+    </div>
+    <div>
+      <h5><%= t('footer.ecommerce') %></h5>
+      <p><%= t('footer.shipping_prices_zones_and_times') %></p>
+      <p><%= t('footer.payment_methods') %></p>
+    </div>
   </div>
-  <div id="footer-right" class="columns omega eight" data-hook></div>
+  <div id="footer-right" class="columns omega eight"></div>
 </footer>

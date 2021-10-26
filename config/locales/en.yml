@@ -102,6 +102,13 @@ en:
       feature_three_text: 'We will notify you automatically when your device is ready. We offer up until 1 year warranty.'
     shop_name: 'Salva Mi Maquina shop'
     best_at_best_price: 'Best of Apple products, at best prices!'
+  footer:
+    social: 'Social Media'
+    shops: 'Shops'
+    ecommerce: 'Ecommerce'
+    locations: 'Locations'
+    open_times: 'Open times'
+    shipping_prices_zones_and_times: 'Shipping prices, zones and times'
   simple_form:
     options:
       reparation_request:
