@@ -178,7 +178,7 @@ namespace :setup_prod_db do
     }
 
     3.times do |n|
-      zone = Spree::Zone.find_or_create_by!(name: "Panama Zone #{n + 1}")
+      zone = Spree::Zone.find_or_create_by!(name: "Panama Zone #{n + 1}", admin_name: "panama_zone_#{n + 1}")
       districts = Spree::District.where(name: district_name_by_zones["zone#{n + 1}".to_sym])
       districts.each do |district|
         Spree::ZoneMember.find_or_create_by!(zoneable_type: 'Spree::District', zoneable_id: district.id, zone_id: zone.id)

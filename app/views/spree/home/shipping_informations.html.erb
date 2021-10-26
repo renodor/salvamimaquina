@@ -1,0 +1,26 @@
+<div id="shipping-informations">
+  <div class="shipping-informations-block">
+    <h3><%= t('spree.shipping_prices') %></h3>
+    <div id="shipping-methods">
+      <% @shipping_methods.each do |shipping_method| %>
+        <div class="shipping-method">
+          <p><b><%= t("spree.shipping_methods.#{shipping_method.admin_name}") %></b></p>
+          <p class="shipping-price"><%= number_to_currency(shipping_method.calculator.preferences[:amount]) %></p>
+          <p><span class="district"><%= t('spree.district', count: 2) %>:</span> <%= shipping_method.zones.first.members.map(&:name).join(', ') %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="shipping-informations-block">
+    <h3><%= t('spree.shipping_times') %></h3>
+    <span><%= t('spree.between_1_and_3_days') %></span>
+  </div>
+  <div class="shipping-informations-block" id="pickup-in-stores">
+    <h3><%= t('spree.pickup_in_stores') %> (gratis)</h3>
+    <ul>
+      <% @stores.each do |store| %>
+        <li><%= t('spree.shipping_methods.pickup_in_store', store_name: store.admin_name) %>: <%= link_to t('spree.address').downcase, '#' %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -8,8 +8,10 @@ footer#footer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 35px;
-    div {
+    grid-gap: 35px;
+    .footer-block {
       border-right: 1px solid $light-gray;
+      padding-bottom: 35px;
       &:last-child {
         border-right: 1px solid transparent;
       }
@@ -20,6 +22,15 @@ footer#footer {
       p {
         margin-bottom: 0;
       }
+      a {
+        color: $dark-gray;
+        opacity: 0.8;
+        text-decoration: none;
+        @include default-transition(opacity);
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
     #footer-social-grid {
       display: flex;
@@ -27,6 +38,19 @@ footer#footer {
       svg {
         width: 25px;
         height: 25px;
+      }
+    }
+  }
+}
+
+@media ($max-m) {
+  footer#footer #footer-content {
+    grid-template-columns: 1fr;
+    .footer-block {
+      border-right: none;
+      border-bottom: 1px solid $light-gray;
+      &:last-child {
+        border-bottom: 1px solid transparent;
       }
     }
   }

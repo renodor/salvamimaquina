@@ -1,25 +1,24 @@
 <footer id="footer">
   <div id="footer-content" class="container">
-    <div>
+    <div class="footer-block">
       <h5><%= t('footer.social') %></h5>
       <div id="footer-social-grid">
-        <%= svg 'facebook' %>
-        <%= svg 'instagram' %>
-        <%= svg 'whatsapp' %>
-        <%= svg 'twitter' %>
+        <%= link_to svg('facebook'), '#', target: '_blank' %>
+        <%= link_to svg('instagram'), '#', target: '_blank' %>
+        <%= link_to svg('whatsapp'), '#', target: '_blank' %>
+        <%= link_to svg('twitter'), '#', target: '_blank' %>
       </div>
     </div>
-    <div>
+    <div class="footer-block">
       <h5><%= t('footer.shops') %></h5>
-      <p><%= t('footer.locations') %></p>
-      <p><%= t('footer.open_times') %></p>
-      <p><%= t('contact_us') %></p>
+      <p><%= link_to t('footer.locations'), '#' %></p>
+      <p><%= link_to t('footer.open_times'), '#' %></p>
+      <p><%= link_to t('contact_us'), contact_path %></p>
     </div>
-    <div>
+    <div class="footer-block">
       <h5><%= t('footer.ecommerce') %></h5>
-      <p><%= t('footer.shipping_prices_zones_and_times') %></p>
-      <p><%= t('footer.payment_methods') %></p>
+      <p><%= link_to t('footer.shipping_prices_zones_and_times'), shipping_informations_path %></p>
+      <p><%= link_to t('footer.payment_methods'), '#' %></p>
     </div>
   </div>
-  <div id="footer-right" class="columns omega eight"></div>
 </footer>

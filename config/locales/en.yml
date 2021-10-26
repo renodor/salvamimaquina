@@ -67,6 +67,9 @@ en:
     oldest: 'Oldest'
     best_seller: 'Best seller'
     on_sale_products: 'On sale products'
+    district:
+      one: 'District'
+      other: 'Districts'
     district_based: District Based
     not_enough_stock: 'Not enough stock'
     admin:
@@ -83,6 +86,13 @@ en:
     shipping_methods:
       pickup_in_store: "Pick-up in %{store_name} store"
       delivery_zone: "Delivery in Panama City, Zone %{zone_number}"
+      panama_zone_1: "Panama City zone 1"
+      panama_zone_2: "Panama City zone 2"
+      panama_zone_3: "Panama City zone 3"
+    shipping_prices: 'Shipping prices'
+    shipping_times: 'Shipping times'
+    pickup_in_stores: 'Pickup order in stores'
+    between_1_and_3_days: 'Between one and three days.'
     transaction_secured: "All transactions are secured"
     cvv_explaination: "3-digit security code usually found on the back of your card. American Express cards have a 4-digit code located on the front."
     thank_you_for_your_order: "Thank you for your order!"

@@ -34,6 +34,11 @@ module Spree
       end
     end
 
+    def shipping_informations
+      @shipping_methods = Spree::ShippingMethod.includes(:calculator, zones: [zone_members: :zoneable]).where(service_level: 'delivery').order(:code)
+      @stores = Spree::ShippingMethod.where(service_level: nil)
+    end
+
     private
 
     def user_message_params

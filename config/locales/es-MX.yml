@@ -43,7 +43,9 @@ es-MX:
     oldest: 'Más viejo'
     best_seller: 'Más vendido'
     on_sale_products: 'Productos rebajados'
-    district: 'Corregimiento'
+    district:
+      one: 'Corregimiento'
+      other: 'Corregimientos'
     items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'
     billing_address: 'Dirección'
     apply_code: 'Aplicar código'
@@ -97,6 +99,13 @@ es-MX:
     shipping_methods:
       pickup_in_store: "Recoger en la tienda de %{store_name}"
       delivery_zone: "Entrega a domicilio, en Ciudad de Panamá Zona %{zone_number}"
+      panama_zone_1: "Ciudad de Panamá zona 1"
+      panama_zone_2: "Ciudad de Panamá zona 2"
+      panama_zone_3: "Ciudad de Panamá zona 3"
+    shipping_prices: 'Precios de entrega a domicilio'
+    shipping_times: 'Tiempos de entrega'
+    pickup_in_stores: 'Recoger pedido en tiendas'
+    between_1_and_3_days: 'Entre uno y tres días.'
     name_on_card: "Nombre en la tarjeta"
     card_code: "Código CVV de la tarjeta"
     transaction_secured: "Todas las transacciones están aseguradas"
@@ -167,7 +176,7 @@ es-MX:
     ecommerce: 'Ecommerce'
     locations: 'Ubicaciones'
     open_times: 'Horarios de aperturas'
-    shipping_prices_zones_and_times: 'Zonas precios y tiempos de entrega'
+    shipping_prices_zones_and_times: 'Zonas, precios y tiempos de entrega'
     payment_methods: 'Métodos de pago'
   simple_form:
     options:
