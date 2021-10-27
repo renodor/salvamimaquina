@@ -7,7 +7,7 @@
         <% if category.children.present? %>
             <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
               <%=
-                link_to category.name.capitalize,
+                link_to category.name,
                 spree.nested_taxons_path(category),
                 class: "accordion-button with-children #{@taxon.parent == category || @taxon == category ? '' : 'collapsed'}"
               %>
@@ -21,7 +21,7 @@
             </div>
         <% else %>
           <h2 class="accordion-header" id="<%= "flush-heading#{i}" %>">
-            <%= link_to category.name.capitalize, spree.nested_taxons_path(category), class: 'accordion-button' %>
+            <%= link_to category.name, spree.nested_taxons_path(category), class: 'accordion-button' %>
           </h2>
         <% end %>
       </div>
