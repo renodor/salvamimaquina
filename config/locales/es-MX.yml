@@ -99,13 +99,13 @@ es-MX:
     shipping_methods:
       pickup_in_store: "Recoger en la tienda de %{store_name}"
       delivery_zone: "Entrega a domicilio, en Ciudad de Panamá Zona %{zone_number}"
-      panama_zone_1: "Ciudad de Panamá zona 1"
-      panama_zone_2: "Ciudad de Panamá zona 2"
-      panama_zone_3: "Ciudad de Panamá zona 3"
+      panama_zone_1: "Ciudad de Panamá Zona 1"
+      panama_zone_2: "Ciudad de Panamá Zona 2"
+      panama_zone_3: "Ciudad de Panamá Zona 3"
     shipping_prices: 'Precios de entrega a domicilio'
     shipping_times: 'Tiempos de entrega'
     pickup_in_stores: 'Recoger pedido en tiendas'
-    between_1_and_3_days: 'Entre uno y tres días.'
+    between_1_and_3_days: 'De 1 a 3 días habiles.'
     name_on_card: "Nombre en la tarjeta"
     card_code: "Código CVV de la tarjeta"
     transaction_secured: "Todas las transacciones están aseguradas"

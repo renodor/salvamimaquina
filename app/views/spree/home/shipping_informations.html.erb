@@ -6,7 +6,7 @@
         <div class="shipping-method">
           <p><b><%= t("spree.shipping_methods.#{shipping_method.admin_name}") %></b></p>
           <p class="shipping-price"><%= number_to_currency(shipping_method.calculator.preferences[:amount]) %></p>
-          <p><span class="district"><%= t('spree.district', count: 2) %>:</span> <%= shipping_method.zones.first.members.map(&:name).join(', ') %></p>
+          <p><span class="district"><%= t('spree.district', count: 2) %>:</span> <%= shipping_method.zones.first.members.map(&:name).sort.join(', ') %></p>
         </div>
       <% end %>
     </div>

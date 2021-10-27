@@ -118,7 +118,7 @@ namespace :setup_prod_db do
         latitude: 9.008878
       },
       {
-        name: 'Rio Abajo',
+        name: 'Río Abajo',
         longitude: -79.491915,
         latitude: 9.024213
       },
@@ -173,17 +173,20 @@ namespace :setup_prod_db do
 
     district_name_by_zones = {
       zone1: ['Bella Vista', 'Calidonia', 'Curundú', 'San Francisco'],
-      zone2: ['Ancón', 'Betania', 'Costa Del Este', 'El Chorrillo', 'Parque Lefevre', 'Pueblo Nuevo', 'Rio Abajo', 'San Felipe', 'Santa Ana'],
+      zone2: ['Ancón', 'Betania', 'Costa Del Este', 'El Chorrillo', 'Parque Lefevre', 'Pueblo Nuevo', 'Río Abajo', 'San Felipe', 'Santa Ana'],
       zone3: ['24 de Diciembre', 'Don Bosco', 'Juan Diaz', 'Tocumen']
     }
 
+    zone_member_ids = []
     3.times do |n|
       zone = Spree::Zone.find_or_create_by!(name: "Panama Zone #{n + 1}")
       districts = Spree::District.where(name: district_name_by_zones["zone#{n + 1}".to_sym])
       districts.each do |district|
-        Spree::ZoneMember.find_or_create_by!(zoneable_type: 'Spree::District', zoneable_id: district.id, zone_id: zone.id)
+        zone_member_ids << Spree::ZoneMember.find_or_create_by!(zoneable_type: 'Spree::District', zoneable_id: district.id, zone_id: zone.id).id
       end
     end
+
+    Spree::ZoneMember.where(zoneable_type: 'Spree::District').where.not(id: zone_member_ids).destroy_all
   end
 
   task :create_tax_category do

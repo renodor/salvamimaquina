@@ -86,9 +86,9 @@ en:
     shipping_methods:
       pickup_in_store: "Pick-up in %{store_name} store"
       delivery_zone: "Delivery in Panama City, Zone %{zone_number}"
-      panama_zone_1: "Panama City zone 1"
-      panama_zone_2: "Panama City zone 2"
-      panama_zone_3: "Panama City zone 3"
+      panama_zone_1: "Panama City Zone 1"
+      panama_zone_2: "Panama City Zone 2"
+      panama_zone_3: "Panama City Zone 3"
     shipping_prices: 'Shipping prices'
     shipping_times: 'Shipping times'
     pickup_in_stores: 'Pickup order in stores'
