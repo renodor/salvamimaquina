@@ -30,8 +30,8 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  home: 'Inicio'
-  shop: 'Tienda'
+  home: 'Home'
+  online_shop: 'Online shop'
   panama: 'Panama'
   trade_in: 'Trade in'
   reparation: 'Reparation'

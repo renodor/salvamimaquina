@@ -39,6 +39,8 @@ module Spree
       @stores = Spree::ShippingMethod.where(service_level: nil)
     end
 
+    def payment_methods; end
+
     private
 
     def user_message_params

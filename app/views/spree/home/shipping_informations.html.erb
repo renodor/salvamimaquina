@@ -19,7 +19,9 @@
     <h3><%= t('spree.pickup_in_stores') %> (gratis)</h3>
     <ul>
       <% @stores.each do |store| %>
-        <li><%= t('spree.shipping_methods.pickup_in_store', store_name: store.admin_name) %>: <%= link_to t('spree.address').downcase, '#' %></li>
+        <li>
+          <%= t('spree.shipping_methods.pickup_in_store', store_name: store.admin_name) %>: <%= link_to t('spree.address').downcase, "http://www.google.com/maps/place/#{store.latitude},#{store.longitude}", target: '_blank' %>
+        </li>
       <% end %>
     </ul>
   </div>

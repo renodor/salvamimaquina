@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
     get 'contact', to: 'home#contact'
     get 'shipping_informations', to: 'home#shipping_informations'
+    get 'payment_methods', to: 'home#payment_methods'
     post 'create_user_message', to: 'home#create_user_message'
   end
 
