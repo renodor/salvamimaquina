@@ -125,3 +125,7 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+  activerecord:
+    attributes:
+      spree/promotion/rules/shipping_method:
+        description: 'Shipping is in Panama Zone 1 or Panama Zone 2'

@@ -298,6 +298,9 @@ namespace :setup_prod_db do
       type: 'Spree::Promotion::Rules::ItemTotal',
       preferences: { amount: 150, currency: 'USD', operator: 'gte' }
     )
+    promotion.rules.find_or_create_by(
+      type: 'Spree::Promotion::Rules::ShippingMethod'
+    )
     promotion.save!
   end
 end
