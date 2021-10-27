@@ -28,8 +28,11 @@
     }
   }
   #pickup-in-stores {
-    a {
-      color: $dark-gray;
+    ul {
+      padding-left: 0;
+      a {
+        color: $dark-gray;
+      }
     }
   }
 }
