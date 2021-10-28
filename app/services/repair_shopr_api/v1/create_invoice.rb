@@ -10,6 +10,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       repair_shopr_invoice = build_repair_shopr_invoice
       repair_shopr_invoice[:line_items] = build_repair_shopr_line_items
       repair_shopr_invoice[:line_items] << build_repair_shopr_shipping
+      repair_shopr_invoice[:line_items] << build_repair_shopr_promotions
 
       invoice = post_invoices(repair_shopr_invoice)['invoice']
       # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
@@ -94,6 +95,16 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         quantity: 1,
         taxable: false,
         price: @order.shipment_total
+      }
+    end
+
+    def build_repair_shopr_promotions
+      {
+        item: 'Promotions',
+        name: @order.promotions.map(&:name).join(', '),
+        quantity: 1,
+        taxable: false,
+        price: @order.promo_total
       }
     end
 

@@ -37,6 +37,7 @@ module Spree
     def shipping_informations
       @shipping_methods = Spree::ShippingMethod.includes(:calculator, zones: [zone_members: :zoneable]).where(service_level: 'delivery').order(:code)
       @stores = Spree::ShippingMethod.where(service_level: nil)
+      @free_shipping_threshold = Spree::Promotion::FREE_SHIPPING_THRESHOLD
     end
 
     def payment_methods; end

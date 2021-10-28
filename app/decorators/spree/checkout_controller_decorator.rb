@@ -104,6 +104,10 @@ module Spree
 
       packages = @order.shipments.includes(:stock_location, shipping_rates: %i[shipping_method taxes]).map(&:to_package)
       @differentiator = Spree::Stock::Differentiator.new(@order, packages)
+      @delivery_in_first_or_second_zone = @order.shipments.first.shipping_rates.any? do |shipping_rate|
+        shipping_rate.shipping_method.service_level == 'delivery' && [1, 2].include?(shipping_rate.shipping_method.code.to_i)
+      end
+      @free_shipping_threshold = Spree::Promotion::FREE_SHIPPING_THRESHOLD
     end
 
     # Includes needed relations to avoid N+1

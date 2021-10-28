@@ -84,45 +84,55 @@
       &#address-wrapper #checkout_form_address > .field {
         padding-top: 0;
       }
-      &#delivery-wrapper #checkout_form_delivery #shipments .shipment {
-        h5 {
-          margin: 0 0 20px 0;
-          padding: 15px;
-          font-size: 16px;
-          font-weight: 700;
-          text-transform: uppercase;
-          text-align: center;
-          background-color: #f3f3f3;
-        }
-        .shipping-methods {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          grid-column-gap: 20px;
-          margin-bottom: 20px;
-          .shipping-method {
-            input[type='radio'] {
-              display: none;
-            }
-            input[type='radio']:checked + .shipping-method-label, .shipping-method-label:hover {
-              background-color: $light-green;
-              color: $green;
-              border-color: $green;
-            }
-            .shipping-method-label {
-              height: 100%;
-              padding: 10px;
-              border: 1px solid $light-gray;
-              cursor: pointer;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              text-align: center;
-              @include default-transition(background-color, color, border-color);
-              .rate-cost {
-                font-weight: 700;
+      &#delivery-wrapper #checkout_form_delivery {
+        #shipments .shipment {
+          h5 {
+            margin: 0 0 20px 0;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            background-color: #f3f3f3;
+          }
+          .free-shipping {
+            text-align: center;
+            color: $green;
+            font-weight: 600;
+          }
+          .shipping-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-column-gap: 20px;
+            margin-bottom: 20px;
+            .shipping-method {
+              input[type='radio'] {
+                display: none;
+              }
+              input[type='radio']:checked + .shipping-method-label, .shipping-method-label:hover {
+                background-color: $light-green;
+                color: $green;
+                border-color: $green;
+              }
+              .shipping-method-label {
+                height: 100%;
+                padding: 10px;
+                border: 1px solid $light-gray;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                @include default-transition(background-color, color, border-color);
+                .rate-cost {
+                  font-weight: 700;
+                }
               }
             }
           }
+        }
+        .shipping-informations a {
+          color: $black;
         }
       }
     }

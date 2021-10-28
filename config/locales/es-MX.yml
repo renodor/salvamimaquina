@@ -104,6 +104,7 @@ es-MX:
       panama_zone_3: "Ciudad de Panamá Zona 3"
     shipping_prices: 'Precios de entrega a domicilio'
     shipping_times: 'Tiempos de entrega'
+    free_shipping_for_orders_above_threshold: '¡Entrega gratis para pedidos arriba de %{free_shipping_threshold}!'
     pickup_in_stores: 'Recoger pedido en tiendas'
     between_1_and_3_days: 'De 1 a 3 días habiles.'
     name_on_card: "Nombre en la tarjeta"

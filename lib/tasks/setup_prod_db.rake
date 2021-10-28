@@ -293,10 +293,11 @@ namespace :setup_prod_db do
   task :create_free_shipping_promotion do
     promotion = Spree::Promotion.find_or_create_by!(name: 'Entrega Gratis')
     promotion.apply_automatically = true
+    promotion.description = 'free_shipping_threshold'
     promotion.actions.find_or_create_by!(type: 'Spree::Promotion::Actions::FreeShipping')
     promotion.rules.find_or_create_by(
       type: 'Spree::Promotion::Rules::ItemTotal',
-      preferences: { amount: 150, currency: 'USD', operator: 'gte' }
+      preferences: { amount: Spree::Promotion::FREE_SHIPPING_THRESHOLD, currency: 'USD', operator: 'gte' }
     )
     promotion.rules.find_or_create_by(
       type: 'Spree::Promotion::Rules::ShippingMethod'

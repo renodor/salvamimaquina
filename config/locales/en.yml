@@ -91,6 +91,7 @@ en:
       panama_zone_3: "Panama City Zone 3"
     shipping_prices: 'Shipping prices'
     shipping_times: 'Shipping times'
+    free_shipping_for_orders_above_threshold: 'Free shipping for orders above %{free_shipping_threshold}!'
     pickup_in_stores: 'Pickup order in stores'
     between_1_and_3_days: 'Between one and three days.'
     transaction_secured: "All transactions are secured"

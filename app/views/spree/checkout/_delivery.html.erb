@@ -3,16 +3,22 @@
     <% if ship_form.object == @order.shipments.first %>
       <div class="shipment">
         <h5><%= t('spree.choose_shipping_method') %></h5>
+        <% if @delivery_in_first_or_second_zone %>
+          <p class="free-shipping">
+            <%= t('spree.free_shipping_for_orders_above_threshold', free_shipping_threshold: number_to_currency(@free_shipping_threshold)) %>
+          </p>
+        <% end %>
         <div class="radios shipping-methods">
           <% ship_form.object.shipping_rates.includes(:taxes, :shipping_method).each do |rate| %>
+            <% shipping_method = rate.shipping_method %>
             <label class="shipping-method">
               <%= ship_form.radio_button :selected_shipping_rate_id, rate.id %>
               <div class="shipping-method-label">
                 <span>
-                  <% if rate.shipping_method.service_level == 'delivery' %>
-                    <%= t('spree.shipping_methods.delivery_zone', zone_number: rate.shipping_method.code) %>
+                  <% if shipping_method.service_level == 'delivery' %>
+                    <%= t('spree.shipping_methods.delivery_zone', zone_number: shipping_method.code) %>
                   <% else %>
-                    <%= t('spree.shipping_methods.pickup_in_store', store_name: rate.shipping_method.admin_name) %></span>
+                    <%= t('spree.shipping_methods.pickup_in_store', store_name: shipping_method.admin_name) %></span>
                   <% end %>
                 </span>
                 <span class="rate-cost"><%= rate.display_cost %></span>
@@ -29,13 +35,7 @@
   <% end %>
 </div>
 
-<% if Spree::Config[:shipping_instructions] %>
-  <p id="minstrs" data-hook>
-    <%= form.label :special_instructions, t('spree.shipping_instructions') %><br />
-    <%= form.text_area :special_instructions, cols: 40, rows: 7 %>
-  </p>
-<% end %>
-
 <div class="form-buttons" data-hook="buttons">
   <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary' %>
 </div>
+<p class="shipping-informations"><%= link_to t('footer.shipping_prices_zones_and_times'), shipping_informations_path %></p>
