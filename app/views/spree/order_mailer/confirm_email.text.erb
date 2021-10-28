@@ -1,4 +1,4 @@
-<%= t('spree.thank_you_for_your_order') %>
+<%= @for_admin ? t('.new_ecommerce_order') : t('spree.thank_you_for_your_order') %>
 
 ============================================================
 <%= t('spree.shipping_information') %>:
@@ -14,8 +14,12 @@
   <%= @address.phone %>
   <%= t('.see_on_map') %>: <%= "http://www.google.com/maps/place/#{@address.latitude},#{@address.longitude}" %>
 <% else %>
-  <%= t('spree.shipping_methods.pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>,
-  <%= t('spree.address') %>: <%= @order.shipments.first.shipping_method.google_map_link %>
+  <% if @for_admin %>
+    <%= t('.client_pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>
+  <% else %>
+    <%= t('spree.shipping_methods.pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>,
+    <%= t('spree.address') %>: <%= @order.shipments.first.shipping_method.google_map_link %>
+  <% end %>
 <% end %>
 ============================================================
 

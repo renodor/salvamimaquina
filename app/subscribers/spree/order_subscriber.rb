@@ -11,6 +11,7 @@ module Spree
     def order_finalized(event)
       order = event.payload[:order]
       SendInvoiceToRsJob.perform_later(order)
+      OrderMailer.confirm_email(order, false, true).deliver_later # Send order confirmation to the admin (administracion@salvamimaquina.com)
       UpdateProductPurchaseCountJob.perform_later(order)
     end
   end

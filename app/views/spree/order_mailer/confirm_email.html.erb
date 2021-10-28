@@ -3,7 +3,9 @@
     <%= image_tag 'logo-smm.png' %>
   </div>
 
-  <h1 style="background-color: #f2fff3; font-size: 24px; text-align: center"><%= t('spree.thank_you_for_your_order') %></h1>
+  <h1 style="background-color: #f2fff3; font-size: 24px; text-align: center">
+    <%= @for_admin ? t('.new_ecommerce_order') : t('spree.thank_you_for_your_order') %>
+  </h1>
 
   <div style="margin: 30px 0">
     <p><b><%= t('spree.shipping_information') %>:</b></p>
@@ -20,8 +22,12 @@
       <p><a target='_blank' href="http://www.google.com/maps/place/<%= @address.latitude %>, <%= @address.longitude %>"><%= t('.see_on_map') %></a></p>
     <% else %>
       <p>
-        <%= t('spree.shipping_methods.pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>: 
-        <a target='_blank' href="<%= @order.shipments.first.shipping_method.google_map_link %>" style="color: #2d823b!important"><%= t('spree.address') %></a>
+        <% if @for_admin %>
+          <%= t('.client_pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>
+        <% else %>
+          <%= t('spree.shipping_methods.pickup_in_store', store_name: @order.shipments.first.shipping_method.admin_name) %>: 
+          <a target='_blank' href="<%= @order.shipments.first.shipping_method.google_map_link %>" style="color: #2d823b!important"><%= t('spree.address') %></a>
+        <% end %>
       </p>
     <% end %>
   </div>

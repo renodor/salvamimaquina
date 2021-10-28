@@ -129,6 +129,8 @@ es-MX:
       confirm_email:
         see_on_map: 'Ver en el mapa'
         disclaimer: 'Importante: En el caso de no estar presente a la hora de entrega nos comunicaremos al teléfono incluido en su pedido.'
+        new_ecommerce_order: 'Nuevo pedido en salvamimaquina.com'
+        client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
   activerecord:
     attributes:
       spree/credit_card:

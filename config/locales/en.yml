@@ -98,7 +98,10 @@ en:
     thank_you_for_your_order: "Thank you for your order!"
     order_mailer:
       confirm_email:
+        see_on_map: 'See on the map'
         disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'
+        new_ecommerce_order: 'New order on salvamimaquina.com'
+        client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
   home_page:
     apple_experts: 'We are experts in Apple products'
     all_what_you_need: 'One place for all what you need.'
