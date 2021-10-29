@@ -31,7 +31,7 @@
           <% next if option_type.name == 'model' %>
           <p>
             <%= option_type.name.capitalize %>
-            <%= select_tag option_type.id, options_from_collection_for_select(option_values, :id, :name) %>
+            <%= select_tag "option_type_#{option_type.id}", options_from_collection_for_select(option_values, :id, :name) %>
           </p>
         <% end %>
       </div>
