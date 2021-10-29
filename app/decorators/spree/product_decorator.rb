@@ -64,6 +64,15 @@ module Spree
       variants_including_master.reject(&:is_master).min_by(&:price)
     end
 
+    def variant_option_values_by_option_type(variant_scope = nil)
+      option_value_scope = Spree::OptionValuesVariant.joins(:variant).where(spree_variants: variant_scope ? { id: variant_scope } : { product_id: id })
+      option_value_ids = option_value_scope.distinct.pluck(:option_value_id)
+      Spree::OptionValue.where(id: option_value_ids)
+                        .includes(:option_type)
+                        .order("#{Spree::OptionType.table_name}.position, #{Spree::OptionValue.table_name}.position")
+                        .group_by(&:option_type)
+    end
+
     Spree::Product.prepend self
   end
 end

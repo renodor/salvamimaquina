@@ -1,6 +1,6 @@
 <%= form_for :order, url: populate_orders_path do |f| %>
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-
+    <%= hidden_field_tag :product_id, @product.id %>
     <% if product_has_variants = @product.has_variants? %>
       <div id="product-variants">
         <ul>
@@ -27,6 +27,13 @@
             </li>
           <% end %>
         </ul>
+        <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
+          <% next if option_type.name == 'model' %>
+          <p>
+            <%= option_type.name.capitalize %>
+            <%= select_tag option_type.id, options_from_collection_for_select(option_values, :id, :name) %>
+          </p>
+        <% end %>
       </div>
     <% else %>
       <div class="master-description">

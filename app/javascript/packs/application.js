@@ -25,6 +25,7 @@ import { checkoutForm } from '../components/checkout_form';
 import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
 import { productShowVariants } from '../components/product_show_variants';
+import { cartForm } from '../components/cart_form';
 import { productShowAtcBtn } from '../components/product_show_atc_btn';
 import { productSorting } from '../components/product_sorting';
 import { productFiltersModal } from '../components/product_filters_modal';
@@ -42,6 +43,7 @@ document.addEventListener('turbolinks:load', () => {
   addressForm();
   priceRangeSlider();
   productShowVariants();
+  cartForm();
   productShowAtcBtn();
   productSorting();
   productFiltersModal();
