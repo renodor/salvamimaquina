@@ -128,7 +128,7 @@ Spree::Backend::Config.configure do |config|
       [:sync_repair_shopr],
       'refresh',
       condition: -> { current_spree_user&.admin? },
-      url: '/admin/sync'
+      url: '/admin/syncs'
     ),
     config.class::MenuItem.new(
       [:banners],

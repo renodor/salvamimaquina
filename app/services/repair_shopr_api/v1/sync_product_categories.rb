@@ -11,20 +11,19 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       # Fetch all product categories from RepairShopr
       # (Only the categories below the root category "ecom" will be returned)
       product_categories = get_product_categories
-      taxon_ids = nil
-      deleted_taxons = nil
-      Rails.logger.info('Start to sync product categories')
-      Spree::Taxon.transaction do
-        taxons_and_parents = create_or_update_taxons_and_flatten_hierarchy(product_categories)
-        taxon_ids = update_taxons_hierarchy(taxons_and_parents)
 
-        # All taxons, belonging to categories taxonomy, that are not present in the taxon_ids array or is not the categories_taxon
-        # need to be deleted (It means they have been deleted from RepairShopr)
-        deleted_taxons = @categories_taxonomy.taxons.where.not(id: taxon_ids + [@categories_taxon.id]).destroy_all
-      end
+      Rails.logger.info('Start to sync product categories')
+
+      taxons_and_parents = create_or_update_taxons_and_flatten_hierarchy(product_categories)
+      taxon_ids = update_taxons_hierarchy(taxons_and_parents)
+
+      # All taxons, belonging to categories taxonomy, that are not present in the taxon_ids array or is not the categories_taxon
+      # need to be deleted (It means they have been deleted from RepairShopr)
+      deleted_taxons = @categories_taxonomy.taxons.where.not(id: taxon_ids + [@categories_taxon.id]).destroy_all
 
       sync_logs.synced_product_categories = taxon_ids.size
       sync_logs.deleted_product_categories = deleted_taxons.size
+
       Rails.logger.info('Product categories synced')
 
       taxon_ids

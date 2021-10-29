@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# TODO: rename to SendEventToSentryJob (everywhere...)
-class SendEventToSentry < ActiveJob::Base
+class SendEventToSentryJob < ActiveJob::Base
   queue_as :default
 
   def perform(event, hint)

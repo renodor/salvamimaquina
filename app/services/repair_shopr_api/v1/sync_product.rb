@@ -10,28 +10,28 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       raise ArgumentError, 'attributes or id is needed' unless attributes
 
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
-      Spree::Variant.transaction do
-        add_product_attributes_from_notes(attributes) if attributes['notes'].present?
 
-        # If variant needs to be assigned to a new product,
-        # we need to destroy it and sync it again, because there is currently no way to assign an existing variant to another product in Solidus.
-        existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
-        existing_variant.destroy_and_destroy_product_if_no_other_variants! if existing_variant && variant_needs_to_be_assigned_to_new_product?(existing_variant, attributes)
+      add_product_attributes_from_notes(attributes) if attributes['notes'].present?
 
-        # Nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
-        @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
+      # If variant needs to be assigned to a new product,
+      # we need to destroy it and sync it again, because there is currently no way to assign an existing variant to another product in Solidus.
+      existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
+      existing_variant.destroy_and_destroy_product_if_no_other_variants! if existing_variant && variant_needs_to_be_assigned_to_new_product?(existing_variant, attributes)
 
-        initialize_product_and_variant(attributes)
+      # Nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
+      @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
 
-        assign_product_attributes(attributes)
-        assign_variant_attributes(attributes)
+      initialize_product_and_variant(attributes)
 
-        update_product_stock(attributes['location_quantities'])
-        update_product_classifications(attributes['product_category'])
+      assign_product_attributes(attributes)
+      assign_variant_attributes(attributes)
 
-        RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
-      end
+      update_product_stock(attributes['location_quantities'])
+      update_product_classifications(attributes['product_category'])
+
+      RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
       sync_logs.synced_products += 1
+
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
 
       @variant

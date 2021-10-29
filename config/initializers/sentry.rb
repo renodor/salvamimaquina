@@ -6,6 +6,6 @@ Sentry.init do |config|
   config.breadcrumbs_logger = [:active_support_logger]
 
   config.async = lambda do |event, hint|
-    SendEventToSentry.perform_later(event, hint)
+    SendEventToSentryJob.perform_later(event, hint)
   end
 end

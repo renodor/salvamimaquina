@@ -2,18 +2,9 @@
 
 <% admin_breadcrumb('Synchronize Ecommerce with RepairShopr') %>
 
-<h4>Sync Everything (products, product images, and product categories)</h4>
-<%= link_to "Sync Everything", admin_sync_everything_path, class: 'btn btn-primary' %>
-
-<hr />
-
-<h4>Sync product categories</h4>
-<%= link_to "Sync Product Categories", admin_sync_product_categories_path, class: 'btn btn-secondary' %>
-
-<hr />
-
-<h4>Sync all products and product images</h4>
-<%= link_to "Sync Products", admin_sync_products_path, class: 'btn btn-secondary' %>
+<h4>Synchronize Ecommerce with Repair Shopr</h4>
+<p>(products, product images, and product categories)</p>
+<%= link_to "SYNCHRONIZE", new_admin_sync_path, class: 'btn btn-primary' %>
 
 <hr />
 
@@ -21,6 +12,7 @@
 <table>
    <thead>
       <tr>
+        <th>Status</th>
          <th>Date</th>
          <th>Synced Products</th>
          <th>Deleted Products</th>
@@ -35,6 +27,7 @@
     <% @sync_logs.each do |sync_log| %>
       <div>
         <tr>
+          <td><span class="pill pill-<%= sync_log.status %>"><%= sync_log.status %></span></td>
           <td><%= sync_log.created_at.in_time_zone('Bogota').strftime("%d/%m/%Y - %H:%M:%S") %></td>
           <td><%= sync_log.synced_products %></td>
           <td><%= sync_log.deleted_products %></td>

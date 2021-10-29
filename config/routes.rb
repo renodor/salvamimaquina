@@ -10,11 +10,7 @@ Rails.application.routes.draw do
 
   Spree::Core::Engine.routes.draw do
     namespace :admin do
-      get '/sync', to: 'syncs#index'
-      get '/sync/everything', to: 'syncs#sync_everything'
-      get '/sync/product_categories', to: 'syncs#sync_product_categories'
-      get '/sync/products', to: 'syncs#sync_products'
-      post '/sync/product', to: 'syncs#sync_product'
+      resources :syncs, only: %i[index new]
       resources :reparation_categories, except: :show
       resources :reparation_requests, only: %i[index show]
       resources :banners, except: :show
