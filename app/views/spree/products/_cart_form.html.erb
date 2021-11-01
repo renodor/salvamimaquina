@@ -3,35 +3,10 @@
     <%= hidden_field_tag :product_id, @product.id %>
     <% if product_has_variants = @product.has_variants? %>
       <div id="product-variants">
-        <ul>
-          <% @variants.each_with_index do |variant, index| %>
-            <li>
-              <%=
-                radio_button_tag "variant_id",
-                variant.id,
-                index == 0,
-                'data-price' => number_to_currency(variant.original_price),
-                'data-discount-price' => variant.on_sale? ? number_to_currency(variant.price) : nil,
-                'data-has-stock' => variant.can_supply?
-              %>
-              <%= label_tag "variant_id_#{ variant.id }" do %>
-                <span class="variant-description">
-                  <%= variant.options_text %>
-                </span>
-                <%# if variant_price variant %>
-                  <!-- <span class="price diff"> -->
-                    <%#= variant_price variant %>
-                  <!-- </span> -->
-                <%# end %>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
-          <% next if option_type.name == 'model' %>
           <p>
             <%= option_type.name.capitalize %>
-            <%= select_tag "option_type_#{option_type.id}", options_from_collection_for_select(option_values, :id, :name) %>
+            <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name) %>
           </p>
         <% end %>
       </div>
@@ -61,11 +36,11 @@
       <div class="add-to-cart">
         <% if @master.can_supply? %>
           <%#= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
-          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit do %>
+          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.buy').upcase %>
           <% end %>
         <% else %>
-          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit, disabled: true do %>
+          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.out_of_stock').upcase %>
           <% end %>
         <% end %>

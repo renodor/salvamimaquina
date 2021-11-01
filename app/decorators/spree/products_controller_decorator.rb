@@ -24,13 +24,22 @@ module Spree
 
     def product_variants_with_option_values
       product = Spree::Product.find(params[:product_id])
-      variants = product.variants.has_option(OptionType.find(params[:option_type]), OptionValue.find(params[:option_value]))
-      option_values_by_option_type = product.variant_option_values_by_option_type(variants.pluck(:id)).transform_keys { |key| key[:id] }
-      option_values_by_option_type.transform_values! { |value| value.map(&:id) }
+      variant_ids = product.variants.has_option(OptionType.find(params[:selected_option_type]), OptionValue.find(params[:selected_option_value])).pluck(:id)
+      render json: Spree::Variant.option_values_by_option_type(variant_ids)
+    end
 
+    def variant_with_options_hash
+      options_hash = params[:variant_options].permit!.to_h.each_with_object({}) do |(key, value), hash|
+        hash[key.delete('option_type_').to_i] = value.to_i
+      end
+
+      variant = Spree::Product.find(params[:product_id]).find_variant_by_options_hash(options_hash)
       render json: {
-        variants: variants,
-        option_values_by_option_type: option_values_by_option_type
+        id: variant.id,
+        onSale: variant.on_sale?,
+        price: ActionController::Base.helpers.number_to_currency(variant.original_price),
+        discountPrice: ActionController::Base.helpers.number_to_currency(variant.price),
+        hasStock: variant.can_supply?
       }
     end
 

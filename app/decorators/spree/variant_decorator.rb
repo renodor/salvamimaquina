@@ -2,9 +2,21 @@
 
 module Spree
   module VariantDecorator
+    extend ActiveSupport::Concern
+
     def self.prepended(base)
       base.validates :repair_shopr_id, uniqueness: true, allow_nil: true
       base.enum condition: { original: 0, refurbished: 1 }
+    end
+
+    class_methods do
+      def option_values_by_option_type(variant_ids)
+        option_value_scope = Spree::OptionValuesVariant.joins(:variant).where(spree_variants: { id: variant_ids })
+        option_value_ids = option_value_scope.distinct.pluck(:option_value_id)
+        Spree::OptionValue.where(id: option_value_ids)
+                          .select(:id, :option_type_id)
+                          .group_by(&:option_type_id)
+      end
     end
 
     def destroy_and_destroy_product_if_no_other_variants!
@@ -58,6 +70,14 @@ module Spree
     # (It is discutable if using ActiveRecord#sum would be more performant anyway even if it creates more DB calls...)
     def can_supply?(quantity = 1)
       stock_items.pluck(:count_on_hand).sum >= quantity
+    end
+
+    def options_hash
+      options_hash = {}
+      option_values.each do |option_value|
+        options_hash[option_value.option_type_id] = option_value.id
+      end
+      options_hash
     end
 
     Spree::Variant.prepend self

@@ -4,7 +4,7 @@ module Spree
   module ProductDecorator
     extend ActiveSupport::Concern
 
-    def self.prepended(base)
+    def prepended(base)
       base.scope :ascend_by_purchase_count, -> { order(purchase_count: :asc) }
       base.scope :descend_by_purchase_count, -> { order(purchase_count: :desc) }
       base.scope :ascend_by_available_on, -> { order(available_on: :asc) }
@@ -64,13 +64,8 @@ module Spree
       variants_including_master.reject(&:is_master).min_by(&:price)
     end
 
-    def variant_option_values_by_option_type(variant_scope = nil)
-      option_value_scope = Spree::OptionValuesVariant.joins(:variant).where(spree_variants: variant_scope ? { id: variant_scope } : { product_id: id })
-      option_value_ids = option_value_scope.distinct.pluck(:option_value_id)
-      Spree::OptionValue.where(id: option_value_ids)
-                        .includes(:option_type)
-                        .order("#{Spree::OptionType.table_name}.position, #{Spree::OptionValue.table_name}.position")
-                        .group_by(&:option_type)
+    def find_variant_by_options_hash(options_hash)
+      variants.includes(:option_values).detect { |variant| variant.options_hash == options_hash }
     end
 
     Spree::Product.prepend self
