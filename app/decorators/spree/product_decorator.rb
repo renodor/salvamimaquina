@@ -4,25 +4,26 @@ module Spree
   module ProductDecorator
     extend ActiveSupport::Concern
 
-    def prepended(base)
-      base.scope :ascend_by_purchase_count, -> { order(purchase_count: :asc) }
-      base.scope :descend_by_purchase_count, -> { order(purchase_count: :desc) }
-      base.scope :ascend_by_available_on, -> { order(available_on: :asc) }
-      base.scope :descend_by_available_on, -> { order(available_on: :desc) }
-      base.scope :on_sale, -> { joins(variants_including_master: { prices: :active_sale_prices }).distinct }
-      base.add_search_scope :with_option do |option_type_id, option_value_id| # option_value_id can be one single id or an array of ids, it works the same
+    # rubocop:disable Metrics/BlockLength
+    prepended do
+      scope :ascend_by_purchase_count, -> { order(purchase_count: :asc) }
+      scope :descend_by_purchase_count, -> { order(purchase_count: :desc) }
+      scope :ascend_by_available_on, -> { order(available_on: :asc) }
+      scope :descend_by_available_on, -> { order(available_on: :desc) }
+      scope :on_sale, -> { joins(variants_including_master: { prices: :active_sale_prices }).distinct }
+      add_search_scope :with_option do |option_type_id, option_value_id| # option_value_id can be one single id or an array of ids, it works the same
         joins(:option_types, variants_including_master: :option_values)
           .where(option_types: { id: option_type_id }, option_values: { id: option_value_id })
       end
 
       # Modify the solidus in_taxon scope to remove ordering and thus greatly simplify its SQL
-      base.add_search_scope :in_taxon do |taxon|
+      add_search_scope :in_taxon do |taxon|
         joins(:taxons).where('spree_taxons' => { id: taxon.self_and_descendants.pluck(:id) })
       end
 
       # TODO: simplify that using active_sale_prices scope? or recreating an intermediate model like "DefaultPrice" which always return the current price of a product/variant
       # Do TDD to test every possibility (product with and without variants, on sale and not on sale etc...), and then simplify
-      base.add_search_scope :price_between do |min, max|
+      add_search_scope :price_between do |min, max|
         min, max = max, min if min.to_i > max.to_i
 
         current_time = Time.now
@@ -40,6 +41,7 @@ module Spree
           )
       end
     end
+    # rubocop:enable Metrics/BlockLength
 
     class_methods do
       # Keys are the scope or the method of the sorting option,

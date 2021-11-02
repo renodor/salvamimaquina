@@ -4,10 +4,35 @@
     <% if product_has_variants = @product.has_variants? %>
       <div id="product-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
-          <p>
-            <%= option_type.name.capitalize %>
-            <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name) %>
-          </p>
+          <% if option_type.name == 'model' %>
+            <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name), class: 'display-none' %>
+          <% elsif option_type.name == 'color' %>
+              <%= option_type.name.capitalize %>
+              <p>
+                <% option_values.each do |color| %>
+                    <%=
+                      label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
+                      color.name,
+                      style: "background-color: #{color_code(color.name)};"
+                    %>
+                    <%=
+                      radio_button_tag "variant_options[option_type_#{option_type.id}]",
+                      color.id,
+                      false,
+                      { class: 'display-none', data: { option_type_id: option_type.id } }
+                    %>
+                <% end %>
+              </p>
+          <% else %>
+            <p>
+              <%= option_type.name.capitalize %>
+              <%=
+                select_tag "variant_options[option_type_#{option_type.id}]",
+                options_for_select(option_values.map {|option_value| [option_value.name, option_value.id, { data: { option_type_id: option_type.id } }] }),
+                { class: 'form-select', data: { id: option_type.id } }
+              %>
+            </p>
+          <% end %>
         <% end %>
       </div>
     <% else %>

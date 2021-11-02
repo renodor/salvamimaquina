@@ -31,42 +31,38 @@ const cartForm = () => {
     const productId = cartForm.querySelector('#product_id').value;
     Array.from(cartForm.elements).forEach((formElement) => {
       formElement.addEventListener('change', (event) => {
-        const selectedOptionType = event.currentTarget.name.match(/option_type_(\d+)/)[1];
-        const selectedOptionValue = event.currentTarget.value;
-        const queryString = `product_id=${productId}&selected_option_type=${selectedOptionType}&selected_option_value=${selectedOptionValue}`;
-
+        const selectedOptionValue = event.currentTarget;
+        const selectedOptionTypeId = selectedOptionValue.tagName === 'SELECT' ? selectedOptionValue.dataset.id : selectedOptionValue.dataset.optionTypeId;
+        const queryString = `product_id=${productId}&selected_option_type=${selectedOptionTypeId}&selected_option_value=${selectedOptionValue.value}`;
         fetch(`/products/product_variants_with_option_values?${queryString}`, { headers: { 'accept': 'application/json' } })
             .then((response) => response.json())
             .then((optionValuesByOptionType) => {
               Object.entries(optionValuesByOptionType).forEach((optionType) => {
-                const formSelect = cartForm.elements[`variant_options[option_type_${optionType[0]}]`];
-                const formSelectOptions = formSelect.options;
-                const formSelectOptionsArray = Array.from(formSelectOptions);
+                const optionValueTags = Array.from(cartForm.querySelectorAll(`[data-option-type-id='${optionType[0]}']`));
 
-                if (selectedOptionType === optionType[0]) {
-                  formSelectOptionsArray.forEach((formSelectOption) => formSelectOption.disabled = false);
+                if (selectedOptionTypeId === optionType[0]) {
+                  optionValueTags.forEach((optionValueTag) => optionValueTag.disabled = false);
                 } else {
-                  formSelectOptionsArray.forEach((formSelectOption) => {
-                    formSelectOption.disabled = !optionType[1].some((optionValue) => optionValue.id === parseInt(formSelectOption.value));
+                  optionValueTags.forEach((optionValueTag) => {
+                    optionValueTag.disabled = !optionType[1].some((optionValue) => optionValue.id === parseInt(optionValueTag.value));
                   });
 
-                  if (formSelectOptions[formSelect.selectedIndex].disabled == true) {
-                    const IndexOfFirstEnabledOption = formSelectOptionsArray.findIndex((option) => option.disabled === false);
-                    formSelectOptions.selectedIndex = IndexOfFirstEnabledOption;
+                  if (optionValueTags.find((optionValueTag) => optionValueTag.selected)?.disabled == true) {
+                    optionValueTags.find((optionValueTag) => optionValueTag.disabled === false).selected = true;
                   }
                 }
               });
-            })
-            .then(() => {
-              const formData = new FormData(cartForm);
-              const newQueryString = new URLSearchParams(formData);
-              fetch(`/products/variant_with_options_hash?${newQueryString}`, { headers: { 'accept': 'application/json' } })
-                  .then((response) => response.json())
-                  .then((variant) => {
-                    updateAddToCartBtn(variant);
-                    updateVariantPrice(variant);
-                  });
             });
+      // .then(() => {
+      //   const formData = new FormData(cartForm);
+      //   const newQueryString = new URLSearchParams(formData);
+      //   fetch(`/products/variant_with_options_hash?${newQueryString}`, { headers: { 'accept': 'application/json' } })
+      //       .then((response) => response.json())
+      //       .then((variant) => {
+      //         updateAddToCartBtn(variant);
+      //         updateVariantPrice(variant);
+      //       });
+      // });
       });
     });
   }
