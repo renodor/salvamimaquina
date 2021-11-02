@@ -7,22 +7,22 @@
           <% if option_type.name == 'model' %>
             <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name), class: 'display-none' %>
           <% elsif option_type.name == 'color' %>
-              <%= option_type.name.capitalize %>
-              <p>
+              <div id="variant-colors">
+                <p><%= option_type.name.capitalize %></p>
                 <% option_values.each do |color| %>
-                    <%=
-                      label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
-                      color.name,
-                      style: "background-color: #{color_code(color.name)};"
-                    %>
                     <%=
                       radio_button_tag "variant_options[option_type_#{option_type.id}]",
                       color.id,
                       false,
-                      { class: 'display-none', data: { option_type_id: option_type.id } }
+                      data: { option_type_id: option_type.id }
+                    %>
+                    <%=
+                      label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
+                      '',
+                      style: "background-color: #{color_code(color.name)};"
                     %>
                 <% end %>
-              </p>
+              </div>
           <% else %>
             <p>
               <%= option_type.name.capitalize %>
