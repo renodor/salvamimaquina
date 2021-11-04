@@ -2,10 +2,6 @@
 
 module Spree
   module ProductsControllerDecorator
-    def self.prepended(base)
-      base.skip_before_action :verify_authenticity_token, only: :product_variants_with_option_values
-    end
-
     def index
       @taxonomies = Spree::Taxonomy.includes(root: :children)
       @categories_taxon = Spree::Taxon.includes(children: :icon_attachment).find_by(name: 'Categories')
@@ -34,12 +30,14 @@ module Spree
       end
 
       variant = Spree::Product.find(params[:product_id]).find_variant_by_options_hash(options_hash)
+      variant_image_key = variant.images.first&.attachment&.key
       render json: {
         id: variant.id,
         onSale: variant.on_sale?,
         price: ActionController::Base.helpers.number_to_currency(variant.original_price),
         discountPrice: ActionController::Base.helpers.number_to_currency(variant.price),
-        hasStock: variant.can_supply?
+        hasStock: variant.can_supply?,
+        imageUrl: variant_image_key ? ActionController::Base.helpers.cl_image_path(variant_image_key) : nil
       }
     end
 

@@ -7,31 +7,31 @@
           <% if option_type.name == 'model' %>
             <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name), class: 'display-none' %>
           <% elsif option_type.name == 'color' %>
-              <div id="variant-colors">
-                <p><%= option_type.name.capitalize %></p>
-                <% option_values.each do |color| %>
-                    <%=
-                      radio_button_tag "variant_options[option_type_#{option_type.id}]",
-                      color.id,
-                      false,
-                      data: { option_type_id: option_type.id }
-                    %>
-                    <%=
-                      label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
-                      '',
-                      style: "background-color: #{color_code(color.name)};"
-                    %>
-                <% end %>
-              </div>
+            <div id="variant-colors">
+              <p class="variant-option-type"><%= option_type.name.capitalize %></p>
+              <% option_values.each_with_index do |color, index| %>
+                  <%=
+                    radio_button_tag "variant_options[option_type_#{option_type.id}]",
+                    color.id,
+                    index == 0,
+                    data: { option_type_id: option_type.id }
+                  %>
+                  <%=
+                    label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
+                    '',
+                    style: "background-color: #{color_code(color.name)};"
+                  %>
+              <% end %>
+            </div>
           <% else %>
-            <p>
-              <%= option_type.name.capitalize %>
+            <div class="variant-options">
+              <p class="variant-option-type"><%= option_type.name.capitalize %></p>
               <%=
                 select_tag "variant_options[option_type_#{option_type.id}]",
                 options_for_select(option_values.map {|option_value| [option_value.name, option_value.id, { data: { option_type_id: option_type.id } }] }),
                 { class: 'form-select', data: { id: option_type.id } }
               %>
-            </p>
+            </div>
           <% end %>
         <% end %>
       </div>

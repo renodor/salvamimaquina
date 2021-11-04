@@ -19,6 +19,7 @@
         #thumbnails {
           #product-thumbnails li {
             border: 1px solid transparent;
+            cursor: pointer;
             &.selected, &:hover {
               border: 1px solid $light-gray
             }
@@ -36,9 +37,6 @@
           margin-bottom: 30px;
           #variant-colors {
             margin: 30px 0 15px 0;;
-            p {
-              margin: 0;
-            }
             label {
               width: 40px;
               height: 40px;
@@ -64,22 +62,15 @@
               }
             }
           }
-          ul {
-            list-style: none;
-            padding: 0;
-            li {
-              padding: 0;
-              label {
-                padding: 10px 30px;
-                cursor: pointer;
-                @include default-transition(color, background-color);
-              }
-              input {
-                display: none;
-                &:checked + label {
-                  color: $green;
-                  background-color: $light-green;
-                }
+          .variant-option-type {
+            margin: 0;
+          }
+          .variant-options {
+            select {
+              width: initial;
+              min-width: 140px;
+              &:focus {
+                box-shadow: none;
               }
             }
           }
@@ -123,8 +114,17 @@
       #product-right-part {
         width: 100%;
         margin-bottom: 20px;
-        #product-description .add-to-cart button {
-          width: 100%;
+        #product-description {
+          #product-variants {
+            .variant-options {
+              select {
+                width: 100%;
+              }
+            }
+          }
+          .add-to-cart button {
+            width: 100%;
+          }
         }
       }
     }

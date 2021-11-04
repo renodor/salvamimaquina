@@ -1,7 +1,9 @@
 const cartForm = () => {
-  const cartForm = document.querySelector('#cart-form > form');
+  const productShow = document.querySelector('#product-show');
 
-  if (cartForm) {
+  if (productShow) {
+    const cartForm = productShow.querySelector('#cart-form > form');
+
     const updateAddToCartBtn = ({ hasStock }) => {
       const addToCartBtn = cartForm.querySelector('.add-to-cart button');
       if (hasStock) {
@@ -28,6 +30,39 @@ const cartForm = () => {
       }
     };
 
+    const updateVariantImage = ({ imageUrl }) => {
+      const mainImage = productShow.querySelector('#main-image img');
+      mainImage.src = imageUrl;
+    };
+
+    const updateThumbnails = ({ id }) => {
+      const thumbnails = productShow.querySelectorAll('#thumbnails .thumbnail');
+      thumbnails.forEach((thumbnail) => {
+        if (parseInt(thumbnail.dataset.variantId) === id) {
+          thumbnail.classList.add('selected');
+          thumbnail.style.display = 'inline-block';
+        } else {
+          thumbnail.style.display = 'none';
+          thumbnail.classList.remove('selected');
+        }
+      });
+    };
+
+    const updateVariantInformations = () => {
+      const formData = new FormData(cartForm);
+      const queryString = new URLSearchParams(formData);
+      fetch(`/products/variant_with_options_hash?${queryString}`, { headers: { 'accept': 'application/json' } })
+          .then((response) => response.json())
+          .then((variant) => {
+            updateVariantImage(variant);
+            updateThumbnails(variant);
+            updateAddToCartBtn(variant);
+            updateVariantPrice(variant);
+          });
+    };
+
+    updateVariantInformations();
+
     const productId = cartForm.querySelector('#product_id').value;
     Array.from(cartForm.elements).forEach((formElement) => {
       formElement.addEventListener('change', (event) => {
@@ -52,17 +87,8 @@ const cartForm = () => {
                   }
                 }
               });
-            });
-      // .then(() => {
-      //   const formData = new FormData(cartForm);
-      //   const newQueryString = new URLSearchParams(formData);
-      //   fetch(`/products/variant_with_options_hash?${newQueryString}`, { headers: { 'accept': 'application/json' } })
-      //       .then((response) => response.json())
-      //       .then((variant) => {
-      //         updateAddToCartBtn(variant);
-      //         updateVariantPrice(variant);
-      //       });
-      // });
+            })
+            .then(() => updateVariantInformations());
       });
     });
   }
