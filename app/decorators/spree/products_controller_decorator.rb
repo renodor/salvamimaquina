@@ -9,13 +9,14 @@ module Spree
     end
 
     def show
-      @variants = @product.variants.includes(:stock_items, option_values: :option_type, prices: :active_sale_prices)
+      @variants = @product.variants.includes(prices: :active_sale_prices)
       @master = @product.master
-
-      # @product_properties = @product.product_properties.includes(:property)
-      # @taxon = Spree::Taxon.find(params[:taxon_id]) if params[:taxon_id]
+      @product_has_variant = @product.has_variants?
 
       @product_images = @product.gallery.images.includes(attachment_attachment: :blob)
+
+      # Maybe not needed because when we sync we don't add image to product master if it adds variant? (But not sure... To be confirmed)
+      @product_images = @product_images.where.not(viewable_id: @master.id) if @product_has_variant
     end
 
     def product_variants_with_option_values
@@ -37,6 +38,7 @@ module Spree
         price: ActionController::Base.helpers.number_to_currency(variant.original_price),
         discountPrice: ActionController::Base.helpers.number_to_currency(variant.price),
         hasStock: variant.can_supply?,
+        imageKey: variant_image_key,
         imageUrl: variant_image_key ? ActionController::Base.helpers.cl_image_path(variant_image_key) : nil
       }
     end

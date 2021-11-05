@@ -5,24 +5,25 @@ const productShowThumbnails = () => {
     const mainImage = document.querySelector('#product-show #main-image img');
     const thumbnails = document.querySelectorAll('#thumbnails .thumbnail');
 
-    const replaceMainImageSrc = (newImageUrl) => {
-      mainImage.src = newImageUrl;
+    const replaceMainImageSrc = ({ imageUrl, key }) => {
+      mainImage.src = imageUrl;
+      mainImage.dataset.key = key;
+    };
+
+    const setSelectedThumbnail = () => {
+      thumbnails.forEach((thumbnail) => {
+        if (thumbnail.dataset.key === mainImage.dataset.key) {
+          thumbnail.classList.add('selected');
+        } else {
+          thumbnail.classList.remove('selected');
+        }
+      });
     };
 
     thumbnails.forEach((thumbnail) => {
       thumbnail.addEventListener('click', (event) => {
-        const selectedThumbnail = event.currentTarget;
-        selectedThumbnail.classList.add('selected');
-        thumbnails.forEach((otherThumbnail) => {
-          if (otherThumbnail !== selectedThumbnail) {
-            otherThumbnail.classList.remove('selected');
-          };
-        });
-        replaceMainImageSrc(selectedThumbnail.dataset.imageUrl);
-      });
-
-      thumbnail.addEventListener('mouseover', (event) => {
-        replaceMainImageSrc(event.currentTarget.dataset.imageUrl);
+        replaceMainImageSrc(event.currentTarget.dataset);
+        setSelectedThumbnail();
       });
     });
   }

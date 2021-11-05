@@ -3,6 +3,7 @@ const cartForm = () => {
 
   if (productShow) {
     const cartForm = productShow.querySelector('#cart-form > form');
+    const mainImage = productShow.querySelector('#main-image img');
 
     const updateAddToCartBtn = ({ hasStock }) => {
       const addToCartBtn = cartForm.querySelector('.add-to-cart button');
@@ -30,20 +31,23 @@ const cartForm = () => {
       }
     };
 
-    const updateVariantImage = ({ imageUrl }) => {
-      const mainImage = productShow.querySelector('#main-image img');
+    const updateVariantImage = ({ imageUrl, imageKey }) => {
       mainImage.src = imageUrl;
+      mainImage.dataset.key = imageKey;
     };
 
     const updateThumbnails = ({ id }) => {
       const thumbnails = productShow.querySelectorAll('#thumbnails .thumbnail');
       thumbnails.forEach((thumbnail) => {
         if (parseInt(thumbnail.dataset.variantId) === id) {
-          thumbnail.classList.add('selected');
-          thumbnail.style.display = 'inline-block';
+          thumbnail.style.display = 'block';
+          if (thumbnail.dataset.key == mainImage.dataset.key) {
+            thumbnail.classList.add('selected');
+          } else {
+            thumbnail.classList.remove('selected');
+          }
         } else {
           thumbnail.style.display = 'none';
-          thumbnail.classList.remove('selected');
         }
       });
     };

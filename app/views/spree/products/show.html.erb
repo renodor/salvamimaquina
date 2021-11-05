@@ -6,9 +6,9 @@
       <div data-hook="product_left_part_wrap">
         <div id="product-images" data-hook="product_images">
           <div id="main-image" data-hook>
-            <% if @product.has_variants? %>
+            <% if @product_has_variant %>
               <!-- The src will be added by JS depending what variant is selected -->
-              <img src="#" alt="<%= @product.name %>" itemprop="image">
+              <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="<%= @product.name %>" itemprop="image" data-key="">
             <% else %>
               <%= cl_image_tag @product.gallery.images.first&.attachment&.key, width: 600, crop: :fit, itemprop: "image" %>
             <% end %>

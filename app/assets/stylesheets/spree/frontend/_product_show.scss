@@ -17,9 +17,16 @@
           }
         }
         #thumbnails {
-          #product-thumbnails li {
+          margin: 15px 0;
+          padding-left: 30px;
+          display: flex;
+          align-items: center;
+          column-gap: 10px;
+          overflow-x: auto;
+          .thumbnail {
             border: 1px solid transparent;
             cursor: pointer;
+            padding: 5px;
             &.selected, &:hover {
               border: 1px solid $light-gray
             }
@@ -110,6 +117,9 @@
         width: 100%;
         margin-right: 0;
         margin-bottom: 20px;
+        #product-images #thumbnails {
+          padding-left: 0;
+        }
       }
       #product-right-part {
         width: 100%;

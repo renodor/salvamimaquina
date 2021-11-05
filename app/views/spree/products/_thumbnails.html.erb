@@ -1,21 +1,9 @@
 <%# no need for thumbnails unless there is more than one image %>
 <% if @product_images.size > 1 %>
-  <ul id="product-thumbnails" class="thumbnails inline" data-hook>
-    <% if @product.has_variants? %>
-      <% @product_images.each do |image| %>
-        <% next if image.viewable_id == @product.master.id %>
-        <% image_key = image.attachment&.key %>
-        <li class='thumbnail' data-variant-id="<%= image.viewable_id %>" data-image-url="<%= cl_image_path(image_key) %>" data-thumbnail-id="<%= %>">
-          <%= cl_image_tag image_key, height: 48, crop: :fit, itemprop: "image" %>
-        </li>
-      <% end %>
-    <% else %>
-      <% @product_images.where(viewable_id: @product.master.id).each do |image| %>
-        <% image_key = image.attachment&.key %>
-        <li class='thumbnail' data-variant-id="<%= image.viewable_id %>" data-image-url="<%= cl_image_path(image_key) %>">
-          <%= cl_image_tag image_key, height: 48, crop: :fit, itemprop: "image" %>
-        </li>
-      <% end %>
-    <% end %>
-  </ul>
+  <% @product_images.each do |image| %>
+    <% image_key = image.attachment&.key %>
+    <div class='thumbnail' style="display: none;" data-variant-id="<%= image.viewable_id %>" data-image-url="<%= cl_image_path(image_key) %>" data-key="<%= image_key %>">
+      <%= cl_image_tag image_key, height: 48, crop: :fit, itemprop: "image" %>
+    </div>
+  <% end %>
 <% end %>
