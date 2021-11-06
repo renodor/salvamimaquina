@@ -1,94 +1,126 @@
+// Update variant information on product show (price, add to cart btn, image, thumbnail, available options etc...) regarding what variant is selected
 const productShowVariants = () => {
-  Spree.addImageHandlers = function() {
-    const thumbnails = $('#product-images ul.thumbnails');
-    $('#main-image').data('selectedThumb', $('#main-image img').attr('src'));
-    if (!thumbnails.find('li.selected').length) {
-      thumbnails
-          .find('li')
-          .eq(0)
-          .addClass('selected');
-    }
-    thumbnails.find('a').on('click', function(event) {
-      $('#main-image').data(
-          'selectedThumb',
-          $(event.currentTarget).attr('href')
-      );
-      $('#main-image').data(
-          'selectedThumbId',
-          $(event.currentTarget)
-              .parent()
-              .attr('id')
-      );
-      thumbnails.find('li').removeClass('selected');
-      $(event.currentTarget)
-          .parent('li')
-          .addClass('selected');
-      return false;
-    });
-    thumbnails.find('li').on('mouseenter', function(event) {
-      $('#main-image img').attr(
-          'src',
-          $(event.currentTarget)
-              .find('a')
-              .attr('href')
-      );
-    });
-    thumbnails.find('li').on('mouseleave', function(event) {
-      $('#main-image img').attr('src', $('#main-image').data('selectedThumb'));
-    });
-  };
+  const productShow = document.querySelector('#product-show');
+  const productVariants = productShow?.querySelector('#product-variants');
 
-  Spree.showVariantImages = function(variantId) {
-    $('li.vtmb').hide();
-    $('li.tmb-' + variantId).show();
-    const currentThumb = $('#' + $('#main-image').data('selectedThumbId'));
-    if (!currentThumb.hasClass('vtmb-' + variantId)) {
-      let thumb = $($('#product-images ul.thumbnails li:visible.vtmb').eq(0));
-      if (!(thumb.length > 0)) {
-        thumb = $($('#product-images ul.thumbnails li:visible').eq(0));
+  if (productVariants) {
+    const cartForm = productShow.querySelector('#cart-form > form');
+    const mainImage = productShow.querySelector('#main-image img');
+    const variantIdInput = cartForm.querySelector('#variant_id');
+
+    // Enable/disable add to cart btn and update its text regarding if variant is available or not
+    const updateAddToCartBtn = ({ hasStock }) => {
+      const addToCartBtn = cartForm.querySelector('.add-to-cart button');
+      if (hasStock) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.innerHTML = addToCartBtn.dataset.buy.toUpperCase();
+      } else {
+        addToCartBtn.disabled = true;
+        addToCartBtn.innerHTML = addToCartBtn.dataset.outOfStock.toUpperCase();
       }
-      const newImg = thumb.find('a').attr('href');
-      $('#product-images ul.thumbnails li').removeClass('selected');
-      thumb.addClass('selected');
-      $('#main-image img').attr('src', newImg);
-      $('#main-image').data('selectedThumb', newImg);
-      $('#main-image').data('selectedThumbId', thumb.attr('id'));
-    }
-  };
+    };
 
-  Spree.updateVariantPrice = function(variant) {
-    const variantDiscountPrice = variant.data('discount-price');
-    const variantPrice = variant.data('price');
-    if (variantPrice) {
-      $('.price.selling').text(variantPrice);
-    }
+    // Update price (and discount price) regarding what variant is selected
+    const updateVariantPrice = ({ price, discountPrice, onSale }) => {
+      const priceTag = cartForm.querySelector('#product-price .price.original');
+      priceTag.innerHTML = price;
+      const discountPriceTag = cartForm.querySelector('#product-price .price.discount');
+      discountPriceTag.innerHTML = discountPrice;
 
-    if (variantDiscountPrice) {
-      $('.price.selling.discount').text(variantDiscountPrice);
-      $('.price.selling.original').addClass('crossed');
-      $('.price.selling.discount').removeClass('display-none');
-    } else {
-      $('.price.selling.original').removeClass('crossed');
-      $('.price.selling.discount').addClass('display-none');
-    }
-  };
+      if (onSale) {
+        priceTag.classList.add('crossed');
+        discountPriceTag.classList.remove('display-none');
+      } else {
+        discountPriceTag.classList.add('display-none');
+        priceTag.classList.remove('crossed');
+      }
+    };
 
-  const radios = $('#product-variants input[type="radio"]');
-  if (radios.length > 0) {
-    const selectedRadio = $(
-        '#product-variants input[type="radio"][checked="checked"]'
-    );
-    Spree.showVariantImages(selectedRadio.attr('value'));
-    Spree.updateVariantPrice(selectedRadio);
+    // Update image regarding what variant is selected
+    const updateVariantImage = ({ imageUrl, imageKey }) => {
+      mainImage.src = imageUrl;
+      mainImage.dataset.key = imageKey;
+    };
+
+    // Update thumbnails regarding what variant is selected
+    const updateThumbnails = ({ id }) => {
+      const thumbnails = productShow.querySelectorAll('#thumbnails .thumbnail');
+      thumbnails.forEach((thumbnail) => {
+        if (parseInt(thumbnail.dataset.variantId) === id) {
+          thumbnail.style.display = 'block';
+          if (thumbnail.dataset.key == mainImage.dataset.key) {
+            thumbnail.classList.add('selected');
+          } else {
+            thumbnail.classList.remove('selected');
+          }
+        } else {
+          thumbnail.style.display = 'none';
+        }
+      });
+    };
+
+    // Fetch the selected variant thanks to the current selected option values
+    // Then call the different methods to update all the variant informations (price, image, thumbnails etc...)
+    const updateVariantInformations = () => {
+      const formData = new FormData(cartForm);
+      const queryString = new URLSearchParams(formData);
+      fetch(`/products/variant_with_options_hash?${queryString}`, { headers: { 'accept': 'application/json' } })
+          .then((response) => response.json())
+          .then((variant) => {
+            variantIdInput.value = variant.id;
+            updateVariantImage(variant);
+            updateThumbnails(variant);
+            updateAddToCartBtn(variant);
+            updateVariantPrice(variant);
+          });
+    };
+
+    // Update variant information when page loads
+    updateVariantInformations();
+
+    const productId = cartForm.querySelector('#product_id').value;
+    Array.from(cartForm.elements).forEach((formElement) => {
+      // Add an event listener to all inputs of the "cart form" used to select variant options
+      formElement.addEventListener('change', (event) => {
+        // When an option value is selected call /products/product_variants_with_option_values
+        // This endpoints will find all variants of this product that have this option value
+        // And then returns a hash of those variants option values grouped by option type
+        const selectedOptionValue = event.currentTarget;
+        const selectedOptionTypeId = selectedOptionValue.tagName === 'SELECT' ? selectedOptionValue.dataset.id : selectedOptionValue.dataset.optionTypeId;
+        const queryString = `product_id=${productId}&selected_option_type=${selectedOptionTypeId}&selected_option_value=${selectedOptionValue.value}`;
+        fetch(`/products/product_variants_with_option_values?${queryString}`, { headers: { 'accept': 'application/json' } })
+            .then((response) => response.json())
+            .then((optionValuesByOptionType) => {
+              // For each option types returned, find the corresponding option values on the page and then:
+              // - If this option type is the one that the user just selected, we enable all option values (Because we the user to be able to change the option value of the selected option type)
+              // - If not, disable/enable option values that are not included in the returned results from the endpoint (Indeed it means that for the selected option type, there are no variant with those option values, so we need to prevent user from selecting it)
+              // - After doing this process, if one (previously) selected option value is now disabled, we need to change it. So we find the first not-disabled option value of the same option type and select it.
+              Object.entries(optionValuesByOptionType).forEach((optionType) => {
+                const optionValueTags = Array.from(cartForm.querySelectorAll(`[data-option-type-id='${optionType[0]}']`));
+
+                // The "model" option type is returned by the endpoint but is hidden on the page by default,
+                // so we won't find a corresponding option value tags. In that case we just skip it and pass to the next iteration
+                if (optionValueTags.length == 0) { return; };
+
+                if (selectedOptionTypeId === optionType[0]) {
+                  optionValueTags.forEach((optionValueTag) => optionValueTag.disabled = false);
+                } else {
+                  optionValueTags.forEach((optionValueTag) => {
+                    optionValueTag.disabled = !optionType[1].some((optionValue) => optionValue.id === parseInt(optionValueTag.value));
+                  });
+
+                  if (optionValueTags.find((optionValueTag) => optionValueTag.selected)?.disabled == true) {
+                    optionValueTags.find((optionValueTag) => optionValueTag.disabled === false).selected = true;
+                  }
+                }
+              });
+              // When we all this process is done we can ends up with a new set of selected option values.
+              // We thus need to fetch the corresponding variant and update all variant informations.
+              updateVariantInformations();
+            });
+      });
+    });
   }
-
-  Spree.addImageHandlers();
-
-  /* eslint no-invalid-this: "off" */
-  radios.click(function(event) {
-    Spree.showVariantImages(this.value);
-    Spree.updateVariantPrice($(this));
-  });
 };
 
 export { productShowVariants };

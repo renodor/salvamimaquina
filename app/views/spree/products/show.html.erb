@@ -6,10 +6,16 @@
       <div data-hook="product_left_part_wrap">
         <div id="product-images" data-hook="product_images">
           <div id="main-image" data-hook>
-            <%= cl_image_tag @product.gallery.images.first&.attachment&.key, width: 600, crop: :fit, itemprop: "image" %>
+            <% if @product_has_variant %>
+              <%# The src will be added by JS depending what variant is selected %>
+              <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="<%= @product.name %>" itemprop="image" data-key="">
+            <% else %>
+              <%= cl_image_tag @first_image_key, width: 600, crop: :fit, itemprop: "image", data: { key: @first_image_key } %>
+            <% end %>
           </div>
           <div id="thumbnails" data-hook>
-            <%= render partial: 'thumbnails' %>
+            <%# @first_image_key will be defined only if product has no variants. If it has variants all will be defined by JS anyway %>
+            <%= render 'thumbnails', first_image_key: @first_image_key %>
           </div>
         </div>
 

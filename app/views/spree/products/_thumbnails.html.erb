@@ -1,25 +1,17 @@
 <%# no need for thumbnails unless there is more than one image %>
+<%# first_image_key will be defined only if products has no variants. And in that case we need to select the corresponding thumbnail.
+if products has variants, the corresponding thumbnail will be selected by JS %>
 <% if @product_images.size > 1 %>
-  <ul id="product-thumbnails" class="thumbnails inline" data-hook>
-
-    <% @product_images.each do |image| %>
-      <% next if image.viewable_id != @product.master.id %>
-      <li class='tmb-all tmb-<%= image.viewable_id %>'>
-        <%= link_to cl_image_path(image.attachment&.key) do %>
-          <%= cl_image_tag image.attachment&.key, height: 48, crop: :fit, itemprop: "image" %>
-        <% end %>
-      </li>
-    <% end %>
-
-    <% if @product.has_variants? %>
-      <% @product_images.each do |image| %>
-        <% next if image.viewable_id == @product.master.id %>
-        <li class='vtmb tmb-<%= image.viewable_id %>'>
-          <%= link_to cl_image_path(image.attachment&.key) do %>
-            <%= cl_image_tag image.attachment&.key, height: 48, crop: :fit, itemprop: "image" %>
-          <% end %>
-        </li>
-      <% end %>
-    <% end %>
-  </ul>
+  <% @product_images.each do |image| %>
+    <% image_key = image.attachment&.key %>
+    <div
+      class="thumbnail <%= first_image_key == image_key ? 'selected' : '' %>"
+      style="<%= @product_has_variant ? 'display: none;' : '' %>"
+      data-variant-id="<%= image.viewable_id %>"
+      data-image-url="<%= cl_image_path(image_key) %>"
+      data-key="<%= image_key %>"
+    >
+      <%= cl_image_tag image_key, height: 48, crop: :fit, itemprop: "image" %>
+    </div>
+  <% end %>
 <% end %>

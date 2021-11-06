@@ -30,6 +30,8 @@ Rails.application.routes.draw do
     end
 
     get '/t/filter_products', to: 'taxons#filter_products'
+    get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
+    get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
     get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
     get 'contact', to: 'home#contact'
     get 'shipping_informations', to: 'home#shipping_informations'

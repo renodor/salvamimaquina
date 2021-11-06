@@ -16,6 +16,12 @@
         }
       ],
       "comma-dangle": ["error", "never"],
-      "object-curly-spacing": ["error", "always"]
+      "object-curly-spacing": ["error", "always"],
+      "brace-style": [
+        "error",
+        "1tbs",
+        { "allowSingleLine": true }
+      ],
+      "block-spacing": ["error", "always"]
     }
 }
