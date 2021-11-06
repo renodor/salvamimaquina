@@ -40,6 +40,7 @@
         <%= @master.options_text %>
       </div>
     <% end %>
+    <%# If products has no variant the variant_id is the master id. If it has variants the variant_id will be defined by JS %>
     <%= hidden_field_tag "variant_id", @master.id %>
 
     <%# Only take into account the product master for the case it has no variants,
