@@ -15,8 +15,13 @@ module Spree
 
       @product_images = @product.gallery.images.includes(attachment_attachment: :blob)
 
-      # Maybe not needed because when we sync we don't add image to product master if it adds variant? (But not sure... To be confirmed)
-      @product_images = @product_images.where.not(viewable_id: @master.id) if @product_has_variant
+      if @product_has_variant
+        # Maybe not needed because when we sync we don't add image to product master if it has variants? (But not sure... To be confirmed)
+        @product_images = @product_images.where.not(viewable_id: @master.id)
+      else
+        # If product has no variants we will display the first image by default. We need to extract its key to have the correct thumbnail "selected"
+        @first_image_key = @product_images.first&.attachment&.key
+      end
     end
 
     # Takes the current product (thanks to params[:product_id])

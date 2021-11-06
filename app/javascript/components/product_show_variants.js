@@ -1,10 +1,12 @@
 // Update variant information on product show (price, add to cart btn, image, thumbnail, available options etc...) regarding what variant is selected
 const productShowVariants = () => {
   const productShow = document.querySelector('#product-show');
+  const productVariants = productShow?.querySelector('#product-variants');
 
-  if (productShow) {
+  if (productVariants) {
     const cartForm = productShow.querySelector('#cart-form > form');
     const mainImage = productShow.querySelector('#main-image img');
+    const variantIdInput = cartForm.querySelector('#variant_id');
 
     // Enable/disable add to cart btn and update its text regarding if variant is available or not
     const updateAddToCartBtn = ({ hasStock }) => {
@@ -65,6 +67,7 @@ const productShowVariants = () => {
       fetch(`/products/variant_with_options_hash?${queryString}`, { headers: { 'accept': 'application/json' } })
           .then((response) => response.json())
           .then((variant) => {
+            variantIdInput.value = variant.id;
             updateVariantImage(variant);
             updateThumbnails(variant);
             updateAddToCartBtn(variant);

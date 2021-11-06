@@ -39,20 +39,21 @@
       <div class="master-description">
         <%= @master.options_text %>
       </div>
-      <%= hidden_field_tag "variant_id", @master.id %>
     <% end %>
+    <%= hidden_field_tag "variant_id", @master.id %>
 
-    <% variant = @product_has_variant ? @variants.first : @master %>
-    <% variant_on_sale = variant.on_sale? %>
-    <div data-hook="product_price">
+    <%# Only take into account the product master for the case it has no variants,
+    if it has variants, price and atc btn informations will be updated by JS %>
+    <% master_on_sale = @master.on_sale? %>
+    <div>
       <div id="product-price">
         <div>
-          <% discount_price = variant.price %>
-          <span class="price selling discount <%= variant_on_sale ? '' : 'display-none' %>" itemprop="price" content="<%= discount_price %>">
+          <% discount_price = @master.price %>
+          <span class="price selling discount <%= master_on_sale ? '' : 'display-none' %>" itemprop="price" content="<%= discount_price %>">
             <%= number_to_currency(discount_price) %>
           </span>
-          <% price = variant.original_price %>
-          <span class="price selling original <%= variant_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= price %>">
+          <% price = @master.original_price %>
+          <span class="price selling original <%= master_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= price %>">
             <%= number_to_currency(price) %>
           </span>
         </div>

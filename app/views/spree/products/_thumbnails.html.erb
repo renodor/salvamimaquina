@@ -1,8 +1,16 @@
 <%# no need for thumbnails unless there is more than one image %>
+<%# first_image_key will be defined only if products has no variants. And in that case we need to select the corresponding thumbnail.
+if products has variants, the corresponding thumbnail will be selected by JS %>
 <% if @product_images.size > 1 %>
   <% @product_images.each do |image| %>
     <% image_key = image.attachment&.key %>
-    <div class='thumbnail' style="display: none;" data-variant-id="<%= image.viewable_id %>" data-image-url="<%= cl_image_path(image_key) %>" data-key="<%= image_key %>">
+    <div
+      class="thumbnail <%= first_image_key == image_key ? 'selected' : '' %>"
+      style="<%= @product_has_variant ? 'display: none;' : '' %>"
+      data-variant-id="<%= image.viewable_id %>"
+      data-image-url="<%= cl_image_path(image_key) %>"
+      data-key="<%= image_key %>"
+    >
       <%= cl_image_tag image_key, height: 48, crop: :fit, itemprop: "image" %>
     </div>
   <% end %>
