@@ -1,10 +1,12 @@
-const cartForm = () => {
+// Update variant information on product show (price, add to cart btn, image, thumbnail, available options etc...) regarding what variant is selected
+const productShowVariants = () => {
   const productShow = document.querySelector('#product-show');
 
   if (productShow) {
     const cartForm = productShow.querySelector('#cart-form > form');
     const mainImage = productShow.querySelector('#main-image img');
 
+    // Enable/disable add to cart btn and update its text regarding if variant is available or not
     const updateAddToCartBtn = ({ hasStock }) => {
       const addToCartBtn = cartForm.querySelector('.add-to-cart button');
       if (hasStock) {
@@ -16,6 +18,7 @@ const cartForm = () => {
       }
     };
 
+    // Update price (and discount price) regarding what variant is selected
     const updateVariantPrice = ({ price, discountPrice, onSale }) => {
       const priceTag = cartForm.querySelector('#product-price .price.original');
       priceTag.innerHTML = price;
@@ -31,11 +34,13 @@ const cartForm = () => {
       }
     };
 
+    // Update image regarding what variant is selected
     const updateVariantImage = ({ imageUrl, imageKey }) => {
       mainImage.src = imageUrl;
       mainImage.dataset.key = imageKey;
     };
 
+    // Update thumbnails regarding what variant is selected
     const updateThumbnails = ({ id }) => {
       const thumbnails = productShow.querySelectorAll('#thumbnails .thumbnail');
       thumbnails.forEach((thumbnail) => {
@@ -52,6 +57,8 @@ const cartForm = () => {
       });
     };
 
+    // Fetch the selected variant thanks to the current selected option values
+    // Then call the different methods to update all the variant informations (price, image, thumbnails etc...)
     const updateVariantInformations = () => {
       const formData = new FormData(cartForm);
       const queryString = new URLSearchParams(formData);
@@ -65,19 +72,32 @@ const cartForm = () => {
           });
     };
 
+    // Update variant information when page loads
     updateVariantInformations();
 
     const productId = cartForm.querySelector('#product_id').value;
     Array.from(cartForm.elements).forEach((formElement) => {
+      // Add an event listener to all inputs of the "cart form" used to select variant options
       formElement.addEventListener('change', (event) => {
+        // When an option value is selected call /products/product_variants_with_option_values
+        // This endpoints will find all variants of this product that have this option value
+        // And then returns a hash of those variants option values grouped by option type
         const selectedOptionValue = event.currentTarget;
         const selectedOptionTypeId = selectedOptionValue.tagName === 'SELECT' ? selectedOptionValue.dataset.id : selectedOptionValue.dataset.optionTypeId;
         const queryString = `product_id=${productId}&selected_option_type=${selectedOptionTypeId}&selected_option_value=${selectedOptionValue.value}`;
         fetch(`/products/product_variants_with_option_values?${queryString}`, { headers: { 'accept': 'application/json' } })
             .then((response) => response.json())
             .then((optionValuesByOptionType) => {
+              // For each option types returned, find the corresponding option values on the page and then:
+              // - If this option type is the one that the user just selected, we enable all option values (Because we the user to be able to change the option value of the selected option type)
+              // - If not, disable/enable option values that are not included in the returned results from the endpoint (Indeed it means that for the selected option type, there are no variant with those option values, so we need to prevent user from selecting it)
+              // - After doing this process, if one (previously) selected option value is now disabled, we need to change it. So we find the first not-disabled option value of the same option type and select it.
               Object.entries(optionValuesByOptionType).forEach((optionType) => {
                 const optionValueTags = Array.from(cartForm.querySelectorAll(`[data-option-type-id='${optionType[0]}']`));
+
+                // The "model" option type is returned by the endpoint but is hidden on the page by default,
+                // so we won't find a corresponding option value tags. In that case we just skip it and pass to the next iteration
+                if (optionValueTags.length == 0) { return; };
 
                 if (selectedOptionTypeId === optionType[0]) {
                   optionValueTags.forEach((optionValueTag) => optionValueTag.disabled = false);
@@ -91,11 +111,13 @@ const cartForm = () => {
                   }
                 }
               });
-            })
-            .then(() => updateVariantInformations());
+              // When we all this process is done we can ends up with a new set of selected option values.
+              // We thus need to fetch the corresponding variant and update all variant informations.
+              updateVariantInformations();
+            });
       });
     });
   }
 };
 
-export { cartForm };
+export { productShowVariants };

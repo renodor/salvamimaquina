@@ -1,3 +1,4 @@
+// Update the main image and the selected thumbnail when a thumbnail is clicked
 const productShowThumbnails = () => {
   const thumbnailsContainer = document.querySelectorAll('#product-show #thumbnails');
 
