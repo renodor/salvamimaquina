@@ -21,7 +21,7 @@ namespace :setup_prod_db do
     store = Spree::Store.find(1)
 
     store.update!(
-      name: 'Salva Mi Maquina',
+      name: 'Salva Mi Máquina',
       url: 'www.salvamimaquina.com',
       mail_from_address: 'administracion@salvamimaquina.com',
       default_currency: 'USD',
