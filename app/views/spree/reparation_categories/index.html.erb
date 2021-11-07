@@ -1,8 +1,4 @@
-<% if @banner %>
-  <div class="banner">
-    <%= cl_image_tag(@banner.photo.key, width: 1296, height: 200) %>
-  </div>
-<% end %>
+<%= render 'spree/shared/banner', banner: @banner %>
 <div id="reparation-categories">
   <h2> <%= t('choose_reparation_category') %></h2>
   <div id="reparation-categories-grid">

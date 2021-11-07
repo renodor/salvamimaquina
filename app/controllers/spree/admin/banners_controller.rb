@@ -41,7 +41,7 @@ module Spree
       private
 
       def banner_params
-        params.require(:banner).permit(:location, :photo)
+        params.require(:banner).permit(:location, :photo, :text_one, :text_two, :text_three)
       end
     end
   end

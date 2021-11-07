@@ -6,6 +6,9 @@
 <%= simple_form_for @banner, url: admin_banner_path do |f| %>
   <%= f.input :location, collection: Banner.locations.keys %>
   <%= f.input :photo, as: :file %>
+  <%= f.input :text_one %>
+  <%= f.input :text_two %>
+  <%= f.input :text_three %>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>
 

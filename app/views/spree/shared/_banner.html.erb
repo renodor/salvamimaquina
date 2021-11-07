@@ -1,0 +1,10 @@
+<% if @banner&.texts&.any? %>
+  <div
+    class="banner"
+    style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(<%= cl_image_path banner.photo.key, width: 1296, height: 200 %>)"
+  >
+    <% banner.texts.each do |text| %>
+      <p><%= text %></p>
+    <% end %>
+  </div>
+<% end %>

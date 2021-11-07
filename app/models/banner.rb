@@ -7,4 +7,8 @@ class Banner < ApplicationRecord
 
   validates :photo, :location, presence: true
   validates :location, uniqueness: { message: ->(banner, _) { "There can be only one \"#{banner.location.capitalize}\" Banner, please edit the one that already exists" } }
+
+  def texts
+    [text_one, text_two, text_three]
+  end
 end

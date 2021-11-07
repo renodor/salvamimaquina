@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_29_083948) do
+ActiveRecord::Schema.define(version: 2021_11_07_181609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,9 @@ ActiveRecord::Schema.define(version: 2021_10_29_083948) do
     t.integer "location"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "text_one"
+    t.text "text_two"
+    t.text "text_three"
   end
 
   create_table "friendly_id_slugs", id: :serial, force: :cascade do |t|
