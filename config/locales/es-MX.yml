@@ -166,9 +166,9 @@ es-MX:
     reparation_service_title: '¿Cómo funciona el servicio de reparación?'
     features:
       feature_one_title: 'Diagnóstico'
-      feature_one_text: 'Seleccione su dispositivo y su problema y le presentaremos un presupuesto y tiempo de reparación.'
+      feature_one_text: 'Te presentaremos un diagnóstico y tiempo de reparación dependiendo de su dispositivo y tipo de problema.'
       feature_two_title: 'Elegir el lugar'
-      feature_two_text: 'Tendrá la opción de llegar a una de nuestras 2 sucursales o programar un servicio de mensajería a domicilio.'
+      feature_two_text: 'Escoger entre llevar su equipo a una de nuestras dos sucursales y programar un servicio de mensajería a domicilio.'
       feature_three_title: 'Poner una sonrisa en su cara'
       feature_three_text: 'Se le notificará automáticamente cuando su equipo esté listo. Se beneficiará de una garantía de hasta 1 año.'
     shop_name: 'Tienda Salva Mi Máquina'
