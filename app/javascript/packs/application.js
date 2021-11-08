@@ -29,6 +29,7 @@ import { productShowThumbnails } from '../components/product_show_thumbnails';
 import { productSorting } from '../components/product_sorting';
 import { productFiltersModal } from '../components/product_filters_modal';
 import { productFilters } from '../components/product_filters';
+import { quantitySelector } from '../components/quantity_selector';
 import { cart } from '../components/cart';
 
 // Internal Plugins
@@ -46,6 +47,7 @@ document.addEventListener('turbolinks:load', () => {
   productSorting();
   productFiltersModal();
   productFilters();
+  quantitySelector();
   cart();
 
   initMapbox();

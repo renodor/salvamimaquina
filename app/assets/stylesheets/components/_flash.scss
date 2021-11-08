@@ -7,7 +7,7 @@
   font-weight: 400;
   z-index: 100;
   &.error {
-    background-color: $dark-gray;
+    background-color: $dark-red;
   }
   &.notice, &.success {
     background-color: $green

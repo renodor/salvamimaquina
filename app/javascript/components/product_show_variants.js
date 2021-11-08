@@ -10,7 +10,7 @@ const productShowVariants = () => {
 
     // Enable/disable add to cart btn and update its text regarding if variant is available or not
     const updateAddToCartBtn = ({ hasStock }) => {
-      const addToCartBtn = cartForm.querySelector('.add-to-cart button');
+      const addToCartBtn = cartForm.querySelector('.add-to-cart #add-to-cart-btn');
       if (hasStock) {
         addToCartBtn.disabled = false;
         addToCartBtn.innerHTML = addToCartBtn.dataset.buy.toUpperCase();
@@ -86,6 +86,11 @@ const productShowVariants = () => {
         // This endpoints will find all variants of this product that have this option value
         // And then returns a hash of those variants option values grouped by option type
         const selectedOptionValue = event.currentTarget;
+
+        // Changing quantity is also part of the cartForm but we handle it in a separate quantity_selector.js file,
+        // because it is not related to variant changes, and not specific to product show.
+        if (selectedOptionValue.name == 'quantity') { return; };
+
         const selectedOptionTypeId = selectedOptionValue.tagName === 'SELECT' ? selectedOptionValue.dataset.id : selectedOptionValue.dataset.optionTypeId;
         const queryString = `product_id=${productId}&selected_option_type=${selectedOptionTypeId}&selected_option_value=${selectedOptionValue.value}`;
         fetch(`/products/product_variants_with_option_values?${queryString}`, { headers: { 'accept': 'application/json' } })

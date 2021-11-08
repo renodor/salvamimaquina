@@ -54,6 +54,14 @@ module Spree
       }
     end
 
+    def check_if_can_supply
+      variant = Spree::Variant.find_by(id: params[:variant_id])
+      render json: {
+        canSupply: variant&.can_supply?(params[:quantity].to_i),
+        canSupplyOneMore: variant&.can_supply?(params[:quantity].to_i + 1)
+      }
+    end
+
     Spree::ProductsController.prepend self
   end
 end

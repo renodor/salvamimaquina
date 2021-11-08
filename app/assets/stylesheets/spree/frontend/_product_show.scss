@@ -96,10 +96,9 @@
           }
         }
         .add-to-cart {
-          .add-to-cart-quantity {
-            padding: 16px 10px;
-          }
-          button {
+          display: flex;
+          column-gap: 10px;
+          #add-to-cart-btn {
             width: 140px;
           }
         }
@@ -132,7 +131,7 @@
               }
             }
           }
-          .add-to-cart button {
+          .add-to-cart #add-to-cart-btn {
             width: 100%;
           }
         }

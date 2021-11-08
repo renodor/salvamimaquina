@@ -41,7 +41,7 @@
       </div>
     <% end %>
     <%# If products has no variant the variant_id is the master id. If it has variants the variant_id will be defined by JS %>
-    <%= hidden_field_tag "variant_id", @master.id %>
+    <%= hidden_field_tag 'variant_id', @master.id %>
 
     <%# Only take into account the product master for the case it has no variants,
     if it has variants, price and atc btn informations will be updated by JS %>
@@ -62,15 +62,19 @@
 
       <div class="add-to-cart">
         <% if @master.can_supply? %>
-          <%#= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
-          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
+          <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.buy').upcase %>
           <% end %>
         <% else %>
-          <%= button_tag class: 'large primary', class: 'btn btn-primary', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
+          <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.out_of_stock').upcase %>
           <% end %>
         <% end %>
+        <div class="quantity-selector">
+          <span class="disabled" data-type="remove">-</span>
+          <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', min: 1 %>
+          <span data-type="add">+</span>
+        </div>
       </div>
     </div>
   </div>

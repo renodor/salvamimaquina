@@ -1,0 +1,37 @@
+.quantity-selector {
+  user-select: none; /* standard syntax */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+
+  display: flex;
+  align-items: center;
+  border: 1px solid $light-gray;
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  input[type=number] {
+    text-align: center;
+    border: none;
+    padding: 13px 0!important;
+    width: 20px;
+  }
+  span {
+    cursor: pointer;
+    padding: 13px 20px;
+    &.disabled {
+      color: $light-gray;
+      cursor: not-allowed;
+    }
+  }
+}
