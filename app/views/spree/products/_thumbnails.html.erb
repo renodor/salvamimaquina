@@ -8,7 +8,7 @@ if products has variants, the corresponding thumbnail will be selected by JS %>
       class="thumbnail <%= first_image_key == image_key ? 'selected' : '' %>"
       style="<%= @product_has_variant ? 'display: none;' : '' %>"
       data-variant-id="<%= image.viewable_id %>"
-      data-image-url="<%= cl_image_path(image_key) %>"
+      data-image-url="<%= cl_image_path(image_key, width: 600, crop: :fit) %>"
       data-key="<%= image_key %>"
     >
       <%= cl_image_tag image_key, height: 48, crop: :fit, itemprop: "image" %>

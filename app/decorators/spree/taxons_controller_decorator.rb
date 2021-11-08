@@ -45,7 +45,7 @@ module Spree
         product_image_key = cheapest_variant.images.first&.attachment&.key
         aditional_data = {
           url: spree.product_path(product, taxon_id: @taxon.try(:id)),
-          image_url: product_image_key ? ActionController::Base.helpers.cl_image_path(product_image_key) : nil,
+          image_url: product_image_key ? ActionController::Base.helpers.cl_image_path(product_image_key, width: 540, crop: :fill) : nil,
           cheapest_variant_onsale: cheapest_variant.on_sale?,
           discount_price: cheapest_variant.price,
           discount_price_html_tag: ActionController::Base.helpers.number_to_currency(cheapest_variant.price),
