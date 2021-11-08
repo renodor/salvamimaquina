@@ -133,6 +133,9 @@ es-MX:
         disclaimer: 'Importante: En el caso de no estar presente a la hora de entrega nos comunicaremos al teléfono incluido en su pedido.'
         new_ecommerce_order: 'Nuevo pedido en salvamimaquina.com'
         client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
+    order_mutex_admin_error: 'El Pedido está siendo modificado por alguien. Por favor, inténtelo otra vez.'
+    order_mutex_error: 'Algo salió mal. Por favor, vuelva a intentarlo.'
+    order_not_found: 'No podemos encontrar su pedido. Por favor, inténtelo otra vez'
   activerecord:
     attributes:
       spree/credit_card:
