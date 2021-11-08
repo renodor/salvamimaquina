@@ -23,7 +23,6 @@
 <% if products.present? %>
   <ul id="products" class="inline product-listing" data-hook>
     <% products.each do |product| %>
-      <% url = spree.product_path(product, taxon_id: @taxon.try(:id)) %>
       <% cheapest_variant = product.cheapest_variant %>
       <li id="product_<%= product.id %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
         <div class="product-image">
@@ -32,7 +31,6 @@
           <% else %>
             <div class="image-placeholder" style="width: 200px; height: 200px"></div>
           <% end %>
-          <%#= render('spree/shared/image', image: product.gallery.images.first, size: :product, itemprop: "image") %>
         </div>
         <div class="product-name"><%= product.name %></div>
         <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -47,7 +45,7 @@
           </span>
           <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
         </span>
-        <%= link_to '', url, class: 'product-link full-absolute', itemprop: "name", title: product.name %>
+        <%= link_to '', spree.product_path(product, taxon_id: @taxon.try(:id)), class: 'product-link full-absolute', itemprop: "name", title: product.name %>
       </li>
     <% end %>
   </ul>

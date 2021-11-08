@@ -67,6 +67,7 @@ en:
     oldest: 'Oldest'
     best_seller: 'Best seller'
     on_sale_products: 'On sale products'
+    related_products: 'Related products'
     district:
       one: 'District'
       other: 'Districts'

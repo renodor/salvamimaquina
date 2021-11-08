@@ -31,18 +31,6 @@
         </div>
       </div>
     <% end %>
-
-    <!-- <div id="empty-cart" data-hook> -->
-      <%#= form_tag empty_cart_path, method: :put do %>
-        <!-- <p id="clear_cart_link" data-hook> -->
-        <%#= submit_tag t('spree.empty_cart'), class: 'button gray' %>
-        <%#= t('spree.or') %>
-        <%#= link_to t('spree.continue_shopping'), products_path, class: 'continue button gray' %>
-        <!-- </p> -->
-      <%# end %>
-
-      <%#= render template: 'spree/coupon_codes/new' %>
-    <!-- </div> -->
-
   <% end %>
+  <%= render 'spree/shared/related_products', related_products: @order.related_products %>
 </div>

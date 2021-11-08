@@ -10,3 +10,4 @@
 //= require_tree .
 //= require spree/backend/flatpickr
 //= require spree/backend/solidus_sale_prices
+//= require spree/backend/solidus_related_products

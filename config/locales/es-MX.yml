@@ -43,6 +43,7 @@ es-MX:
     oldest: 'Más viejo'
     best_seller: 'Más vendido'
     on_sale_products: 'Productos rebajados'
+    related_products: 'Productos relacionados'
     district:
       one: 'Corregimiento'
       other: 'Corregimientos'

@@ -22,6 +22,15 @@ module Spree
       line_items.includes(variant: :stock_items).select(&:insufficient_stock?)
     end
 
+    def related_products
+      # TODO: improve this SQL query...
+      Spree::Product
+        .not_deleted
+        .where.not(id: products.pluck(:id))
+        .where(id: Spree::Relation.where(related_to: products.pluck(:id)).pluck(:relatable_id))
+        .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
+    end
+
     Spree::Order.prepend self
   end
 end
