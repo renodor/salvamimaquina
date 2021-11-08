@@ -1,0 +1,10 @@
+<!-- replace_contents 'table#listing_product_stock thead tr' -->
+<tr>
+  <th><%= t('spree.item', count: 1) %></th> <!-- add argument count here -->
+  <th><%= Spree::Variant.model_name.human %></th>
+  <th><%= Spree::StockLocation.model_name.human %></th>
+  <th class="align-center"><%= t('spree.backorderable_header') %></th>
+  <th class="align-center"><%= t('spree.count_on_hand') %></th>
+  <th><%= t('spree.modify_stock_count') %></th>
+  <th class="actions"></th>
+</tr>
