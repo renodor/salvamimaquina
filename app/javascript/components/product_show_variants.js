@@ -8,10 +8,27 @@ const productShowVariants = () => {
     const mainImage = productShow.querySelector('#main-image img');
     const variantIdInput = cartForm.querySelector('#variant_id');
 
+    // Update the quantity selector with the total stock
+    // and enable/disable the add and remove quantity trigger regarding the stock level of the new variant
+    const updateQuantityInput = ({ totalStock }) => {
+      const quantityInput = cartForm.querySelector('.add-to-cart .quantity-selector input#quantity');
+      const addQuantityTrigger = cartForm.querySelector('.add-to-cart .quantity-selector span[data-type="add"]');
+      const removeQuantityTrigger = cartForm.querySelector('.add-to-cart .quantity-selector span[data-type="remove"]');
+
+      quantityInput.value = 1;
+      quantityInput.dataset.totalStock = totalStock;
+      removeQuantityTrigger.classList.add('disabled');
+      if (totalStock > 1) {
+        addQuantityTrigger.classList.remove('disabled');
+      } else {
+        addQuantityTrigger.classList.add('disabled');
+      }
+    };
+
     // Enable/disable add to cart btn and update its text regarding if variant is available or not
-    const updateAddToCartBtn = ({ hasStock }) => {
+    const updateAddToCartBtn = ({ totalStock }) => {
       const addToCartBtn = cartForm.querySelector('.add-to-cart #add-to-cart-btn');
-      if (hasStock) {
+      if (totalStock > 0) {
         addToCartBtn.disabled = false;
         addToCartBtn.innerHTML = addToCartBtn.dataset.buy.toUpperCase();
       } else {
@@ -70,6 +87,7 @@ const productShowVariants = () => {
             variantIdInput.value = variant.id;
             updateVariantImage(variant);
             updateThumbnails(variant);
+            updateQuantityInput(variant);
             updateAddToCartBtn(variant);
             updateVariantPrice(variant);
           });

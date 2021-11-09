@@ -48,17 +48,9 @@ module Spree
         onSale: variant.on_sale?,
         price: ActionController::Base.helpers.number_to_currency(variant.original_price),
         discountPrice: ActionController::Base.helpers.number_to_currency(variant.price),
-        hasStock: variant.can_supply?,
+        totalStock: variant.total_on_hand,
         imageKey: variant_image_key,
         imageUrl: variant_image_key ? ActionController::Base.helpers.cl_image_path(variant_image_key, width: 600, crop: :fit) : nil
-      }
-    end
-
-    def check_if_can_supply
-      variant = Spree::Variant.find_by(id: params[:variant_id])
-      render json: {
-        canSupply: variant&.can_supply?(params[:quantity].to_i),
-        canSupplyOneMore: variant&.can_supply?(params[:quantity].to_i + 1)
       }
     end
 

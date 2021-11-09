@@ -14,13 +14,15 @@
     padding-left: 60px!important;
     padding-right: 60px!important;
   }
-  &:hover, &:focus, &:active {
-    background-color: $dark-green!important;
-  }
   &:disabled {
     background-color: $green;
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: initial;
+  }
+  &:not(:disabled) {
+    &:hover, &:focus, &:active {
+      background-color: $dark-green!important;
+    }
   }
 }

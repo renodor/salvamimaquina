@@ -76,6 +76,7 @@
             select {
               width: initial;
               min-width: 140px;
+              border-radius: 0;
               &:focus {
                 box-shadow: none;
               }
@@ -107,7 +108,7 @@
   }
 }
 
-@media ($max-s) {
+@media ($max-m) {
   #product-show {
     #product-top-part {
       flex-direction: column;
