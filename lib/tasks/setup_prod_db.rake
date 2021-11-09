@@ -15,6 +15,7 @@ namespace :setup_prod_db do
     destroy_countries_and_states_out_of_panama
     create_payment_methods
     create_free_shipping_promotion
+    create_cross_sells_relation_type
   ]
 
   task :create_store do
@@ -303,6 +304,15 @@ namespace :setup_prod_db do
       type: 'Spree::Promotion::Rules::ShippingMethod'
     )
     promotion.save!
+  end
+
+  task :create_cross_sells_relation_type do
+    Spree::RelationType.find_or_create_by!(
+      name: 'Cross Sells',
+      applies_to: 'Spree::Product',
+      applies_from: 'Spree::Product',
+      bidirectional: true
+    )
   end
 end
 # rubocop:enable Metrics/BlockLength
