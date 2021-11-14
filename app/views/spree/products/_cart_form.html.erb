@@ -9,19 +9,21 @@
           <% elsif option_type.name == 'color' %>
             <div id="variant-colors">
               <p class="variant-option-type"><%= option_type.name.capitalize %></p>
-              <% option_values.each_with_index do |color, index| %>
-                  <%=
-                    radio_button_tag "variant_options[option_type_#{option_type.id}]",
-                    color.id,
-                    index == 0,
-                    data: { option_type_id: option_type.id }
-                  %>
-                  <%=
-                    label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
-                    '',
-                    style: "background-color: #{color_code(color.name)};"
-                  %>
-              <% end %>
+              <div class="color-badges">
+                <% option_values.each_with_index do |color, index| %>
+                    <%=
+                      radio_button_tag "variant_options[option_type_#{option_type.id}]",
+                      color.id,
+                      index == 0,
+                      data: { option_type_id: option_type.id }
+                    %>
+                    <%=
+                      label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
+                      '',
+                      style: "background-color: #{color_code(color.name)};"
+                    %>
+                <% end %>
+              </div>
             </div>
           <% else %>
             <div class="variant-options">

@@ -4,7 +4,7 @@
 <% if capacity_filter.present? %>
   <div class="navigation product-filter" data-hook="navigation">
     <h6 class="filter-title"><%= t('spree.capacity') %></h6>
-    <ul class="filter_choices">
+    <ul>
       <% capacity_filter.each do |capacity, capacity_id| %>
         <li>
           <input type="checkbox"

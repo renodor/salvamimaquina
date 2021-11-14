@@ -106,24 +106,7 @@
         }
       }
       #color-filter {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 15px 10px 0 10px;
-        .color-filter-label {
-          width: 31px;
-          height: 31px;
-          border: 2px solid transparent;
-          cursor: pointer;
-          opacity: 0.6;
-          outline: 1px solid #bdbdbd;
-          @include default-transition(opacity, border);
-        }
-        input[type='checkbox']:checked + .color-filter-label {
-          border: 2px solid $dark-gray;
-          opacity: 1;
-          outline: 0;
-        }
+        margin: 15px 9px 0 9px;
       }
     }
   }

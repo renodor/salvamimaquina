@@ -4,9 +4,8 @@
 <% if color_filter.present? %>
   <div class="navigation product-filter" data-hook="navigation">
     <h6 class="filter-title"><%= t('spree.color', count: color_filter.size) %></h6>
-    <div id="color-filter" class="filter_choices">
+    <div id="color-filter" class="color-badges">
       <% color_filter.each do |color, color_id| %>
-        <div>
           <input type="checkbox"
                   id="<%= color_id %>"
                   name="<%= "search[with_option][#{color_option_type.id}][]" %>"
@@ -15,7 +14,6 @@
           />
           <label class="color-filter-label" style="background-color: <%= color_code(color) %>;" for="<%= color_id %>">
           </label>
-        </div>
       <% end %>
     </div>
   </div>

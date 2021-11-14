@@ -4,7 +4,7 @@
 <% if model_filter.present? %>
   <div class="navigation product-filter" data-hook="navigation">
     <h6 class="filter-title"><%= t('spree.model', count: model_filter.size) %></h6>
-    <ul class="filter_choices">
+    <ul>
       <% model_filter.each do |model_name, model_id| %>
         <li>
           <input type="checkbox"
