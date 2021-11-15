@@ -26,19 +26,6 @@ const productSorting = () => {
         });
       });
     });
-
-    // When page is resized (can happen when user put device horizontally/vertically),
-    // makes sure that the product filter modal gray background disapear,
-    // and makes sure that the correct tab stays open (the ones with product filters and not with products sorting)
-    window.addEventListener('resize', (event) => {
-      document.querySelector('.modal-backdrop.fade.show')?.remove();
-      if (window.innerWidth > 767) {
-        const productFiltersAndSortingTab = document.getElementById('productFiltersAndSortingTab');
-        productFiltersAndSortingTab.querySelector('#products-sorting-tab').classList.remove('active', 'show');
-        productFiltersAndSortingTab.querySelector('#product-filters-tab').classList.add('active', 'show');
-        document.querySelector('#productFiltersAndSortingTabContent #product-filters-tab-content').classList.add('active', 'show');
-      }
-    });
   };
 };
 
