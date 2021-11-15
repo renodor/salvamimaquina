@@ -85,6 +85,7 @@
         cursor: pointer;
         display: flex;
         justify-content: space-between;
+        column-gap: 5px;
         align-items: center;
         @include default-transition(color, background-color);
         &:hover {
@@ -93,6 +94,7 @@
         }
         svg {
           display: none;
+          flex-shrink: 0;
         }
       }
       input[type='checkbox'] {
