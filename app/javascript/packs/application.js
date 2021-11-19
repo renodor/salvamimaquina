@@ -33,6 +33,7 @@ import { quantitySelector } from '../components/quantity_selector';
 import { cart } from '../components/cart';
 
 // Internal Plugins
+import { corporateClientsLogoSlider } from '../plugins/corporate_clients_logo_slider';
 import { initMapbox } from '../plugins/init_mapbox';
 import { initBacCheckout } from '../plugins/bac_checkout';
 
@@ -51,5 +52,6 @@ document.addEventListener('turbolinks:load', () => {
   cart();
 
   initMapbox();
+  corporateClientsLogoSlider();
   initBacCheckout();
 });

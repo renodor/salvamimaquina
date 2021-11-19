@@ -12,12 +12,14 @@
 @import 'components/container';
 @import 'components/navbar';
 @import 'components/banner';
+@import 'components/slider';
 @import 'components/btn';
 @import 'components/flash';
 @import 'components/form';
 @import 'components/tooltip';
 @import 'components/footer';
 @import 'components/whatsapp_widget';
+@import 'components/contact_form';
 
 // Spree Components
 @import 'spree/frontend/wrapper';
@@ -42,6 +44,7 @@
 // Pages
 @import 'pages/homepage';
 @import 'pages/reparations';
+@import 'pages/corporate_clients';
 @import 'pages/contact';
 @import 'pages/information_pages';
 

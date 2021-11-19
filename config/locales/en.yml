@@ -32,6 +32,7 @@
 en:
   home: 'Home'
   online_shop: 'Online shop'
+  companies: 'Empresas'
   panama: 'Panama'
   trade_in: 'Trade in'
   reparation: 'Reparation'
@@ -43,6 +44,7 @@ en:
   contact_soon: 'We will contact you soon'
   message_sent: 'Thanks for your message, we will contact you soon.'
   business_hours: 'Business hours'
+  hour: 'Horario'
   closed: 'Closed'
   monday: 'Monday'
   tuesday: 'Tuesday'
@@ -51,6 +53,7 @@ en:
   friday: 'Friday'
   saturday: 'Saturday'
   sunday: 'Sunday'
+  to: 'To'
   spree:
     address: 'Address'
     item:
@@ -80,6 +83,7 @@ en:
         reparation_categories: 'Reparation Categories'
         reparation_requests: 'Reparation Requests'
         banners: 'Banners'
+        sliders: 'Sliders'
     different_billing_address: 'If you need a different billing address please contact us;'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'

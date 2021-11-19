@@ -1,0 +1,33 @@
+<% admin_breadcrumb('Slider') %>
+
+<% content_for :page_actions do %>
+  <% if can? :create, Slider %>
+    <li>
+      <%= link_to 'New Slider', spree.new_admin_slider_path, class: 'btn btn-primary' %>
+    </li>
+  <% end %>
+<% end %>
+
+<table>
+   <thead>
+      <tr>
+         <th>Location</th>
+         <th></th>
+      </tr>
+   </thead>
+   <tbody>
+    <% @sliders.each do |slider| %>
+      <tr>
+        <td><%= slider.location %></td>
+        <td class="actions">
+          <% if can?(:edit, slider) %>
+            <%= link_to_edit slider, no_text: true, url: edit_admin_slider_url(slider) %>
+          <% end %>
+          <% if can?(:destroy, slider) %>
+            <%= link_to "delete", admin_slider_url(slider), method: :delete %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+   </tbody>
+</table>

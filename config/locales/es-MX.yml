@@ -1,6 +1,7 @@
 es-MX:
   home: 'Inicio'
   online_shop: 'Tienda en línea'
+  companies: 'Empresas'
   panama: 'Panamá'
   trade_in: 'Trade in'
   send: 'Envíar'
@@ -13,6 +14,7 @@ es-MX:
   contact_soon: 'Estaremos en contacto rapidamente.'
   message_sent: 'Gracias por su mensaje, le estaremos contactando pronto.'
   business_hours: 'Horarios'
+  hour: 'Horario'
   closed: 'Cerrado'
   monday: 'Lunes'
   tuesday: 'Martes'
@@ -21,6 +23,7 @@ es-MX:
   friday: 'Viernes'
   saturday: 'Sábado'
   sunday: 'Domingo'
+  to: 'a'
   spree:
     email: 'Correo'
     brands: 'Marcas'
@@ -177,7 +180,26 @@ es-MX:
       feature_three_text: 'Se le notificará automáticamente cuando su equipo esté listo. Se beneficiará de una garantía de hasta 1 año.'
     shop_name: 'Tienda Salva Mi Máquina'
     best_at_best_price: 'Lo mejor de Apple, ¡al mejor precio!'
-  footer:
+  corporate_services:
+    repair:
+      title: 'Reparacíon y mantenimiento'
+      text: 'Smartphones, tabletas o computadoras. Lideres en reparación de placa lógica APPLE. Tenemos una tasa de éxito mayor a 80%, y tarifas competitivas.'
+    customer_service:
+      title: 'Servicio al cliente'
+      text: 'Servicio personalizado, eficiente y de alta calidad. Una ejecutiva de atención al cliente dedicada a su empresa, para una atención breve.'
+    emergency:
+      title: 'Intervenciones de emergencia'
+      text: 'Smartphones, tabletas o computadoras. Lideres en reparación de placa lógica APPLE. Tenemos una tasa de éxito mayor a 80%, y tarifas competitivas.'
+    credit:
+      title: 'Beneficios financieros'
+      text: 'Damos crédito a nuestros clientes empresariales'
+    quality:
+      title: 'Somos expertos'
+      text: 'Contamos con 12 técnicos con experiencia en las ramas de teléfonos, tablet y computadoras Apple y también en equipos Windows. Le garantiza un servicio de alta calidad.'
+    delivery:
+      title: 'Puerta a puerta'
+      text: 'Gracias a nuestra mensajería especializada, le brindamos servicios directamente en el cede de su empresa.'
+    footer:
     social: 'Redes'
     shops: 'Tiendas'
     ecommerce: 'Ecommerce'

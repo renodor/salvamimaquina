@@ -18,19 +18,54 @@ module Spree
     end
 
     def contact
-      @business_hours = generate_business_hours
       @user_message = UserMessage.new
+      generate_business_hours
+    end
+
+    def corporate_clients
+      @user_message = UserMessage.new
+      find_corporate_clients_banner_and_slider
+
+      # TODO: improve how we deal with this data... Maybe create a CorporateService model?
+      @corporate_services = %w[
+        repair
+        customer_service
+        emergency
+        credit
+        quality
+        delivery
+      ]
     end
 
     def create_user_message
       @user_message = UserMessage.new(user_message_params)
       if @user_message.save
-        UserMessageMailer.contact_message(@user_message).deliver_later
+        UserMessageMailer.contact_message(
+          user_message: @user_message,
+          subject: 'New Message from salvamimaquina.com contact form',
+          to: 'administracion@salvamimaquina.com'
+        ).deliver_later
         flash.notice = t('message_sent')
         redirect_to contact_path
       else
-        @business_hours = generate_business_hours
+        generate_business_hours
         render :contact
+      end
+    end
+
+    def create_corporate_client_message
+      @user_message = UserMessage.new(user_message_params)
+      if @user_message.save
+        UserMessageMailer.contact_message(
+          user_message: @user_message,
+          subject: 'New message from salvamimaquina.com corporate client contact form',
+          to: ['administracion@salvamimaquina.com', 'quentin@salvamimaquina.com']
+        ).deliver_later
+        flash.notice = t('message_sent')
+        redirect_to corporate_clients_path
+      else
+        find_corporate_clients_banner_and_slider
+        render :corporate_clients
       end
     end
 
@@ -58,7 +93,12 @@ module Spree
         business_hour
       end
 
-      business_hours.sort_by! { |day| %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].index(day[:day]) }
+      @business_hours = business_hours.sort_by! { |day| %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].index(day[:day]) }
+    end
+
+    def find_corporate_clients_banner_and_slider
+      @banner = Banner.find_by(location: :corporate_clients)
+      @slider = Slider.find_by(location: :corporate_clients)
     end
 
     Spree::HomeController.prepend self

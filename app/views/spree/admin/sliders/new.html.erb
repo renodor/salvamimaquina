@@ -1,0 +1,13 @@
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb(link_to 'Sliders', spree.admin_sliders_path) %>
+<% admin_breadcrumb('New Slider') %>
+
+<%= simple_form_for @slider, url: admin_sliders_path do |f| %>
+  <%= f.input :location, collection: Slider.locations.keys %>
+  <%= f.input :name %>
+  <%= f.input :slide_images, as: :file, input_html: { multiple: true } %>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>
+
+<br /><br />

@@ -1,16 +1,5 @@
-#contact-form {
-  margin-bottom: 30px;
-  form {
-    width: 50%;
-    input, textarea {
-      padding: 15px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    textarea {
-      height: 150px;
-    }
-  }
+#users-contact-form form {
+  width: 50%
 }
 
 #shops {
@@ -35,14 +24,14 @@
   #shops {
     flex-direction: column;
   }
+
+  #users-contact-form form {
+    width: 100%;
+  }
 }
 
 @media ($max-m) {
   #shops iframe {
-    width: 100%;
-  }
-
-  #contact-form form {
     width: 100%;
   }
 }

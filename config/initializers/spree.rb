@@ -108,13 +108,11 @@ Spree::Frontend::Config.configure do |config|
   config.locale = 'es-MX'
 end
 
+# rubocop:disable Metrics/BlockLength
 Spree::Backend::Config.configure do |config|
   config.locale = 'en'
 
-  # Uncomment and change the following configuration if you want to add
-  # a new menu item:
-  #
-
+  # Add new items to admin menu
   config.menu_items += [
     config.class::MenuItem.new(
       %i[reparation_categories reparation_requests],
@@ -135,9 +133,16 @@ Spree::Backend::Config.configure do |config|
       'picture-o',
       condition: -> { current_spree_user&.admin? },
       url: '/admin/banners'
+    ),
+    config.class::MenuItem.new(
+      [:sliders],
+      'forward',
+      condition: -> { current_spree_user&.admin? },
+      url: '/admin/sliders'
     )
   ]
 end
+# rubocop:enable Metrics/BlockLength
 
 Spree::Api::Config.configure do |config|
   config.requires_authentication = true

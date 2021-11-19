@@ -1,0 +1,33 @@
+<%= render 'spree/shared/banner', banner: @banner %>
+<h1 class="text-center">Servicios a clientes corporativos</h1>
+
+<div id="corporate-services">
+  <% @corporate_services.each do |corporate_service| %>
+    <div class="corporate-service">
+      <%= svg corporate_service %>
+      <h2><%= t("corporate_services.#{corporate_service}.title") %></h2>
+      <p><%= t("corporate_services.#{corporate_service}.text") %></p>
+    </div>
+  <% end %>
+</div>
+
+<%= render 'spree/shared/slider', slider: @slider %>
+
+<div id="corporate-clients-contact">
+  <div id="corporate-clients-contact-information">
+    <p><b><%= t('contact').upcase %></b></p>
+    <p>quentin@salvamimaquina.com</p>
+    <p>+ 507 6978-4955</p>
+    <br />
+    <p><b><%= t('hour') %></b></p>
+    <p><%= t('monday') %> <%= t('to') %> <%= t('friday') %> : 9 am – 7 pm</p>
+  </div>
+  <div id="corporate-clients-contact-form" class="contact-form">
+    <%= simple_form_for @user_message, url: create_corporate_client_message_path(anchor: 'corporate-clients-contact-form') do |f| %>
+      <%= f.input :name, label: false, placeholder: :name %>
+      <%= f.input :email, label: false, placeholder: :email, required: true %>
+      <%= f.input :message, label: false, placeholder: :message, required: true %>
+      <%= f.submit t('send').upcase, class: 'btn btn-primary w-100' %>
+    <% end %>
+  </div>
+</div>

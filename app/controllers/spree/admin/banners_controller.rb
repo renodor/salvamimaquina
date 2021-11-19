@@ -7,6 +7,10 @@ module Spree
         @banners = Banner.all
       end
 
+      def show
+        @banner = Banner.find(params[:id])
+      end
+
       def new
         @banner = Banner.new
       end

@@ -1,0 +1,14 @@
+<% if slider %>
+  <!-- Slider main container -->
+  <div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      <% slider.slide_images.includes(:blob).each do |slide_image| %>
+        <div class="swiper-slide centered-flexbox">
+            <%= cl_image_tag slide_image.key %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
