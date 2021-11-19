@@ -3,8 +3,6 @@
 module PaymentGateway
   module FirstAtlanticCommerce
     class Authorize3ds < FirstAtlanticCommerce::Base
-      TEST_MODE = Rails.application.credentials.fac_payment_test_mode
-
       class << self
         def call(amount:, card_info:, order_number:, email:, billing_address:)
           xml_response = authorize_3ds(xml_payload(amount, card_info, order_number, email, billing_address))
@@ -13,7 +11,7 @@ module PaymentGateway
           {
             success: xml_parsed_response.xpath('//ResponseCode').text == '0',
             message: xml_parsed_response.xpath('//ResponseCodeDescription').text,
-            html_form: TEST_MODE ? test_mode_3ds_response_html_form(order_number) : xml_parsed_response.xpath('//HTMLFormData').text
+            html_form: Rails.env.production? ? xml_parsed_response.xpath('//HTMLFormData').text : test_mode_3ds_response_html_form(order_number)
           }
         end
 
@@ -27,7 +25,7 @@ module PaymentGateway
               <CardNumber>#{card_info[:card_number]}</CardNumber>
               <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://#{TEST_MODE ? '78f52a6629e1.ngrok.io' : 'salvamimaquina.herokuapp.com'}/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://#{Rails.env.production? ? 'salvamimaquina.herokuapp.com' : '78f52a6629e1.ngrok.io'}/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>

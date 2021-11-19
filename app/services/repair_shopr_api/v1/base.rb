@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class RepairShoprApi::V1::Base
-  TEST_MODE = Rails.application.credentials.repair_shopr_test_mode
-  API_PATH = "https://#{TEST_MODE ? Rails.application.credentials.repair_shopr_subdomain_test : Rails.application.credentials.repair_shopr_subdomain}.repairshopr.com/api/v1"
-  API_KEY = TEST_MODE ? Rails.application.credentials.repair_shopr_api_key_test : Rails.application.credentials.repair_shopr_api_key
+  API_PATH = "https://#{Rails.env.production? ? Rails.application.credentials.repair_shopr_subdomain : Rails.application.credentials.repair_shopr_subdomain_test}.repairshopr.com/api/v1"
+  API_KEY = Rails.env.production? ? Rails.application.credentials.repair_shopr_api_key : Rails.application.credentials.repair_shopr_api_key_test
   RS_ROOT_CATEGORY_NAME = 'ecom'
 
   RepairShoprApiError = Class.new(StandardError)
