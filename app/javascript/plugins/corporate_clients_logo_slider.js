@@ -1,7 +1,6 @@
 // import Swiper JS
 import Swiper, { Autoplay } from 'swiper';
 Swiper.use([Autoplay]); // https://github.com/JayChase/angular2-useful-swiper/issues/48
-import 'swiper/swiper.scss';
 
 const corporateClientsLogoSlider = () => {
   const swiperCarousel = document.querySelector('.swiper');
