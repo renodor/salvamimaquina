@@ -117,7 +117,7 @@ Spree::Backend::Config.configure do |config|
     config.class::MenuItem.new(
       %i[reparation_categories reparation_requests],
       'laptop',
-      condition: -> { current_spree_user&.admin? },
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
       url: '/admin/reparation_categories',
       partial: 'spree/admin/shared/reparations_sub_menu',
       label: :reparations
@@ -125,19 +125,19 @@ Spree::Backend::Config.configure do |config|
     config.class::MenuItem.new(
       [:sync_repair_shopr],
       'refresh',
-      condition: -> { current_spree_user&.admin? },
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
       url: '/admin/syncs'
     ),
     config.class::MenuItem.new(
       [:banners],
       'picture-o',
-      condition: -> { current_spree_user&.admin? },
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
       url: '/admin/banners'
     ),
     config.class::MenuItem.new(
       [:sliders],
       'forward',
-      condition: -> { current_spree_user&.admin? },
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
       url: '/admin/sliders'
     )
   ]
