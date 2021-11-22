@@ -199,7 +199,7 @@ es-MX:
     delivery:
       title: 'Puerta a puerta'
       text: 'Gracias a nuestra mensajería especializada, le brindamos servicios directamente en el cede de su empresa.'
-    footer:
+  footer:
     social: 'Redes'
     shops: 'Tiendas'
     ecommerce: 'Ecommerce'
