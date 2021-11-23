@@ -2,8 +2,11 @@
 
 module Spree
   module HomeControllerDecorator
-    def self.prepended(base)
-      base.layout 'spree/layouts/spree_application'
+    extend ActiveSupport::Concern
+
+    prepended do
+      invisible_captcha only: %i[create_user_message create_corporate_client_message]
+      layout 'spree/layouts/spree_application'
     end
 
     def index

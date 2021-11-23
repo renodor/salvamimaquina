@@ -1,6 +1,7 @@
 <h1 class="text-center"><%= t('contact') %></h1>
 <div id="users-contact-form" class="contact-form centered-flexbox">
   <%= simple_form_for @user_message, url: create_user_message_path do |f| %>
+    <%= invisible_captcha %>
     <%= f.input :name, label: false, placeholder: :name, required: true %>
     <%= f.input :email, label: false, placeholder: :email, required: true %>
     <%= f.input :message, label: false, placeholder: :message, required: true %>

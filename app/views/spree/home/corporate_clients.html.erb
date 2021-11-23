@@ -24,6 +24,7 @@
   </div>
   <div id="corporate-clients-contact-form" class="contact-form">
     <%= simple_form_for @user_message, url: create_corporate_client_message_path(anchor: 'corporate-clients-contact-form') do |f| %>
+      <%= invisible_captcha %>
       <%= f.input :name, label: false, placeholder: :name %>
       <%= f.input :email, label: false, placeholder: :email, required: true %>
       <%= f.input :message, label: false, placeholder: :message, required: true %>

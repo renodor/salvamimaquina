@@ -67,6 +67,8 @@ gem 'postmark-rails'
 
 gem 'simple_form'
 
+gem 'invisible_captcha'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'
