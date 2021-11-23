@@ -1,0 +1,23 @@
+<%= render partial: 'spree/shared/error_messages', locals: { target: @user } %>
+
+<div id="edit-account">
+  <h1><%= t('spree.editing_user') %></h1>
+
+  <div data-hook="account_edit">
+    <%= form_for Spree::User.new, as: @user, url: spree.user_path(@user), method: :put do |f| %>
+      <%= render partial: 'spree/shared/user_form', locals: { f: f } %>
+      <p>
+        <%= f.submit t('spree.update'), class: 'button primary' %>
+      </p>
+    <% end %>
+  </div>
+
+  <div data-hook="account_edit">
+    <%= form_for @user.ship_address, url: account_update_user_address_path, method: :put do |ship_form| %>
+      <%= render partial: 'spree/address/form', locals: { form: ship_form, address_type: 'shipping', address: @user.ship_address } %>
+      <p>
+        <%= ship_form.submit t('spree.update'), class: 'button primary' %>
+      </p>
+    <% end %>
+  </div>
+</div>

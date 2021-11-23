@@ -30,6 +30,8 @@ Rails.application.routes.draw do
       resources :reparation_requests, only: %i[new create]
     end
 
+    put '/account/update_user_address', to: 'users#update_user_address'
+
     get '/t/filter_products', to: 'taxons#filter_products'
     get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
     get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
