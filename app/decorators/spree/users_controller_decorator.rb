@@ -10,7 +10,6 @@ module Spree
       address.save!
 
       current_spree_user.ship_address = address
-      # current_spree_user.ship_address.update!()
       redirect_to account_path
     end
 
