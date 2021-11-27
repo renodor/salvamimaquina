@@ -171,10 +171,13 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       options = { option_types: [], option_values: [] }
 
       variant_options.each do |variant_option_type, variant_option_value|
-        option_type = Spree::OptionType.find_or_create_by!(
+        option_type = Spree::OptionType.find_or_initialize_by(
           name: variant_option_type,
           presentation: variant_option_type
         )
+
+        option_type.position = 1 if option_type.name == 'color' && option_type.position != 1
+        option_type.save!
 
         option_value = Spree::OptionValue.find_or_create_by!(
           option_type_id: option_type.id,
