@@ -115,7 +115,7 @@ const productShowVariants = () => {
             .then((response) => response.json())
             .then((optionValuesByOptionType) => {
               // For each option types returned, find the corresponding option values on the page and then:
-              // - If this option type is the one that the user just selected, we enable all option values (Because we the user to be able to change the option value of the selected option type)
+              // - If this option type is the one that the user just selected, we enable all option values (Because we want the user to be able to change the option value of the selected option type)
               // - If not, disable/enable option values that are not included in the returned results from the endpoint (Indeed it means that for the selected option type, there are no variant with those option values, so we need to prevent user from selecting it)
               // - After doing this process, if one (previously) selected option value is now disabled, we need to change it. So we find the first not-disabled option value of the same option type and select it.
               Object.entries(optionValuesByOptionType).forEach((optionType) => {
@@ -132,8 +132,16 @@ const productShowVariants = () => {
                     optionValueTag.disabled = !optionType[1].some((optionValue) => optionValue.id === parseInt(optionValueTag.value));
                   });
 
-                  if (optionValueTags.find((optionValueTag) => optionValueTag.selected)?.disabled == true) {
-                    optionValueTags.find((optionValueTag) => optionValueTag.disabled === false).selected = true;
+                  if (optionValueTags.find((optionValueTag) => optionValueTag.selected || optionValueTag.checked)?.disabled) {
+                    const firstNonDisabledOptionValue = optionValueTags.find((optionValueTag) => optionValueTag.disabled === false);
+                    switch (firstNonDisabledOptionValue.tagName) {
+                      case 'INPUT':
+                        firstNonDisabledOptionValue.checked = true;
+                        break;
+                      case 'OPTION':
+                        firstNonDisabledOptionValue.selected = true;
+                        break;
+                    }
                   }
                 }
               });

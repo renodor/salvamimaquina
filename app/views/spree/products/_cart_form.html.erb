@@ -2,12 +2,15 @@
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
     <%= hidden_field_tag :product_id, @product.id %>
     <% if @product_has_variant %>
-      <% cheapest_variant = @product.cheapest_variant %>
+      <% cheapest_variant_option_values = @product.cheapest_variant.option_values %>
       <div id="product-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
           <% if option_type.name == 'model' %>
             <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name), class: 'display-none' %>
           <% elsif option_type.name == 'color' %>
+            <!-- "colors" are always the first options to select, so we enable all of it, so the user is able to change
+            and we enable/disable the other options regarding of the cheapest variant available options.
+            If the user change the options, the JS will do its magic and enable/disable the inputs -->
             <div id="variant-colors">
               <p class="variant-option-type"><%= option_type.name.capitalize %></p>
               <div class="color-badges">
@@ -15,8 +18,8 @@
                     <%=
                       radio_button_tag "variant_options[option_type_#{option_type.id}]",
                       color.id,
-                      cheapest_variant.option_values.find_by(option_type_id: option_type.id).id == color.id,
-                      data: { option_type_id: option_type.id }
+                      cheapest_variant_option_values.find_by(option_type_id: option_type.id).id == color.id,
+                      { data: { option_type_id: option_type.id } }
                     %>
                     <%=
                       label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
@@ -33,8 +36,17 @@
                 select_tag(
                   "variant_options[option_type_#{option_type.id}]",
                   options_for_select(
-                    option_values.map { |option_value| [option_value.name, option_value.id, { data: { option_type_id: option_type.id } }] },
-                    cheapest_variant.option_values.find_by(option_type_id: option_type.id).id,
+                    option_values.map do |option_value|
+                      [
+                        option_value.name,
+                        option_value.id,
+                        {
+                          disabled: cheapest_variant_option_values.find_by(id: option_value.id).blank?,
+                          selected: cheapest_variant_option_values.find_by(option_type_id: option_type.id).id == option_value.id,
+                          data: { option_type_id: option_type.id }
+                        }
+                      ]
+                    end
                   ),
                   { class: 'form-select', data: { id: option_type.id } }
                 )

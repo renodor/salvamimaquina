@@ -42,6 +42,7 @@ module Spree
       end
 
       variant = Spree::Product.find(params[:product_id]).find_variant_by_options_hash(options_hash)
+
       variant_image_key = variant.images.first&.attachment&.key
       render json: {
         id: variant.id,
