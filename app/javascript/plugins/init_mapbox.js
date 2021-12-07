@@ -7,8 +7,8 @@ const initMapbox = () => {
   // Shown on the address page when defining shipping address
   if (mapElement) {
     // Get latitude and longitude hidden inputs
-    const latitudeInput = document.getElementById('order_ship_address_attributes_latitude');
-    const longitudeInput = document.getElementById('order_ship_address_attributes_longitude');
+    const latitudeInput = document.querySelector('[data-input="address_latitude"]');
+    const longitudeInput = document.querySelector('[data-input="address_longitude"]');
 
     // Method that update the value of latitude and longitude hidden inputs
     const updateCoordinates = () => {
@@ -54,7 +54,7 @@ const initMapbox = () => {
     // Add en event listener on the area (corregimiento) input
     // and update the map each time it changes
     // + Nullify latitude and longitude hidden fields value, to be sure user will move the marker
-    const corregimientoInput = document.getElementById('order_ship_address_attributes_district_id');
+    const corregimientoInput = document.querySelector('[data-input="district_id"]');
     corregimientoInput.addEventListener('change', (event) => {
       const indexOfSelectedDistrict = corregimientoInput.options.selectedIndex;
       const latitude = parseFloat(corregimientoInput.options[indexOfSelectedDistrict].dataset.latitude);
@@ -65,7 +65,7 @@ const initMapbox = () => {
 
 
     // Prevent form submission if map marker have not been set
-    const submitAddressBtn = document.querySelector('#checkout_form_address input[type=submit]');
+    const submitAddressBtn = document.querySelector('input[type=submit][data-input="map_submit"]');
     submitAddressBtn.addEventListener('click', (event) => {
       if (!latitudeInput.value || !longitudeInput.value) {
         event.preventDefault();

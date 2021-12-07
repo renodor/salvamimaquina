@@ -44,7 +44,7 @@
     <div class="field col-md-6" id=<%="#{address_id}district" %>>
       <%= form.label :city, t('spree.district', count: 1) %>
       <span class="js-address-fields">
-        <%= form.select :district_id, district_select_options(address), { include_blank: true }, required: true %>
+        <%= form.select :district_id, district_select_options(address), { include_blank: true }, required: true, data: { input: 'district_id'} %>
       </span>
     </div>
 
@@ -64,6 +64,6 @@
     </div>
   <% end %>
 
-  <%= form.hidden_field :latitude %>
-  <%= form.hidden_field :longitude %>
+  <%= form.hidden_field :latitude, data: { input: 'address_latitude' } %>
+  <%= form.hidden_field :longitude, data: { input: 'address_longitude' } %>
 </div>

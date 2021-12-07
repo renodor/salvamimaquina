@@ -29,6 +29,7 @@ es-MX:
     email: 'Correo'
     brands: 'Marcas'
     address: 'Dirección'
+    account_information: 'Información de cuenta'
     model:
       one: 'Modelo'
       other: 'Modelos'

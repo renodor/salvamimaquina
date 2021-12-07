@@ -7,15 +7,18 @@
   </div>
   <div>
     <h2><%= t('spree.address') %></h2>
-    <p><b>Name:</b><%= @user.ship_address.name %></p>
-    <p><b>Address 1:</b><%= @user.ship_address.address1 %></p>
-    <p><b>Punto de referencia:</b><%= @user.ship_address.address2 %></p>
-    <p><b>Phone:</b><%= @user.ship_address.phone %></p>
-    <p><b>District:</b><%= @user.ship_address.district&.name %></p>
-    <p><b>State:</b><%= @user.ship_address.state&.name %></p>
-    <p><b>City:</b><%= @user.ship_address.city %></p>
+    (<%= link_to t('spree.edit'), spree.edit_account_path(anchor: 'edit-user-address') %>)
+    <p><b>Name:</b><%= @address.name %></p>
+    <p><b>Address 1:</b><%= @address.address1 %></p>
+    <p><b>Punto de referencia:</b><%= @address.address2 %></p>
+    <p><b>Phone:</b><%= @address.phone %></p>
+    <p><b>District:</b><%= @address.district&.name %></p>
+    <p><b>State:</b><%= @address.state&.name %></p>
+    <p><b>City:</b><%= @address.city %></p>
   </div>
 </div>
+
+<div id="static-map" style="width: 100%; height: 300px;" data-latitude="<%= @address.latitude %>" data-longitude="<%= @address.longitude %>"></div>
 
 <div data-hook="account_my_orders" class="account-my-orders">
 

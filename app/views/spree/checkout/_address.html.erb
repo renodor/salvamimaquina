@@ -13,7 +13,7 @@
 <hr class="clear" />
 
 <div class="form-buttons" data-hook="buttons">
-  <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary' %>
+  <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary', data: { input: 'map_submit' } %>
   <%
 =begin%>
  <% if try_spree_current_user %>

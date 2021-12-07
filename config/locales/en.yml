@@ -56,7 +56,10 @@ en:
   sunday: 'Sunday'
   to: 'To'
   spree:
+    email: 'Email'
+    brands: 'Brands'
     address: 'Address'
+    account_information: 'Información de cuenta'
     item:
       one: 'Item'
       other: 'Items'
