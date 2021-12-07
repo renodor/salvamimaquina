@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     get 'corporate_clients', to: 'home#corporate_clients'
     post 'create_corporate_client_message', to: 'home#create_corporate_client_message'
     get 'contact', to: 'home#contact'
+    get 'about', to: 'home#about'
     post 'create_user_message', to: 'home#create_user_message'
     get 'shipping_informations', to: 'home#shipping_informations'
     get 'payment_methods', to: 'home#payment_methods'
