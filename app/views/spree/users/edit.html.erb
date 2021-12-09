@@ -1,7 +1,7 @@
 <%= render partial: 'spree/shared/error_messages', locals: { target: @user } %>
 
 <div id="edit-account">
-  <h1><%= t('spree.account_information') %></h1>
+  <h1><%= t('spree.edit_my_account') %></h1>
 
   <div>
     <%= form_for Spree::User.new, as: @user, url: spree.user_path(@user), method: :put do |f| %>
@@ -12,7 +12,7 @@
     <% end %>
   </div>
 
-  <h1 id="edit-user-address"><%= t('spree.address') %></h1>
+  <h1 id="edit-user-address"><%= t('spree.edit_my_address') %></h1>
   <div>
     <%= form_for @user.ship_address, url: account_update_user_address_path, method: :put do |ship_form| %>
       <%= render partial: 'spree/address/form', locals: { form: ship_form, address_type: 'shipping', address: @user.ship_address } %>

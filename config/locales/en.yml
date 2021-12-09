@@ -59,7 +59,9 @@ en:
     email: 'Email'
     brands: 'Brands'
     address: 'Address'
-    account_information: 'Información de cuenta'
+    my_address: 'My address'
+    edit_my_address: 'Edit my address'
+    edit_my_account: 'Edit my account'
     item:
       one: 'Item'
       other: 'Items'

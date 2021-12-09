@@ -1,0 +1,31 @@
+#user-account-tabs {
+  .nav-link {
+    color: $dark-gray;
+    font-weight: 400;
+    &.active {
+      font-weight: bold;
+    }
+  }
+}
+
+#user-account {
+  .tab-pane {
+    padding: 10px;
+    .edit-user-account {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      a {
+        color: $dark-gray;
+      }
+    }
+  }
+  #user-address {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    p {
+      margin: 0;
+    }
+  }
+}

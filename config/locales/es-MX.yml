@@ -29,7 +29,9 @@ es-MX:
     email: 'Correo'
     brands: 'Marcas'
     address: 'Dirección'
-    account_information: 'Información de cuenta'
+    my_address: 'Mi dirección'
+    edit_my_address: 'Editar mi dirección'
+    edit_my_account: 'Editar mi cuenta'
     model:
       one: 'Modelo'
       other: 'Modelos'
