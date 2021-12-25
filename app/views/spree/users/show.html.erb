@@ -1,30 +1,42 @@
 <h1><%= t('spree.my_account') %></h1>
 <ul class="nav nav-tabs" id="user-account-tabs" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="user-address-tab" data-bs-toggle="tab" data-bs-target="#user-address" type="button" role="tab" aria-controls="user-address" aria-selected="true">Shipping Address</button>
+    <button class="nav-link active" id="user-infos-tab" data-bs-toggle="tab" data-bs-target="#user-infos" type="button" role="tab" aria-controls="user-infos" aria-selected="true">Mi perfil</button>
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="user-order-tab" data-bs-toggle="tab" data-bs-target="#user-orders" type="button" role="tab" aria-controls="user-orders" aria-selected="false">Orders</button>
   </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="user-credentials-tab" data-bs-toggle="tab" data-bs-target="#user-credentials" type="button" role="tab" aria-controls="user-credentials" aria-selected="false">Datos personales</button>
-  </li>
 </ul>
 <div class="tab-content" id="user-account">
-  <div class="tab-pane fade show active" id="user-address" role="tabpanel" aria-labelledby="user-address-tab">
-    <div class="position-relative">
-      <span class="edit-user-account">
-        <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-user-address') %>
-      </span>
-      <p><%= @address.name %></p>
-      <p><%= @address.address1 %></p>
-      <p><%= @address.address2 %></p>
-      <p><%= @address.phone %></p>
-      <p><%= @address.district&.name %></p>
-      <p><%= @address.state&.name %></p>
-      <p><%= @address.city %></p>
+  <div class="tab-pane fade show active" id="user-infos" role="tabpanel" aria-labelledby="user-infos-tab">
+    <div>
+      <div class="user-infos-block">
+        <div class="user-infos-title">
+          <h3>Informacion de Cuenta</h3>
+          <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-account'), class: "edit-user-account" %>
+        </div>
+        <p><%= @user.email %></p>
+        <p>
+          <% 10.times do %>
+            <%= svg('dot') %>
+          <% end %>
+        </p>
+      </div>
+      <div class="user-infos-block">
+        <div class="user-infos-title">
+          <h3>Direccion</h3>
+          <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-user-address'), class: "edit-user-account" %>
+        </div>
+        <p><%= @address.name %></p>
+        <p><%= @address.address1 %></p>
+        <p><%= @address.address2 %></p>
+        <p><%= @address.phone %></p>
+        <p><%= @address.district&.name %></p>
+        <p><%= @address.state&.name %></p>
+        <p><%= @address.city %></p>
+      </div>
     </div>
-    <div id="static-map" style="width: 100%; height: 300px;" data-latitude="<%= @address.latitude %>" data-longitude="<%= @address.longitude %>"></div>
+    <div id="static-map" style="width: 100%; height: 500px;" data-latitude="<%= @address.latitude %>" data-longitude="<%= @address.longitude %>"></div>
   </div>
   <div class="tab-pane fade" id="user-orders" role="tabpanel" aria-labelledby="user-order-tab">
     <div data-hook="account_my_orders" class="account-my-orders">
@@ -58,11 +70,6 @@
         <p><%= t('spree.you_have_no_orders_yet') %></p>
       <% end %>
       <br />
-    </div>
-  </div>
-  <div class="tab-pane fade" id="user-credentials" role="tabpanel" aria-labelledby="user-credentials-tab">
-    <div class="user-info">
-      <p><%= @user.email %> (<%= link_to t('spree.edit'), spree.edit_account_path %>)</p>
     </div>
   </div>
 </div>

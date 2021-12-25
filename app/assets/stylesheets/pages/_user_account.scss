@@ -2,6 +2,7 @@
   .nav-link {
     color: $dark-gray;
     font-weight: 400;
+    border-radius: 0;
     &.active {
       font-weight: bold;
     }
@@ -9,23 +10,54 @@
 }
 
 #user-account {
-  .tab-pane {
-    padding: 10px;
-    .edit-user-account {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      a {
-        color: $dark-gray;
+  padding: 25px;
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  #user-infos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 30px;
+    .user-infos-block {
+      position: relative;
+      &:first-child {
+        margin-bottom: 30px;
+      }
+      .user-infos-title {
+        display: flex;
+        justify-content: space-between;
+        grid-column-gap: 10px;
+        .edit-user-account {
+          padding: 0 20px;
+          height: 100%;
+          color: $dark-gray;
+        }
+      }
+      p {
+        margin: 0;
       }
     }
   }
-  #user-address {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    p {
-      margin: 0;
+}
+
+@media ($max-l) {
+  #user-account #user-infos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media ($max-s) {
+  #user-account {
+    padding: 20px;
+    #user-infos {
+      .user-infos-block {
+        .user-infos-title {
+          .edit-user-account {
+            padding: 0 5px;
+          }
+        }
+      }
     }
   }
 }
