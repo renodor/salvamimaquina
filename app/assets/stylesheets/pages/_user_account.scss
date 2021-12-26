@@ -14,7 +14,7 @@
   border-left: 1px solid #dee2e6;
   border-right: 1px solid #dee2e6;
   border-bottom: 1px solid #dee2e6;
-  #user-infos {
+  #user-infos #user-infos-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 10px;
@@ -39,10 +39,16 @@
       }
     }
   }
+  #user-orders #user-orders-content {
+    .user-order {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+  }
 }
 
 @media ($max-l) {
-  #user-account #user-infos {
+  #user-account #user-infos #user-infos-content {
     grid-template-columns: 1fr;
   }
 }
@@ -50,14 +56,8 @@
 @media ($max-s) {
   #user-account {
     padding: 20px;
-    #user-infos {
-      .user-infos-block {
-        .user-infos-title {
-          .edit-user-account {
-            padding: 0 5px;
-          }
-        }
-      }
+    #user-infos #user-infos-content .user-infos-block .user-infos-title .edit-user-account {
+      padding: 0 5px;
     }
   }
 }

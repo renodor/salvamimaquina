@@ -4,68 +4,55 @@
     <button class="nav-link active" id="user-infos-tab" data-bs-toggle="tab" data-bs-target="#user-infos" type="button" role="tab" aria-controls="user-infos" aria-selected="true">Mi perfil</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="user-order-tab" data-bs-toggle="tab" data-bs-target="#user-orders" type="button" role="tab" aria-controls="user-orders" aria-selected="false">Orders</button>
+    <button class="nav-link" id="user-orders-tab" data-bs-toggle="tab" data-bs-target="#user-orders" type="button" role="tab" aria-controls="user-orders" aria-selected="false"><%= t('spree.my_orders') %></button>
   </li>
 </ul>
 <div class="tab-content" id="user-account">
   <div class="tab-pane fade show active" id="user-infos" role="tabpanel" aria-labelledby="user-infos-tab">
-    <div>
-      <div class="user-infos-block">
-        <div class="user-infos-title">
-          <h3>Informacion de Cuenta</h3>
-          <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-account'), class: "edit-user-account" %>
+    <div id="user-infos-content">
+      <div>
+        <div class="user-infos-block">
+          <div class="user-infos-title">
+            <h3>Informacion de Cuenta</h3>
+            <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-account'), class: "edit-user-account" %>
+          </div>
+          <p><%= @user.email %></p>
+          <p>
+            <% 10.times do %>
+              <%= svg('dot') %>
+            <% end %>
+          </p>
         </div>
-        <p><%= @user.email %></p>
-        <p>
-          <% 10.times do %>
-            <%= svg('dot') %>
-          <% end %>
-        </p>
-      </div>
-      <div class="user-infos-block">
-        <div class="user-infos-title">
-          <h3>Direccion</h3>
-          <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-user-address'), class: "edit-user-account" %>
+        <div class="user-infos-block">
+          <div class="user-infos-title">
+            <h3>Direccion</h3>
+            <%= link_to svg('pen'), spree.edit_account_path(anchor: 'edit-user-address'), class: "edit-user-account" %>
+          </div>
+          <p><%= @address.name %></p>
+          <p><%= @address.address1 %></p>
+          <p><%= @address.address2 %></p>
+          <p><%= @address.phone %></p>
+          <p><%= @address.district&.name %></p>
+          <p><%= @address.state&.name %></p>
+          <p><%= @address.city %></p>
         </div>
-        <p><%= @address.name %></p>
-        <p><%= @address.address1 %></p>
-        <p><%= @address.address2 %></p>
-        <p><%= @address.phone %></p>
-        <p><%= @address.district&.name %></p>
-        <p><%= @address.state&.name %></p>
-        <p><%= @address.city %></p>
       </div>
+      <div id="static-map" style="width: 100%; height: 550px;" data-latitude="<%= @address.latitude %>" data-longitude="<%= @address.longitude %>"></div>
     </div>
-    <div id="static-map" style="width: 100%; height: 500px;" data-latitude="<%= @address.latitude %>" data-longitude="<%= @address.longitude %>"></div>
   </div>
-  <div class="tab-pane fade" id="user-orders" role="tabpanel" aria-labelledby="user-order-tab">
-    <div data-hook="account_my_orders" class="account-my-orders">
-      <h3><%= t('spree.my_orders') %></h3>
+  <div class="tab-pane fade" id="user-orders" role="tabpanel" aria-labelledby="user-orders-tab">
+    <div id="user-orders-content">
       <% if @orders.present? %>
-        <table class="order-summary">
-          <thead>
-          <tr>
-            <th class="order-number"><%= t(:number, scope: 'activerecord.attributes.spree/order') %></th>
-            <th class="order-date"><%= t('spree.date') %></th>
-            <th class="order-status"><%= t('spree.status') %></th>
-            <th class="order-payment-state"><%= t('spree.payment_state') %></th>
-            <th class="order-shipment-state"><%= t('spree.shipment_state') %></th>
-            <th class="order-total"><%= t('spree.total') %></th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @orders.each do |order| %>
-            <tr class="<%= cycle('even', 'odd') %>">
-              <td class="order-number"><%= link_to order.number, order_url(order) %></td>
-              <td class="order-date"><%= l order.completed_at.to_date %></td>
-              <td class="order-status"><%= t("spree.order_state.#{order.state}").titleize %></td>
-              <td class="order-payment-state"><%= t("spree.payment_states.#{order.payment_state}").titleize if order.payment_state %></td>
-              <td class="order-shipment-state"><%= t("spree.shipment_states.#{order.shipment_state}").titleize if order.shipment_state %></td>
-              <td class="order-total"><%= order.display_total %></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
+        <% @orders.each do |order| %>
+          <div class="user-order">
+            <div class="order-number"><%= link_to order.number, order_url(order) %></div>
+            <div class="order-date"><%= l order.completed_at.to_date %></div>
+            <div class="order-status"><%= t("spree.order_state.#{order.state}").titleize %></div>
+            <div class="order-payment-state"><%= t("spree.payment_states.#{order.payment_state}").titleize if order.payment_state %></div>
+            <div class="order-total"><%= order.display_total %></div>
+            <div> <%=  cl_image_tag order.line_items.first&.variant&.images&.first&.attachment&.key, height: 100, crop: :fit %></div>
+          </div>
+        <% end %>
       <% else %>
         <p><%= t('spree.you_have_no_orders_yet') %></p>
       <% end %>
