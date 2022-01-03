@@ -147,7 +147,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     # (We use these product notes to pass additional product attributes not natively supported by RS)
     def add_product_attributes_from_notes(attributes)
       attributes['variant_options'] = {}
-      attributes['notes'].strip.split("\r\n").map do |attribute|
+      attributes['notes'].strip.split("\r\n").reject(&:blank?).map do |attribute|
         attribute_array = attribute.split(/:|=/)
         attribute_type = attribute_array[0].strip.downcase
         attribute_value = attribute_array[1].strip
