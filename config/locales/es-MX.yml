@@ -32,6 +32,7 @@ es-MX:
     my_address: 'Mi dirección'
     edit_my_address: 'Editar mi dirección'
     edit_my_account: 'Editar mi cuenta'
+    back_to_my_account: 'Regresar a mi cuenta'
     model:
       one: 'Modelo'
       other: 'Modelos'

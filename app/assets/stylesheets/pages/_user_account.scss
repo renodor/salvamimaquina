@@ -40,16 +40,44 @@
     }
   }
   #user-orders #user-orders-content {
+    display: grid;
     .user-order {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: repeat(6, 1fr);
+      height: 100px;
+      border-bottom: 1px solid $light-gray;
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        a {
+          padding: 5px 10px!important;
+          border-radius: 5px!important;
+          text-decoration: none;
+        }
+      }
     }
   }
 }
 
 @media ($max-l) {
-  #user-account #user-infos #user-infos-content {
-    grid-template-columns: 1fr;
+  #user-account {
+    #user-infos #user-infos-content {
+      grid-template-columns: 1fr;
+    }
+    #user-orders #user-orders-content {
+      grid-template-columns: 1fr 1fr;
+      .user-order {
+        display: block;
+        height: 100%;
+        &:nth-child(odd) {
+          border-right: 1px solid $light-gray;
+        }
+        div {
+          margin: 15px 0;
+        }
+      }
+    }
   }
 }
 
@@ -58,6 +86,12 @@
     padding: 20px;
     #user-infos #user-infos-content .user-infos-block .user-infos-title .edit-user-account {
       padding: 0 5px;
+    }
+    #user-orders #user-orders-content {
+      grid-template-columns: 1fr;
+      .user-order {
+        border-right: none!important;
+      }
     }
   }
 }

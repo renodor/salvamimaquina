@@ -1,7 +1,7 @@
 <div id="order-wrapper">
-  <%# if order_just_completed?(@order) %>
+  <% if order_just_completed?(@order) %>
     <p><%= t('spree.thank_you_for_your_order') %></p>
-  <%# end %>
+  <% end %>
   <h1><%= accurate_title %></h1>
 
   <div id="order">
@@ -18,7 +18,11 @@
     </div>
 
     <div id="order-back-link" data-hook="links">
-      <%= link_to t('spree.back_to_store').upcase, spree.root_path, class: "btn btn-primary" %>
+      <% if order_just_completed?(@order) %>
+        <%= link_to t('spree.back_to_store').upcase, spree.root_path, class: "btn btn-primary" %>
+      <% else %>
+        <%= link_to t('spree.back_to_my_account').upcase, account_path, class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
 </div>

@@ -62,6 +62,7 @@ en:
     my_address: 'My address'
     edit_my_address: 'Edit my address'
     edit_my_account: 'Edit my account'
+    back_to_my_account: 'Back to my account'
     item:
       one: 'Item'
       other: 'Items'
