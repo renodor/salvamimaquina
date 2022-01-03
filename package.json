@@ -9,6 +9,7 @@
     "@rails/webpacker": "4.3.0",
     "bootstrap": "^5.0.2",
     "mapbox-gl": "^2.2.0",
+    "node-sass": "^7.0.1",
     "swiper": "^7.2.0",
     "turbolinks": "^5.2.0"
   },
