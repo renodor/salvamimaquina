@@ -27,6 +27,16 @@ module Spree
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     end
 
+    def load_object
+      unless spree_current_user
+        session['spree_user_return_to'] = '/account' if params[:login_to_account]
+        redirect_to login_path and return
+      end
+
+      @user ||= Spree::User.find_by(id: spree_current_user.id)
+      authorize! params[:action].to_sym, @user
+    end
+
     Spree::UsersController.prepend self
   end
 end

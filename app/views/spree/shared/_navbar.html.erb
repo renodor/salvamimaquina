@@ -44,13 +44,19 @@
       <button class="btn btn-outline-success" type="submit">Search</button> -->
       <%#= render partial: 'spree/shared/search' %>
     <!-- </form> -->
-    <%#= render 'spree/shared/login_bar_items' %>
+  </div>
+  <div>
+    <%= link_to account_path(login_to_account: true), class: 'nav-link navbar-account-link' do %>
+      <% if spree_current_user %>
+        <%= svg 'user-fill' %>
+      <% else %>
+        <%= svg 'user' %>
+      <% end %>
+    <% end %>
   </div>
   <div>
     <%= link_to spree.cart_path, class: 'nav-link navbar-cart-link' do %>
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-      </svg>
+      <%= svg 'cart' %>
       <% if quantity = current_order&.quantity %>
         <span class="navbar-cart-quantity"><%= quantity %></span>
       <% end %>

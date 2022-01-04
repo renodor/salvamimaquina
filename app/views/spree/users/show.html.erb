@@ -1,4 +1,7 @@
-<h1><%= t('spree.my_account') %></h1>
+<div id="user-account-header">
+  <h1><%= t('spree.my_account') %></h1>
+  <%= link_to t('spree.logout'), logout_path, method: :delete, class: 'btn btn-secondary' %>
+</div>
 <ul class="nav nav-tabs" id="user-account-tabs" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="user-infos-tab" data-bs-toggle="tab" data-bs-target="#user-infos" type="button" role="tab" aria-controls="user-infos" aria-selected="true">Mi perfil</button>

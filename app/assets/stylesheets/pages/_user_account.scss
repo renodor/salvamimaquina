@@ -9,6 +9,16 @@
   }
 }
 
+#user-account-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  h1 {
+    margin-bottom: 0;
+    flex-grow: 1;
+  }
+}
+
 #user-account {
   padding: 25px;
   border-left: 1px solid #dee2e6;

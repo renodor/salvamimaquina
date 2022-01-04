@@ -28,13 +28,22 @@
       }
     }
     .navbar-collapse {
-      .navbar-nav .nav-item .nav-link {
-        text-transform: uppercase;
+      .navbar-nav {
+        border-right: 1px solid $light-gray;
+        padding-right: 8px;
+        .nav-item .nav-link {
+          text-transform: uppercase;
+        }
       }
+    }
+    .navbar-account-link {
+      padding-right: 10px;
+      color: $green;
     }
     .navbar-cart-link {
       color: $green;
       position: relative;
+      padding-left: 10px;
       @include default-transition(color);
       &:hover {
         color: $dark-green;
@@ -65,29 +74,34 @@
 }
 
 @media ($max-l) {
-  .navbar-collapse {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    height: 100%;
-    width: 100%;
-    z-index: 102;
-    background-color: white;
-    transition: right .5s;
-    display: block;
-    border-left: 1px solid $gray;
-    &.active {
-      right: 0;
-    }
-    .navbar-close {
-      display: flex;
-      justify-content: flex-end;
-      .navbar-toggler {
-        padding: 20px;
+  .navbar {
+    .navbar-collapse {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      height: 100%;
+      width: 100%;
+      z-index: 102;
+      background-color: white;
+      transition: right .5s;
+      display: block;
+      border-left: 1px solid $gray;
+      &.active {
+        right: 0;
+      }
+      .navbar-close {
+        display: flex;
+        justify-content: flex-end;
+        .navbar-toggler {
+          padding: 20px;
+        }
+      }
+      .navbar-nav {
+        text-align: center;
       }
     }
-    .navbar-nav {
-      text-align: center;
+    .navbar-account-link {
+      padding-left: 10px;
     }
   }
 }
