@@ -17,6 +17,17 @@
     margin-bottom: 0;
     flex-grow: 1;
   }
+  a {
+    color: $gray;
+    border: 1px solid $gray;
+    text-decoration: none;
+    padding: 2px 10px;
+    @include default-transition(color, border-color);
+    &:hover {
+      color: $dark-gray;
+      border-color: $dark-gray;
+    }
+  }
 }
 
 #user-account {
@@ -66,6 +77,31 @@
           text-decoration: none;
         }
       }
+    }
+  }
+}
+
+#edit-user-address {
+  input, select {
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    &::placeholder {
+      font-size: 16px;
+    }
+    &.disabled {
+      background-color: $light-gray;
+      color: $dark-gray;
+      &:focus, &:active {
+        border-color: $light-gray!important;
+      }
+    }
+  }
+  select {
+    height: 46px;
+    background-color: white;
+    &:focus-visible {
+      outline: none;
     }
   }
 }

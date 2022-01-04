@@ -1,28 +1,14 @@
 <%= render partial: 'spree/shared/error_messages', locals: { target: @user } %>
 
-<div id="edit-account">
+<div>
   <h1><%= t('spree.edit_my_account') %></h1>
 
   <div>
     <%= form_for Spree::User.new, as: @user, url: spree.user_path(@user), method: :put do |f| %>
       <%= render partial: 'spree/shared/user_form', locals: { f: f } %>
       <p>
-        <%= f.submit t('spree.update'), class: 'button primary' %>
+        <%= f.submit t('spree.update').upcase, class: 'btn btn-primary large' %>
       </p>
     <% end %>
-  </div>
-
-  <h1 id="edit-user-address"><%= t('spree.edit_my_address') %></h1>
-  <div>
-    <%= form_for @user.ship_address, url: account_update_user_address_path, method: :put do |ship_form| %>
-      <%= render partial: 'spree/address/form', locals: { form: ship_form, address_type: 'shipping', address: @user.ship_address } %>
-      <div id="missing-map-pin" class=""><%= t('spree.missing_map_pin') %></div>
-      <div id="map" style="width: 100%; height: 600px;"></div>
-      <p>
-        <%= ship_form.submit t('spree.update'), class: 'button primary', data: { input: 'map_submit' } %>
-      </p>
-
-    <% end %>
-
   </div>
 </div>

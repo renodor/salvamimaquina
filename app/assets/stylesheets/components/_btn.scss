@@ -26,3 +26,14 @@
     }
   }
 }
+
+.btn-secondary {
+  border-radius: 0;
+  background-color: #4b4b4b;
+  border: none!important;
+  box-shadow: none;
+  @include default-transition(background-color);
+  &:hover {
+    background-color: $dark-gray;
+  }
+}

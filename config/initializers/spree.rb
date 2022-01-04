@@ -149,7 +149,7 @@ Spree::Api::Config.configure do |config|
 end
 
 # Prevent solidus auth to ask user to registrate before checkout
-Spree::Auth::Config[:registration_step] = false
+# Spree::Auth::Config[:registration_step] = false
 
 Spree.user_class = 'Spree::LegacyUser'
 

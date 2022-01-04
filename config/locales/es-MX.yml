@@ -30,8 +30,11 @@ es-MX:
     brands: 'Marcas'
     address: 'Dirección'
     my_address: 'Mi dirección'
+    no_address: 'Aún no tiene dirección guardada.'
+    create_address: 'Crear dirección'
     edit_my_address: 'Editar mi dirección'
     edit_my_account: 'Editar mi cuenta'
+    account_information: 'Información de Cuenta'
     back_to_my_account: 'Regresar a mi cuenta'
     model:
       one: 'Modelo'

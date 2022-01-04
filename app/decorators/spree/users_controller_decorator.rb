@@ -2,17 +2,30 @@
 
 module Spree
   module UsersControllerDecorator
-    def self.prepended(base)
-      base.before_action :send_mapbox_api_to_frontend, only: %i[show edit]
+    def edit
+      load_object
+      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     end
 
     def show
       super
 
+      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
       @address = @user.ship_address
     end
 
+    def new_user_address
+      load_object
+      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
+    end
+
+    def edit_user_address
+      load_object
+      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
+    end
+
     def update_user_address
+      load_object
       current_spree_user.ship_address = Spree::Address.create(user_address_params)
       redirect_to account_path, notice: I18n.t('spree.account_updated')
     end
@@ -23,13 +36,9 @@ module Spree
 
     private
 
-    def send_mapbox_api_to_frontend
-      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
-    end
-
     def load_object
       unless spree_current_user
-        session['spree_user_return_to'] = '/account' if params[:login_to_account]
+        session['spree_user_return_to'] = '/account'
         redirect_to login_path and return
       end
 

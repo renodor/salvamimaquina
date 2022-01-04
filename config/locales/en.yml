@@ -60,8 +60,11 @@ en:
     brands: 'Brands'
     address: 'Address'
     my_address: 'My address'
+    no_address: 'You have no saved address yet.'
+    create_address: 'Create address'
     edit_my_address: 'Edit my address'
     edit_my_account: 'Edit my account'
+    account_information: 'Account information'
     back_to_my_account: 'Back to my account'
     item:
       one: 'Item'
