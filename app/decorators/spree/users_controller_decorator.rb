@@ -8,14 +8,18 @@ module Spree
     end
 
     def show
-      super
+      load_object
+      @orders = @user.orders.complete.order('completed_at desc').includes(line_items: [variant: [images: [attachment_attachment: :blob]]])
+      @address = @user.ship_address
 
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
-      @address = @user.ship_address
     end
 
     def new_user_address
       load_object
+      @address = Spree::Address.build_default
+      @address.state = Spree::State.find_by(name: 'Panamá')
+      @address.city = 'Panamá'
       gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     end
 

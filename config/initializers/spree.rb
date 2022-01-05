@@ -73,6 +73,9 @@ Spree.config do |config|
   # to a custom users role:
   # config.roles.assign_permissions :role_name, ['Spree::PermissionSets::CustomPermissionSet']
 
+  # Overwrite default user role to add UserAddressManagement permissions
+  config.roles.assign_permissions :default, ['Spree::PermissionSets::DefaultCustomer', 'Spree::PermissionSets::UserAddressManagement']
+
   # Frontend:
 
   # Custom logo for the frontend

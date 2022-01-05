@@ -29,7 +29,9 @@
         <div class="user-infos-block">
           <div class="user-infos-title">
             <h3><%= t('spree.address') %></h3>
-            <%= link_to svg('pen'), spree.account_edit_user_address_path, class: "edit-user-account" %>
+            <% if @address %>
+              <%= link_to svg('pen'), spree.account_edit_user_address_path, class: "edit-user-account" %>
+            <% end %>
           </div>
           <% if @address %>
             <p><%= @address.name %></p>
@@ -66,7 +68,6 @@
       <% else %>
         <p><%= t('spree.you_have_no_orders_yet') %></p>
       <% end %>
-      <br />
     </div>
   </div>
 </div>

@@ -67,6 +67,9 @@
       grid-template-columns: repeat(6, 1fr);
       height: 100px;
       border-bottom: 1px solid $light-gray;
+      &:last-child {
+        border-bottom: none;
+      }
       div {
         display: flex;
         align-items: center;

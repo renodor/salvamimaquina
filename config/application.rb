@@ -23,6 +23,14 @@ module Salvamimaquina
 
     config.active_job.queue_adapter = :sidekiq
 
+    # Following this guide to load custom permission set files in our Spree application:
+    # https://guides.solidus.io/developers/customizations/customizing-permissions.html#customizing-permissions
+    config.before_initialize do
+      Dir.glob(File.join(File.dirname(__FILE__), '../lib/spree/permission_sets/*.rb')) do |c|
+        require_dependency(c)
+      end
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
