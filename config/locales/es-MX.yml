@@ -29,6 +29,13 @@ es-MX:
     email: 'Correo'
     brands: 'Marcas'
     address: 'Dirección'
+    my_address: 'Mi dirección'
+    no_address: 'Aún no tiene dirección guardada.'
+    create_address: 'Crear dirección'
+    edit_my_address: 'Editar mi dirección'
+    edit_my_account: 'Editar mi cuenta'
+    account_information: 'Información de Cuenta'
+    back_to_my_account: 'Regresar a mi cuenta'
     model:
       one: 'Modelo'
       other: 'Modelos'
@@ -39,6 +46,7 @@ es-MX:
       one: 'Producto'
       other: 'Productos'
     buy: 'Comprar'
+    see_products: 'Ver productos'
     sort_products: 'Ordenar productos'
     sort: 'Ordenar'
     ascend_by_price: 'Precio más bajo'
@@ -168,6 +176,12 @@ es-MX:
     sessions:
       spree_user:
         signed_out: 'Desconectado correctamente'
+    user_registrations:
+      spree_user:
+        signed_up: 'Bienvenido. Tu cuenta ha sido creada!'
+    user_sessions:
+      spree_user:
+        signed_out: 'Sesión finalizada.'
   home_page:
     apple_experts: '¡Somos expertos en dispositivos Apple!'
     all_what_you_need: 'Un solo lugar para todo lo que necesites.'

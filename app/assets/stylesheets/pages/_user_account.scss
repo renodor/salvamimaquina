@@ -1,0 +1,150 @@
+#user-account-tabs {
+  .nav-link {
+    color: $dark-gray;
+    font-weight: 400;
+    border-radius: 0;
+    &.active {
+      font-weight: bold;
+    }
+  }
+}
+
+#user-account-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  h1 {
+    margin-bottom: 0;
+    flex-grow: 1;
+  }
+  a {
+    color: $gray;
+    border: 1px solid $gray;
+    text-decoration: none;
+    padding: 2px 10px;
+    @include default-transition(color, border-color);
+    &:hover {
+      color: $dark-gray;
+      border-color: $dark-gray;
+    }
+  }
+}
+
+#user-account {
+  padding: 25px;
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  #user-infos #user-infos-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 30px;
+    .user-infos-block {
+      position: relative;
+      &:first-child {
+        margin-bottom: 30px;
+      }
+      .user-infos-title {
+        display: flex;
+        justify-content: space-between;
+        grid-column-gap: 10px;
+        .edit-user-account {
+          padding: 0 20px;
+          height: 100%;
+          color: $dark-gray;
+        }
+      }
+      p {
+        margin: 0;
+      }
+    }
+  }
+  #user-orders #user-orders-content {
+    display: grid;
+    a {
+      color: $dark-gray;
+    }
+    .user-order {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      height: 100px;
+      border-bottom: 1px solid $light-gray;
+      &:last-child {
+        border-bottom: none;
+      }
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        a {
+          color: white;
+          padding: 5px 10px!important;
+          border-radius: 5px!important;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+#edit-user-address {
+  input, select {
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    &::placeholder {
+      font-size: 16px;
+    }
+    &.disabled {
+      background-color: $light-gray;
+      color: $dark-gray;
+      &:focus, &:active {
+        border-color: $light-gray!important;
+      }
+    }
+  }
+  select {
+    height: 46px;
+    background-color: white;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+
+@media ($max-l) {
+  #user-account {
+    #user-infos #user-infos-content {
+      grid-template-columns: 1fr;
+    }
+    #user-orders #user-orders-content {
+      grid-template-columns: 1fr 1fr;
+      .user-order {
+        display: block;
+        height: 100%;
+        &:nth-child(odd) {
+          border-right: 1px solid $light-gray;
+        }
+        div {
+          margin: 15px 0;
+        }
+      }
+    }
+  }
+}
+
+@media ($max-s) {
+  #user-account {
+    padding: 20px;
+    #user-infos #user-infos-content .user-infos-block .user-infos-title .edit-user-account {
+      padding: 0 5px;
+    }
+    #user-orders #user-orders-content {
+      grid-template-columns: 1fr;
+      .user-order {
+        border-right: none!important;
+      }
+    }
+  }
+}

@@ -73,6 +73,9 @@ Spree.config do |config|
   # to a custom users role:
   # config.roles.assign_permissions :role_name, ['Spree::PermissionSets::CustomPermissionSet']
 
+  # Overwrite default user role to add UserAddressManagement permissions
+  config.roles.assign_permissions :default, ['Spree::PermissionSets::DefaultCustomer', 'Spree::PermissionSets::UserAddressManagement']
+
   # Frontend:
 
   # Custom logo for the frontend
@@ -149,7 +152,7 @@ Spree::Api::Config.configure do |config|
 end
 
 # Prevent solidus auth to ask user to registrate before checkout
-Spree::Auth::Config[:registration_step] = false
+# Spree::Auth::Config[:registration_step] = false
 
 Spree.user_class = 'Spree::LegacyUser'
 
