@@ -62,11 +62,11 @@
             <div class="order-status"><%= t("spree.order_state.#{order.state}").titleize %></div>
             <div class="order-payment-state"><%= t("spree.payment_states.#{order.payment_state}").titleize if order.payment_state %></div>
             <div class="order-total"><%= order.display_total %></div>
-            <div> <%=  cl_image_tag order.line_items.first&.variant&.images&.first&.attachment&.key, height: 80, crop: :fit %></div>
+            <div> <%= cl_image_tag order.line_items.first&.variant&.images&.first&.attachment&.key, height: 80, crop: :fit %></div>
           </div>
         <% end %>
       <% else %>
-        <p><%= t('spree.you_have_no_orders_yet') %></p>
+        <p><%= t('spree.you_have_no_orders_yet') %> <%= link_to t('spree.see_products'), products_path %></p>
       <% end %>
     </div>
   </div>

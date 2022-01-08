@@ -62,6 +62,9 @@
   }
   #user-orders #user-orders-content {
     display: grid;
+    a {
+      color: $dark-gray;
+    }
     .user-order {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -75,6 +78,7 @@
         align-items: center;
         justify-content: center;
         a {
+          color: white;
           padding: 5px 10px!important;
           border-radius: 5px!important;
           text-decoration: none;

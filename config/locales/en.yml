@@ -73,6 +73,7 @@ en:
       one: 'Product'
       other: 'Products'
     buy: 'Buy'
+    see_products: 'See products'
     sort_products: 'Sort products'
     ascend_by_price: 'Lowest prices'
     descend_by_price: 'Highest prices'
@@ -118,6 +119,25 @@ en:
         disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'
         new_ecommerce_order: 'New order on salvamimaquina.com'
         client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
+  activerecord:
+    attributes:
+      spree/promotion/rules/shipping_method:
+        description: 'Shipping is in Panama Zone 1 or Panama Zone 2'
+  devise:
+    failure:
+      invalid: 'Email or password invalid'
+    user_passwords:
+      spree_user:
+        send_instructions: 'You will receive an email with instructions on how to reset your password in a few minutes.'
+    sessions:
+      spree_user:
+        signed_out: 'Signed out successfully.'
+    user_registrations:
+      spree_user:
+        signed_up: 'Welcome! You have signed up successfully.'
+    user_sessions:
+      spree_user:
+        signed_out: 'Signed out successfully.'
   home_page:
     apple_experts: 'We are experts in Apple products'
     all_what_you_need: 'One place for all what you need.'
@@ -144,7 +164,3 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
-  activerecord:
-    attributes:
-      spree/promotion/rules/shipping_method:
-        description: 'Shipping is in Panama Zone 1 or Panama Zone 2'
