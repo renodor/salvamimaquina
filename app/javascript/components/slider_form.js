@@ -30,7 +30,7 @@ const sliderForm = () => {
       const newId = parseInt(newPhotoInput.dataset.id) + 1;
       newPhotoInput.dataset.id = newId;
       newPhotoInput.id = `slide_images_${newId}`;
-      newPhotoInput.files = null
+      newPhotoInput.files = null;
       newPhotoInputContainer.querySelector('label').htmlFor = `slide_images_${newId}`;
       newPhotoInputContainer.querySelector('#photo-preview').dataset.id = newId;
       lastPhotoInputContainer.after(newPhotoInputContainer);
