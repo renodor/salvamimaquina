@@ -1,6 +1,16 @@
 <% if slider.is_a?(Slider) %>
   <!-- Slider main container -->
-  <div class="swiper">
+  <div class="swiper"
+    data-loop="<%= slider.slide_images.size > 1 %>"
+    data-autoplay="<%= slider.auto_play %>"
+    data-delay-between-slides="<%= slider.delay_between_slides %>"
+    data-navigation="<%= slider.navigation %>"
+    data-pagination="<%= slider.pagination %>"
+    data-image-per-slide-s="<%= slider.image_per_slide_s %>"
+    data-image-per-slide-m="<%= slider.image_per_slide_m %>"
+    data-image-per-slide-l="<%= slider.image_per_slide_l %>"
+    data-image-per-slide-xl="<%= slider.image_per_slide_xl %>"
+  >
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper">
       <!-- Slides -->
@@ -9,6 +19,24 @@
           <%= cl_image_tag slide_image.key %>
         </div>
       <% end %>
+      <% slider.mobile_slide_images.includes(:blob).each do |mobile_slide_image| %>
+        <div class="swiper-slide centered-flexbox" style="display: none;">
+          <%= cl_image_tag mobile_slide_image.key %>
+        </div>
+      <% end %>
     </div>
+
+    <% if slider.navigation %>
+      <div class="swiper-navigation swiper-prev">
+        <%= svg 'chevron_left' %>
+      </div>
+      <div class="swiper-navigation swiper-next">
+        <%= svg 'chevron_right' %>
+      </div>
+    <% end %>
+
+    <% if slider.pagination %>
+      <div class="swiper-pagination"></div>
+    <% end %>
   </div>
 <% end %>

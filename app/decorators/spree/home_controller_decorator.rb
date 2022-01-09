@@ -14,6 +14,7 @@ module Spree
                   .includes(variants_including_master: [prices: :active_sale_prices, images: [attachment_attachment: :blob]])
                   .where(highlight: true)
                   .limit(4)
+      @slider = Slider.find_by(location: :home_page)
 
       respond_to do |format|
         format.html { render layout: 'homepage' }

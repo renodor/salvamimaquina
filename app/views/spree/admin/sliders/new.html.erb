@@ -6,11 +6,44 @@
 <%= simple_form_for @slider, url: admin_sliders_path, html: { id: 'slider-form', class: 'form-with-images' } do |f| %>
   <%= f.input :location, collection: Slider.locations.keys %>
   <%= f.input :name %>
-  <div class="photo-input-container">
-    <%= image_tag "", width: 300, class: 'display-none', id: 'photo-preview', data: { id: 0 } %>
-    <%= f.input :slide_images_0, as: :file, label: false, input_html: { multiple: true, class: 'photo-input', data: { id: 0 } } %>
-    <%= f.label :slide_images_0, 'Upload Image', class: 'btn btn-secondary' %>
+  <%= f.input :auto_play %>
+  <%= f.input :navigation %>
+  <%= f.input :pagination %>
+  <%= f.input :delay_between_slides, hint: 'Milliseconds' %>
+  <div class="image-per-slide">
+    <%= f.input :image_per_slide_s %>
+    <%= f.input :image_per_slide_m %>
+    <%= f.input :image_per_slide_l %>
+    <%= f.input :image_per_slide_xl %>
   </div>
-  <p><button type="button" id="add-slide" class="btn">+ Add another slide</button></p>
+  <% if @slider.errors[:slide_images].present? %>
+    <p class="no-slide-error">Please add at least one slide</p>
+  <% end %>
+  <div id="slides">
+    <div id="desktop-slides">
+      <div class="photo-input-container display-none">
+        <div>
+          <%= image_tag "", class: 'display-none photo-preview', data: { id: 0, type: 'desktop' } %>
+        </div>
+        <label>
+          <%= f.input :slide_images, as: :file, label: false, input_html: { multiple: true, class: 'display-none photo-input', data: { id: 0, type: 'desktop' } } %>
+          <span class="btn btn-secondary">Choose image</span>
+        </label>
+        <span class="remove-slide">Remove slide</span>
+      </div>
+      <p><button type="button" class="btn add-slide" data-type="desktop">+ Add slide</button></p>
+    </div>
+    <div id="mobile-slides">
+      <div class="photo-input-container display-none">
+        <div><%= image_tag "", class: 'display-none photo-preview', data: { id: 0, type: 'mobile' } %></div>
+        <label>
+          <%= f.input :mobile_slide_images, as: :file, label: false, input_html: { multiple: true, class: 'display-none photo-input', data: { id: 0, type: 'mobile' } } %>
+          <span class="btn btn-secondary">Choose mobile image</span>
+        </label>
+        <span class="remove-slide">Remove mobile slide</span>
+      </div>
+      <p><button type="button" class="btn add-slide" data-type="mobile">+ Add mobile slide</button></p>
+    </div>
+  </div>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>

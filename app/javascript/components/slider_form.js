@@ -2,39 +2,68 @@ const sliderForm = () => {
   const sliderForm = document.getElementById('slider-form');
 
   if (sliderForm) {
-    const previewImageOnFileSelect = (photoInput) => {
+    // Method that add a listener in photo input to display the image when a file is uploaded
+    const initPreviewImageOnFileSelect = (photoInput) => {
       photoInput.addEventListener('change', () => {
-        const id = photoInput.dataset.id;
-        console.log(id);
-        // we call the displayPreview function (who retrieve the image url and display it)
+        const photoPreview = sliderForm.querySelector(`#${photoInput.dataset.type}-slides .photo-preview[data-id='${photoInput.dataset.id}']`);
         if (photoInput.files && photoInput.files[0]) {
           const reader = new FileReader();
-          reader.onload = (event) => {
-            document.getElementById('photo-preview').src = event.currentTarget.result;
-          };
+          reader.onload = (event) => { photoPreview.src = event.currentTarget.result; };
           reader.readAsDataURL(photoInput.files[0]);
-          document.getElementById('photo-preview').classList.remove('display-none');
+          photoPreview.classList.remove('display-none');
         }
       });
     };
 
-    sliderForm.querySelectorAll('.photo-input').forEach((photoInput) => previewImageOnFileSelect(photoInput));
+    // Method that add a listener on remove slide btn to remove it from the DOM when clicked
+    const initRemoveSlideBtn = (removeSlideBtn) => {
+      removeSlideBtn.addEventListener('click', (event) => {
+        const currentPhotoInputContainer = event.currentTarget.parentNode;
+        const photoInputContainers = sliderForm.querySelectorAll('.photo-input-container');
 
-    const addSlideBtn = sliderForm.querySelector('#add-slide');
+        if (photoInputContainers.length === 1) {
+          currentPhotoInputContainer.classList.add('display-none');
+        } else {
+          currentPhotoInputContainer.remove();
+        }
+      });
+    };
 
-    addSlideBtn.addEventListener('click', () => {
-      const photoInputContainers = sliderForm.querySelectorAll('.photo-input-container');
-      const lastPhotoInputContainer = photoInputContainers[photoInputContainers.length - 1];
-      const newPhotoInputContainer = lastPhotoInputContainer.cloneNode(true);
-      const newPhotoInput = newPhotoInputContainer.querySelector('.photo-input');
-      const newId = parseInt(newPhotoInput.dataset.id) + 1;
-      newPhotoInput.dataset.id = newId;
-      newPhotoInput.id = `slide_images_${newId}`;
-      newPhotoInput.files = null;
-      newPhotoInputContainer.querySelector('label').htmlFor = `slide_images_${newId}`;
-      newPhotoInputContainer.querySelector('#photo-preview').dataset.id = newId;
-      lastPhotoInputContainer.after(newPhotoInputContainer);
-      previewImageOnFileSelect(newPhotoInput);
+    // Init all photo inputs present on the page
+    sliderForm.querySelectorAll('.photo-input').forEach((photoInput) => initPreviewImageOnFileSelect(photoInput));
+
+    // Init all remove slide btn present on the page
+    sliderForm.querySelectorAll('.remove-slide').forEach((removeSlideBtn) => {
+      initRemoveSlideBtn(removeSlideBtn);
+    });
+
+    // Add a new slide container on the DOM when clicking on add slide btn
+    sliderForm.querySelectorAll('.add-slide').forEach((addSlideBtn) => {
+      addSlideBtn.addEventListener('click', (event) => {
+        const photoInputContainers = sliderForm.querySelectorAll(`#${event.currentTarget.dataset.type}-slides .photo-input-container`);
+        const lastPhotoInputContainer = photoInputContainers[photoInputContainers.length - 1]; // Always select the last one to have the last ID
+
+        const newPhotoInputContainer = lastPhotoInputContainer.cloneNode(true);
+        const newPhotoInput = newPhotoInputContainer.querySelector('.photo-input');
+        const newPhotoPreview = newPhotoInputContainer.querySelector('.photo-preview');
+        const removeSlideBtn = newPhotoInputContainer.querySelector('.remove-slide');
+        const newId = parseInt(newPhotoInput.dataset.id) + 1;
+
+        newPhotoInput.dataset.id = newId;
+        newPhotoPreview.dataset.id = newId;
+        newPhotoInput.value = null;
+        newPhotoPreview.src = '';
+        removeSlideBtn.classList.remove('display-none');
+        lastPhotoInputContainer.classList.remove('display-none');
+
+        initPreviewImageOnFileSelect(newPhotoInput);
+        initRemoveSlideBtn(removeSlideBtn);
+        lastPhotoInputContainer.after(newPhotoInputContainer);
+      });
+    });
+
+    sliderForm.querySelectorAll('.remove-existing-slide').forEach((existingSlide) => {
+      existingSlide.addEventListener('click', (event) => { event.currentTarget.parentNode.remove(); });
     });
   }
 };

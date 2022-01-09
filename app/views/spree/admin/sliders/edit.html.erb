@@ -3,10 +3,40 @@
 <% admin_breadcrumb(link_to 'Sliders', spree.admin_sliders_path) %>
 <% admin_breadcrumb('Edit Slider') %>
 
-<%= simple_form_for @slider, url: admin_slider_path do |f| %>
+<%= simple_form_for @slider, url: admin_slider_path, html: { id: 'slider-form', class: 'form-with-images' } do |f| %>
   <%= f.input :location, collection: Slider.locations.keys %>
   <%= f.input :name %>
-  <%= f.input :slide_images, as: :file, input_html: { multiple: true } %>
+  <%= f.input :auto_play %>
+  <%= f.input :navigation %>
+  <%= f.input :pagination %>
+  <%= f.input :delay_between_slides, hint: 'Milliseconds' %>
+  <div class="image-per-slide">
+    <%= f.input :image_per_slide_s %>
+    <%= f.input :image_per_slide_m %>
+    <%= f.input :image_per_slide_l %>
+    <%= f.input :image_per_slide_xl %>
+  </div>
+  <% if @slider.errors[:slide_images].present? %>
+    <p class="no-slide-error">Please add at least one slide</p>
+  <% end %>
+  <% @slider.slide_images.each do |slide_image| %>
+    <div class="existing-slide">
+      <div><%= cl_image_tag slide_image.key, width: 500, data: { id: slide_image.id } %></div>
+      <%= f.hidden_field :slide_images, multiple: true, value: slide_image.signed_id %>
+      <p class="remove-existing-slide">Remove slide</p>
+    </div>
+  <% end %>
+  <div class="photo-input-container display-none">
+    <div>
+      <%= image_tag "", width: 500, class: 'display-none photo-preview', data: { id: 0 } %>
+    </div>
+    <label>
+      <%= f.input :slide_images, as: :file, label: false, input_html: { multiple: true, class: 'display-none photo-input', data: { id: 0 } } %>
+      <span class="btn btn-secondary">Choose Image</span>
+    </label>
+    <span class="remove-slide">Remove slide</span>
+  </div>
+  <p><button type="button" id="add-slide" class="btn">+ Add slide</button></p>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>
 

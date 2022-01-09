@@ -35,7 +35,7 @@ import { previewImageOnFileSelect } from '../components/preview_image_on_file_se
 import { sliderForm } from '../components/slider_form';
 
 // Internal Plugins
-import { corporateClientsLogoSlider } from '../plugins/corporate_clients_logo_slider';
+import { swiperSlider } from '../plugins/swiper_slider';
 import { initMapbox } from '../plugins/init_mapbox';
 import { initBacCheckout } from '../plugins/bac_checkout';
 
@@ -56,6 +56,6 @@ document.addEventListener('turbolinks:load', () => {
   sliderForm();
 
   initMapbox();
-  corporateClientsLogoSlider();
+  swiperSlider();
   initBacCheckout();
 });
