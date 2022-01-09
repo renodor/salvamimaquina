@@ -15,13 +15,8 @@
     <div class="swiper-wrapper">
       <!-- Slides -->
       <% slider.slide_images.includes(:blob).each do |slide_image| %>
-        <div class="swiper-slide centered-flexbox">
+        <div class="swiper-slide">
           <%= cl_image_tag slide_image.key %>
-        </div>
-      <% end %>
-      <% slider.mobile_slide_images.includes(:blob).each do |mobile_slide_image| %>
-        <div class="swiper-slide centered-flexbox" style="display: none;">
-          <%= cl_image_tag mobile_slide_image.key %>
         </div>
       <% end %>
     </div>

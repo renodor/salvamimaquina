@@ -1,6 +1,6 @@
 // import Swiper JS
-import Swiper, { Autoplay, Navigation, Pagination } from 'swiper';
-Swiper.use([Autoplay, Navigation, Pagination]); // https://github.com/JayChase/angular2-useful-swiper/issues/48
+import Swiper, { Autoplay, Navigation, Pagination, Manipulation } from 'swiper';
+Swiper.use([Autoplay, Navigation, Pagination, Manipulation]); // https://github.com/JayChase/angular2-useful-swiper/issues/48
 
 const swiperSlider = () => {
   const swiperCarousel = document.querySelector('.swiper');
@@ -36,28 +36,7 @@ const swiperSlider = () => {
       }
     });
 
-    // const displayRelevantSlides = () => {
-    //   const desktopSlides = swiperCarousel.querySelector('.desktop-slides');
-    //   const mobileSlides = swiperCarousel.querySelector('.mobile-slides');
-    //   if (window.innerWidth >= 767) {
-    //     mobileSlides.classList.remove('swiper-wrapper');
-    //     mobileSlides.classList.add('display-none');
-
-    //     desktopSlides.classList.add('swiper-wrapper');
-    //     desktopSlides.classList.remove('display-none');
-    //   } else {
-    //     desktopSlides.classList.remove('swiper-wrapper');
-    //     desktopSlides.classList.add('display-none');
-
-    //     mobileSlides.classList.add('swiper-wrapper');
-    //     mobileSlides.classList.remove('display-none');
-    //   }
-    // };
-
-    // displayRelevantSlides();
-    // window.addEventListener('resize', () => {
-    //   displayRelevantSlides();
-    // });
+    swiper.appendSlide('<div class="swiper-slide">Slide 10"</div>');
   }
 };
 
