@@ -1,0 +1,13 @@
+.form-with-images {
+  .image-input {
+    padding: 10px;
+    border: 1px solid $light-gray;
+    margin: 20px 0;
+    img {
+      max-height: 150px;
+      height: auto;
+      max-width: 400px;
+      width: auto;
+    }
+  }
+}

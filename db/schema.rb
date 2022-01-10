@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_09_234706) do
+ActiveRecord::Schema.define(version: 2022_01_10_075057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,14 @@ ActiveRecord::Schema.define(version: 2022_01_09_234706) do
     t.integer "image_per_slide_s", default: 1
     t.integer "space_between_slides", default: 10
     t.boolean "force_slide_full_width", default: true
+  end
+
+  create_table "slides", force: :cascade do |t|
+    t.text "link"
+    t.bigint "slider_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["slider_id"], name: "index_slides_on_slider_id"
   end
 
   create_table "spree_addresses", id: :serial, force: :cascade do |t|
@@ -1356,6 +1364,7 @@ ActiveRecord::Schema.define(version: 2022_01_09_234706) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "reparation_requests", "reparation_categories"
+  add_foreign_key "slides", "sliders"
   add_foreign_key "spree_districts", "spree_states", column: "state_id", on_delete: :cascade
   add_foreign_key "spree_promotion_code_batches", "spree_promotions", column: "promotion_id"
   add_foreign_key "spree_promotion_codes", "spree_promotion_code_batches", column: "promotion_code_batch_id"

@@ -6,77 +6,68 @@ const swiperSlider = () => {
   const swiperCarousel = document.querySelector('.swiper');
 
   if (swiperCarousel) {
-    const swiperOptions = swiperCarousel.dataset;
+    const sliderOptions = JSON.parse(swiperCarousel.dataset.sliderOptions);
     const swiper = new Swiper('.swiper', {
-      spaceBetween: parseInt(swiperOptions.spaceBetweenSlides),
+      loop: true,
+      spaceBetween: sliderOptions.spaceBetweenSlides,
 
-      navigation: swiperOptions.navigation === 'true' ? { nextEl: '.swiper-next', prevEl: '.swiper-prev' } : false,
-      pagination: swiperOptions.pagination === 'true' ? { el: '.swiper-pagination', clickable: true } : false,
+      navigation: sliderOptions.navigation ? { nextEl: '.swiper-next', prevEl: '.swiper-prev' } : false,
+      pagination: sliderOptions.pagination ? { el: '.swiper-pagination', clickable: true } : false,
 
       autoplay: {
-        enabled: swiperOptions.autoplay === 'true',
-        delay: parseInt(swiperOptions.delayBetweenSlides),
+        enabled: sliderOptions.autoplay,
+        delay: sliderOptions.delayBetweenSlides,
         disableOnInteraction: false
       },
 
       breakpoints: {
         576: {
-          slidesPerView: parseInt(swiperOptions.imagePerSlideS)
+          slidesPerView: sliderOptions.imagePerSlideS
         },
         768: {
-          slidesPerView: parseInt(swiperOptions.imagePerSlideM)
+          slidesPerView: sliderOptions.imagePerSlideM
         },
         992: {
-          slidesPerView: parseInt(swiperOptions.imagePerSlideL)
+          slidesPerView: sliderOptions.imagePerSlideL
         },
         1200: {
-          slidesPerView: parseInt(swiperOptions.imagePerSlideXl)
+          slidesPerView: sliderOptions.imagePerSlideXl
         }
       }
     });
 
-    const desktopSlideUrls = JSON.parse(swiperCarousel.dataset.desktopSlides);
-    const mobileSlideUrls = JSON.parse(swiperCarousel.dataset.mobileSlides);
+    if (sliderOptions.disableLoop) { swiper.disable(); }
 
-    const addSlides = (slideUrls) => {
-      slideUrls.forEach((slideUrl) => swiper.appendSlide(`<div class="swiper-slide centered-flexbox"><img src="${slideUrl}" /></div>`));
+    const slides = JSON.parse(swiperCarousel.dataset.slides);
+    const addRelevantSlides = () => {
+      // Because swiper needs at least 1 slide to initiate loop we can't just remove all slides all the time
+      // So we 1) add a placeholder > 2) remove all other slides > 3) add new slides > 4) remove placeholder
+      swiper.prependSlide('<div class="swiper-slide placeholder-slide">'); // 1)
+      swiper.removeSlide([...Array(swiper.slides.length).keys()].slice(1)); // 2)
+      swiper.appendSlide(slides.map(({ link, image, imageMobile }) => { // 3)
+        return `<div class="swiper-slide centered-flexbox">
+          <a href="${link}">
+            <img src="${window.innerWidth > 575 ? image : imageMobile || image}" />
+          </a>
+        </div>`;
+      }));
+      swiper.removeSlide(0); // 4)
     };
+    addRelevantSlides();
 
-    if (mobileSlideUrls.length > 0) {
-      const addRelevantTypeToSlider = () => {
-        if (window.innerWidth > 575) {
-          swiper.wrapperEl.dataset.type = 'desktop';
-        } else {
-          swiper.wrapperEl.dataset.type = 'mobile';
-        }
-      };
+    let currentDevice = '';
+    const setCurrentDevice = () => (currentDevice = window.innerWidth > 575 ? 'desktop' : 'mobile');
+    setCurrentDevice();
+    const setSwiperDeviceType = () => (swiper.wrapperEl.dataset.deviceType = currentDevice);
+    setSwiperDeviceType();
 
-      const addRelevantSlides = () => {
-        if (swiper.wrapperEl.dataset.type === 'desktop') {
-          swiper.removeAllSlides();
-          addSlides(desktopSlideUrls);
-        } else {
-          swiper.removeAllSlides();
-          addSlides(mobileSlideUrls);
-        }
-      };
-
-      addRelevantTypeToSlider();
-      addRelevantSlides();
-
-
-      swiper.on('breakpoint', () => {
-        if (window.innerWidth > 575 && swiper.wrapperEl.dataset.type == 'mobile') {
-          swiper.wrapperEl.dataset.type = 'desktop';
-          addRelevantSlides();
-        } else if (window.innerWidth <= 575 && swiper.wrapperEl.dataset.type == 'desktop') {
-          swiper.wrapperEl.dataset.type = 'mobile';
-          addRelevantSlides();
-        }
-      });
-    } else {
-      addSlides(desktopSlideUrls);
-    }
+    swiper.on('breakpoint', () => {
+      setCurrentDevice();
+      if (currentDevice != swiper.wrapperEl.dataset.deviceType) {
+        setSwiperDeviceType();
+        addRelevantSlides();
+      }
+    });
   }
 };
 

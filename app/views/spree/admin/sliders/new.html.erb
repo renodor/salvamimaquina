@@ -16,34 +16,5 @@
     <%= f.input :image_per_slide_l %>
     <%= f.input :image_per_slide_xl %>
   </div>
-  <% if @slider.errors[:slide_images].present? %>
-    <p class="no-slide-error">Please add at least one slide</p>
-  <% end %>
-  <div id="slides">
-    <div id="desktop-slides">
-      <div class="photo-input-container display-none">
-        <div>
-          <%= image_tag "", class: 'display-none photo-preview', data: { id: 0, type: 'desktop' } %>
-        </div>
-        <label>
-          <%= f.input :slide_images, as: :file, label: false, input_html: { multiple: true, class: 'display-none photo-input', data: { id: 0, type: 'desktop' } } %>
-          <span class="btn btn-secondary">Choose image</span>
-        </label>
-        <span class="remove-slide">Remove slide</span>
-      </div>
-      <p><button type="button" class="btn add-slide" data-type="desktop">+ Add slide</button></p>
-    </div>
-    <div id="mobile-slides">
-      <div class="photo-input-container display-none">
-        <div><%= image_tag "", class: 'display-none photo-preview', data: { id: 0, type: 'mobile' } %></div>
-        <label>
-          <%= f.input :mobile_slide_images, as: :file, label: false, input_html: { multiple: true, class: 'display-none photo-input', data: { id: 0, type: 'mobile' } } %>
-          <span class="btn btn-secondary">Choose mobile image</span>
-        </label>
-        <span class="remove-slide">Remove mobile slide</span>
-      </div>
-      <p><button type="button" class="btn add-slide" data-type="mobile">+ Add mobile slide</button></p>
-    </div>
-  </div>
-  <%= f.submit class: 'btn btn-primary' %>
+  <%= f.submit 'Create slider and add first slide', class: 'btn btn-primary' %>
 <% end %>

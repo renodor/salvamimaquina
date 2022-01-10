@@ -3,7 +3,7 @@
 <% admin_breadcrumb(link_to 'Sliders', spree.admin_sliders_path) %>
 <% admin_breadcrumb('Edit Slider') %>
 
-<%= simple_form_for @slider, url: admin_slider_path, html: { id: 'slider-form', class: 'form-with-images' } do |f| %>
+<%= simple_form_for @slider, url: admin_slider_path, html: { id: 'slider-form' } do |f| %>
   <%= f.input :location, collection: Slider.locations.keys %>
   <%= f.input :name %>
   <%= f.input :auto_play %>
@@ -11,35 +11,42 @@
   <%= f.input :pagination %>
   <%= f.input :delay_between_slides, hint: 'Milliseconds' %>
   <%= f.input :space_between_slides, hint: 'Pixels' %>
-  <%= f.input :force_slide_full_width, hint: 'TBD' %>
+  <%= f.input :force_slide_full_width, hint: 'Make sure that slide image will take 100% of the slide width' %>
   <div class="image-per-slide">
-    <%= f.input :image_per_slide_s %>
-    <%= f.input :image_per_slide_m %>
-    <%= f.input :image_per_slide_l %>
-    <%= f.input :image_per_slide_xl %>
+    <%= f.input :image_per_slide_s, hint: 'Images per slides on small screen' %>
+    <%= f.input :image_per_slide_m, hint: 'Images per slides on medium screen' %>
+    <%= f.input :image_per_slide_l, hint: 'Images per slides on large screen' %>
+    <%= f.input :image_per_slide_xl, hint: 'Images per slides on big screen' %>
   </div>
-  <% if @slider.errors[:slide_images].present? %>
-    <p class="no-slide-error">Please add at least one slide</p>
-  <% end %>
-  <% @slider.slide_images.each do |slide_image| %>
-    <div class="existing-slide">
-      <div><%= cl_image_tag slide_image.key, width: 500, data: { id: slide_image.id } %></div>
-      <%= f.hidden_field :slide_images, multiple: true, value: slide_image.signed_id %>
-      <p class="remove-existing-slide">Remove slide</p>
-    </div>
-  <% end %>
-  <div class="photo-input-container display-none">
-    <div>
-      <%= image_tag "", width: 500, class: 'display-none photo-preview', data: { id: 0 } %>
-    </div>
-    <label>
-      <%= f.input :slide_images, as: :file, label: false, input_html: { multiple: true, class: 'display-none photo-input', data: { id: 0 } } %>
-      <span class="btn btn-secondary">Choose Image</span>
-    </label>
-    <span class="remove-slide">Remove slide</span>
-  </div>
-  <p><button type="button" id="add-slide" class="btn">+ Add slide</button></p>
   <%= f.submit class: 'btn btn-primary' %>
+  <div class="slides">
+    <% @slider.slides.each_with_index do |slide, index| %>
+      <div class="slide">
+        <div class="slide-header">
+          <span><b class="slide-number">Slide <%= index + 1 %></b></span>
+          <!-- <span><%#= link_to 'Edit', edit_admin_slider_slide_path(@slider.id, slide.id) %></span> -->
+          <span><%= link_to 'Remove', admin_slider_slide_path(@slider.id, slide.id), method: :delete %></span>
+        </div>
+        <div class="slide-content">
+          <p>Link: <%= link_to slide.link, slide.link, target: :blank %></p>
+          <div class="slide-images">
+            <div>
+              <p>Image:</p>
+              <%= cl_image_tag slide.image.key, width: 400 %>
+            </div>
+            <% if slide.image_mobile %>
+              <div>
+                <p>Image mobile:</p>
+                <%= cl_image_tag slide.image_mobile.key, width: 400 %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <p><%= link_to '+ Add slide', new_admin_slider_slide_path(@slider.id), class: 'btn btn-secondary' %></p>
 <% end %>
+
 
 <br /><br />

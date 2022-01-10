@@ -5,4 +5,6 @@
 @import 'config/bootstrap_variables';
 
 // Spree Components
+@import 'spree/backend/base';
 @import 'spree/backend/slider_form';
+@import 'spree/backend/form_with_images';

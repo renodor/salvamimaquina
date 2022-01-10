@@ -1,22 +1,38 @@
 <% if slider.is_a?(Slider) %>
+  <%
+    slider_options = {
+      disableLoop: slider.slides.size == 1,
+      autoplay: slider.auto_play,
+      delayBetweenSlides: slider.delay_between_slides,
+      spaceBetweenSlides: slider.space_between_slides,
+      navigation: slider.navigation,
+      pagination: slider.pagination,
+      imagePerSlideS: slider.image_per_slide_s,
+      imagePerSlideM: slider.image_per_slide_m,
+      imagePerSlideL: slider.image_per_slide_l,
+      imagePerSlideXl: slider.image_per_slide_xl
+    }
+  %>
+
+  <%
+    slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).map do |slide|
+      {
+        link: slide.link,
+        image: cl_image_path(slide.image.key),
+        imageMobile: cl_image_path(slide.image_mobile&.key || '')
+      }
+    end
+  %>
   <!-- Slider main container -->
   <div class="swiper"
-    data-loop="<%= slider.slide_images.size > 1 %>"
-    data-autoplay="<%= slider.auto_play %>"
-    data-delay-between-slides="<%= slider.delay_between_slides %>"
-    data-space-between-slides="<%= slider.space_between_slides %>"
-    data-pagination="<%= slider.pagination %>"
-    data-pagination="<%= slider.pagination %>"
-    data-image-per-slide-s="<%= slider.image_per_slide_s %>"
-    data-image-per-slide-m="<%= slider.image_per_slide_m %>"
-    data-image-per-slide-l="<%= slider.image_per_slide_l %>"
-    data-image-per-slide-xl="<%= slider.image_per_slide_xl %>"
-    data-desktop-slides="<%= slider.slide_images.includes(:blob).map { |slide| cl_image_path(slide.key) }%>"
-    data-mobile-slides="<%= slider.mobile_slide_images.includes(:blob).map { |slide| cl_image_path(slide.key) }%>"
+    data-slider-options=<%= slider_options.to_json %>
+    data-slides=<%= slides_object.to_json %>
   >
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper <%= slider.force_slide_full_width ? 'full-width-slides' : '' %>">
-      <!-- Relevant slides (mobile or desktop) Slides will go here but will be added by JS -->
+      <!-- Relevant slides (mobile or desktop) will be added by JS here -->
+      <!-- But we need a placeholder because swiper needs at least 1 slide to initiate loop -->
+      <div class="swiper-slide placeholder-slide"></div>
     </div>
 
     <% if slider.navigation %>
