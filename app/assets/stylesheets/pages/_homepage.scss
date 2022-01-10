@@ -31,55 +31,12 @@
   }
 }
 
-@media ($max-xl) {
-  #homepage-banner {
-    .container {
-      img {
-        height: 300px;
-      }
-    }
-  }
-}
-
-@media ($max-l) {
-  #homepage-banner {
-    height: 100%;
-    padding: 40px 20px 50px 20px;
-    .container {
-      flex-direction: column-reverse;
-      .homepage-banner-text {
-        text-align: center;
-        .homepage-banner-ctas {
-          a {
-            margin: 5px;
-            margin-bottom: 15px;
-          }
-        }
-      }
-      img {
-        height: 200px;
-        padding-bottom: 15px;
-      }
-    }
-  }
-}
-
 @media ($max-m) {
   .homepage-block {
     .homepage-features {
       grid-template-columns: 1fr;
       .homepage-feature {
         padding-bottom: 20px;
-      }
-    }
-  }
-}
-
-@media ($max-s) {
-  #homepage-banner {
-    .container {
-      img {
-        height: 150px;
       }
     }
   }
