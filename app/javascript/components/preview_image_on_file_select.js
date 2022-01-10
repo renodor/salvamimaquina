@@ -1,3 +1,4 @@
+// When uploading an image to a form, display a preview of it next to the form input
 const previewImageOnFileSelect = () => {
   const formWithImages = document.querySelector('.form-with-images');
 

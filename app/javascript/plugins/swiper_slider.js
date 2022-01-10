@@ -6,7 +6,10 @@ const swiperSlider = () => {
   const swiperCarousel = document.querySelector('.swiper');
 
   if (swiperCarousel) {
+    // Get slider options from HTML view
     const sliderOptions = JSON.parse(swiperCarousel.dataset.sliderOptions);
+
+    // Initialize swiper instance with the slider options
     const swiper = new Swiper('.swiper', {
       loop: true,
       spaceBetween: sliderOptions.spaceBetweenSlides,
@@ -35,10 +38,12 @@ const swiperSlider = () => {
         }
       }
     });
-
     if (sliderOptions.disableLoop) { swiper.disable(); }
 
+    // Get slide infos from HTML view
     const slides = JSON.parse(swiperCarousel.dataset.slides);
+
+    // Add slides to slider
     const addRelevantSlides = () => {
       // Because swiper needs at least 1 slide to initiate loop we can't just remove all slides all the time
       // So we 1) add a placeholder > 2) remove all other slides > 3) add new slides > 4) remove placeholder
@@ -55,12 +60,14 @@ const swiperSlider = () => {
     };
     addRelevantSlides();
 
+    // Set currentDevice variable and slider device type to track when we need to change slides
     let currentDevice = '';
     const setCurrentDevice = () => (currentDevice = window.innerWidth > 575 ? 'desktop' : 'mobile');
     setCurrentDevice();
     const setSwiperDeviceType = () => (swiper.wrapperEl.dataset.deviceType = currentDevice);
     setSwiperDeviceType();
 
+    // When window is resized and we pass a breakpoint, change slides (desktop VS mobile) if needed
     swiper.on('breakpoint', () => {
       setCurrentDevice();
       if (currentDevice != swiper.wrapperEl.dataset.deviceType) {

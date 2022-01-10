@@ -9,10 +9,12 @@
   <div class="image-input">
     <%= image_tag '', width: 300, class: 'display-none image-preview', data: { id: 'desktop-image' } %>
     <%= f.input :image, as: :file, input_html: { data: { id: 'desktop-image'} } %>
+    <p class="invalid-feedback display-block"><%= @slide.errors[:image]&.join(', ') %></p>
   </div>
   <div class="image-input">
     <%= image_tag '', width: 300, class: 'display-none image-preview', data: { id: 'mobile-image' } %>
     <%= f.input :image_mobile, as: :file, input_html: { data: { id: 'mobile-image'} } %>
+    <p class="invalid-feedback display-block"><%= @slide.errors[:image_mobile]&.join(', ') %></p>
   </div>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>
