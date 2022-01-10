@@ -4,21 +4,19 @@
     data-loop="<%= slider.slide_images.size > 1 %>"
     data-autoplay="<%= slider.auto_play %>"
     data-delay-between-slides="<%= slider.delay_between_slides %>"
-    data-navigation="<%= slider.navigation %>"
+    data-space-between-slides="<%= slider.space_between_slides %>"
+    data-pagination="<%= slider.pagination %>"
     data-pagination="<%= slider.pagination %>"
     data-image-per-slide-s="<%= slider.image_per_slide_s %>"
     data-image-per-slide-m="<%= slider.image_per_slide_m %>"
     data-image-per-slide-l="<%= slider.image_per_slide_l %>"
     data-image-per-slide-xl="<%= slider.image_per_slide_xl %>"
+    data-desktop-slides="<%= slider.slide_images.includes(:blob).map { |slide| cl_image_path(slide.key) }%>"
+    data-mobile-slides="<%= slider.mobile_slide_images.includes(:blob).map { |slide| cl_image_path(slide.key) }%>"
   >
     <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
-      <!-- Slides -->
-      <% slider.slide_images.includes(:blob).each do |slide_image| %>
-        <div class="swiper-slide">
-          <%= cl_image_tag slide_image.key %>
-        </div>
-      <% end %>
+    <div class="swiper-wrapper <%= slider.force_slide_full_width ? 'full-width-slides' : '' %>">
+      <!-- Relevant slides (mobile or desktop) Slides will go here but will be added by JS -->
     </div>
 
     <% if slider.navigation %>

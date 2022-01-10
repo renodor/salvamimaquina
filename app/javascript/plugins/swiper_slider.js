@@ -8,8 +8,7 @@ const swiperSlider = () => {
   if (swiperCarousel) {
     const swiperOptions = swiperCarousel.dataset;
     const swiper = new Swiper('.swiper', {
-      loop: swiperCarousel.dataset.loop === 'true',
-      spaceBetween: 10,
+      spaceBetween: parseInt(swiperOptions.spaceBetweenSlides),
 
       navigation: swiperOptions.navigation === 'true' ? { nextEl: '.swiper-next', prevEl: '.swiper-prev' } : false,
       pagination: swiperOptions.pagination === 'true' ? { el: '.swiper-pagination', clickable: true } : false,
@@ -36,7 +35,48 @@ const swiperSlider = () => {
       }
     });
 
-    swiper.appendSlide('<div class="swiper-slide">Slide 10"</div>');
+    const desktopSlideUrls = JSON.parse(swiperCarousel.dataset.desktopSlides);
+    const mobileSlideUrls = JSON.parse(swiperCarousel.dataset.mobileSlides);
+
+    const addSlides = (slideUrls) => {
+      slideUrls.forEach((slideUrl) => swiper.appendSlide(`<div class="swiper-slide centered-flexbox"><img src="${slideUrl}" /></div>`));
+    };
+
+    if (mobileSlideUrls.length > 0) {
+      const addRelevantTypeToSlider = () => {
+        if (window.innerWidth > 575) {
+          swiper.wrapperEl.dataset.type = 'desktop';
+        } else {
+          swiper.wrapperEl.dataset.type = 'mobile';
+        }
+      };
+
+      const addRelevantSlides = () => {
+        if (swiper.wrapperEl.dataset.type === 'desktop') {
+          swiper.removeAllSlides();
+          addSlides(desktopSlideUrls);
+        } else {
+          swiper.removeAllSlides();
+          addSlides(mobileSlideUrls);
+        }
+      };
+
+      addRelevantTypeToSlider();
+      addRelevantSlides();
+
+
+      swiper.on('breakpoint', () => {
+        if (window.innerWidth > 575 && swiper.wrapperEl.dataset.type == 'mobile') {
+          swiper.wrapperEl.dataset.type = 'desktop';
+          addRelevantSlides();
+        } else if (window.innerWidth <= 575 && swiper.wrapperEl.dataset.type == 'desktop') {
+          swiper.wrapperEl.dataset.type = 'mobile';
+          addRelevantSlides();
+        }
+      });
+    } else {
+      addSlides(desktopSlideUrls);
+    }
   }
 };
 
