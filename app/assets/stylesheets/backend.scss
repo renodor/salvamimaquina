@@ -21,4 +21,15 @@
     display: initial;
     transform: none;
   }
+  .admin-nav-footer {
+    width: 200px;
+  }
+  .admin-locale-selection .js-locale-selection.custom-select {
+    background-color: white;
+    background-position-x: right;
+    background-position-y: center;
+    border: 1px solid #D7DAE0;
+    background-size: 8px 9px;
+    opacity: 1;
+  }
 }
