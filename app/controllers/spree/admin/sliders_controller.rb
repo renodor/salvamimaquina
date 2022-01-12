@@ -18,7 +18,7 @@ module Spree
       def create
         @slider = Slider.new(slider_params)
         if @slider.save
-          redirect_to admin_sliders_path
+          redirect_to new_admin_slider_slide_path(@slider.id)
         else
           render :new
         end
@@ -41,7 +41,7 @@ module Spree
       private
 
       def slider_params
-        params.require(:slider).permit(:location, :name, slide_images: [])
+        params.require(:slider).permit(:location, :name, :auto_play, :navigation, :pagination, :delay_between_slides, :space_between_slides, :force_slide_full_width, :image_per_slide_s, :image_per_slide_m, :image_per_slide_l, :image_per_slide_xl)
       end
     end
   end

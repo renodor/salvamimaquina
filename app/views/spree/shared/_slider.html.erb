@@ -1,14 +1,51 @@
 <% if slider.is_a?(Slider) %>
+  <%
+    slider_options = {
+      disableLoop: slider.slides.size == 1,
+      autoplay: slider.auto_play,
+      delayBetweenSlides: slider.delay_between_slides,
+      spaceBetweenSlides: slider.space_between_slides,
+      navigation: slider.navigation,
+      pagination: slider.pagination,
+      imagePerSlideS: slider.image_per_slide_s,
+      imagePerSlideM: slider.image_per_slide_m,
+      imagePerSlideL: slider.image_per_slide_l,
+      imagePerSlideXl: slider.image_per_slide_xl
+    }
+  %>
+
+  <%
+    slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).map do |slide|
+      {
+        link: slide.link,
+        image: cl_image_path(slide.image.key),
+        imageMobile: cl_image_path(slide.image_mobile&.key || '')
+      }
+    end
+  %>
   <!-- Slider main container -->
-  <div class="swiper">
+  <div class="swiper"
+    data-slider-options=<%= slider_options.to_json %>
+    data-slides=<%= slides_object.to_json %>
+  >
     <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
-      <!-- Slides -->
-      <% slider.slide_images.includes(:blob).each do |slide_image| %>
-        <div class="swiper-slide centered-flexbox">
-            <%= cl_image_tag slide_image.key %>
-        </div>
-      <% end %>
+    <div class="swiper-wrapper <%= slider.force_slide_full_width ? 'full-width-slides' : '' %>">
+      <!-- Relevant slides (mobile or desktop) will be added by JS here -->
+      <!-- But we need a placeholder because swiper needs at least 1 slide to initiate loop -->
+      <div class="swiper-slide placeholder-slide"></div>
     </div>
+
+    <% if slider.navigation %>
+      <div class="swiper-navigation swiper-prev">
+        <%= svg 'chevron_left' %>
+      </div>
+      <div class="swiper-navigation swiper-next">
+        <%= svg 'chevron_right' %>
+      </div>
+    <% end %>
+
+    <% if slider.pagination %>
+      <div class="swiper-pagination"></div>
+    <% end %>
   </div>
 <% end %>

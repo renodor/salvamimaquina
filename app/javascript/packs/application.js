@@ -31,9 +31,10 @@ import { productFiltersModal } from '../components/product_filters_modal';
 import { productFilters } from '../components/product_filters';
 import { quantitySelector } from '../components/quantity_selector';
 import { cart } from '../components/cart';
+import { previewImageOnFileSelect } from '../components/preview_image_on_file_select';
 
 // Internal Plugins
-import { corporateClientsLogoSlider } from '../plugins/corporate_clients_logo_slider';
+import { swiperSlider } from '../plugins/swiper_slider';
 import { initMapbox } from '../plugins/init_mapbox';
 import { initBacCheckout } from '../plugins/bac_checkout';
 
@@ -50,8 +51,9 @@ document.addEventListener('turbolinks:load', () => {
   productFilters();
   quantitySelector();
   cart();
+  previewImageOnFileSelect();
 
   initMapbox();
-  corporateClientsLogoSlider();
+  swiperSlider();
   initBacCheckout();
 });

@@ -1,0 +1,18 @@
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb(link_to 'Sliders', spree.admin_sliders_path) %>
+<% admin_breadcrumb(link_to @slider.name, spree.edit_admin_slider_path(@slider.id)) %>
+<% admin_breadcrumb('New Slide') %>
+
+<%= simple_form_for [@slider, @slide], url: admin_slider_slides_path, html: { class: 'form-with-images' } do |f| %>
+  <%= f.input :link %>
+  <div class="image-input">
+    <%= cl_image_tag @slide.image.key, width: 300, class: 'image-preview', data: { id: 'desktop-image' } %>
+    <%= f.input :image, as: :file, input_html: { data: { id: 'desktop-image'} } %>
+  </div>
+  <div class="image-input">
+    <%= cl_image_tag @slide.image_mobile.key, width: 300, class: "image-preview #{@slide.image_mobile.present? ? '' : 'display-none'}", data: { id: 'mobile-image' } %>
+    <%= f.input :image_mobile, as: :file, input_html: { data: { id: 'mobile-image'} } %>
+  </div>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>

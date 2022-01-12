@@ -14,7 +14,9 @@ Rails.application.routes.draw do
       resources :reparation_categories, except: :show
       resources :reparation_requests, only: %i[index show]
       resources :banners, except: :show
-      resources :sliders
+      resources :sliders do
+        resources :slides
+      end
     end
 
     post '/checkout/three_d_secure_response', to: 'checkout#three_d_secure_response'
