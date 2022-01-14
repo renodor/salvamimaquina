@@ -4,15 +4,18 @@
 <% admin_breadcrumb(link_to @slider.name, spree.edit_admin_slider_path(@slider.id)) %>
 <% admin_breadcrumb('New Slide') %>
 
-<%= simple_form_for [@slider, @slide], url: admin_slider_slides_path, html: { class: 'form-with-images' } do |f| %>
-  <%= f.input :link %>
+<%= simple_form_for [@slider, @slide], url: admin_slider_slide_path, html: { class: 'form-with-images' } do |f| %>
+  <%= f.input :link, as: :string %>
+  <%= f.input :order, label: 'Slide number' %>
   <div class="image-input">
     <%= cl_image_tag @slide.image.key, width: 300, class: 'image-preview', data: { id: 'desktop-image' } %>
-    <%= f.input :image, as: :file, input_html: { data: { id: 'desktop-image'} } %>
+    <%= f.input :image, as: :file, hint: 'Image width: 1300px', input_html: { data: { id: 'desktop-image'} } %>
+    <p class="invalid-feedback display-block"><%= @slide.errors[:image]&.join(', ') %></p>
   </div>
   <div class="image-input">
-    <%= cl_image_tag @slide.image_mobile.key, width: 300, class: "image-preview #{@slide.image_mobile.present? ? '' : 'display-none'}", data: { id: 'mobile-image' } %>
-    <%= f.input :image_mobile, as: :file, input_html: { data: { id: 'mobile-image'} } %>
+    <%= cl_image_tag @slide.image_mobile&.key, width: 300, class: 'image-preview', data: { id: 'mobile-image' } %>
+    <%= f.input :image_mobile, as: :file, hint: 'Image width: 535px', input_html: { data: { id: 'mobile-image'} } %>
+    <p class="invalid-feedback display-block"><%= @slide.errors[:image_mobile]&.join(', ') %></p>
   </div>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>

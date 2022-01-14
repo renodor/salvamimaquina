@@ -20,11 +20,11 @@
   </div>
   <%= f.submit class: 'btn btn-primary' %>
   <div class="slides">
-    <% @slider.slides.each_with_index do |slide, index| %>
+    <% @slider.slides.order(:order).each_with_index do |slide, index| %>
       <div class="slide">
         <div class="slide-header">
           <span><b class="slide-number">Slide <%= index + 1 %></b></span>
-          <!-- <span><%#= link_to 'Edit', edit_admin_slider_slide_path(@slider.id, slide.id) %></span> -->
+          <span><%= link_to 'Edit', edit_admin_slider_slide_path(@slider.id, slide.id) %></span>
           <span><%= link_to 'Remove', admin_slider_slide_path(@slider.id, slide.id), method: :delete %></span>
         </div>
         <div class="slide-content">
@@ -37,7 +37,7 @@
             <% if slide.image_mobile %>
               <div>
                 <p>Image mobile:</p>
-                <%= cl_image_tag slide.image_mobile.key, width: 400 %>
+                <%= cl_image_tag slide.image_mobile&.key, width: 400 %>
               </div>
             <% end %>
           </div>

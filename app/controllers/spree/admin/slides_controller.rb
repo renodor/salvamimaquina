@@ -25,9 +25,10 @@ module Spree
       end
 
       def update
+        @slider = Slider.find(params[:slider_id])
         @slide = Slide.find(params[:id])
         if @slide.update(slide_params)
-          redirect_to admin_slides_path
+          redirect_to edit_admin_slider_path(@slider.id)
         else
           render :edit
         end
@@ -41,7 +42,7 @@ module Spree
       private
 
       def slide_params
-        params.require(:slide).permit(:link, :image, :image_mobile)
+        params.require(:slide).permit(:link, :order, :image, :image_mobile)
       end
     end
   end
