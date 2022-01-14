@@ -11,6 +11,7 @@ module Spree
       @reparation_request = ReparationRequest.new(reparation_request_params)
       @reparation_request.reparation_category = ReparationCategory.find(params[:reparation_category_id])
       if @reparation_request.save
+        ReparationRequestMailer.reparation_request_message(reparation_request: @reparation_request).deliver_later
         redirect_to reparation_requests_thank_you_path
       else
         @category = ReparationCategory.find(params[:reparation_category_id])
