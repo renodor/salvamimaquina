@@ -15,7 +15,7 @@
       </tr>
    </thead>
    <tbody>
-    <% @reparation_requests.each do |reparation_request| %>
+    <% @reparation_requests.order(created_at: :desc).each do |reparation_request| %>
       <tr>
         <td><%= reparation_request.created_at.strftime("%d %b %Y") %></td>
         <td><%= reparation_request.reparation_category.name %></td>
