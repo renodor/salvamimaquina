@@ -51,9 +51,9 @@ const swiperSlider = () => {
       swiper.removeSlide([...Array(swiper.slides.length).keys()].slice(1)); // 2)
       swiper.appendSlide(slides.map(({ link, image, imageMobile }) => { // 3)
         return `<div class="swiper-slide centered-flexbox">
-          <a href="${link}">
+          ${link ? `<a href="${link}">` : ''}
             <img src="${window.innerWidth > 575 ? image : imageMobile || image}" />
-          </a>
+           ${link ? `</a>` : ''}
         </div>`;
       }));
       swiper.removeSlide(0); // 4)
