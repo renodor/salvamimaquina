@@ -3,19 +3,21 @@
 <table>
    <thead>
       <tr>
-         <th>Product Type</th>
-         <th>Product</th>
-         <th>Damage</th>
-         <th>Name</th>
-         <th>Email</th>
-         <th>Shop</th>
-         <th>Comment</th>
-         <th></th>
+        <th>Date</th>
+        <th>Product Type</th>
+        <th>Product</th>
+        <th>Damage</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Shop</th>
+        <th>Comment</th>
+        <th></th>
       </tr>
    </thead>
    <tbody>
     <% @reparation_requests.each do |reparation_request| %>
       <tr>
+        <td><%= reparation_request.created_at.strftime("%d %b %Y") %></td>
         <td><%= reparation_request.reparation_category.name %></td>
         <td><%= reparation_request.product %></td>
         <td><%= reparation_request.damage %></td>
