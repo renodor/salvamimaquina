@@ -18,8 +18,8 @@
     slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
       {
         link: slide.link,
-        image: cl_image_path(slide.image.key),
-        imageMobile: cl_image_path(slide.image_mobile&.key || '')
+        image: cl_image_path_with_folder(slide.image),
+        imageMobile: cl_image_path_with_folder(slide.image_mobile)
       }
     end
   %>

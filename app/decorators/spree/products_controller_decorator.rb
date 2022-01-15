@@ -51,7 +51,7 @@ module Spree
         discountPrice: ActionController::Base.helpers.number_to_currency(variant.price),
         totalStock: variant.total_on_hand,
         imageKey: variant_image_key,
-        imageUrl: variant_image_key ? ActionController::Base.helpers.cl_image_path(variant_image_key, width: 600, crop: :fit) : nil
+        imageUrl: variant_image_key ? helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit) : nil
       }
     end
 

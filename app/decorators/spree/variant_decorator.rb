@@ -4,6 +4,8 @@ module Spree
   module VariantDecorator
     extend ActiveSupport::Concern
 
+    CLOUDINARY_STORAGE_FOLDER = 'banners'
+
     prepended do
       validates :repair_shopr_id, uniqueness: true, allow_nil: true
       enum condition: { original: 0, refurbished: 1 }

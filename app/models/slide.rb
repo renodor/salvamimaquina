@@ -1,10 +1,11 @@
 # frozen_string_literal:true
 
 class Slide < ApplicationRecord
-  VALID_IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg'].freeze
+  CLOUDINARY_STORAGE_FOLDER = 'slides'
+  VALID_IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'].freeze
   belongs_to :slider
-  has_one_attached :image
-  has_one_attached :image_mobile
+  has_one_attached :image, service: :cloudinary_slides
+  has_one_attached :image_mobile, service: :cloudinary_slides
 
   validates :image, presence: true
   validate :correct_image_type
