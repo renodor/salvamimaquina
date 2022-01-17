@@ -32,12 +32,12 @@
           <div class="slide-images">
             <div>
               <p>Image:</p>
-              <%= cl_image_tag slide.image.key, width: 400 %>
+              <%= cl_image_tag_with_folder slide.image, width: 400 %>
             </div>
             <% if slide.image_mobile %>
               <div>
                 <p>Image mobile:</p>
-                <%= cl_image_tag slide.image_mobile&.key, width: 400 %>
+                <%= cl_image_tag_with_folder slide.image_mobile, width: 400 %>
               </div>
             <% end %>
           </div>

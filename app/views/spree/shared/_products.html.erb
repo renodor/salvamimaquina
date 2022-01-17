@@ -29,7 +29,7 @@
           <% if cheapest_variant.images.present? %>
             <%= cl_image_tag_with_folder cheapest_variant.images.first&.attachment, width: 540, crop: :fill %>
           <% else %>
-            <div class="image-placeholder" style="width: 200px; height: 200px"></div>
+            <div class="image-placeholder" style="width: 125px; height: 125px"></div>
           <% end %>
         </div>
         <div class="product-name"><%= product.name %></div>

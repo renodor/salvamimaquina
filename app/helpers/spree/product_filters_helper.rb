@@ -23,7 +23,8 @@ module Spree
       space_gray: '#4e575a',
       grafito: '#323535',
       verde_noche: '#366644',
-      negro_mate: '#3b3b3b'
+      negro_mate: '#3b3b3b',
+      sierra_blue: '#95AFC8'
     }.freeze
 
     def build_price_range_slider_values

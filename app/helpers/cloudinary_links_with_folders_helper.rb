@@ -12,7 +12,7 @@ module CloudinaryLinksWithFoldersHelper
   private
 
   def image_url(image)
-    return '' unless image&.key
+    return '' unless image.try(:key)
 
     "#{Rails.env}/#{image.record.class::CLOUDINARY_STORAGE_FOLDER}/#{image.key}"
   end

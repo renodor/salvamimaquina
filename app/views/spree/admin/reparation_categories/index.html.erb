@@ -25,7 +25,7 @@
         <td><%= category.products.join(', ').truncate(60) %></td>
         <td><%= category.damages.join(', ').truncate(60) %></td>
         <td>
-          <%= category.photo.key ? link_to('Photo link', cl_image_path(category.photo.key), target: '_blank') : '' %>
+          <%= category.photo.key ? link_to('Photo link', cl_image_path_with_folder(category.photo), target: '_blank') : '' %>
         </td>
         <td class="actions">
           <% if can?(:edit, category) %>

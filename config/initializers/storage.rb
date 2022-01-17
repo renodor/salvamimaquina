@@ -1,6 +1,6 @@
 # frozen_string_literal:true
 
-model_names = %w[products slides banners]
+model_names = %w[products product_categories slides banners reparation_categories]
 
 service_configuration = {}
 model_names.each do |model_name|
