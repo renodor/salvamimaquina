@@ -3,7 +3,7 @@
     class="banner"
     style="background-image:
       <%= 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),' if banner.any_text? %>
-      url(<%= cl_image_path_with_folder banner.photo, width: 1296, height: 200 %>)
+      url(<%= cl_image_path_with_folder banner.photo, width: 1296, height: 200, model: Banner, no_fallback: true %>)
     "
   >
     <% banner.texts.each do |text| %>

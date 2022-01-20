@@ -26,11 +26,7 @@
       <% cheapest_variant = product.cheapest_variant %>
       <li id="product_<%= product.id %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
         <div class="product-image">
-          <% if cheapest_variant.images.present? %>
-            <%= cl_image_tag_with_folder cheapest_variant.images.first&.attachment, width: 540, crop: :fill %>
-          <% else %>
-            <div class="image-placeholder" style="width: 125px; height: 125px"></div>
-          <% end %>
+          <%= cl_image_tag_with_folder cheapest_variant.images.first&.attachment, width: 540, crop: :fill, model: Spree::Image %>
         </div>
         <div class="product-name"><%= product.name %></div>
         <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">

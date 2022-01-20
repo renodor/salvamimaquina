@@ -5,7 +5,7 @@
     <% @categories_taxon.children.each do |category| %>
       <div class="position-relative category">
         <p><%= category.name %></p>
-        <%= cl_image_tag_with_folder(category.icon, width: 500, crop: :fill) %>
+        <%= cl_image_tag_with_folder(category.icon, width: 500, crop: :fill, model: Spree::Taxon) %>
         <%= link_to '', spree.nested_taxons_path(category), class: 'full-absolute' %>
       </div>
     <% end %>

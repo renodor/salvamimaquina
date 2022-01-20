@@ -2,6 +2,7 @@
 
 class Slide < ApplicationRecord
   CLOUDINARY_STORAGE_FOLDER = 'slides'
+  CLOUDINARY_FALLBACK_IMAGE = 'slide-placeholder.jpg'
   VALID_IMAGE_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'].freeze
 
   belongs_to :slider

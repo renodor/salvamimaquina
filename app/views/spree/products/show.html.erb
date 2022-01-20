@@ -10,7 +10,7 @@
               <%# The src will be added by JS depending what variant is selected %>
               <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="<%= @product.name %>" itemprop="image" data-key="">
             <% else %>
-              <%= cl_image_tag_with_folder @first_image, width: 600, crop: :fit, itemprop: "image", data: { key: @first_image&.key } %>
+              <%= cl_image_tag_with_folder @first_image, width: 600, crop: :fit, model: Spree::Image, itemprop: "image", data: { key: @first_image&.key } %>
             <% end %>
           </div>
           <div id="thumbnails" data-hook>

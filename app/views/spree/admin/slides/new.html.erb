@@ -8,7 +8,7 @@
   <%= f.input :link, as: :string %>
   <div class="image-input">
     <%= image_tag '', width: 300, class: 'display-none image-preview', data: { id: 'desktop-image' } %>
-    <%= f.input :image, as: :file, hint: 'Image width: 1300px', input_html: { data: { id: 'desktop-image'} } %>
+    <%= f.input :image, as: :file, hint: 'Image width: 1300px | Image height: 550px', input_html: { data: { id: 'desktop-image'} } %>
     <p class="invalid-feedback display-block"><%= @slide.errors[:image]&.join(', ') %></p>
   </div>
   <div class="image-input">
