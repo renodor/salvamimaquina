@@ -13,7 +13,7 @@
   </div>
   <div class="image-input">
     <%= image_tag '', width: 300, class: 'display-none image-preview', data: { id: 'mobile-image' } %>
-    <%= f.input :image_mobile, as: :file, hint: 'Image width: 535px', input_html: { data: { id: 'mobile-image'} } %>
+    <%= f.input :image_mobile, as: :file, hint: 'Image width: 535px | Image height: 535px', input_html: { data: { id: 'mobile-image'} } %>
     <p class="invalid-feedback display-block"><%= @slide.errors[:image_mobile]&.join(', ') %></p>
   </div>
   <%= f.submit class: 'btn btn-primary' %>
