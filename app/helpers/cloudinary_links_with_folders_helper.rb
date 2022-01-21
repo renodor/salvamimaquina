@@ -31,7 +31,7 @@ module CloudinaryLinksWithFoldersHelper
   private
 
   def image_url(image, options)
-    # If we want cloudinary fallback image to work we need to return a "wrong" image key (like "_")
+    # If we want cloudinary fallback image to work we need to return a "wrong" image key (like "0")
     # otherwise we can return an empty string and the image won't be processed at all
     return options[:no_fallback] ? '' : '0' unless image.try(:key)
 
