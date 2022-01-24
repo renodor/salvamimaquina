@@ -1,7 +1,6 @@
 <!-- TODO: use this in front-end also (not only in admin). And use this "size" variable to define image and placeholder size-->
 <% size ||= :mini %>
 <% if image_attachment = image&.attachment %>
-  <% binding.pry %>
   <%= cl_image_tag_with_folder(image_attachment, model: Spree::Image) %> <!-- WARNING: This is not necessarly called for a Spree::Image attachment. So the model argument could be wrong...-->
 <% else %>
   <span class="image-placeholder <%= size %>"></span>
