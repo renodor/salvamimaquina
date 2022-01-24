@@ -37,7 +37,7 @@
             <% if slide.image_mobile.present? %>
               <div>
                 <p>Image mobile:</p>
-                <%= cl_image_tag_with_folder slide.image_mobile, width: 400, model: Slide %>
+                <%= cl_image_tag_with_folder slide.image_mobile, width: 400, model: Slide, no_fallback: true %>
               </div>
             <% end %>
           </div>
