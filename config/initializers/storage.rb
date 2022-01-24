@@ -10,11 +10,11 @@
 # }
 # So on the Slide model we can now define:
 # has_one_attached :image, service: :cloudinary_slides
-# Now each time an attachment is create for Slide model, the image will be automatically uploaded in Cloudinary in the following folder:
+# Now each time an attachment is created for Slide model, the image will be automatically uploaded in Cloudinary in the following folder:
 # - /development/slides (in dev environment)
 # - /production/slides (in prod environment)
 
-# (Then when displaying images on the front end don't forget to use #cl_image_path_with_folder and #cl_image_tag_with_folder methods
+# (Then when displaying images on the front end we need to use #cl_image_path_with_folder and #cl_image_tag_with_folder methods
 # to retrieve the files on the correct folder)
 
 folders = %w[products product_categories slides banners reparation_categories]
