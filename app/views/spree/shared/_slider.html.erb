@@ -14,11 +14,13 @@
     }
   %>
 
+  <% no_fallback = false unless local_assigns[:no_fallback] %>
+
   <%
     slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
       {
         link: slide.link,
-        image: cl_image_path_with_folder(slide.image, model: Slide),
+        image: cl_image_path_with_folder(slide.image, model: Slide, no_fallback: no_fallback),
         imageMobile: cl_image_path_with_folder(slide.image_mobile, model: Slide, no_fallback: true)
       }
     end
