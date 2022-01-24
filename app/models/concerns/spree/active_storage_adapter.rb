@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Copying the whole ActiveStorageAdapter module ONLY to modify the has_attachment method to accept a 3rd argument.
+# TODO: find a way to modify this without having to copy the whole module
+
 module Spree
   # Adapts ActiveStorage interface to make it compliant with Solidus'
   # Paperclip-oriented attachment support.
@@ -30,11 +33,14 @@ module Spree
       attr_reader :attachment_definition
 
       # Specifies the relation between a single attachment and the model
-      def has_attachment(name, definition, storage_folder) # rubocop:disable Naming/PredicateName
+      # We modified this method to accept a 3rd argument that represents the service name,
+      # so that we can define specific service per model
+      def has_attachment(name, definition, service_name) # rubocop:disable Naming/PredicateName
         @attachment_name = name.to_sym
         @attachment_definition = definition
 
-        has_one_attached(attachment_name, service: storage_folder)
+        # Here ActiveStorage has_one_attached method is called with a specific service
+        has_one_attached(attachment_name, service: service_name)
 
         override_reader
         override_writer

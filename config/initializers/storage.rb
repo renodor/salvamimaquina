@@ -1,7 +1,7 @@
 # frozen_string_literal:true
 
 # Dinamically create storage service for the following folders.
-# (Then we need to choose what model will have an attachment using those services)
+# So that we can define specific storage service per Model
 
 # For example, adding "slides" in the folder list here will create the following service:
 # cloudinary_slides: {

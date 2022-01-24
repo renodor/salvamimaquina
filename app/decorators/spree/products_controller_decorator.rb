@@ -42,7 +42,6 @@ module Spree
       end
 
       variant = Spree::Product.find(params[:product_id]).find_variant_by_options_hash(options_hash)
-
       variant_image_key = variant.images.first&.attachment&.key
       render json: {
         id: variant.id,
@@ -51,7 +50,7 @@ module Spree
         discountPrice: helpers.number_to_currency(variant.price),
         totalStock: variant.total_on_hand,
         imageKey: variant_image_key,
-        imageUrl: variant_image_key ? helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit, model: Spree::Image) : nil
+        imageUrl: helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit, model: Spree::Image)
       }
     end
 
