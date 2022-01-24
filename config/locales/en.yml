@@ -40,6 +40,7 @@ en:
   choose_reparation_category: 'What type of equipment do you need to repair?'
   reparation_explanation: 'Include specific information about your device, like the year, the model, the operative system, and add a short description of the issue you are facing.'
   thanks_for_your_request: 'Thanks for your request'
+  choose_trade_in_category: 'What type of equipment you want to Trade-in?'
   contact: 'Contact'
   contact_us: 'Contact us'
   contact_soon: 'We will contact you soon'

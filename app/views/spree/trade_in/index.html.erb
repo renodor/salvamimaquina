@@ -1,0 +1,13 @@
+<%= render 'spree/shared/banner', banner: @banner %>
+<div id="reparation-categories">
+  <h2> <%= t('choose_trade_in_category') %></h2>
+  <div id="reparation-categories-grid">
+    <% @trade_in_categories.each do |trade_in_category| %>
+      <div class="reparation-category position-relative">
+        <p class="reparation-category-name text-center"><%= trade_in_category.name %></p>
+        <%= cl_image_tag_with_folder(trade_in_category.photo, width: 500, crop: :fill, model: ReparationCategory) %>
+        <%= link_to '', trade_in_path(trade_in_category), class: 'full-absolute' %>
+      </div>
+    <% end %>
+  </div>
+</div>

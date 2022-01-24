@@ -10,6 +10,7 @@ es-MX:
   choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
   reparation_explanation: 'Incluir datos específicos del dispositivo como año, modelo y sistema operativo, además de una breve descripción del problema:'
   thanks_for_your_request: 'Gracias por su solicitud'
+  choose_trade_in_category: '¿Que tipo de equipo quieres hacerle Trade-in?'
   contact: 'Contacto'
   contact_us: 'Contactarnos'
   contact_soon: 'Estaremos en contacto rapidamente.'

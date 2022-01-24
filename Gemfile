@@ -67,9 +67,9 @@ gem 'postmark-rails'
 
 gem 'simple_form'
 
+# Honeypot to prevent spam on the contact form
 gem 'invisible_captcha'
 
-# centralize tracking services like Google Analytics and Facebook Pixel in a  middleware
 
 group :development, :test do
   # For debugging
