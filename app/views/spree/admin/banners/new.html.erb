@@ -5,7 +5,7 @@
 
 <%= simple_form_for @banner, url: admin_banners_path do |f| %>
   <%= f.input :location, collection: Banner.locations.keys %>
-  <%= f.input :photo, as: :file %>
+  <%= f.input :photo, as: :file, hint: 'Image width: 1300px | Image height: 300px' %>
   <%= f.input :text_one %>
   <%= f.input :text_two %>
   <%= f.input :text_three %>

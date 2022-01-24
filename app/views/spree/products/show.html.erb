@@ -7,15 +7,15 @@
         <div id="product-images" data-hook="product_images">
           <div id="main-image" data-hook>
             <% if @product_has_variant %>
-              <%# The src will be added by JS depending what variant is selected %>
+              <%# The src will be added by JS depending what variant is selected, this is just a small placeholder empty gif %>
               <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="<%= @product.name %>" itemprop="image" data-key="">
             <% else %>
-              <%= cl_image_tag @first_image_key, width: 600, crop: :fit, itemprop: "image", data: { key: @first_image_key } %>
+              <%= cl_image_tag_with_folder @first_image, width: 600, crop: :fit, model: Spree::Image, itemprop: "image", data: { key: @first_image&.key } %>
             <% end %>
           </div>
           <div id="thumbnails" data-hook>
-            <%# @first_image_key will be defined only if product has no variants. If it has variants all will be defined by JS anyway %>
-            <%= render 'thumbnails', first_image_key: @first_image_key %>
+            <%# @first_image will be defined only if product has no variants. If it has variants all will be defined by JS anyway %>
+            <%= render 'thumbnails', first_image: @first_image %>
           </div>
         </div>
 

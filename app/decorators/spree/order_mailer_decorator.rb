@@ -4,6 +4,7 @@ module Spree
   module OrderMailerDecorator
     def self.prepended(base)
       base.helper 'spree/name'
+      base.helper 'cloudinary_links_with_folders'
     end
 
     def confirm_email(order, resend = false, for_admin = false) # rubocop:disable Style/OptionalBooleanParameter

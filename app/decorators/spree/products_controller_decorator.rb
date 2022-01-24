@@ -4,7 +4,7 @@ module Spree
   module ProductsControllerDecorator
     def index
       @taxonomies = Spree::Taxonomy.includes(root: :children)
-      @categories_taxon = Spree::Taxon.includes(children: :icon_attachment).find_by(name: 'Categories')
+      @categories_taxon = Spree::Taxon.includes(children: [icon_attachment: :blob]).find_by(name: 'Categories')
       @banner = Banner.find_by(location: :shop)
     end
 
@@ -19,8 +19,8 @@ module Spree
         # Maybe not needed because when we sync we don't add image to product master if it has variants? (But not sure... To be confirmed)
         @product_images = @product_images.where.not(viewable_id: @master.id)
       else
-        # If product has no variants we will display the first image by default. We need to extract its key to have the correct thumbnail "selected"
-        @first_image_key = @product_images.first&.attachment&.key
+        # If product has no variants we will display the first image by default. We need it to have the correct thumbnail "selected"
+        @first_image = @product_images.first&.attachment
       end
     end
 
@@ -42,16 +42,15 @@ module Spree
       end
 
       variant = Spree::Product.find(params[:product_id]).find_variant_by_options_hash(options_hash)
-
       variant_image_key = variant.images.first&.attachment&.key
       render json: {
         id: variant.id,
         onSale: variant.on_sale?,
-        price: ActionController::Base.helpers.number_to_currency(variant.original_price),
-        discountPrice: ActionController::Base.helpers.number_to_currency(variant.price),
+        price: helpers.number_to_currency(variant.original_price),
+        discountPrice: helpers.number_to_currency(variant.price),
         totalStock: variant.total_on_hand,
         imageKey: variant_image_key,
-        imageUrl: variant_image_key ? ActionController::Base.helpers.cl_image_path(variant_image_key, width: 600, crop: :fit) : nil
+        imageUrl: helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit, model: Spree::Image)
       }
     end
 

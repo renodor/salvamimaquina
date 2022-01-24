@@ -42,15 +42,14 @@ module Spree
     def products_with_aditional_data
       @products.map do |product|
         cheapest_variant = product.cheapest_variant
-        product_image_key = cheapest_variant.images.first&.attachment&.key
         aditional_data = {
           url: spree.product_path(product, taxon_id: @taxon.try(:id)),
-          image_url: product_image_key ? ActionController::Base.helpers.cl_image_path(product_image_key, width: 540, crop: :fill) : nil,
+          image_url: helpers.cl_image_path_with_folder(cheapest_variant.images.first&.attachment, width: 540, crop: :fill, model: Spree::Image),
           cheapest_variant_onsale: cheapest_variant.on_sale?,
           discount_price: cheapest_variant.price,
-          discount_price_html_tag: ActionController::Base.helpers.number_to_currency(cheapest_variant.price),
+          discount_price_html_tag: helpers.number_to_currency(cheapest_variant.price),
           price: cheapest_variant.original_price,
-          price_html_tag: ActionController::Base.helpers.number_to_currency(cheapest_variant.original_price)
+          price_html_tag: helpers.number_to_currency(cheapest_variant.original_price)
         }
 
         product.as_json.merge(aditional_data)

@@ -1,7 +1,9 @@
 # frozen_string_literal:true
 
 class Banner < ApplicationRecord
-  has_one_attached :photo
+  CLOUDINARY_STORAGE_FOLDER = 'banners'
+
+  has_one_attached :photo, service: :cloudinary_banners
 
   enum location: { shop: 0, reparation: 1, corporate_clients: 2 }
 

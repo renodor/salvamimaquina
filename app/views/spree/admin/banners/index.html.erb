@@ -21,7 +21,7 @@
       <tr>
         <td><%= banner.location.capitalize %></td>
         <td>
-          <%= banner.photo.key ? link_to('Photo link', cl_image_path(banner.photo.key), target: '_blank') : '' %>
+          <%= banner.photo.key ? link_to('Photo link', cl_image_path_with_folder(banner.photo, model: Banner), target: '_blank') : '' %>
         </td>
         <td class="actions">
           <% if can?(:edit, banner) %>

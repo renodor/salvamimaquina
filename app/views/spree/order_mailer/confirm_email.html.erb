@@ -38,7 +38,7 @@
       <div style="margin-bottom: 20px; border: 1px solid rgba(0, 0, 0, .125); padding: 20px;">
         <p style="margin: 0 0 5px 0; font-size: 16px;"><b><%= line_item.variant.product.name %></b><%= line_item.variant.sku.present? ? " (#{line_item.variant.sku})" : '' %></p>
         <div style="width: 150px; height: 150px; margin: 20px 0;">
-          <%= cl_image_tag line_item.variant.gallery.images.first&.attachment&.key || line_item.variant.product.gallery.images.first&.attachment&.key, height: 150, width: 150, crop: :fill %>
+          <%= cl_image_tag_with_folder line_item.variant.gallery.images.first&.attachment || line_item.variant.product.gallery.images.first&.attachment, height: 150, width: 150, crop: :fill, model: Spree::Image %>
         </div>
         <div>
           <p style="margin: 0 0 5px 0;"><%= line_item.variant.options_text(show_option_type: true, show_model: true) %></p>

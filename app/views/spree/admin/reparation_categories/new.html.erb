@@ -5,7 +5,7 @@
 
 <%= simple_form_for @category, url: admin_reparation_categories_path do |f| %>
   <%= f.input :name %>
-  <%= f.input :photo, as: :file %>
+  <%= f.input :photo, as: :file, hint: 'Image width: 500px | Image height: 300px' %>
   <p><b>Products:</b></p>
   <% 5.times do %>
     <%= text_field_tag 'reparation_category[products][]' %>
