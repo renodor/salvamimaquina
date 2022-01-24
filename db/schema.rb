@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_14_153031) do
+ActiveRecord::Schema.define(version: 2022_01_24_142215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_153031) do
     t.integer "image_per_slide_s", default: 1
     t.integer "space_between_slides", default: 10
     t.boolean "force_slide_full_width", default: true
+    t.boolean "fallback_image", default: true
   end
 
   create_table "slides", force: :cascade do |t|

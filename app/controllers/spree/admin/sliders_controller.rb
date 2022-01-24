@@ -41,7 +41,7 @@ module Spree
       private
 
       def slider_params
-        params.require(:slider).permit(:location, :name, :auto_play, :navigation, :pagination, :delay_between_slides, :space_between_slides, :force_slide_full_width, :image_per_slide_s, :image_per_slide_m, :image_per_slide_l, :image_per_slide_xl)
+        params.require(:slider).permit(:location, :name, :auto_play, :navigation, :pagination, :fallback_image, :delay_between_slides, :space_between_slides, :force_slide_full_width, :image_per_slide_s, :image_per_slide_m, :image_per_slide_l, :image_per_slide_xl)
       end
     end
   end
