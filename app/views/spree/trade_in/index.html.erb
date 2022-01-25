@@ -1,13 +1,19 @@
 <%= render 'spree/shared/banner', banner: @banner %>
-<div id="reparation-categories">
+<div id="trade-in-form">
   <h2> <%= t('choose_trade_in_category') %></h2>
-  <div id="reparation-categories-grid">
-    <% @trade_in_categories.each do |trade_in_category| %>
-      <div class="reparation-category position-relative">
-        <p class="reparation-category-name text-center"><%= trade_in_category.name %></p>
-        <%= cl_image_tag_with_folder(trade_in_category.photo, width: 500, crop: :fill, model: ReparationCategory) %>
-        <%= link_to '', trade_in_path(trade_in_category), class: 'full-absolute' %>
-      </div>
+  <div>
+    <%= select_tag 'trade_in_categories', options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }) %>
+  </div>
+  <div id="trade-in-models">
+    <% @trade_in_categories.each do |trade_in_cateory| %>
+      <%= select_tag trade_in_cateory.id, options_for_select(trade_in_cateory.trade_in_models.map { |model| [model.name, model.id] }), class: 'display-none' %>
+    <% end %>
+  </div>
+  <div id="trade-in-model-prices">
+    <% @trade_in_models.each do |trade_in_model| %>
+      <p class="trade-in-model-price" data-id="<%= trade_in_model.id %>">
+        <%= number_to_currency(trade_in_model.min_value) %> | <%= number_to_currency(trade_in_model.max_value) %>
+      </p>
     <% end %>
   </div>
 </div>

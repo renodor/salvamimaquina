@@ -2,23 +2,23 @@ const tradeInForm = () => {
   const tradeInForm = document.getElementById('trade-in-form');
 
   if (tradeInForm) {
-    const selectInput = tradeInForm.querySelector('select');
+    const selectCategories = tradeInForm.querySelector('#trade_in_categories');
 
     const displaySelectedTradeInModelPrices = (selectedTradeInModelId) => {
-      tradeInForm.querySelectorAll('#trade-in-model-prices .trade-in-model-price').forEach((tradeInModelPrice) => {
-        if (tradeInModelPrice.dataset.id == selectedTradeInModelId) {
-          tradeInModelPrice.classList.remove('display-none');
+      tradeInForm.querySelectorAll('#trade-in-models select').forEach((tradeInModel) => {
+        if (tradeInModel.id == selectedTradeInModelId) {
+          tradeInModel.classList.remove('display-none');
         } else {
-          tradeInModelPrice.classList.add('display-none');
+          tradeInModel.classList.add('display-none');
         }
       });
     };
 
-    selectInput.addEventListener('change', (event) => {
+    selectCategories.addEventListener('change', (event) => {
       displaySelectedTradeInModelPrices(event.currentTarget.value);
     });
 
-    displaySelectedTradeInModelPrices(selectInput.value);
+    displaySelectedTradeInModelPrices(selectCategories.value);
   }
 };
 
