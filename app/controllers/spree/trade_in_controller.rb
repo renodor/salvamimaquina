@@ -4,6 +4,7 @@ module Spree
   class TradeInController < Spree::StoreController
     def index
       @trade_in_categories = TradeInCategory.all
+      @trade_in_categories_options = @trade_in_categories.map { |category| [category.name, category.id] }
 
       # @trade_in_models_options = @trade_in_categories.map do |category|
       #   {
