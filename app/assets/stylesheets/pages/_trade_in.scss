@@ -1,0 +1,32 @@
+#trade-in-form {
+  text-align: center;
+  h2 {
+    margin-bottom: 30px;
+  }
+  select {
+    padding: 15px 50px;
+    border: 2px solid black!important;
+    background-color: white;
+    cursor: pointer;
+    font-size: 20px;
+    margin-left: 0;
+    width: 500px;
+    margin: 15px 0;
+    outline: none;
+  }
+  #trade-in-model-prices {
+    .trade-in-model-price {
+      font-size: 25px;
+      p {
+        margin: 0;
+        .model-name {
+          font-weight: bolder;
+        }
+        .model-price {
+          color: $green;
+          font-size: 30px;
+        }
+      }
+    }
+  }
+}
