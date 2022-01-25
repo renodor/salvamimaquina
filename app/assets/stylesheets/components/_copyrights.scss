@@ -1,8 +1,25 @@
 #copyrights {
-  background-color: #232326;
   p {
-    color: $gray;
     margin: 0;
     text-align: right;
+  }
+  #apple-copyright {
+    background-color: #818181;
+    p {
+      color: $dark-gray
+    }
+  }
+  #renodor-copyright {
+    background-color: #232326;
+    padding: 15px 0;
+    p a {
+      color: $gray;
+      text-decoration: none;
+      opacity: 0.65;
+      @include default-transition(opacity);
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 }
