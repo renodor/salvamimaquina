@@ -1,48 +1,96 @@
 <%= render 'spree/shared/banner', banner: @banner %>
 <div id="trade-in-form">
-  <h2> <%= t('choose_trade_in_category') %></h2>
-  <div id="trade-in-categories">
-    <%= select_tag 'trade_in_categories', options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }), prompt: 'Choose product type' %>
-  </div>
-  <div id="trade-in-models">
-    <% @trade_in_categories.each do |trade_in_cateory| %>
-      <%= select_tag trade_in_cateory.id, options_for_select(trade_in_cateory.trade_in_models.map { |model| [model.name, model.id] }), prompt: 'Choose model', class: 'display-none' %>
-    <% end %>
-  </div>
-  <div id="trade-in-model-prices">
-    <% @trade_in_models.each do |trade_in_model| %>
-      <div class="display-none trade-in-model-price" data-model-id="<%= trade_in_model.id %>">
-        <p>You have an <span class="model-name"><%= trade_in_model.name %></span></p>
-        <p>We can buy it from you between <span class="model-price"><%= number_to_currency(trade_in_model.min_value) %></span> and <span class="model-price"><%= number_to_currency(trade_in_model.max_value) %></span></p>
-      </div>
-    <% end %>
+  <div id="trade-in-first-part">
+    <h2><%= t('choose_trade_in_category') %></h2>
+
+    <div id="trade-in-categories">
+      <%= select_tag 'trade_in_categories', options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }), prompt: 'Choose product type' %>
+    </div>
+
+    <div id="trade-in-models">
+      <% @trade_in_categories.each do |trade_in_category| %>
+        <%=
+          select_tag trade_in_category.id,
+          options_for_select(trade_in_category.trade_in_models.map { |model| [model.name, model.id] }),
+          prompt: 'Choose model',
+          class: 'hidden display-none',
+          data: { parent_id: trade_in_category.id, hidden: true }
+        %>
+      <% end %>
+    </div>
+
+    <div id="trade-in-model-prices">
+      <% @trade_in_models.each do |trade_in_model| %>
+        <div
+          class="display-none hidden trade-in-model-price"
+          data-parent-id="<%= trade_in_model.id %>"
+          data-min-value="<%= trade_in_model.min_value %>"
+          data-max-value="<%= trade_in_model.max_value %>"
+          data-selected="false"
+        >
+          <p class="model-name">You have an <b><%= trade_in_model.name %></b></p>
+          <p>
+            (Estimated value between <b><%= number_to_currency(trade_in_model.min_value) %></b> and <b><%= number_to_currency(trade_in_model.max_value) %></b>)
+          </p>
+        </div>
+      <% end %>
+    </div>
   </div>
 
-  <div id="taxons">
-    <%= select_tag 'taxon', options_for_select(@taxons.map { |taxon| [taxon.name, taxon.id] }), prompt: 'Choose taxon' %>
-  </div>
+  <div id="trade-in-second-part" class="display-none hidden">
+    <h2>What product do you want to buy in exchange?</h2>
 
-  <div id="products">
-    <% @taxons.each do |taxon| %>
-      <div>
-        <%= select_tag 'product', options_for_select(taxon.all_products.map { |product| [product.name, product.id] }), prompt: 'Choose product' %>
-      </div>
-    <% end %>
-  </div>
+    <div id="taxons">
+      <%=
+        select_tag 'taxon',
+        options_for_select(@taxons.map { |taxon| [taxon.name, taxon.id] }),
+        prompt: 'Choose product category'
+      %>
+    </div>
 
-  <div id="variants">
-    <% @products.each do |product| %>
-      <div>
-        <% if product.has_variants? %>
+    <div id="products">
+      <% @taxons.each do |taxon| %>
+        <div>
           <%=
-            select_tag 'variant',
-            options_for_select(product.variants.map { |variant| ["#{variant.name} - #{variant.options_text}", variant.id] }),
-            prompt: 'Choose variant'
+            select_tag 'product',
+            options_for_select(taxon.all_products.map { |product| [product.name, product.id] }),
+            prompt: 'Choose product',
+            class: 'display-none hidden product',
+            data: { parent_id: taxon.id }
           %>
-        <% else %>
-          "nada"
-        <% end %>
-      </div>
-    <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id="variants">
+      <% @products.each do |product| %>
+        <div>
+          <% if product.has_variants? %>
+            <%=
+              select_tag 'variant',
+              options_for_select(product.variants.map { |variant| ["#{variant.name} - #{variant.options_text}", variant.id] }),
+              prompt: 'Choose variant',
+              class: 'display-none hidden variant',
+              data: { parent_id: product.id }
+            %>
+          <% else %>
+            <span class="display-none hidden variant" data-parent-id="<%= product.id %>">"nada"</span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id="variant-infos">
+      <% @variants.each do |variant| %>
+        <% next if variant.is_master? %>
+        <div class="variant-info display-none hidden" data-parent-id="<%= variant.id %>" data-price="<%= variant.price %>">
+          <%= cl_image_tag_with_folder variant.images.first&.attachment, width: 200, crop: :fill, model: Spree::Image %>
+          <div class="price-to-compute">
+            You can buy an <%= "#{variant.name} - #{variant.options_text}" %> between <span class="min-price"></span> and <span class="max-price"></span>
+          </div>
+          <p>(Instead of <%= number_to_currency(variant.price) %>)</p>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
