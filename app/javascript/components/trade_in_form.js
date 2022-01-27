@@ -2,49 +2,96 @@ const tradeInForm = () => {
   const tradeInForm = document.getElementById('trade-in-form');
 
   if (tradeInForm) {
-    const displayCorrectChildren = (parentId, children) => {
-      children.forEach((childElement) => {
-        if (childElement.dataset.parentId === parentId) {
-          childElement.classList.remove('display-none');
-          childElement.dataset.selected = true;
+    // const displayCorrectChildrenOnParentSelect = (parentElement, childrenContainerClass, childrenClass) => {
+    //   parentElement.addEventListener('change', (event) => {
+    //     const childrenContainer = tradeInForm.querySelector(childrenContainerClass);
+    //     childrenContainer.classList.remove('hidden');
+
+    //     childrenContainer.querySelectorAll(childrenClass).forEach((childElement) => {
+    //       childElement.value = '';
+    //       if (childElement.dataset.parentId === event.currentTarget.value) {
+    //         childElement.classList.remove('display-none');
+    //         childElement.dataset.selected = true;
+    //       } else {
+    //         childElement.classList.add('display-none');
+    //         childElement.dataset.selected = false;
+    //       }
+    //     });
+    //   });
+    // };
+
+    const selectTradeInCategories = tradeInForm.querySelector('#trade-in-categories select');
+    selectTradeInCategories.addEventListener('change', (event) => {
+      const tradeInModelPrice = tradeInForm.querySelector('#trade-in-model-price');
+      tradeInModelPrice.classList.add('hidden');
+
+      const tradeInModels = tradeInForm.querySelector('#trade-in-models');
+      tradeInModels.value = '';
+      Array.from(tradeInModels.options).forEach((option, index) => {
+        if (index === 0) { return; }
+
+        if (option.dataset.tradeInCategoryId === event.currentTarget.value) {
+          option.classList.remove('display-none');
         } else {
-          childElement.classList.add('display-none');
-          childElement.dataset.selected = false;
+          option.classList.add('display-none');
         }
       });
-    };
-
-    const selectCategories = tradeInForm.querySelector('#trade_in_categories');
-    selectCategories.addEventListener('change', (event) => {
-      const tradeInModels = tradeInForm.querySelector('#trade-in-models');
       tradeInModels.classList.remove('hidden');
-      displayCorrectChildren(event.currentTarget.value, tradeInModels.querySelectorAll('.trade-in-model'));
     });
 
-    const selectModels = tradeInForm.querySelectorAll('#trade-in-models select');
-    selectModels.forEach((selectModel) => {
-      selectModel.addEventListener('change', (event) => {
-        const tradeInModelPrices = tradeInForm.querySelector('#trade-in-model-prices');
-        tradeInModelPrices.classList.remove('hidden');
-        displayCorrectChildren(event.currentTarget.value, tradeInModelPrices.querySelectorAll('.trade-in-model-price'));
+    const tradeInModels = tradeInForm.querySelector('#trade-in-models');
+    tradeInModels.addEventListener('change', (event) => {
+      const tradeInModelPrice = tradeInForm.querySelector('#trade-in-model-price');
+
+      if (tradeInModels.selectedIndex === 0) {
+        tradeInModelPrice.classList.add('hidden');
+      } else {
+        const selectedModel = event.currentTarget.selectedOptions[0];
+        tradeInModelPrice.querySelector('.model-name').innerHTML = selectedModel.innerHTML;
+        tradeInModelPrice.querySelector('.model-min-value').innerHTML = selectedModel.dataset.minValue;
+        tradeInModelPrice.querySelector('.model-max-value').innerHTML = selectedModel.dataset.maxValue;
+        tradeInModelPrice.classList.remove('hidden');
+
         tradeInForm.querySelector('#trade-in-second-part').classList.remove('hidden');
-      });
+      }
     });
 
     const selectTaxon = tradeInForm.querySelector('#taxons select');
     selectTaxon.addEventListener('change', (event) => {
+      // const tradeInModelPrice = tradeInForm.querySelector('#trade-in-model-price');
+      // tradeInModelPrice.classList.add('hidden');
+
       const products = tradeInForm.querySelector('#products');
+      products.value = '';
+      Array.from(products.options).forEach((option, index) => {
+        if (index === 0) { return; }
+
+        if (option.dataset.taxonId === event.currentTarget.value) {
+          option.classList.remove('display-none');
+        } else {
+          option.classList.add('display-none');
+        }
+      });
       products.classList.remove('hidden');
-      displayCorrectChildren(event.currentTarget.value, products.querySelectorAll('.product'));
     });
 
-    const selectProducts = tradeInForm.querySelectorAll('#products select');
-    selectProducts.forEach((selectProduct) => {
-      selectProduct.addEventListener('change', (event) => {
-        const variants = tradeInForm.querySelector('#variants');
-        variants.classList.remove('hidden');
-        displayCorrectChildren(event.currentTarget.value, variants.querySelectorAll('.variant'));
+    const selectProduct = tradeInForm.querySelector('#products');
+    selectProduct.addEventListener('change', (event) => {
+      // const tradeInModelPrice = tradeInForm.querySelector('#trade-in-model-price');
+      // tradeInModelPrice.classList.add('hidden');
+
+      const variants = tradeInForm.querySelector('#variants');
+      variants.value = '';
+      Array.from(variants.options).forEach((option, index) => {
+        if (index === 0) { return; }
+
+        if (option.dataset.productId === event.currentTarget.value) {
+          option.classList.remove('display-none');
+        } else {
+          option.classList.add('display-none');
+        }
       });
+      variants.classList.remove('hidden');
     });
 
     const selectVariants = tradeInForm.querySelectorAll('#variants select');

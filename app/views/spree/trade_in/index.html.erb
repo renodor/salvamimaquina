@@ -11,33 +11,30 @@
       %>
     </div>
 
-    <div id="trade-in-models" class="hidden" data-hidden="true">
-      <% @trade_in_categories.each do |trade_in_category| %>
-        <%=
-          select_tag trade_in_category.id,
-          options_for_select(trade_in_category.trade_in_models.map { |model| [model.name, model.id] }),
-          prompt: 'Choose model',
-          class: 'display-none trade-in-model',
-          data: { parent_id: trade_in_category.id }
-        %>
-      <% end %>
-    </div>
+    <%=
+      select_tag 'trade_in_model',
+      options_for_select(
+        @trade_in_models.map do |model|
+          [
+            model.name,
+            model.id,
+            data: {
+              trade_in_category_id: model.trade_in_category.id,
+              min_value: number_to_currency(model.min_value),
+              max_value: number_to_currency(model.max_value),
+            }
+          ]
+        end
+      ),
+      prompt: 'Choose model',
+      class: 'display-none trade-in-model',
+      id: 'trade-in-models',
+      class: 'hidden'
+    %>
 
-    <div id="trade-in-model-prices" class="hidden">
-      <% @trade_in_models.each do |trade_in_model| %>
-        <div
-          class="display-none trade-in-model-price"
-          data-parent-id="<%= trade_in_model.id %>"
-          data-min-value="<%= trade_in_model.min_value %>"
-          data-max-value="<%= trade_in_model.max_value %>"
-          data-selected="false"
-        >
-          <p class="model-name">You have an <b><%= trade_in_model.name %></b></p>
-          <p>
-            (Estimated value between <b><%= number_to_currency(trade_in_model.min_value) %></b> and <b><%= number_to_currency(trade_in_model.max_value) %></b>)
-          </p>
-        </div>
-      <% end %>
+    <div id="trade-in-model-price" class="hidden" data-min-value="" data-max-value="">
+      <p class="model-name-paragraph">You have an <b class="model-name"></b></p>
+      <p class="model-values">(Estimated value between <b class="model-min-value"></b> and <b class="model-max-value"></b>)</p>
     </div>
   </div>
 
@@ -52,37 +49,37 @@
       %>
     </div>
 
-    <div id="products" class="hidden">
-      <% @taxons.each do |taxon| %>
-        <div>
-          <%=
-            select_tag 'product',
-            options_for_select(taxon.all_products.map { |product| [product.name, product.id] }),
-            prompt: 'Choose product',
-            class: 'display-none product',
-            data: { parent_id: taxon.id }
-          %>
-        </div>
-      <% end %>
-    </div>
+    <%=
+      select_tag 'product',
+      options_for_select(
+        @products.map do |product|
+          [
+            product.name,
+            product.id,
+            data: { taxon_id: product.taxon_ids.first }
+          ]
+        end
+      ),
+      prompt: 'Choose product',
+      id: 'products',
+      class: 'hidden'
+    %>
 
-    <div id="variants" class="hidden">
-      <% @products.each do |product| %>
-        <div>
-          <% if product.has_variants? %>
-            <%=
-              select_tag 'variant',
-              options_for_select(product.variants.map { |variant| ["#{variant.name} - #{variant.options_text}", variant.id] }),
-              prompt: 'Choose variant',
-              class: 'display-none variant',
-              data: { parent_id: product.id }
-            %>
-          <% else %>
-            <span class="display-none variant" data-parent-id="<%= product.id %>">"nada"</span>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
+    <%=
+      select_tag 'variant',
+      options_for_select(
+        @variants.map do |variant|
+          [
+            "#{variant.name} - #{variant.options_text}",
+            variant.id,
+            data: { product_id: variant.product_id }
+          ]
+        end
+      ),
+      prompt: 'Choose variant',
+      id: 'variants',
+      class: 'hidden'
+    %>
 
     <div id="variant-infos">
       <% @variants.each do |variant| %>

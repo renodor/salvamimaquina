@@ -14,13 +14,12 @@
     outline: none;
   }
   #trade-in-models {
-    height: 90px;
     transition: opacity 1s ease;
     &:not(.hidden) {
       opacity: 1;
     }
   }
-  #trade-in-model-prices {
+  #trade-in-model-price {
     transition: opacity 1s ease;
     &:not(.hidden) {
       opacity: 1;
