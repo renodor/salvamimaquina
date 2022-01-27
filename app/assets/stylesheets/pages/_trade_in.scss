@@ -12,12 +12,19 @@
     width: 500px;
     margin: 15px 0;
     outline: none;
+  }
+  #trade-in-models {
+    height: 90px;
     transition: opacity 1s ease;
     &:not(.hidden) {
       opacity: 1;
     }
   }
   #trade-in-model-prices {
+    transition: opacity 1s ease;
+    &:not(.hidden) {
+      opacity: 1;
+    }
     .trade-in-model-price {
       p {
         margin: 0;
@@ -30,5 +37,29 @@
   }
   #trade-in-second-part {
     margin-top: 40px;
+    transition: opacity 1s ease;
+    &:not(.hidden) {
+      opacity: 1;
+    }
+    #products {
+      transition: opacity 1s ease;
+      &:not(.hidden) {
+        opacity: 1;
+      }
+    }
+    #variants {
+      transition: opacity 1s ease;
+      &:not(.hidden) {
+        opacity: 1;
+      }
+    }
+    #variant-infos {
+      .variant-info {
+        transition: opacity 1s ease;
+        &:not(.hidden) {
+          opacity: 1;
+        }
+      }
+    }
   }
 }
