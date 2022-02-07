@@ -9,7 +9,7 @@
     background-color: white;
     cursor: pointer;
     font-size: 20px;
-    width: 500px;
+    width: 550px;
     margin: 15px 0;
     outline: none;
   }
@@ -53,6 +53,10 @@
       }
     }
     #variant-infos {
+      transition: opacity 1s ease;
+      &:not(.hidden) {
+        opacity: 1;
+      }
       .variant-info {
         transition: opacity 1s ease;
         &:not(.hidden) {

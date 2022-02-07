@@ -32,7 +32,11 @@ Rails.application.routes.draw do
       resources :reparation_requests, only: %i[new create]
     end
 
-    resources :trade_in, only: %i[index show]
+    resources :trade_in, only: %i[index] do
+      member do
+        get :variant_infos
+      end
+    end
 
     get '/account/edit_user_address', to: 'users#edit_user_address'
     get '/account/new_user_address', to: 'users#new_user_address'
