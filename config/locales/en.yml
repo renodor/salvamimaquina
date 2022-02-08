@@ -30,6 +30,7 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  and: 'and'
   home: 'Home'
   online_shop: 'Online shop'
   companies: 'Companies'
@@ -40,7 +41,17 @@ en:
   choose_reparation_category: 'What type of equipment do you need to repair?'
   reparation_explanation: 'Include specific information about your device, like the year, the model, the operative system, and add a short description of the issue you are facing.'
   thanks_for_your_request: 'Thanks for your request'
-  choose_trade_in_category: 'What type of equipment you want to Trade-in?'
+  trade_in: 'Trade-in'
+  choose_product_to_trade_in: 'Choose a product to Trade-in'
+  choose_product_category: 'Choose product category'
+  choose_product: 'Choose product'
+  choose_product_buy_in_exchange: 'Choose product to buy in exchange'
+  choose_variant: 'Choose variant'
+  you_have_a: 'You have a'
+  estimated_value_between: 'Value estimated between'
+  you_can_by_a: 'You can buy a'
+  between: 'between'
+  instead_of: 'Instead of'
   contact: 'Contact'
   contact_us: 'Contact us'
   contact_soon: 'We will contact you soon'

@@ -75,9 +75,18 @@
   }
 }
 
+@media($max-xl) {
+  #header .navbar #logo img {
+    width: 100px;
+  }
+}
+
 @media ($max-l) {
   #header {
     .navbar {
+      #logo img {
+        width: 150px;
+      }
       .navbar-collapse {
         position: fixed;
         top: 0;

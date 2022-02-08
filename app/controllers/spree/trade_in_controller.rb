@@ -11,12 +11,6 @@ module Spree
       @variants = Spree::Variant.all.includes(:product, [option_values: :option_type]).order(:product_id)
     end
 
-    def show
-      @trade_in_category = TradeInCategory.find(params[:id])
-      @trade_in_models = @trade_in_category.trade_in_models
-      @trade_in_models_select_options = @trade_in_models.map { |model| [model.name, model.id] }
-    end
-
     def variant_infos
       variant = Spree::Variant.find(params[:id])
       render json: {
