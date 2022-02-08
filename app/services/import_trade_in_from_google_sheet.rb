@@ -3,7 +3,7 @@
 require 'csv'
 
 class ImportTradeInFromGoogleSheet
-  FILE_ID = '194r_WUSKRb1M_PVi_5kpkWimX-BmJ5GhmAWthFW-wBU'
+  FILE_ID = Rails.application.credentials.trade_in_google_sheet_id
 
   class << self
     def call
