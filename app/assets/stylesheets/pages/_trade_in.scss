@@ -20,18 +20,17 @@
     }
   }
   #trade-in-model-price {
+    font-size: 20px;
     transition: opacity 1s ease;
     &:not(.hidden) {
       opacity: 1;
     }
-    .trade-in-model-price {
-      p {
-        margin: 0;
-        padding: 0 0 10px 0;
-      }
-      .model-name {
-        font-size: 20px
-      }
+    p {
+      margin: 0;
+      padding: 0 0 10px 0;
+    }
+    .model-min-value, .model-max-value {
+      color: $green;
     }
   }
   #trade-in-second-part {
@@ -57,11 +56,18 @@
       &:not(.hidden) {
         opacity: 1;
       }
-      .variant-info {
-        transition: opacity 1s ease;
-        &:not(.hidden) {
-          opacity: 1;
+      margin-top: 15px;
+      font-size: 20px;
+      .variant-price-to-compute div {
+        margin-top: 30px;
+        padding: 30px 80px;
+        background-color: #d8fcdb;
+        .variant-min-price, .variant-max-price {
+          color: $green;
         }
+      }
+      .variant-price-container {
+        font-style: italic;
       }
     }
   }

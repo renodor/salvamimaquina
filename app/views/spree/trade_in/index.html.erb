@@ -1,13 +1,13 @@
 <%= render 'spree/shared/banner', banner: @banner %>
 <div id="trade-in-form">
   <div id="trade-in-first-part">
-    <h2><%= t('choose_trade_in_category') %></h2>
+    <h2><%= t('choose_product_to_trade_in') %></h2>
 
     <div>
       <%=
         select_tag 'trade_in_categories',
         options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }),
-        prompt: 'Choose product type',
+        prompt: t('choose_product_category'),
         id: 'trade-in-categories'
       %>
     </div>
@@ -30,7 +30,7 @@
             ]
           end
         ),
-        prompt: 'Choose model',
+        prompt: t('choose_product'),
         class: 'display-none trade-in-model',
         id: 'trade-in-models',
         class: 'hidden'
@@ -38,19 +38,19 @@
     </div>
 
     <div id="trade-in-model-price" class="hidden" data-min-value="" data-max-value="">
-      <p class="model-name-paragraph">You have an <b class="model-name"></b></p>
-      <p class="model-values">(Estimated value between <b class="model-min-value"></b> and <b class="model-max-value"></b>)</p>
+      <p class="model-name-paragraph"><%= t('you_have_a') %> <b class="model-name"></b></p>
+      <p class="model-values">(<%= t('estimated_value_between') %> <b class="model-min-value"></b> <%= t('and') %> <b class="model-max-value"></b>)</p>
     </div>
   </div>
 
   <div id="trade-in-second-part" class="hidden">
-    <h2>What product do you want to buy in exchange?</h2>
+    <h2><%= t('choose_product_buy_in_exchange') %></h2>
 
     <div>
       <%=
         select_tag 'taxon',
         options_for_select(@taxons.map { |taxon| [taxon.name, taxon.id] }),
-        prompt: 'Choose product category',
+        prompt: t('choose_product_category'),
         id: 'taxons'
       %>
     </div>
@@ -71,7 +71,7 @@
             ]
           end
         ),
-        prompt: 'Choose product',
+        prompt: t('choose_product'),
         id: 'products',
         class: 'hidden'
       %>
@@ -91,7 +91,7 @@
             ]
           end
         ),
-        prompt: 'Choose variant',
+        prompt: t('choose_variant'),
         id: 'variants',
         class: 'hidden'
       %>
@@ -99,10 +99,13 @@
 
     <div id="variant-infos" class="hidden">
       <div class="variant-image"><!-- Will be added by JS --></div>
-      <div class="price-to-compute">
-        You can buy an <span class="variant-name"></span> - <span class="variant-options"></span> between <span class="variant-min-price"></span> and <span class="variant-max-price"></span>
+      <div class="variant-price-to-compute centered-flexbox">
+        <div>
+          <%= t('you_can_by_a') %> <b class="variant-name"></b> - <b class="variant-options"></b>
+          <br /><%= t('between') %> <b class="variant-min-price"></b> <%= t('and') %> <b class="variant-max-price"></b>
+        </div>
       </div>
-      <p>(Instead of <span class="variant-price"></span>)</p>
+      <p class="variant-price-container">(<%= t('instead_of') %> <b class="variant-price"></b>)</p>
     </div>
   </div>
 </div>
