@@ -3,11 +3,11 @@
 module Spree
   class TradeInController < Spree::StoreController
     def index
-      @trade_in_categories = TradeInCategory.all.includes(:trade_in_models)
-      @trade_in_models = TradeInModel.all
+      @trade_in_categories = TradeInCategory.all
+      @trade_in_models = TradeInModel.all.includes(:trade_in_category)
       @taxons = Taxon.where(depth: 1)
       @accessories_taxon_id = Spree::Taxon.find_by(name: 'Accesorios').id
-      @products = Spree::Product.all.includes(:variants).order(:name)
+      @products = Spree::Product.all.includes(:variants, :master, :taxons).order(:name)
       @variants = Spree::Variant.where(is_master: false).includes(:product, [option_values: :option_type]).order(:product_id)
     end
 
