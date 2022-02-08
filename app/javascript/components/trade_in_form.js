@@ -10,10 +10,19 @@ const tradeInForm = () => {
     const variants = tradeInForm.querySelector('#variants');
     const variantInfos = tradeInForm.querySelector('#variant-infos');
 
+    const show = (element) => {
+      element.disabled = false;
+      element.classList.remove('hidden');
+    };
+
+    const hide = (element) => {
+      element.disabled = true;
+      element.classList.add('hidden');
+    };
     // Update variant infos (price, image, name, max value, min value),
     // (Method called when a new variant is selected, or when a new trade in model is selected)
     const changeVariantInfos = (variantId) => {
-      variantInfos.classList.add('hidden');
+      hide(variantInfos);
       const params = `trade_in_min_value=${tradeInModelPrice.dataset.minValue}&trade_in_max_value=${tradeInModelPrice.dataset.maxValue}`;
       fetch(`/trade_in/${variantId}/variant_infos/?${params}`, { headers: { 'accept': 'application/json' } })
           .then((response) => response.json())
@@ -24,10 +33,9 @@ const tradeInForm = () => {
             variantInfos.querySelector('.variant-min-price').innerHTML = minValue;
             variantInfos.querySelector('.variant-max-price').innerHTML = maxValue;
             variantInfos.querySelector('.variant-price').innerHTML = price;
+            variantInfos.dataset.id = variantId;
+            show(variantInfos);
           });
-      variantInfos.dataset.isDisplayed = true;
-      variantInfos.dataset.id = variantId;
-      variantInfos.classList.remove('hidden');
     };
 
     // Show/hide the correct select options of children
@@ -43,7 +51,7 @@ const tradeInForm = () => {
           option.classList.add('display-none');
         }
       });
-      childrenSelectTag.classList.remove('hidden');
+      show(childrenSelectTag);
     };
 
     // When selected trade in category change:
@@ -51,8 +59,8 @@ const tradeInForm = () => {
     // - Hide variant infos (in case it was already displayed)
     // - Show the trade in models corresponding to the new selected trade in category (and hide the others)
     tradeInCategories.addEventListener('change', (event) => {
-      tradeInModelPrice.classList.add('hidden');
-      variantInfos.classList.add('hidden');
+      hide(tradeInModelPrice);
+      hide(variantInfos);
       displayOptionsOfSelectedParent(tradeInModels, event.currentTarget.value);
     });
 
@@ -65,21 +73,21 @@ const tradeInForm = () => {
     // - If a variant is already selected, update its infos
     tradeInModels.addEventListener('change', (event) => {
       if (tradeInModels.selectedIndex === 0) {
-        tradeInModelPrice.classList.add('hidden');
-        variantInfos.classList.add('hidden');
+        hide(tradeInModelPrice);
+        hide(variantInfos);
       } else {
         const selectedModel = event.currentTarget.selectedOptions[0];
         tradeInModelPrice.querySelector('.model-name').innerHTML = selectedModel.innerHTML;
         tradeInModelPrice.querySelector('.model-min-value').innerHTML = selectedModel.dataset.minValueText;
         tradeInModelPrice.querySelector('.model-max-value').innerHTML = selectedModel.dataset.maxValueText;
-        tradeInModelPrice.classList.remove('hidden');
+        show(tradeInModelPrice);
 
         tradeInModelPrice.dataset.minValue = selectedModel.dataset.minValue;
         tradeInModelPrice.dataset.maxValue = selectedModel.dataset.maxValue;
 
-        tradeInForm.querySelector('#trade-in-second-part').classList.remove('hidden');
+        show(tradeInForm.querySelector('#trade-in-second-part'));
 
-        if (variantInfos.dataset.isDisplayed) {
+        if (variantInfos.dataset.id) {
           changeVariantInfos(variantInfos.dataset.id);
         }
       }
@@ -96,28 +104,49 @@ const tradeInForm = () => {
         option.classList.add('display-none');
       });
 
-      variantInfos.classList.add('hidden');
+      hide(variantInfos);
+      delete variantInfos.dataset.id;
 
       displayOptionsOfSelectedParent(products, event.currentTarget.value);
     });
 
     // When selected product change:
     // - If this product has variants:
+    //    - show variants
     //    - Hide variant infos (in case it was already displayed)
-    //    - Show the variants corresponding to the new selected paroduct (and hide the others)
+    //    - Show the variants options corresponding to the new selected product (and hide the others)
     // - if this product don't have variants:
+    //    - hide variants
     //    - change variant infos
     products.addEventListener('change', (event) => {
-      if (event.currentTarget.selectedOptions[0].dataset.hasVariants === 'true') {
-        variantInfos.classList.add('hidden');
-        displayOptionsOfSelectedParent(variants, event.currentTarget.value);
+      const productSelect = event.currentTarget;
+      const selectedOption = productSelect.selectedOptions[0];
+      if (selectedOption.dataset.hasVariants === 'true' || productSelect.selectedIndex === 0) {
+        show(variants);
+        hide(variantInfos);
+        delete variantInfos.dataset.id;
+        displayOptionsOfSelectedParent(variants, productSelect.value);
+      } else if (tradeInModelPrice.classList.contains('hidden')) {
+        hide(variants);
+        variantInfos.dataset.id = selectedOption.dataset.masterId;
       } else {
-        changeVariantInfos(event.currentTarget.selectedOptions[0].dataset.masterId);
+        hide(variants);
+        changeVariantInfos(selectedOption.dataset.masterId);
       }
     });
 
     // When selected variant change, change variant infos
-    variants.addEventListener('change', (event) => (changeVariantInfos(event.currentTarget.value)));
+    variants.addEventListener('change', (event) => {
+      const variantSelect = event.currentTarget;
+      if (variantSelect.selectedIndex === 0) {
+        hide(variantInfos);
+        delete variantInfos.dataset.id;
+      } else if (tradeInModelPrice.classList.contains('hidden')) {
+        variantInfos.dataset.id = variantSelect.value;
+      } else {
+        changeVariantInfos(variantSelect.value);
+      }
+    });
   }
 };
 

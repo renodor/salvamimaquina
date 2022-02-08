@@ -33,17 +33,18 @@
         prompt: t('choose_product'),
         class: 'display-none trade-in-model',
         id: 'trade-in-models',
-        class: 'hidden'
+        class: 'hidden',
+        disabled: true
       %>
     </div>
 
-    <div id="trade-in-model-price" class="hidden" data-min-value="" data-max-value="">
+    <div id="trade-in-model-price" class="hidden" data-min-value="" data-max-value="" disabled>
       <p class="model-name-paragraph"><%= t('you_have_a') %> <b class="model-name"></b></p>
       <p class="model-values">(<%= t('estimated_value_between') %> <b class="model-min-value"></b> <%= t('and') %> <b class="model-max-value"></b>)</p>
     </div>
   </div>
 
-  <div id="trade-in-second-part" class="hidden">
+  <div id="trade-in-second-part" class="hidden" disabled>
     <h2><%= t('choose_product_buy_in_exchange') %></h2>
 
     <div>
@@ -73,7 +74,8 @@
         ),
         prompt: t('choose_product'),
         id: 'products',
-        class: 'hidden'
+        class: 'hidden',
+        disabled: true
       %>
     </div>
 
@@ -93,11 +95,12 @@
         ),
         prompt: t('choose_variant'),
         id: 'variants',
-        class: 'hidden'
+        class: 'hidden',
+        disabled: true
       %>
     </div>
 
-    <div id="variant-infos" class="hidden">
+    <div id="variant-infos" class="hidden" disabled>
       <div class="variant-image"><!-- Will be added by JS --></div>
       <div class="variant-price-to-compute centered-flexbox">
         <div>

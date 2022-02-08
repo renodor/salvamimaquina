@@ -1,7 +1,7 @@
 @mixin default-transition($properties...) {
-    transition-property: $properties;
-    transition-duration: .3s;
-    transition-timing-function: ease;
+  transition-property: $properties;
+  transition-duration: .3s;
+  transition-timing-function: ease;
 }
 
 .centered-flexbox {
@@ -39,7 +39,7 @@
 }
 
 .hidden {
-  opacity: 0;
+  opacity: 0!important;
 }
 
 .w-100 {
