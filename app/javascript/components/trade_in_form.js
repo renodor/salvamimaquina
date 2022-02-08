@@ -19,8 +19,9 @@ const tradeInForm = () => {
       element.disabled = true;
       element.classList.add('hidden');
     };
+
     // Update variant infos (price, image, name, max value, min value),
-    // (Method called when a new variant is selected, or when a new trade in model is selected)
+    // (Method called when a new variant is selected, when a new product without variant is selected, or when a new trade in model is selected)
     const changeVariantInfos = (variantId) => {
       hide(variantInfos);
       const params = `trade_in_min_value=${tradeInModelPrice.dataset.minValue}&trade_in_max_value=${tradeInModelPrice.dataset.maxValue}`;
@@ -43,7 +44,7 @@ const tradeInForm = () => {
     const displayOptionsOfSelectedParent = (childrenSelectTag, parentId) => {
       childrenSelectTag.value = '';
       Array.from(childrenSelectTag.options).forEach((option, index) => {
-        if (index === 0) { return; }
+        if (index === 0) { return; } // The first option is the placeholder
 
         if (option.dataset.parentId === parentId) {
           option.classList.remove('display-none');
@@ -94,7 +95,7 @@ const tradeInForm = () => {
     });
 
     // When selected taxon change:
-    // - Hide all variant options and variant infos
+    // - Hide all variant options, variant infos and delete variant infos id (so that if trade in model change it won't trigger changes on variant infos)
     // - Show the products corresponding to the new selected taxon (and hide the others)
     taxons.addEventListener('change', (event) => {
       variants.value = '';
@@ -111,13 +112,16 @@ const tradeInForm = () => {
     });
 
     // When selected product change:
-    // - If this product has variants:
-    //    - show variants
-    //    - Hide variant infos (in case it was already displayed)
+    // - If this product has variants or if the option is the placeholder
+    //    - Show variants
+    //    - Hide variant infos (in case it was already displayed) and delete the variant info id
     //    - Show the variants options corresponding to the new selected product (and hide the others)
-    // - if this product don't have variants:
+    // - Else if trade in model price is not set
+    //    - Hide variants
+    //    - Set the variant info id with the product master id (will be used to display the correct variant infos when a trade in model is selected)
+    // - Else this product don't have variants:
     //    - hide variants
-    //    - change variant infos
+    //    - change variant infos with the porduct master id
     products.addEventListener('change', (event) => {
       const productSelect = event.currentTarget;
       const selectedOption = productSelect.selectedOptions[0];
@@ -135,7 +139,10 @@ const tradeInForm = () => {
       }
     });
 
-    // When selected variant change, change variant infos
+    // When selected variant change:
+    // - If the options is the placeholder, hide variant infos and delete the variant info id
+    // - Else if trade in model price is not set, set the variant info id with the variant id
+    // - Else change variant infos
     variants.addEventListener('change', (event) => {
       const variantSelect = event.currentTarget;
       if (variantSelect.selectedIndex === 0) {
