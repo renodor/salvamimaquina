@@ -30,6 +30,7 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  to: 'to'
   and: 'and'
   home: 'Home'
   online_shop: 'Online shop'
@@ -66,7 +67,6 @@ en:
   friday: 'Friday'
   saturday: 'Saturday'
   sunday: 'Sunday'
-  to: 'To'
   spree:
     email: 'Email'
     brands: 'Brands'

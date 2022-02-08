@@ -8,7 +8,7 @@ module Spree
       @taxons = Taxon.where(depth: 1)
       @accessories_taxon_id = Spree::Taxon.find_by(name: 'Accesorios').id
       @products = Spree::Product.all.includes(:variants).order(:name)
-      @variants = Spree::Variant.all.includes(:product, [option_values: :option_type]).order(:product_id)
+      @variants = Spree::Variant.where(is_master: false).includes(:product, [option_values: :option_type]).order(:product_id)
     end
 
     def variant_infos

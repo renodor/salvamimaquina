@@ -17,7 +17,7 @@
 # (Then when displaying images on the front end we need to use #cl_image_path_with_folder and #cl_image_tag_with_folder methods
 # to retrieve the files on the correct folder)
 
-folders = %w[products product_categories slides banners reparation_categories trade_in_categories]
+folders = %w[products product_categories slides banners reparation_categories]
 
 service_configuration = {}
 folders.each do |folder|

@@ -31,7 +31,6 @@
           end
         ),
         prompt: t('choose_product'),
-        class: 'display-none trade-in-model',
         id: 'trade-in-models',
         class: 'hidden',
         disabled: true
@@ -84,8 +83,6 @@
         select_tag 'variant',
         options_for_select(
           @variants.map do |variant|
-            next if variant.is_master?
-
             [
               "#{variant.name} - #{variant.options_text}",
               variant.id,
