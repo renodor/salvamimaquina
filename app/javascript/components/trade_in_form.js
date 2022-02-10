@@ -9,6 +9,7 @@ const tradeInForm = () => {
     const products = tradeInForm.querySelector('#products');
     const variants = tradeInForm.querySelector('#variants');
     const variantInfos = tradeInForm.querySelector('#variant-infos');
+    const invalidTradeIn = tradeInForm.querySelector('#invalid-trade-in');
 
     const show = (element) => {
       element.disabled = false;
@@ -25,17 +26,22 @@ const tradeInForm = () => {
     const changeVariantInfos = (variantId) => {
       hide(variantInfos);
       const params = `trade_in_min_value=${tradeInModelPrice.dataset.minValue}&trade_in_max_value=${tradeInModelPrice.dataset.maxValue}`;
-      fetch(`/trade_in/${variantId}/variant_infos/?${params}`, { headers: { 'accept': 'application/json' } })
+      fetch(`/trade_in_requests/${variantId}/variant_infos/?${params}`, { headers: { 'accept': 'application/json' } })
           .then((response) => response.json())
-          .then(({ imageTag, name, options, minValue, maxValue, price }) => {
-            variantInfos.querySelector('.variant-image').innerHTML = imageTag;
-            variantInfos.querySelector('.variant-name').innerHTML = name;
-            variantInfos.querySelector('.variant-options').innerHTML = options;
-            variantInfos.querySelector('.variant-min-price').innerHTML = minValue;
-            variantInfos.querySelector('.variant-max-price').innerHTML = maxValue;
-            variantInfos.querySelector('.variant-price').innerHTML = price;
+          .then(({ tradeInIsValid, imageTag, name, options, minValue, maxValue, price }) => {
             variantInfos.dataset.id = variantId;
-            show(variantInfos);
+            if (tradeInIsValid) {
+              variantInfos.querySelector('.variant-image').innerHTML = imageTag;
+              variantInfos.querySelector('.variant-name').innerHTML = name;
+              variantInfos.querySelector('.variant-options').innerHTML = options;
+              variantInfos.querySelector('.variant-min-price').innerHTML = minValue;
+              variantInfos.querySelector('.variant-max-price').innerHTML = maxValue;
+              variantInfos.querySelector('.variant-price').innerHTML = price;
+              invalidTradeIn.classList.add('display-none');
+              show(variantInfos);
+            } else {
+              invalidTradeIn.classList.remove('display-none');
+            }
           });
     };
 

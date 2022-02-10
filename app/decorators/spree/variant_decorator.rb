@@ -38,12 +38,11 @@ module Spree
     end
 
     # Modify Spree::Variant#options_text to be able to:
-    # - avoid N+1
     # - show or not option type
     # - show or not model
     # - translate option type
     def options_text(show_option_type: false, show_model: false)
-      option_values.includes(:option_type).map do |option_value|
+      option_values.map do |option_value|
         option_type = option_value.option_type
         next if option_type.name == 'model' && show_model == false
 

@@ -61,6 +61,14 @@
         font-style: italic;
       }
     }
+    #invalid-trade-in div {
+      margin-top: 30px;
+      padding: 30px 80px;
+      background-color: #d8fcdb;
+      p {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
@@ -79,8 +87,13 @@
     select {
       padding: 10px;
     }
-    #trade-in-second-part  #variant-infos .variant-price-to-compute div {
-      padding: 30px 15px;
+    #trade-in-second-part  {
+      #variant-infos .variant-price-to-compute div {
+        padding: 30px 15px;
+      }
+      #invalid-trade-in div {
+        padding: 30px 15px;
+      }
     }
   }
 }
