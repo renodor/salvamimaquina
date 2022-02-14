@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     post 'create_user_message', to: 'home#create_user_message'
     get 'shipping_informations', to: 'home#shipping_informations'
     get 'payment_methods', to: 'home#payment_methods'
+
+    get '/fake_api_call/show_request', to: 'fake_api_calls#show_request'
   end
 
   namespace :repair_shopr_webhook do

@@ -106,12 +106,22 @@ class RepairShoprApi::V1::Base
     end
 
     def request(http_method:, endpoint:, params: {})
-      @response = client.public_send(http_method, endpoint, params)
-      parsed_response = Oj.load(@response.body)
+      if Rails.env.production? || http_method == :get
+        @response = client.public_send(http_method, endpoint, params)
+        parsed_response = Oj.load(@response.body)
 
-      return parsed_response if @response.status == HTTP_OK_CODE
+        return parsed_response if @response.status == HTTP_OK_CODE
 
-      raise error_class, "Code: #{@response.status}, response: #{@response.body}"
+        raise error_class, "Code: #{@response.status}, response: #{@response.body}"
+      else
+        FakeApiCall.new(
+          current_base_url: 'http://localhost:3000',
+          http_method: http_method,
+          endpoint: endpoint,
+          payload: params,
+          response: fake_response(endpoint, params)
+        ).call
+      end
     end
 
     def error_class
@@ -128,6 +138,38 @@ class RepairShoprApi::V1::Base
         UnprocessableEntityError
       else
         ApiError
+      end
+    end
+
+    def fake_response(endpoint, payload)
+      case endpoint
+      when 'invoices'
+        {
+          'invoice' => {
+            'id' => 1,
+            'customer_id' => payload[:customer_id],
+            'customer_business_then_name' => 'Walkin Customer',
+            'number' => payload[:number],
+            'created_at' => DateTime.current,
+            'updated_at' => DateTime.current,
+            'date' => payload[:date],
+            'due_date' => payload[:date],
+            'subtotal' => payload[:subtotal],
+            'total' => payload[:total],
+            'tax' => payload[:tax],
+            'verified_paid' => false,
+            'tech_marked_paid' => false,
+            'ticket_id' => nil,
+            'pdf_url' => nil,
+            'is_paid' => true,
+            'location_id' => payload[:location_id],
+            'po_number' => nil,
+            'contact_id' => nil,
+            'note' => payload[:note],
+            'hardwarecost' => nil,
+            'user_id' => 1
+          }
+        }
       end
     end
   end

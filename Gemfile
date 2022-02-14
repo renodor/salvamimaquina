@@ -86,7 +86,11 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # To simulate sending emails
-  gem 'letter_opener', group: :development
+  gem 'letter_opener'
+
+  # Launch cross-platform applications
+  # (used to open a new browser tab from controller or service class)
+  gem 'launchy'
 
   gem 'rubocop', require: false
 
