@@ -38,11 +38,8 @@ Rails.application.routes.draw do
       resources :reparation_requests, only: %i[new create]
     end
 
-    resources :trade_in_requests, only: %i[new create] do
-      member do
-        get :variant_infos
-      end
-    end
+    resources :trade_in_requests, only: %i[new create show], param: :token
+    get 'trade_in_requests/variant_infos/:variant_id', to: 'trade_in_requests#variant_infos'
 
     get '/account/edit_user_address', to: 'users#edit_user_address'
     get '/account/new_user_address', to: 'users#new_user_address'

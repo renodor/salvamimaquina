@@ -1373,16 +1373,17 @@ ActiveRecord::Schema.define(version: 2022_02_09_211834) do
   end
 
   create_table "trade_in_requests", force: :cascade do |t|
-    t.bigint "trade_in_model_id", null: false
-    t.bigint "spree_variant_id", null: false
     t.integer "shop"
+    t.boolean "with_promo"
     t.string "name"
     t.string "phone"
     t.string "email"
-    t.string "coupon_code"
+    t.text "comment"
+    t.text "token"
+    t.bigint "trade_in_model_id", null: false
+    t.integer "variant_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["spree_variant_id"], name: "index_trade_in_requests_on_spree_variant_id"
     t.index ["trade_in_model_id"], name: "index_trade_in_requests_on_trade_in_model_id"
   end
 
@@ -1405,6 +1406,6 @@ ActiveRecord::Schema.define(version: 2022_02_09_211834) do
   add_foreign_key "spree_tax_rate_tax_categories", "spree_tax_rates", column: "tax_rate_id"
   add_foreign_key "spree_wallet_payment_sources", "spree_users", column: "user_id"
   add_foreign_key "trade_in_models", "trade_in_categories"
-  add_foreign_key "trade_in_requests", "spree_variants"
+  add_foreign_key "trade_in_requests", "spree_variants", column: "variant_id", on_delete: :cascade
   add_foreign_key "trade_in_requests", "trade_in_models"
 end

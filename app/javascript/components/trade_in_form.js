@@ -1,15 +1,19 @@
+window.Modal = require('bootstrap/js/dist/modal');
+
 const tradeInForm = () => {
-  const tradeInForm = document.getElementById('trade-in-form');
+  const tradeInForm = document.querySelector('#trade-in-form form');
 
   if (tradeInForm) {
     const tradeInCategories = tradeInForm.querySelector('#trade-in-categories');
     const tradeInModels = tradeInForm.querySelector('#trade-in-models');
-    const tradeInModelPrice = tradeInForm.querySelector('#trade-in-model-price');
+    const tradeInModelPrice = tradeInForm.querySelector('.trade-in-model-price');
+    const tradeInSecondPart = tradeInForm.querySelector('.trade-in-second-part');
     const taxons = tradeInForm.querySelector('#taxons');
     const products = tradeInForm.querySelector('#products');
     const variants = tradeInForm.querySelector('#variants');
-    const variantInfos = tradeInForm.querySelector('#variant-infos');
+    const variantInfos = tradeInForm.querySelector('.variant-infos');
     const invalidTradeIn = tradeInForm.querySelector('#invalid-trade-in');
+    const tradeInCta = tradeInForm.querySelector('#trade-in-cta');
 
     const show = (element) => {
       element.disabled = false;
@@ -25,8 +29,9 @@ const tradeInForm = () => {
     // (Method called when a new variant is selected, when a new product without variant is selected, or when a new trade in model is selected)
     const changeVariantInfos = (variantId) => {
       hide(variantInfos);
+      hide(tradeInCta);
       const params = `trade_in_min_value=${tradeInModelPrice.dataset.minValue}&trade_in_max_value=${tradeInModelPrice.dataset.maxValue}`;
-      fetch(`/trade_in_requests/${variantId}/variant_infos/?${params}`, { headers: { 'accept': 'application/json' } })
+      fetch(`/trade_in_requests/variant_infos/${variantId}/?${params}`, { headers: { 'accept': 'application/json' } })
           .then((response) => response.json())
           .then(({ tradeInIsValid, imageTag, name, options, minValue, maxValue, price }) => {
             variantInfos.dataset.id = variantId;
@@ -39,10 +44,24 @@ const tradeInForm = () => {
               variantInfos.querySelector('.variant-price').innerHTML = price;
               invalidTradeIn.classList.add('display-none');
               show(variantInfos);
+              show(tradeInCta);
             } else {
               invalidTradeIn.classList.remove('display-none');
             }
           });
+    };
+
+    const changeTradeInModelPrice = (selectedModel) => {
+      tradeInModelPrice.querySelector('.model-name').innerHTML = selectedModel.innerHTML;
+      tradeInModelPrice.querySelector('.model-min-value').innerHTML = selectedModel.dataset.minValueText;
+      tradeInModelPrice.querySelector('.model-max-value').innerHTML = selectedModel.dataset.maxValueText;
+      show(tradeInModelPrice);
+
+      tradeInModelPrice.dataset.minValue = selectedModel.dataset.minValue;
+      tradeInModelPrice.dataset.maxValue = selectedModel.dataset.maxValue;
+
+      show(tradeInSecondPart);
+      show(taxons);
     };
 
     // Show/hide the correct select options of children
@@ -68,6 +87,7 @@ const tradeInForm = () => {
     tradeInCategories.addEventListener('change', (event) => {
       hide(tradeInModelPrice);
       hide(variantInfos);
+      hide(tradeInCta);
       displayOptionsOfSelectedParent(tradeInModels, event.currentTarget.value);
     });
 
@@ -82,17 +102,9 @@ const tradeInForm = () => {
       if (tradeInModels.selectedIndex === 0) {
         hide(tradeInModelPrice);
         hide(variantInfos);
+        hide(tradeInCta);
       } else {
-        const selectedModel = event.currentTarget.selectedOptions[0];
-        tradeInModelPrice.querySelector('.model-name').innerHTML = selectedModel.innerHTML;
-        tradeInModelPrice.querySelector('.model-min-value').innerHTML = selectedModel.dataset.minValueText;
-        tradeInModelPrice.querySelector('.model-max-value').innerHTML = selectedModel.dataset.maxValueText;
-        show(tradeInModelPrice);
-
-        tradeInModelPrice.dataset.minValue = selectedModel.dataset.minValue;
-        tradeInModelPrice.dataset.maxValue = selectedModel.dataset.maxValue;
-
-        show(tradeInForm.querySelector('#trade-in-second-part'));
+        changeTradeInModelPrice(event.currentTarget.selectedOptions[0]);
 
         if (variantInfos.dataset.id) {
           changeVariantInfos(variantInfos.dataset.id);
@@ -113,6 +125,7 @@ const tradeInForm = () => {
 
       hide(variantInfos);
       delete variantInfos.dataset.id;
+      hide(tradeInCta);
 
       displayOptionsOfSelectedParent(products, event.currentTarget.value);
     });
@@ -134,6 +147,7 @@ const tradeInForm = () => {
       if (selectedOption.dataset.hasVariants === 'true' || productSelect.selectedIndex === 0) {
         show(variants);
         hide(variantInfos);
+        hide(tradeInCta);
         delete variantInfos.dataset.id;
         displayOptionsOfSelectedParent(variants, productSelect.value);
       } else if (tradeInModelPrice.classList.contains('hidden')) {
@@ -154,12 +168,30 @@ const tradeInForm = () => {
       if (variantSelect.selectedIndex === 0) {
         hide(variantInfos);
         delete variantInfos.dataset.id;
+        hide(tradeInCta);
       } else if (tradeInModelPrice.classList.contains('hidden')) {
         variantInfos.dataset.id = variantSelect.value;
       } else {
         changeVariantInfos(variantSelect.value);
       }
     });
+
+    if (tradeInForm.dataset.showFields === 'true') {
+      changeTradeInModelPrice(tradeInModels.selectedOptions[0]);
+      changeVariantInfos(variants.value);
+      show(tradeInCategories);
+      show(tradeInModels);
+      show(tradeInModelPrice);
+      show(tradeInSecondPart);
+      show(taxons);
+      show(products);
+      show(variants);
+      show(variantInfos);
+      show(invalidTradeIn);
+      show(tradeInCta);
+      const myModal = new Modal(document.getElementById('tradeInFormModal'));
+      myModal.show();
+    }
   }
 };
 

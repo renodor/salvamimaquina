@@ -24,6 +24,8 @@ es-MX:
   between: 'entre'
   instead_of: 'En vez de'
   please_choose_product_with_higher_value: 'Por favor elige un producto de un valor superior al que quiere devolver'
+  realize_this_trade_in_and_get_promo: '¡Confirma este Trade-in e aprovecha de una PROMOCIÓN adicional!'
+  complete_your_contact_infos_to_have_a_promo: 'Completa tu información de contacto para aprovechar una PROMOCIÓN adicional'
   trade_in_disclaimer: 'La cotización dada son montos aproximados, se debe evaluar en sitio todos los detalles de su equipo para brindar el valor real.'
   contact: 'Contacto'
   contact_us: 'Contactarnos'
@@ -176,6 +178,10 @@ es-MX:
         comment: 'Comentario'
         shops:
           bella_vista: 'Bella Vista'
+      trade_in_request:
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
     errors:
       models:
         spree/credit_card:
@@ -243,8 +249,23 @@ es-MX:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+      trade_in_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'
     placeholders:
       user_message:
         name: 'Nombre'
         email: 'Correo'
         message: 'Mensaje'
+      trade_in_request:
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
+        comment: 'Comentario'
+    labels:
+      trade_in_request:
+        shop: 'Tienda donde desea hacer el Trade-in'
+  time:
+    formats:
+      simple: "%d %b %Y"
