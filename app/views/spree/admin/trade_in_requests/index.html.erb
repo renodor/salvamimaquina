@@ -10,6 +10,10 @@
          <th>Product to buy</th>
          <th>Min value</th>
          <th>Max value</th>
+         <th>With a promo?</th>
+         <th>Is still valid?</th>
+         <th>Coupon Code</th>
+         <th>Creation Date</th>
       </tr>
    </thead>
    <tbody>
@@ -22,6 +26,20 @@
         <td><%= trade_in_request.variant.name %> - <%= trade_in_request.variant.options_text %></td>
         <td><%= trade_in_request.variant.price - trade_in_request.trade_in_model.min_value %></td>
         <td><%= trade_in_request.variant.price - trade_in_request.trade_in_model.max_value %></td>
+        <td>
+          <span class="pill pill-<%= trade_in_request.with_promo ? 'active' : 'error' %>">
+            <%= trade_in_request.with_promo ? 'Yes' : 'No' %>
+          </span>
+        </td>
+        <td>
+          <% if trade_in_request.with_promo %>
+            <span class="pill pill-<%= trade_in_request.still_valid? ? 'active' : 'error' %>">
+              <%= trade_in_request.still_valid? ? 'Yes' : 'No' %>
+            </span>
+          <% end %>
+        </td>
+        <td><%= trade_in_request.with_promo ? trade_in_request.coupon_code : '' %></td>
+        <td><%= trade_in_request.created_at.strftime("%d %b %Y") %></td>
       </tr>
     <% end %>
    </tbody>

@@ -17,6 +17,12 @@ class TradeInRequest < ApplicationRecord
     "TRADE-IN-#{token[0, 5]}"
   end
 
+  def still_valid?
+    return false unless with_promo
+
+    Time.current <= created_at + COUPON_VALIDITY_DAYS.days
+  end
+
   private
 
   def set_with_promo
