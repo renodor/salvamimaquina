@@ -15,21 +15,24 @@ const tradeInForm = () => {
     const invalidTradeIn = tradeInForm.querySelector('#invalid-trade-in');
     const tradeInCta = tradeInForm.querySelector('#trade-in-cta');
 
-    const show = (element) => {
-      element.disabled = false;
-      element.classList.remove('hidden');
+    const show = (...elements) => {
+      elements.forEach((element) => {
+        element.disabled = false;
+        element.classList.remove('hidden');
+      });
     };
 
-    const hide = (element) => {
-      element.disabled = true;
-      element.classList.add('hidden');
+    const hide = (...elements) => {
+      elements.forEach((element) => {
+        element.disabled = true;
+        element.classList.add('hidden');
+      });
     };
 
     // Update variant infos (price, image, name, max value, min value),
     // (Method called when a new variant is selected, when a new product without variant is selected, or when a new trade in model is selected)
     const changeVariantInfos = (variantId) => {
-      hide(variantInfos);
-      hide(tradeInCta);
+      hide(variantInfos, tradeInCta);
       const params = `trade_in_min_value=${tradeInModelPrice.dataset.minValue}&trade_in_max_value=${tradeInModelPrice.dataset.maxValue}`;
       fetch(`/trade_in_requests/variant_infos/${variantId}/?${params}`, { headers: { 'accept': 'application/json' } })
           .then((response) => response.json())
@@ -43,8 +46,7 @@ const tradeInForm = () => {
               variantInfos.querySelector('.variant-max-price').innerHTML = maxValue;
               variantInfos.querySelector('.variant-price').innerHTML = price;
               invalidTradeIn.classList.add('display-none');
-              show(variantInfos);
-              show(tradeInCta);
+              show(variantInfos, tradeInCta);
             } else {
               invalidTradeIn.classList.remove('display-none');
             }
@@ -60,8 +62,7 @@ const tradeInForm = () => {
       tradeInModelPrice.dataset.minValue = selectedModel.dataset.minValue;
       tradeInModelPrice.dataset.maxValue = selectedModel.dataset.maxValue;
 
-      show(tradeInSecondPart);
-      show(taxons);
+      show(tradeInSecondPart, taxons);
     };
 
     // Show/hide the correct select options of children
@@ -85,9 +86,7 @@ const tradeInForm = () => {
     // - Hide variant infos (in case it was already displayed)
     // - Show the trade in models corresponding to the new selected trade in category (and hide the others)
     tradeInCategories.addEventListener('change', (event) => {
-      hide(tradeInModelPrice);
-      hide(variantInfos);
-      hide(tradeInCta);
+      hide(tradeInModelPrice, variantInfos, tradeInCta);
       displayOptionsOfSelectedParent(tradeInModels, event.currentTarget.value);
     });
 
@@ -100,9 +99,7 @@ const tradeInForm = () => {
     // - If a variant is already selected, update its infos
     tradeInModels.addEventListener('change', (event) => {
       if (tradeInModels.selectedIndex === 0) {
-        hide(tradeInModelPrice);
-        hide(variantInfos);
-        hide(tradeInCta);
+        hide(tradeInModelPrice, variantInfos, tradeInCta);
       } else {
         changeTradeInModelPrice(event.currentTarget.selectedOptions[0]);
 
@@ -123,9 +120,8 @@ const tradeInForm = () => {
         option.classList.add('display-none');
       });
 
-      hide(variantInfos);
       delete variantInfos.dataset.id;
-      hide(tradeInCta);
+      hide(variantInfos, tradeInCta);
 
       displayOptionsOfSelectedParent(products, event.currentTarget.value);
     });
@@ -146,8 +142,7 @@ const tradeInForm = () => {
       const selectedOption = productSelect.selectedOptions[0];
       if (selectedOption.dataset.hasVariants === 'true' || productSelect.selectedIndex === 0) {
         show(variants);
-        hide(variantInfos);
-        hide(tradeInCta);
+        hide(variantInfos, tradeInCta);
         delete variantInfos.dataset.id;
         displayOptionsOfSelectedParent(variants, productSelect.value);
       } else if (tradeInModelPrice.classList.contains('hidden')) {
@@ -166,9 +161,8 @@ const tradeInForm = () => {
     variants.addEventListener('change', (event) => {
       const variantSelect = event.currentTarget;
       if (variantSelect.selectedIndex === 0) {
-        hide(variantInfos);
         delete variantInfos.dataset.id;
-        hide(tradeInCta);
+        hide(variantInfos, tradeInCta);
       } else if (tradeInModelPrice.classList.contains('hidden')) {
         variantInfos.dataset.id = variantSelect.value;
       } else {
@@ -178,17 +172,26 @@ const tradeInForm = () => {
 
     if (tradeInForm.dataset.showFields === 'true') {
       changeTradeInModelPrice(tradeInModels.selectedOptions[0]);
-      changeVariantInfos(variants.value);
-      show(tradeInCategories);
-      show(tradeInModels);
-      show(tradeInModelPrice);
-      show(tradeInSecondPart);
-      show(taxons);
-      show(products);
-      show(variants);
-      show(variantInfos);
-      show(invalidTradeIn);
-      show(tradeInCta);
+
+      const selectedProduct = products.selectedOptions[0];
+      if (selectedProduct.dataset.hasVariants === 'true') {
+        changeVariantInfos(variants.value);
+        show(variants);
+      } else {
+        changeVariantInfos(selectedProduct.dataset.masterId);
+      }
+
+      show(
+          tradeInCategories,
+          tradeInModels,
+          tradeInModelPrice,
+          tradeInSecondPart,
+          taxons,
+          products,
+          variantInfos,
+          invalidTradeIn,
+          tradeInCta
+      );
       const myModal = new Modal(document.getElementById('tradeInFormModal'));
       myModal.show();
     }
