@@ -1,5 +1,5 @@
 <div class="trade-in">
-  <h2>Trade-in request confirmed!</h2>
+  <h2><%= t('trade_in_request_confirmed') %></h2>
   <div
     id="trade-in-promo"
     class="centered-flexbox"
@@ -7,15 +7,15 @@
   >
     <div>
       <% if @trade_in_request.with_promo %>
-        <p>Realize your Trade-in in one of Salva Mi Máquina shops and</p>
-        <p>enjoy a <b>10% discount on all accessories!</b></p>
-        <p>with this coupon code:</p>
+        <p><%= t('realize_trade_in_in_smm_shop') %> <%= t('and') %></p>
+        <p><%= t('enjoy_a') %> <b><%= t('percentage_discount_on_all_accessories', amount: '10%') %></b></p>
+        <p><%= t('with_this_coupon_code') %></p>
         <span id="trade-in-coupon-code"><%= @trade_in_request.coupon_code %></span>
-        <p><b>This coupon is valid only <%=  @coupon_validity_days %> days!</b></p>
-        <p>(You have until <%= I18n.localize((@trade_in_request.created_at + @coupon_validity_days.days), format: :simple).titleize %> to use it)</p>
-        <p><small><i>Not valid on our Ecommerce</i></small></p>
+        <p><b> <%= t('coupon_code_valid_only', validity: @coupon_validity_days) %></b></p>
+        <p>(<%= t('you_have_until', date: I18n.localize((@trade_in_request.created_at + @coupon_validity_days.days), format: :simple).titleize) %>)</p>
+        <p><small><i><%= t('not_valid_online') %></i></small></p>
       <% else %>
-        <p>Realize your Trade-in in one of Salva Mi Máquina shops</p>
+        <p><%= t('realize_trade_in_in_smm_shop') %></p>
       <% end %>
     </div>
   </div>
@@ -23,7 +23,7 @@
   <hr />
 
   <div class="trade-in-first-part">
-    <h2>Your Trade-in</h2>
+    <h2><%= t('your_trade_in') %></h2>
     <div class="trade-in-model-price">
       <p class="model-name-paragraph">
         <%= t('you_have_a') %> <b class="model-name"><%= @trade_in_model.name %></b>
