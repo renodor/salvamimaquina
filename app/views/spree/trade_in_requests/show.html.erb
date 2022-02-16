@@ -1,25 +1,29 @@
 <div class="trade-in">
-  <h1>Trade-in request confirmed!</h1>
-  <% if @trade_in_request.with_promo %>
-    <div class="centered-flexbox">
-      <div id="trade-in-coupon-code">
-        <p>
-          Enjoy a 10% discount on all accessories in Salva Mi Máquina shops!
-          <br />with the following coupon code:
-        </p>
-        <span><%= @trade_in_request.coupon_code %></span>
-        <p>
-          <b>This coupon valid only <%=  @coupon_validity_days %> days!</b>
-          <br />So you have until <%= I18n.localize((@trade_in_request.created_at + @coupon_validity_days.days), format: :simple).titleize %> to use it.
-        </p>
-      </div>
+  <h2>Trade-in request confirmed!</h2>
+  <div
+    id="trade-in-promo"
+    class="centered-flexbox"
+    style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= image_url 'tradein3.jpeg' %>');"
+  >
+    <div>
+      <% if @trade_in_request.with_promo %>
+        <p>Realize your Trade-in in one of Salva Mi Máquina shops and</p>
+        <p>enjoy a <b>10% discount on all accessories!</b></p>
+        <p>with this coupon code:</p>
+        <span id="trade-in-coupon-code"><%= @trade_in_request.coupon_code %></span>
+        <p><b>This coupon is valid only <%=  @coupon_validity_days %> days!</b></p>
+        <p>(You have until <%= I18n.localize((@trade_in_request.created_at + @coupon_validity_days.days), format: :simple).titleize %> to use it)</p>
+        <p><small><i>Not valid on our Ecommerce</i></small></p>
+      <% else %>
+        <p>Realize your Trade-in in one of Salva Mi Máquina shops</p>
+      <% end %>
     </div>
-  <% else %>
-    <p>(It seems you already enjoyed a Trade-in discount)</p>
-  <% end %>
+  </div>
+
+  <hr />
 
   <div class="trade-in-first-part">
-    <h2>Trade-in Recap</h2>
+    <h2>Your Trade-in</h2>
     <div class="trade-in-model-price">
       <p class="model-name-paragraph">
         <%= t('you_have_a') %> <b class="model-name"><%= @trade_in_model.name %></b>
@@ -46,8 +50,8 @@
       <div class="variant-image">
         <%= cl_image_tag_with_folder(@variant.images.first&.attachment, width: 200, crop: :fill, model: Spree::Image) %>
       </div>
-      <p class="variant-price-container">
-        (<%= t('instead_of') %> <b class="variant-price"><%= number_to_currency(@variant.price) %></b>)
+      <p>
+        <i>(<%= t('instead_of') %> <b class="variant-price"><%= number_to_currency(@variant.price) %></b>)</i>
       </p>
     </div>
   </div>

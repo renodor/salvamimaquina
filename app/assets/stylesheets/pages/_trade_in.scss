@@ -6,7 +6,6 @@
 
 .trade-in {
   text-align: center;
-  font-size: 20px;
   h2 {
     margin-bottom: 15px;
   }
@@ -37,10 +36,10 @@
     }
   }
   .trade-in-second-part {
-    margin-top: 40px;
+    margin-top: 30px;
     @include opacity-transition;
     .trade-in-arrow-separation {
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       fill: $dark-gray;
     }
     #products, #variants {
@@ -56,8 +55,8 @@
           color: $green;
         }
       }
-      .variant-price-container {
-        font-style: italic;
+      .variant-image {
+        margin: 20px 0;
       }
     }
     #invalid-trade-in div {
@@ -127,9 +126,6 @@
           appearance: auto;
           padding: 12px 10px;
           margin-top: 5px;
-          option:first-child {
-            color: $gray;
-          }
         }
         label {
           font-size: 16px;
@@ -149,19 +145,35 @@
     margin-top: 30px;
     font-size: 16px;
   }
-  #trade-in-coupon-code {
-    span {
+  #trade-in-promo {
+    background-size: cover;
+    background-position: center;
+    padding: 30px 20px;
+    margin: 30px 0;
+    p {
+      color: white;
+      margin-bottom: 0;
+      padding: 3px 0;
+    }
+    #trade-in-coupon-code {
       display: inline-block;
       padding: 10px 30px;
-      margin: 10px 0;
+      margin: 25px 0;
       color: white;
       background-color: $green;
+      border: 1.5px solid white;
+      font-weight: bold;
     }
+  }
+  hr {
+    color: $light-gray;
+    margin: 30px 0;
+    opacity: 1;
   }
 }
 
 @media($max-m) {
-  #trade-in-form {
+  .trade-in {
     select {
       width: 100%;
       padding: 15px;
@@ -170,7 +182,7 @@
 }
 
 @media($max-s) {
-  #trade-in-form {
+  .trade-in {
     font-size: 17px;
     select {
       padding: 10px;

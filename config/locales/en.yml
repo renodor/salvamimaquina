@@ -182,3 +182,6 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+  time:
+    formats:
+      simple: "%d %b %Y"

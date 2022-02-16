@@ -62,7 +62,6 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   config.action_mailer.delivery_method     = :postmark
-  config.action_mailer.default_url_options = { host: 'https://www.salvamimaquina.com' }
   config.action_mailer.postmark_settings   = { api_token: Rails.application.credentials.postmark_api_token }
 
   # Enable serving of images from an asset server for emails

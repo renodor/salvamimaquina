@@ -14,7 +14,7 @@ class TradeInRequest < ApplicationRecord
   COUPON_VALIDITY_DAYS = 7
 
   def coupon_code
-    "TRADE-IN-#{token[0, 5]}"
+    "TRADE-IN-#{token[0, 5]}".upcase
   end
 
   def still_valid?

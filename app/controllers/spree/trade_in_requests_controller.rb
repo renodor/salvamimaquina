@@ -10,7 +10,8 @@ module Spree
     def create
       @trade_in_request = TradeInRequest.create(trade_in_request_params)
       if @trade_in_request.valid?
-        # ReparationRequestMailer.reparation_request_message(reparation_request: @reparation_request).deliver_later
+        TradeInRequestMailer.confirmation_email(@trade_in_request).deliver_later
+        TradeInRequestMailer.admin_confirmation_email(@trade_in_request).deliver_later
         redirect_to trade_in_request_path(@trade_in_request.token)
       else
         set_form_variables

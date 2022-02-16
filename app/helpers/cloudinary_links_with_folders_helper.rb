@@ -21,16 +21,16 @@
 
 module CloudinaryLinksWithFoldersHelper
   def cl_image_path_with_folder(image, options = {})
-    cl_image_path(image_url(image, options), options_with_fallback_image(options))
+    cl_image_path(image_url_with_folder(image, options), options_with_fallback_image(options))
   end
 
   def cl_image_tag_with_folder(image, options = {})
-    cl_image_tag(image_url(image, options), options_with_fallback_image(options))
+    cl_image_tag(image_url_with_folder(image, options), options_with_fallback_image(options))
   end
 
   private
 
-  def image_url(image, options)
+  def image_url_with_folder(image, options)
     # If we want cloudinary fallback image to work we need to return a "wrong" image key (like "0")
     # otherwise we can return an empty string and the image won't be processed at all
     return options[:no_fallback] ? '' : '0' unless image.try(:key)

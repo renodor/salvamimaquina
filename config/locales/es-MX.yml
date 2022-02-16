@@ -269,3 +269,6 @@ es-MX:
   time:
     formats:
       simple: "%d %b %Y"
+  trade_in_request_mailer:
+    confirmation_email:
+      subject: 'Su Solicitud de Trade-in en Salva Mi Máquina'
