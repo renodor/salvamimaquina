@@ -70,24 +70,31 @@ const tradeInForm = () => {
       show(tradeInSecondPart, taxons);
     };
 
-    // Show/hide the correct select options of children
+    // Show/hide the correct select options of children depending on what parent is selected
     // (Method called when a new parent is selected)
+    // We can't just display/hide the relevant options with CSS because safari browsers don't apply CSS on option tags...
     const displayOptionsOfSelectedParent = (childrenSelectTag, parentId) => {
+      // Reset children select tag
       childrenSelectTag.value = '';
       childrenSelectTag.innerHTML = '';
 
+      // Add children select tag prompt
       const prompt = document.createElement('option');
       prompt.text = childrenSelectTag.dataset.prompt;
       childrenSelectTag.add(prompt, 0);
 
+      // Retrieve all children select tag options (from an hidden div on the DOM)
       const selectId = childrenSelectTag.id;
       const optionsForSelect = [...tradeInForm.querySelectorAll(`.options-for-select[data-select-id=${selectId}] option`)];
+
+      // Add the relevant options to children select tag depending on what parent is selected
       optionsForSelect.forEach((option) => {
         if (option.dataset.parentId === parentId) {
           childrenSelectTag.add(option.cloneNode(true));
         }
       });
 
+      // Display children select tag
       show(childrenSelectTag);
     };
 

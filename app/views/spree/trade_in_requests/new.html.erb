@@ -15,6 +15,7 @@
       </div>
 
       <div>
+        <!-- Options for the following select tag. Relevant ones will be added to select tag by JS -->
         <div class="options-for-select display-none" data-select-id="trade-in-models">
           <%=
             options_for_select(
@@ -37,7 +38,7 @@
         </div>
         <%=
           select_tag 'trade_in_model_id',
-          '',
+          '', # options will be added by JS
           id: 'trade-in-models',
           class: 'hidden',
           disabled: true,
@@ -72,6 +73,7 @@
       </div>
 
       <div>
+        <!-- Options for the following select tag. Relevant ones will be added to select tag by JS -->
         <div class="options-for-select display-none" data-select-id="products">
           <%=
             options_for_select(
@@ -92,7 +94,7 @@
         </div>
         <%=
           select_tag 'product_id',
-          '',
+          '', # options will be added by JS
           id: 'products',
           class: 'hidden',
           disabled: true,
@@ -101,6 +103,7 @@
       </div>
 
       <div>
+        <!-- Options for the following select tag. Relevant ones will be added to select tag by JS -->
         <div class="options-for-select display-none" data-select-id="variants">
           <%=
             options_for_select(
@@ -117,7 +120,7 @@
         </div>
         <%=
           select_tag 'trade_in_request[variant_id]',
-          '',
+          '', # options will be added by JS
           id: 'variants',
           class: 'hidden',
           disabled: true,
