@@ -8,34 +8,41 @@
       <div>
         <%=
           select_tag 'trade_in_category_id',
-          options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }, params[:trade_in_request]&.dig(:trade_in_category_id)),
+          options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }, params[:trade_in_category_id]),
           prompt: t('choose_product_category'),
           id: 'trade-in-categories'
         %>
       </div>
+
       <div>
+        <!-- Options for the following select tag. Relevant ones will be added to select tag by JS -->
+        <div class="options-for-select display-none" data-select-id="trade-in-models">
+          <%=
+            options_for_select(
+              @trade_in_models.map do |model|
+                [
+                  model.name,
+                  model.id,
+                  data: {
+                    parent_id: model.trade_in_category.id,
+                    min_value: model.min_value,
+                    max_value: model.max_value,
+                    min_value_text: number_to_currency(model.min_value),
+                    max_value_text: number_to_currency(model.max_value),
+                  }
+                ]
+              end,
+              params[:trade_in_model_id]
+            )
+          %>
+        </div>
         <%=
           select_tag 'trade_in_model_id',
-          options_for_select(
-            @trade_in_models.map do |model|
-              [
-                model.name,
-                model.id,
-                data: {
-                  parent_id: model.trade_in_category.id,
-                  min_value: model.min_value,
-                  max_value: model.max_value,
-                  min_value_text: number_to_currency(model.min_value),
-                  max_value_text: number_to_currency(model.max_value),
-                }
-              ]
-            end,
-            params[:trade_in_model_id]
-          ),
-          prompt: t('choose_product'),
+          '', # options will be added by JS
           id: 'trade-in-models',
           class: 'hidden',
-          disabled: true
+          disabled: true,
+          data: { prompt: t('choose_product') }
         %>
       </div>
 
@@ -57,8 +64,8 @@
 
       <div>
         <%=
-          select_tag 'trade_in_request[taxon_id]',
-          options_for_select(@taxons.map { |taxon| [taxon.name, taxon.id] }, params[:trade_in_request]&.dig(:taxon_id)),
+          select_tag 'taxon_id',
+          options_for_select(@taxons.map { |taxon| [taxon.name, taxon.id] }, params[:taxon_id]),
           prompt: t('choose_product_category'),
           id: 'taxons',
           disabled: true
@@ -66,46 +73,58 @@
       </div>
 
       <div>
+        <!-- Options for the following select tag. Relevant ones will be added to select tag by JS -->
+        <div class="options-for-select display-none" data-select-id="products">
+          <%=
+            options_for_select(
+              @products.map do |product|
+                [
+                  product.name,
+                  product.id,
+                  data: {
+                    parent_id: product.taxons.first.depth == 2 ? @accessories_taxon_id : product.taxon_ids.first,
+                    has_variants: product.has_variants?,
+                    master_id: product.master.id
+                  }
+                ]
+              end,
+              params[:product_id]
+            )
+          %>
+        </div>
         <%=
-          select_tag 'trade_in_request[product_id]',
-          options_for_select(
-            @products.map do |product|
-              [
-                product.name,
-                product.id,
-                data: {
-                  parent_id: product.taxons.first.depth == 2 ? @accessories_taxon_id : product.taxon_ids.first,
-                  has_variants: product.has_variants?,
-                  master_id: product.master.id
-                }
-              ]
-            end,
-            params[:trade_in_request]&.dig(:product_id)
-          ),
-          prompt: t('choose_product'),
+          select_tag 'product_id',
+          '', # options will be added by JS
           id: 'products',
           class: 'hidden',
-          disabled: true
+          disabled: true,
+          data: { prompt: t('choose_product') }
         %>
       </div>
 
       <div>
+        <!-- Options for the following select tag. Relevant ones will be added to select tag by JS -->
+        <div class="options-for-select display-none" data-select-id="variants">
+          <%=
+            options_for_select(
+              @variants.map do |variant|
+                [
+                  "#{variant.name} - #{variant.options_text}",
+                  variant.id,
+                  data: { parent_id: variant.product_id }
+                ]
+              end,
+              params[:trade_in_request]&.dig(:variant_id)
+            )
+          %>
+        </div>
         <%=
           select_tag 'trade_in_request[variant_id]',
-          options_for_select(
-            @variants.map do |variant|
-              [
-                "#{variant.name} - #{variant.options_text}",
-                variant.id,
-                data: { parent_id: variant.product_id }
-              ]
-            end,
-            params[:trade_in_request]&.dig(:variant_id)
-          ),
-          prompt: t('choose_variant'),
+          '', # options will be added by JS
           id: 'variants',
           class: 'hidden',
-          disabled: true
+          disabled: true,
+          data: { prompt: t('choose_variant') }
         %>
       </div>
 

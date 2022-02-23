@@ -70,19 +70,31 @@ const tradeInForm = () => {
       show(tradeInSecondPart, taxons);
     };
 
-    // Show/hide the correct select options of children
+    // Show/hide the correct select options of children depending on what parent is selected
     // (Method called when a new parent is selected)
+    // We can't just display/hide the relevant options with CSS because safari browsers don't apply CSS on option tags...
     const displayOptionsOfSelectedParent = (childrenSelectTag, parentId) => {
+      // Reset children select tag
       childrenSelectTag.value = '';
-      Array.from(childrenSelectTag.options).forEach((option, index) => {
-        if (index === 0) { return; } // The first option is the placeholder
+      childrenSelectTag.innerHTML = '';
 
+      // Add children select tag prompt
+      const prompt = document.createElement('option');
+      prompt.text = childrenSelectTag.dataset.prompt;
+      childrenSelectTag.add(prompt, 0);
+
+      // Retrieve all children select tag options (from an hidden div on the DOM)
+      const selectId = childrenSelectTag.id;
+      const optionsForSelect = [...tradeInForm.querySelectorAll(`.options-for-select[data-select-id=${selectId}] option`)];
+
+      // Add the relevant options to children select tag depending on what parent is selected
+      optionsForSelect.forEach((option) => {
         if (option.dataset.parentId === parentId) {
-          option.classList.remove('display-none');
-        } else {
-          option.classList.add('display-none');
+          childrenSelectTag.add(option.cloneNode(true));
         }
       });
+
+      // Display children select tag
       show(childrenSelectTag);
     };
 
@@ -118,11 +130,10 @@ const tradeInForm = () => {
     // - Hide all variant options, variant infos and delete variant infos id (so that if trade in model change it won't trigger changes on variant infos)
     // - Show the products corresponding to the new selected taxon (and hide the others)
     taxons.addEventListener('change', (event) => {
-      variants.value = '';
-      Array.from(variants.options).forEach((option, index) => {
-        if (index === 0) { return; }
-
-        option.classList.add('display-none');
+      [...variants.options].forEach((option, index) => {
+        if (index > 0) {
+          option.remove();
+        }
       });
 
       delete variantInfos.dataset.id;
@@ -179,10 +190,13 @@ const tradeInForm = () => {
     // This happens when user tries to submit a form with errors,
     // the page is re-rendered and we need to display everything
     if (tradeInForm.dataset.showFields === 'true') {
+      displayOptionsOfSelectedParent(tradeInModels, tradeInCategories.value);
+      displayOptionsOfSelectedParent(products, taxons.value);
       changeTradeInModelPrice(tradeInModels.selectedOptions[0]);
 
       const selectedProduct = products.selectedOptions[0];
       if (selectedProduct.dataset.hasVariants === 'true') {
+        displayOptionsOfSelectedParent(variants, products.value);
         changeVariantInfos(variants.value);
         show(variants);
       } else {
@@ -200,6 +214,7 @@ const tradeInForm = () => {
           invalidTradeIn,
           tradeInCta
       );
+
       const myModal = new Modal(document.getElementById('tradeInFormModal'));
       myModal.show();
     }
