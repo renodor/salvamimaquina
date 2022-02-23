@@ -1,0 +1,164 @@
+<%= render 'spree/shared/banner', banner: @banner %>
+
+<div id="trade-in-form" class="trade-in">
+  <%= simple_form_for @trade_in_request, html: { data: { show_fields: @show_fields }} do |f| %>
+    <div class="trade-in-first-part">
+      <h2><%= t('product_you_want_to_trade_in') %></h2>
+
+      <div>
+        <%=
+          select_tag 'trade_in_category_id',
+          options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }, params[:trade_in_request]&.dig(:trade_in_category_id)),
+          prompt: t('choose_product_category'),
+          id: 'trade-in-categories'
+        %>
+      </div>
+      <div>
+        <%=
+          select_tag 'trade_in_model_id',
+          options_for_select(
+            @trade_in_models.map do |model|
+              [
+                model.name,
+                model.id,
+                data: {
+                  parent_id: model.trade_in_category.id,
+                  min_value: model.min_value,
+                  max_value: model.max_value,
+                  min_value_text: number_to_currency(model.min_value),
+                  max_value_text: number_to_currency(model.max_value),
+                }
+              ]
+            end,
+            params[:trade_in_model_id]
+          ),
+          prompt: t('choose_product'),
+          id: 'trade-in-models',
+          class: 'hidden',
+          disabled: true
+        %>
+      </div>
+
+      <div class="trade-in-model-price hidden" data-min-value="" data-max-value="" disabled>
+        <input id="trade-in-model-min-value" name="trade_in_request[model_min_value]" hidden>
+        <input id="trade-in-model-max-value" name="trade_in_request[model_max_value]" hidden>
+        <input id="trade-in-model-name" name="trade_in_request[model_name_with_options]" hidden>
+        <p class="model-name-paragraph"><%= t('you_have_a') %> <b class="model-name"></b></p>
+        <p class="model-values">(<%= t('estimated_value_between') %> <b class="model-min-value"></b> <%= t('and') %> <b class="model-max-value"></b>) *</p>
+      </div>
+    </div>
+
+    <div class="trade-in-second-part hidden">
+      <div class="trade-in-arrow-separation">
+        <%= svg 'arrow_down_circle' %>
+      </div>
+
+      <h2><%= t('what_product_you_want_to_buy') %></h2>
+
+      <div>
+        <%=
+          select_tag 'trade_in_request[taxon_id]',
+          options_for_select(@taxons.map { |taxon| [taxon.name, taxon.id] }, params[:trade_in_request]&.dig(:taxon_id)),
+          prompt: t('choose_product_category'),
+          id: 'taxons',
+          disabled: true
+        %>
+      </div>
+
+      <div>
+        <%=
+          select_tag 'trade_in_request[product_id]',
+          options_for_select(
+            @products.map do |product|
+              [
+                product.name,
+                product.id,
+                data: {
+                  parent_id: product.taxons.first.depth == 2 ? @accessories_taxon_id : product.taxon_ids.first,
+                  has_variants: product.has_variants?,
+                  master_id: product.master.id
+                }
+              ]
+            end,
+            params[:trade_in_request]&.dig(:product_id)
+          ),
+          prompt: t('choose_product'),
+          id: 'products',
+          class: 'hidden',
+          disabled: true
+        %>
+      </div>
+
+      <div>
+        <%=
+          select_tag 'trade_in_request[variant_id]',
+          options_for_select(
+            @variants.map do |variant|
+              [
+                "#{variant.name} - #{variant.options_text}",
+                variant.id,
+                data: { parent_id: variant.product_id }
+              ]
+            end,
+            params[:trade_in_request]&.dig(:variant_id)
+          ),
+          prompt: t('choose_variant'),
+          id: 'variants',
+          class: 'hidden',
+          disabled: true
+        %>
+      </div>
+
+      <div id="invalid-trade-in" class="display-none centered-flexbox" disabled>
+        <div class="">
+          <p><%= t('please_choose_product_with_higher_value') %></p>
+        </div>
+      </div>
+
+      <div class="variant-infos" class="hidden" disabled>
+        <div class="variant-price-to-compute centered-flexbox">
+          <div>
+            <%= t('you_can_by_a') %> <b class="variant-name"><!-- added by JS --></b> - <b class="variant-options"><!-- added by JS --></b>
+            <br /><%= t('between') %> <b class="variant-min-price"><!-- added by JS --></b> <%= t('and') %> <b class="variant-max-price"><!-- added by JS --></b>
+          </div>
+        </div>
+        <div class="variant-image"><!-- added by JS --></div>
+        <p class="variant-price-container">(<%= t('instead_of') %> <b class="variant-price"><!-- added by JS --></b>)</p>
+      </div>
+    </div>
+
+    <div id="trade-in-third-part">
+      <!-- Button trigger modal -->
+      <button id="trade-in-cta" type="button" class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#tradeInFormModal" disabled>
+        <%= t('confirm_trade_in_request') %>
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="tradeInFormModal" tabindex="-1" aria-labelledby="tradeInFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <span><%= t('complete_your_contact_infos') %></span>
+              <button type="button" class="btn-close centered-flexbox" data-bs-dismiss="modal" aria-label="Close">
+                <%= svg 'cross' %>
+              </button>
+            </div>
+            <div class="modal-body">
+              <%= f.input :name, label: false %>
+              <%= f.input :email, label: false %>
+              <%= f.input :phone, label: false %>
+              <%= f.input :comment, label: false %>
+              <%= f.input :shop, collection: TradeInRequest.shops.symbolize_keys.keys, include_blank: false %>
+              <%= f.submit t('spree.confirm').upcase, class: 'btn btn-primary' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+  <div class="trade-in-disclaimers">
+    <p><i>* <%= t('trade_in_disclaimer') %></i></p>
+  </div>
+</div>

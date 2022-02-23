@@ -118,6 +118,14 @@ Spree::Backend::Config.configure do |config|
   # Add new items to admin menu
   config.menu_items += [
     config.class::MenuItem.new(
+      %i[trade_in_requests trade_in_models],
+      'money',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      url: '/admin/trade_in_models',
+      partial: 'spree/admin/shared/trade_in_sub_menu',
+      label: :trade_in
+    ),
+    config.class::MenuItem.new(
       %i[reparation_categories reparation_requests],
       'laptop',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
@@ -129,7 +137,7 @@ Spree::Backend::Config.configure do |config|
       [:sync_repair_shopr],
       'refresh',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
-      url: '/admin/syncs'
+      url: '/admin/sync_repair_shopr'
     ),
     config.class::MenuItem.new(
       [:banners],

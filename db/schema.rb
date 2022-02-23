@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_24_142215) do
+ActiveRecord::Schema.define(version: 2022_02_09_211834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1355,6 +1355,39 @@ ActiveRecord::Schema.define(version: 2022_01_24_142215) do
     t.datetime "updated_at", precision: 6
   end
 
+  create_table "trade_in_categories", force: :cascade do |t|
+    t.string "name"
+    t.integer "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "trade_in_models", force: :cascade do |t|
+    t.string "name"
+    t.float "min_value"
+    t.float "max_value"
+    t.bigint "trade_in_category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["trade_in_category_id"], name: "index_trade_in_models_on_trade_in_category_id"
+  end
+
+  create_table "trade_in_requests", force: :cascade do |t|
+    t.integer "shop"
+    t.boolean "with_promo"
+    t.string "name"
+    t.string "phone"
+    t.string "email"
+    t.string "model_name_with_options"
+    t.float "model_min_value"
+    t.float "model_max_value"
+    t.text "comment"
+    t.text "token"
+    t.integer "variant_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_messages", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -1373,4 +1406,6 @@ ActiveRecord::Schema.define(version: 2022_01_24_142215) do
   add_foreign_key "spree_tax_rate_tax_categories", "spree_tax_categories", column: "tax_category_id"
   add_foreign_key "spree_tax_rate_tax_categories", "spree_tax_rates", column: "tax_rate_id"
   add_foreign_key "spree_wallet_payment_sources", "spree_users", column: "user_id"
+  add_foreign_key "trade_in_models", "trade_in_categories"
+  add_foreign_key "trade_in_requests", "spree_variants", column: "variant_id", on_delete: :cascade
 end

@@ -30,7 +30,12 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  to: 'to'
+  and: 'and'
   home: 'Home'
+  day:
+    one: 'Day'
+    other: 'Days'
   online_shop: 'Online shop'
   companies: 'Companies'
   about: 'About'
@@ -40,6 +45,28 @@ en:
   choose_reparation_category: 'What type of equipment do you need to repair?'
   reparation_explanation: 'Include specific information about your device, like the year, the model, the operative system, and add a short description of the issue you are facing.'
   thanks_for_your_request: 'Thanks for your request'
+  trade_in: 'Trade-in'
+  product_you_want_to_trade_in: 'Product you want to Trade-in'
+  choose_product_category: 'Choose product category'
+  choose_product: 'Choose product'
+  what_product_you_want_to_buy: 'What product you want to buy?'
+  choose_variant: 'Choose variant'
+  you_have_a: 'You have a'
+  estimated_value_between: 'Value estimated between'
+  you_can_by_a: 'You can buy a'
+  between: 'between'
+  instead_of: 'Instead of'
+  please_choose_product_with_higher_value: 'Please choose a product with a higher value than the one you have'
+  confirm_trade_in_request: 'Confirm TRADE-IN request'
+  complete_your_contact_infos: 'Complete your contact information'
+  trade_in_request_confirmed: 'Trade-in request confirmed!'
+  complete_trade_in: 'Complete the process in one of our shops.'
+  complete_trade_in_to_have_a_promo: 'Complete the process in one of our shops within the next %{validity},<br /> and enjoy a <b>%{amount} discount on our phone accessories</b> with this coupon code'
+  you_have_until: 'You have until %{date} to use it'
+  not_valid_online: 'Not valid online'
+  your_trade_in: 'Your Trade-in'
+  trade_in_disclaimer: 'The given prices are estimations. We would have to check all the details of your product to give you the real value'
+  trade_in_promo_restrictiones: 'Restrictions apply'
   contact: 'Contact'
   contact_us: 'Contact us'
   contact_soon: 'We will contact you soon'
@@ -54,7 +81,6 @@ en:
   friday: 'Friday'
   saturday: 'Saturday'
   sunday: 'Sunday'
-  to: 'To'
   spree:
     email: 'Email'
     brands: 'Brands'
@@ -95,6 +121,9 @@ en:
         reparation_requests: 'Reparation Requests'
         banners: 'Banners'
         sliders: 'Sliders'
+        trade_in: 'Trade-in'
+        trade_in_models: 'Trade-in models'
+        trade_in_requests: 'Trade-in requests'
     different_billing_address: 'If you need a different billing address please contact us;'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'
@@ -164,3 +193,16 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+      trade_in_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'
+    labels:
+      trade_in_request:
+        shop: 'Shop where you want to do your Trade-in'
+  time:
+    formats:
+      simple: "%d %b %Y"
+  trade_in_request_mailer:
+    confirmation_email:
+      subject: 'Your Trade-in Request in Salva Mi Máquina'

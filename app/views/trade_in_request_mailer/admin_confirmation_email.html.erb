@@ -1,0 +1,21 @@
+<h1>Client information</h2>
+<p><b>Name:</b> <%= @trade_in_request.name %></p>
+<p><b>Email:</b> <%= @trade_in_request.email %></p>
+<p><b>Phone:</b> <%= @trade_in_request.phone %></p>
+<p><b>Comment:</b> <%= @trade_in_request.comment %></p>
+<p><b>Shop:</b> <%= @trade_in_request.shop.tr('_', ' ').titleize %></p>
+
+<h1>Trade-in information</h2>
+<p><b>Creation date:</b> <%= @trade_in_request.created_at.strftime("%d %b %Y") %></p>
+<% if @trade_in_request.with_promo && @trade_in_request.still_valid? %>
+  <p><b>Has PROMO:</b></p>
+  <ul>
+    <li><b>Coupon code: <span style="color: #39ab4b;"><%= @trade_in_request.coupon_code %></span></b></li>
+    <li><b>Valid until:</b> <%= (@trade_in_request.created_at + @coupon_validity.days).strftime("%d %b %Y") %></li>
+  </ul>
+<% else %>
+  <p><b style="color: #ae1d1d">NO PROMO</b></p>
+<% end %>
+<p><b>Client product:</b> <%= @trade_in_request.model_name_with_options %> (value between <%= number_to_currency(@trade_in_request.model_min_value) %> and <%= number_to_currency(@trade_in_request.model_max_value) %>)</p>
+<p><b>Buying product:</b> <%= @variant.name %> - <%= @variant.options_text %> (trade-in price between <%= number_to_currency(@trade_in_request.min_value) %> and <%= number_to_currency(@trade_in_request.max_value) %>)</p>
+<p><b>Shop:</b> <%= @trade_in_request.shop.tr('_', ' ').titleize %></p>

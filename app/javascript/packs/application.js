@@ -32,6 +32,7 @@ import { productFilters } from '../components/product_filters';
 import { quantitySelector } from '../components/quantity_selector';
 import { cart } from '../components/cart';
 import { previewImageOnFileSelect } from '../components/preview_image_on_file_select';
+import { tradeInForm } from '../components/trade_in_form';
 
 // Internal Plugins
 import { swiperSlider } from '../plugins/swiper_slider';
@@ -52,6 +53,7 @@ document.addEventListener('turbolinks:load', () => {
   quantitySelector();
   cart();
   previewImageOnFileSelect();
+  tradeInForm();
 
   initMapbox();
   swiperSlider();

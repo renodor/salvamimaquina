@@ -10,13 +10,19 @@ Rails.application.routes.draw do
 
   Spree::Core::Engine.routes.draw do
     namespace :admin do
-      resources :syncs, only: %i[index new]
+      resources :sync_repair_shopr, only: %i[index new]
       resources :reparation_categories, except: :show
       resources :reparation_requests, only: %i[index show]
       resources :banners, except: :show
       resources :sliders do
         resources :slides
       end
+      resources :trade_in_models, only: %i[index] do
+        collection do
+          get :sync
+        end
+      end
+      resources :trade_in_requests, only: %i[index]
     end
 
     post '/checkout/three_d_secure_response', to: 'checkout#three_d_secure_response'
@@ -31,6 +37,9 @@ Rails.application.routes.draw do
     resources :reparation_categories, only: [:index] do
       resources :reparation_requests, only: %i[new create]
     end
+
+    resources :trade_in_requests, only: %i[new create show], param: :token
+    get 'trade_in_requests/variant_infos/:variant_id', to: 'trade_in_requests#variant_infos'
 
     get '/account/edit_user_address', to: 'users#edit_user_address'
     get '/account/new_user_address', to: 'users#new_user_address'

@@ -1,5 +1,10 @@
 es-MX:
+  to: 'a'
+  and: 'y'
   home: 'Inicio'
+  day:
+    one: 'Día'
+    other: 'Días'
   online_shop: 'Tienda en línea'
   companies: 'Empresas'
   about: 'Nosotros'
@@ -10,6 +15,28 @@ es-MX:
   choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
   reparation_explanation: 'Incluir datos específicos del dispositivo como año, modelo y sistema operativo, además de una breve descripción del problema:'
   thanks_for_your_request: 'Gracias por su solicitud'
+  trade_in: 'Trade-in'
+  product_you_want_to_trade_in: 'Equipo que desea dar en Trade-in'
+  choose_product_category: 'Elige categoría de producto'
+  choose_product: 'Elige producto'
+  what_product_you_want_to_buy: '¿Qué equipo quiere comprar?'
+  choose_variant: 'Elegir variación'
+  you_have_a: 'Tiene un'
+  estimated_value_between: 'Valor estimado entre'
+  you_can_by_a: 'Puede comprar un'
+  between: 'entre'
+  instead_of: 'En vez de'
+  please_choose_product_with_higher_value: 'Por favor elige un producto de un valor superior al que quiere devolver'
+  confirm_trade_in_request: 'Confirmar solicitud de TRADE-IN'
+  complete_your_contact_infos: 'Completa tu información de contacto'
+  trade_in_request_confirmed: '¡Solicitud de Trade-in confirmada!'
+  complete_trade_in: 'Completa el proceso en unas de nuestras tiendas.'
+  complete_trade_in_to_have_a_promo: 'Si completa el proceso en unas de nuestras tiendas dentro de los próximos %{validity},<br /> disfrutaras de <b>%{amount} de descuento en los accesorios de celulares</b> con ese código'
+  you_have_until: 'Tiene hasta el %{date} para usarlo'
+  not_valid_online: 'No válido en línea'
+  your_trade_in: 'Su Trade-in'
+  trade_in_disclaimer: 'La cotización dada son montos aproximados, se debe evaluar en sitio todos los detalles de su equipo para brindar el valor real.'
+  trade_in_promo_restrictiones: 'Aplican restricciones'
   contact: 'Contacto'
   contact_us: 'Contactarnos'
   contact_soon: 'Estaremos en contacto rapidamente.'
@@ -24,7 +51,6 @@ es-MX:
   friday: 'Viernes'
   saturday: 'Sábado'
   sunday: 'Domingo'
-  to: 'a'
   spree:
     email: 'Correo'
     brands: 'Marcas'
@@ -162,6 +188,10 @@ es-MX:
         comment: 'Comentario'
         shops:
           bella_vista: 'Bella Vista'
+      trade_in_request:
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
     errors:
       models:
         spree/credit_card:
@@ -229,8 +259,26 @@ es-MX:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+      trade_in_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'
     placeholders:
       user_message:
         name: 'Nombre'
         email: 'Correo'
         message: 'Mensaje'
+      trade_in_request:
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
+        comment: 'Comentario'
+    labels:
+      trade_in_request:
+        shop: 'Tienda donde desea hacer el Trade-in'
+  time:
+    formats:
+      simple: "%d %b %Y"
+  trade_in_request_mailer:
+    confirmation_email:
+      subject: 'Su Solicitud de Trade-in en Salva Mi Máquina'
