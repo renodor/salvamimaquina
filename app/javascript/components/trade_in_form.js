@@ -175,7 +175,7 @@ const tradeInForm = () => {
       }
     });
 
-    // If showFields is set to true display all hidden fields by default
+    // If showFields is set to true, display all hidden fields by default
     // This happens when user tries to submit a form with errors,
     // the page is re-rendered and we need to display everything
     if (tradeInForm.dataset.showFields === 'true') {
