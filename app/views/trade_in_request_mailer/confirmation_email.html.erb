@@ -65,7 +65,7 @@
         <div>
           <%= t('you_can_by_a') %> <b><%= @variant.name %></b> - <b><%= @variant.options_text %></b>
           <br />
-          <%= t('between') %> <b style="color: #39ab4b;"><%= number_to_currency(@variant.price - @trade_in_request.model_min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@variant.price - @trade_in_request.model_max_value) %></b>
+          <%= t('between') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_request.min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_request.max_value) %></b>
         </div>
       </div>
       <div style="margin: 20px 0;">

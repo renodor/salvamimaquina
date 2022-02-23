@@ -22,6 +22,14 @@ class TradeInRequest < ApplicationRecord
     Time.current <= created_at + COUPON_VALIDITY_DAYS.days
   end
 
+  def min_value
+    variant.price - model_min_value
+  end
+
+  def max_value
+    variant.price - model_max_value
+  end
+
   private
 
   def set_with_promo

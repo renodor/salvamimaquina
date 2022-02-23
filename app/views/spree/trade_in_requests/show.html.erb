@@ -41,7 +41,7 @@
         <div>
           <%= t('you_can_by_a') %> <b class="variant-name"><%= @variant.name %></b> - <b class="variant-options"><%= @variant.options_text %></b>
           <br />
-          <%= t('between') %> <b class="variant-min-price"><%= number_to_currency(@variant.price - @trade_in_request.model_min_value) %></b> <%= t('and') %> <b class="variant-max-price"><%= number_to_currency(@variant.price - @trade_in_request.model_max_value) %></b>
+          <%= t('between') %> <b class="variant-min-price"><%= number_to_currency(@trade_in_request.min_value) %></b> <%= t('and') %> <b class="variant-max-price"><%= number_to_currency(@trade_in_request.max_value) %></b>
         </div>
       </div>
       <div class="variant-image">
