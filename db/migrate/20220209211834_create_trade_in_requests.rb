@@ -6,10 +6,12 @@ class CreateTradeInRequests < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :phone
       t.string :email
+      t.string :model_name_with_options
+      t.float :model_min_value
+      t.float :model_max_value
       t.text :comment
       t.text :token
 
-      t.references :trade_in_model, null: false, foreign_key: true
       t.integer :variant_id, null: false
       t.foreign_key :spree_variants, column: :variant_id, on_delete: :cascade
 

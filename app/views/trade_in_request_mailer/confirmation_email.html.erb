@@ -10,7 +10,7 @@
   <h2 style="font-size: 28px;"><%= t('trade_in_request_confirmed') %></h2>
   <div
     style="
-      background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= asset_path 'tradein3.jpeg' %>');
+      background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= asset_path 'tradein.jpeg' %>');
       background-size: cover;
       background-position: center;
       padding: 30px 20px;
@@ -47,10 +47,10 @@
     <h2 style="font-size: 28px;"><%= t('your_trade_in') %></h2>
     <div>
       <p>
-        <%= t('you_have_a') %> <b><%= @trade_in_model.name %></b>
+        <%= t('you_have_a') %> <b><%= @trade_in_request.model_name_with_options %></b>
       </p>
       <p>
-        (<%= t('estimated_value_between') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_model.min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_model.max_value) %></b>) *
+        (<%= t('estimated_value_between') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_request.model_min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_request.model_max_value) %></b>) *
       </p>
     </div>
   </div>
@@ -65,7 +65,7 @@
         <div>
           <%= t('you_can_by_a') %> <b><%= @variant.name %></b> - <b><%= @variant.options_text %></b>
           <br />
-          <%= t('between') %> <b style="color: #39ab4b;"><%= number_to_currency(@variant.price - @trade_in_model.min_value.to_f) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@variant.price - @trade_in_model.max_value.to_f) %></b>
+          <%= t('between') %> <b style="color: #39ab4b;"><%= number_to_currency(@variant.price - @trade_in_request.model_min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@variant.price - @trade_in_request.model_max_value) %></b>
         </div>
       </div>
       <div style="margin: 20px 0;">

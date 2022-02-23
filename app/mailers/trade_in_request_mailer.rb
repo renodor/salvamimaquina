@@ -6,7 +6,6 @@ class TradeInRequestMailer < ApplicationMailer
 
   def confirmation_email(trade_in_request)
     @trade_in_request = trade_in_request
-    @trade_in_model = @trade_in_request.trade_in_model
     @variant = @trade_in_request.variant
     @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
     @coupon_validity_text = "#{@coupon_validity} #{I18n.t('day', count: @coupon_validity).downcase}"
@@ -21,7 +20,6 @@ class TradeInRequestMailer < ApplicationMailer
 
   def admin_confirmation_email(trade_in_request)
     @trade_in_request = trade_in_request
-    @trade_in_model = @trade_in_request.trade_in_model
     @variant = @trade_in_request.variant
     @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
     @store = Spree::Store.default

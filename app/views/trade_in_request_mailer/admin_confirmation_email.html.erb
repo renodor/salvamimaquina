@@ -16,6 +16,6 @@
 <% else %>
   <p><b style="color: #ae1d1d">NO PROMO</b></p>
 <% end %>
-<p><b>Client product:</b> <%= @trade_in_model.name %> (value between <%= number_to_currency(@trade_in_model.min_value) %> and <%= number_to_currency(@trade_in_model.max_value) %>)</p>
-<p><b>Buying product:</b> <%= @variant.name %> - <%= @variant.options_text %> (trade-in price between <%= number_to_currency(@variant.price - @trade_in_model.min_value.to_f) %> and <%= number_to_currency(@variant.price - @trade_in_model.max_value.to_f) %>)</p>
+<p><b>Client product:</b> <%= @trade_in_request.model_name_with_options %> (value between <%= number_to_currency(@trade_in_request.model_min_value) %> and <%= number_to_currency(@trade_in_request.model_max_value) %>)</p>
+<p><b>Buying product:</b> <%= @variant.name %> - <%= @variant.options_text %> (trade-in price between <%= number_to_currency(@variant.price - @trade_in_request.model_min_value) %> and <%= number_to_currency(@variant.price - @trade_in_request.model_max_value) %>)</p>
 <p><b>Shop:</b> <%= @trade_in_request.shop.tr('_', ' ').titleize %></p>

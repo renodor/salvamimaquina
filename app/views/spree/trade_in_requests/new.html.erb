@@ -7,7 +7,7 @@
 
       <div>
         <%=
-          select_tag 'trade_in_request[trade_in_category_id]',
+          select_tag 'trade_in_category_id',
           options_for_select(@trade_in_categories.map { |category| [category.name, category.id] }, params[:trade_in_request]&.dig(:trade_in_category_id)),
           prompt: t('choose_product_category'),
           id: 'trade-in-categories'
@@ -15,7 +15,7 @@
       </div>
       <div>
         <%=
-          select_tag 'trade_in_request[trade_in_model_id]',
+          select_tag 'trade_in_model_id',
           options_for_select(
             @trade_in_models.map do |model|
               [
@@ -30,7 +30,7 @@
                 }
               ]
             end,
-            params[:trade_in_request]&.dig(:trade_in_model_id)
+            params[:trade_in_model_id]
           ),
           prompt: t('choose_product'),
           id: 'trade-in-models',
@@ -41,6 +41,9 @@
 
 
       <div class="trade-in-model-price hidden" data-min-value="" data-max-value="" disabled>
+        <input id="trade-in-model-min-value" name="trade_in_request[model_min_value]" hidden>
+        <input id="trade-in-model-max-value" name="trade_in_request[model_max_value]" hidden>
+        <input id="trade-in-model-name" name="trade_in_request[model_name_with_options]" hidden>
         <p class="model-name-paragraph"><%= t('you_have_a') %> <b class="model-name"></b></p>
         <p class="model-values">(<%= t('estimated_value_between') %> <b class="model-min-value"></b> <%= t('and') %> <b class="model-max-value"></b>) *</p>
       </div>

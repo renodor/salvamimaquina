@@ -1378,13 +1378,14 @@ ActiveRecord::Schema.define(version: 2022_02_09_211834) do
     t.string "name"
     t.string "phone"
     t.string "email"
+    t.string "model_name_with_options"
+    t.float "model_min_value"
+    t.float "model_max_value"
     t.text "comment"
     t.text "token"
-    t.bigint "trade_in_model_id", null: false
     t.integer "variant_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["trade_in_model_id"], name: "index_trade_in_requests_on_trade_in_model_id"
   end
 
   create_table "user_messages", force: :cascade do |t|
@@ -1407,5 +1408,4 @@ ActiveRecord::Schema.define(version: 2022_02_09_211834) do
   add_foreign_key "spree_wallet_payment_sources", "spree_users", column: "user_id"
   add_foreign_key "trade_in_models", "trade_in_categories"
   add_foreign_key "trade_in_requests", "spree_variants", column: "variant_id", on_delete: :cascade
-  add_foreign_key "trade_in_requests", "trade_in_models"
 end

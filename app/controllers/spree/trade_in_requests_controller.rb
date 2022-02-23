@@ -24,7 +24,6 @@ module Spree
       @trade_in_request = TradeInRequest.find_by(token: params[:token])
       redirect_to new_trade_in_request_path and return unless @trade_in_request
 
-      @trade_in_model = @trade_in_request.trade_in_model
       @variant = @trade_in_request.variant
       @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
       @coupon_validity_text = "#{@coupon_validity} #{I18n.t('day', count: @coupon_validity).downcase}"
@@ -55,7 +54,7 @@ module Spree
     end
 
     def trade_in_request_params
-      params.require(:trade_in_request).permit(:trade_in_model_id, :variant_id, :name, :email, :phone, :shop, :comment)
+      params.require(:trade_in_request).permit(:variant_id, :model_name_with_options, :model_min_value, :model_max_value, :name, :email, :phone, :shop, :comment)
     end
   end
 end

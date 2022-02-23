@@ -3,7 +3,7 @@
   <div
     id="trade-in-promo"
     class="centered-flexbox"
-    style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= image_url 'tradein3.jpeg' %>');"
+    style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= image_url 'tradein.jpeg' %>');"
   >
     <div>
       <% if @trade_in_request.with_promo %>
@@ -23,10 +23,10 @@
     <h2><%= t('your_trade_in') %></h2>
     <div class="trade-in-model-price">
       <p class="model-name-paragraph">
-        <%= t('you_have_a') %> <b class="model-name"><%= @trade_in_model.name %></b>
+        <%= t('you_have_a') %> <b class="model-name"><%= @trade_in_request.model_name_with_options %></b>
       </p>
       <p class="model-values">
-        (<%= t('estimated_value_between') %> <b class="model-min-value"><%= number_to_currency(@trade_in_model.min_value) %></b> <%= t('and') %> <b class="model-max-value"><%= number_to_currency(@trade_in_model.max_value) %></b>) *
+        (<%= t('estimated_value_between') %> <b class="model-min-value"><%= number_to_currency(@trade_in_request.model_min_value) %></b> <%= t('and') %> <b class="model-max-value"><%= number_to_currency(@trade_in_request.model_max_value) %></b>) *
       </p>
     </div>
   </div>
@@ -41,7 +41,7 @@
         <div>
           <%= t('you_can_by_a') %> <b class="variant-name"><%= @variant.name %></b> - <b class="variant-options"><%= @variant.options_text %></b>
           <br />
-          <%= t('between') %> <b class="variant-min-price"><%= number_to_currency(@variant.price - @trade_in_model.min_value.to_f) %></b> <%= t('and') %> <b class="variant-max-price"><%= number_to_currency(@variant.price - @trade_in_model.max_value.to_f) %></b>
+          <%= t('between') %> <b class="variant-min-price"><%= number_to_currency(@variant.price - @trade_in_request.model_min_value) %></b> <%= t('and') %> <b class="variant-max-price"><%= number_to_currency(@variant.price - @trade_in_request.model_max_value) %></b>
         </div>
       </div>
       <div class="variant-image">

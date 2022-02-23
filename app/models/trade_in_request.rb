@@ -1,10 +1,9 @@
 # frozen_string_literal:true
 
 class TradeInRequest < ApplicationRecord
-  belongs_to :trade_in_model
   belongs_to :variant, class_name: 'Spree::Variant'
 
-  validates :shop, :name, :phone, :email, presence: true
+  validates :model_name_with_options, :model_min_value, :model_max_value, :shop, :name, :phone, :email, presence: true
 
   enum shop: { bella_vista: 0, san_francisco: 1 }
 

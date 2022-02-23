@@ -53,6 +53,8 @@ const tradeInForm = () => {
           });
     };
 
+    // Update trade in model infos (name, min value, max value),
+    // (Method called when a new trade in model is selected)
     const changeTradeInModelPrice = (selectedModel) => {
       tradeInModelPrice.querySelector('.model-name').innerHTML = selectedModel.innerHTML;
       tradeInModelPrice.querySelector('.model-min-value').innerHTML = selectedModel.dataset.minValueText;
@@ -61,6 +63,9 @@ const tradeInForm = () => {
 
       tradeInModelPrice.dataset.minValue = selectedModel.dataset.minValue;
       tradeInModelPrice.dataset.maxValue = selectedModel.dataset.maxValue;
+      tradeInModelPrice.querySelector('input#trade-in-model-min-value').value = selectedModel.dataset.minValue;
+      tradeInModelPrice.querySelector('input#trade-in-model-max-value').value = selectedModel.dataset.maxValue;
+      tradeInModelPrice.querySelector('input#trade-in-model-name').value = selectedModel.innerHTML;
 
       show(tradeInSecondPart, taxons);
     };
