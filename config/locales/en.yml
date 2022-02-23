@@ -193,6 +193,16 @@ en:
         shop:
           bella_vista: 'Bella Vista'
           san_francisco: 'San Francisco'
+      trade_in_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'
+    labels:
+      trade_in_request:
+        shop: 'Shop where you want to do your Trade-in'
   time:
     formats:
       simple: "%d %b %Y"
+  trade_in_request_mailer:
+    confirmation_email:
+      subject: 'Your Trade-in Request in Salva Mi Máquina'
