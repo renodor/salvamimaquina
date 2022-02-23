@@ -47,10 +47,10 @@ module Spree
     def set_form_variables
       @trade_in_categories = TradeInCategory.all.order(:name)
       @trade_in_models = TradeInModel.all.includes(:trade_in_category).order(:name)
-      @taxons = Taxon.where(depth: 1)
       @accessories_taxon_id = Spree::Taxon.find_by(name: 'Accesorios').id
-      @products = Spree::Product.all.includes(:variants, :master, :taxons).order(:name)
-      @variants = Spree::Variant.where(is_master: false).includes(:product, [option_values: :option_type]).order(:product_id)
+      @taxons = Taxon.where.not(id: @accessories_taxon_id).where(depth: 1)
+      @products = Spree::Product.includes(:variants, :master, :taxons, :classifications).in_taxons(@taxons).order(:name)
+      @variants = Spree::Variant.where(is_master: false, product: @products).includes(:product, [option_values: :option_type]).order(:product_id)
     end
 
     def trade_in_request_params
