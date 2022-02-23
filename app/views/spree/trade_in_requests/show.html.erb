@@ -7,15 +7,12 @@
   >
     <div>
       <% if @trade_in_request.with_promo %>
-        <p><%= t('realize_trade_in_in_smm_shop') %> <%= t('and') %></p>
-        <p><%= t('enjoy_a') %> <b><%= t('percentage_discount_on_all_accessories', amount: '10%') %></b></p>
-        <p><%= t('with_this_coupon_code') %></p>
+        <p><%= raw t('complete_trade_in_to_have_a_promo', validity: @coupon_validity_text, amount: '20%') %> **</p>
         <span id="trade-in-coupon-code"><%= @trade_in_request.coupon_code %></span>
-        <p><b> <%= t('coupon_code_valid_only', validity: @coupon_validity_days) %></b></p>
-        <p>(<%= t('you_have_until', date: I18n.localize((@trade_in_request.created_at + @coupon_validity_days.days), format: :simple).titleize) %>)</p>
+        <p>(<%= t('you_have_until', date: I18n.localize((@trade_in_request.created_at + @coupon_validity.days), format: :simple).titleize) %>)</p>
         <p><small><i><%= t('not_valid_online') %></i></small></p>
       <% else %>
-        <p><%= t('realize_trade_in_in_smm_shop') %></p>
+        <p><%= t('complete_trade_in') %></p>
       <% end %>
     </div>
   </div>
@@ -29,7 +26,7 @@
         <%= t('you_have_a') %> <b class="model-name"><%= @trade_in_model.name %></b>
       </p>
       <p class="model-values">
-        (<%= t('estimated_value_between') %> <b class="model-min-value"><%= number_to_currency(@trade_in_model.min_value) %></b> <%= t('and') %> <b class="model-max-value"><%= number_to_currency(@trade_in_model.max_value) %></b>)*
+        (<%= t('estimated_value_between') %> <b class="model-min-value"><%= number_to_currency(@trade_in_model.min_value) %></b> <%= t('and') %> <b class="model-max-value"><%= number_to_currency(@trade_in_model.max_value) %></b>) *
       </p>
     </div>
   </div>
@@ -55,5 +52,8 @@
       </p>
     </div>
   </div>
-  <p class="trade-in-disclaimer"><i>*<%= t('trade_in_disclaimer') %></i></p>
+  <div class="trade-in-disclaimers">
+    <p><i>* <%= t('trade_in_disclaimer') %></i></p>
+    <p><i>** <%= t('trade_in_promo_restrictiones') %></i></p>
+  </div>
 </div>

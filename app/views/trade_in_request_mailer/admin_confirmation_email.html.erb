@@ -11,7 +11,7 @@
   <p><b>Has PROMO:</b></p>
   <ul>
     <li><b>Coupon code: <span style="color: #39ab4b;"><%= @trade_in_request.coupon_code %></span></b></li>
-    <li><b>Valid until:</b> <%= (@trade_in_request.created_at + @coupon_validity_days.days).strftime("%d %b %Y") %></li>
+    <li><b>Valid until:</b> <%= (@trade_in_request.created_at + @coupon_validity.days).strftime("%d %b %Y") %></li>
   </ul>
 <% else %>
   <p><b style="color: #ae1d1d">NO PROMO</b></p>

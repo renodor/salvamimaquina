@@ -42,7 +42,7 @@
 
       <div class="trade-in-model-price hidden" data-min-value="" data-max-value="" disabled>
         <p class="model-name-paragraph"><%= t('you_have_a') %> <b class="model-name"></b></p>
-        <p class="model-values">(<%= t('estimated_value_between') %> <b class="model-min-value"></b> <%= t('and') %> <b class="model-max-value"></b>)*</p>
+        <p class="model-values">(<%= t('estimated_value_between') %> <b class="model-min-value"></b> <%= t('and') %> <b class="model-max-value"></b>) *</p>
       </div>
     </div>
 
@@ -128,7 +128,7 @@
     <div id="trade-in-third-part">
       <!-- Button trigger modal -->
       <button id="trade-in-cta" type="button" class="btn btn-primary hidden" data-bs-toggle="modal" data-bs-target="#tradeInFormModal" disabled>
-        <%= t('realize_this_trade_in_and_get_promo') %>
+        <%= t('confirm_trade_in_request') %>
       </button>
 
       <!-- Modal -->
@@ -136,7 +136,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <span><%= t('complete_your_contact_infos_to_have_a_promo') %></span>
+              <span><%= t('complete_your_contact_infos') %></span>
               <button type="button" class="btn-close centered-flexbox" data-bs-dismiss="modal" aria-label="Close">
                 <%= svg 'cross' %>
               </button>
@@ -156,6 +156,7 @@
 
   <% end %>
 
-
-  <p class="trade-in-disclaimer"><i>*<%= t('trade_in_disclaimer') %></i></p>
+  <div class="trade-in-disclaimers">
+    <p><i>* <%= t('trade_in_disclaimer') %></i></p>
+  </div>
 </div>

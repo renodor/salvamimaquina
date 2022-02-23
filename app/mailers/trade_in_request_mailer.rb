@@ -8,7 +8,8 @@ class TradeInRequestMailer < ApplicationMailer
     @trade_in_request = trade_in_request
     @trade_in_model = @trade_in_request.trade_in_model
     @variant = @trade_in_request.variant
-    @coupon_validity_days = TradeInRequest::COUPON_VALIDITY_DAYS
+    @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
+    @coupon_validity_text = "#{@coupon_validity} #{I18n.t('day', count: @coupon_validity).downcase}"
     @store = Spree::Store.default
 
     mail(
@@ -22,7 +23,7 @@ class TradeInRequestMailer < ApplicationMailer
     @trade_in_request = trade_in_request
     @trade_in_model = @trade_in_request.trade_in_model
     @variant = @trade_in_request.variant
-    @coupon_validity_days = TradeInRequest::COUPON_VALIDITY_DAYS
+    @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
     @store = Spree::Store.default
 
     mail(to: @store.mail_from_address, from: @store.mail_from_address, subject: 'New trade-in request from www.salvamimaquina.com')

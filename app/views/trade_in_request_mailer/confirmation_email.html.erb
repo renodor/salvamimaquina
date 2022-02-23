@@ -7,7 +7,7 @@
     line-height: 1.5;
   "
 >
-  <h2 style="font-size: 28px;">Trade-in request confirmed!</h2>
+  <h2 style="font-size: 28px;"><%= t('trade_in_request_confirmed') %></h2>
   <div
     style="
       background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= asset_path 'tradein3.jpeg' %>');
@@ -19,9 +19,7 @@
   >
     <div style="color: white;">
       <% if @trade_in_request.with_promo %>
-        <p>Realize your Trade-in in one of Salva Mi Máquina shops and</p>
-        <p>enjoy a <b>10% discount on all accessories!</b></p>
-        <p>with this coupon code:</p>
+        <p><%= raw t('complete_trade_in_to_have_a_promo', validity: @coupon_validity_text, amount: '20%') %> **</p>
         <span
           style="
             display: inline-block;
@@ -35,11 +33,10 @@
         >
           <%= @trade_in_request.coupon_code %>
         </span>
-        <p><b>This coupon is valid only <%=  @coupon_validity_days %> days!</b></p>
-        <p>(You have until <%= I18n.localize((@trade_in_request.created_at + @coupon_validity_days.days), format: :simple).titleize %> to use it)</p>
-        <p><small><i>Not valid on our Ecommerce</i></small></p>
+        <p>(<%= t('you_have_until', date: I18n.localize((@trade_in_request.created_at + @coupon_validity.days), format: :simple).titleize) %>)</p>
+        <p><small><i><%= t('not_valid_online') %></i></small></p>
       <% else %>
-        <p>Realize your Trade-in in one of Salva Mi Máquina shops</p>
+        <p><%= t('complete_trade_in') %></p>
       <% end %>
     </div>
   </div>
@@ -47,13 +44,13 @@
   <hr style="height: 1px; background-color: rgba(0, 0, 0, .125); margin: 30px 0; opacity: 1; border: none;" />
 
   <div>
-    <h2 style="font-size: 28px;">Your Trade-in</h2>
+    <h2 style="font-size: 28px;"><%= t('your_trade_in') %></h2>
     <div>
       <p>
         <%= t('you_have_a') %> <b><%= @trade_in_model.name %></b>
       </p>
       <p>
-        (<%= t('estimated_value_between') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_model.min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_model.max_value) %></b>)*
+        (<%= t('estimated_value_between') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_model.min_value) %></b> <%= t('and') %> <b style="color: #39ab4b;"><%= number_to_currency(@trade_in_model.max_value) %></b>) *
       </p>
     </div>
   </div>
@@ -79,5 +76,8 @@
       </p>
     </div>
   </div>
-  <p><i>*<%= t('trade_in_disclaimer') %></i></p>
+  <div style="margin-top: 50px;">
+    <p><i>* <%= t('trade_in_disclaimer') %></i></p>
+    <p><i>** <%= t('trade_in_promo_restrictiones') %></i></p>
+  </div>
 </div>

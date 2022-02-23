@@ -26,7 +26,8 @@ module Spree
 
       @trade_in_model = @trade_in_request.trade_in_model
       @variant = @trade_in_request.variant
-      @coupon_validity_days = TradeInRequest::COUPON_VALIDITY_DAYS
+      @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
+      @coupon_validity_text = "#{@coupon_validity} #{I18n.t('day', count: @coupon_validity).downcase}"
     end
 
     def variant_infos
