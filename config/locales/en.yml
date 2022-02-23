@@ -180,6 +180,25 @@ en:
       feature_three_text: 'We will notify you automatically when your device is ready. We offer up until 1 year warranty.'
     shop_name: 'Salva Mi Máquina shop'
     best_at_best_price: 'Best of Apple products, at best prices!'
+  corporate_services:
+    repair:
+      title: 'Reparation and maintenance'
+      text: 'Smartphones, tablets or computers. We are leaders in reparations of APPLE logic boards, with a success rate over 80%, and competitive prices.'
+    customer_service:
+      title: 'Customer service'
+      text: 'Personalized, eficient and high quality services. A dedicated executive for your company allows a minimum response time.'
+    emergency:
+      title: 'Emergencies'
+      text: 'Smartphones, tablets or computers. We are leaders in reparations of APPLE logic boards, with a success rate over 80%, and competitive prices.'
+    credit:
+      title: 'Financial benefits'
+      text: 'We offer credits to our corporative clients.'
+    quality:
+      title: 'We are experts'
+      text: 'With 12 technical experts in smartphones, tablets and computers both Apple and Windows, we can garantee high quality services.'
+    delivery:
+      title: 'Door to door'
+      text: 'Thanks to our special delivery service we bring results directly at the door of your company.'
   footer:
     social: 'Social Media'
     shops: 'Shops'
