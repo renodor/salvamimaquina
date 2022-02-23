@@ -23,11 +23,11 @@ class TradeInRequest < ApplicationRecord
   end
 
   def min_value
-    variant.price - model_min_value
+    variant.price - model_max_value
   end
 
   def max_value
-    variant.price - model_max_value
+    variant.price - model_min_value
   end
 
   private

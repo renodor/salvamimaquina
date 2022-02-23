@@ -74,15 +74,20 @@ const tradeInForm = () => {
     // (Method called when a new parent is selected)
     const displayOptionsOfSelectedParent = (childrenSelectTag, parentId) => {
       childrenSelectTag.value = '';
-      Array.from(childrenSelectTag.options).forEach((option, index) => {
-        if (index === 0) { return; } // The first option is the placeholder
+      childrenSelectTag.innerHTML = '';
 
+      const prompt = document.createElement('option');
+      prompt.text = childrenSelectTag.dataset.prompt;
+      childrenSelectTag.add(prompt, 0);
+
+      const selectId = childrenSelectTag.id;
+      const optionsForSelect = [...tradeInForm.querySelectorAll(`.options-for-select[data-select-id=${selectId}] option`)];
+      optionsForSelect.forEach((option) => {
         if (option.dataset.parentId === parentId) {
-          option.classList.remove('display-none');
-        } else {
-          option.classList.add('display-none');
+          childrenSelectTag.add(option.cloneNode(true));
         }
       });
+
       show(childrenSelectTag);
     };
 
@@ -118,11 +123,10 @@ const tradeInForm = () => {
     // - Hide all variant options, variant infos and delete variant infos id (so that if trade in model change it won't trigger changes on variant infos)
     // - Show the products corresponding to the new selected taxon (and hide the others)
     taxons.addEventListener('change', (event) => {
-      variants.value = '';
-      Array.from(variants.options).forEach((option, index) => {
-        if (index === 0) { return; }
-
-        option.classList.add('display-none');
+      [...variants.options].forEach((option, index) => {
+        if (index > 0) {
+          option.remove();
+        }
       });
 
       delete variantInfos.dataset.id;
@@ -179,10 +183,13 @@ const tradeInForm = () => {
     // This happens when user tries to submit a form with errors,
     // the page is re-rendered and we need to display everything
     if (tradeInForm.dataset.showFields === 'true') {
+      displayOptionsOfSelectedParent(tradeInModels, tradeInCategories.value);
+      displayOptionsOfSelectedParent(products, taxons.value);
       changeTradeInModelPrice(tradeInModels.selectedOptions[0]);
 
       const selectedProduct = products.selectedOptions[0];
       if (selectedProduct.dataset.hasVariants === 'true') {
+        displayOptionsOfSelectedParent(variants, products.value);
         changeVariantInfos(variants.value);
         show(variants);
       } else {
@@ -200,6 +207,7 @@ const tradeInForm = () => {
           invalidTradeIn,
           tradeInCta
       );
+
       const myModal = new Modal(document.getElementById('tradeInFormModal'));
       myModal.show();
     }
