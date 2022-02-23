@@ -59,9 +59,6 @@ gem 'sidekiq-failures', '~> 1.0'
 
 gem 'jwt'
 
-# To allow CORS for some domains
-gem 'rack-cors'
-
 # Transactional emails
 gem 'postmark-rails'
 

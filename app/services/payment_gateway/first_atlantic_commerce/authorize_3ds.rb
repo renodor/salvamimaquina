@@ -65,9 +65,9 @@ module PaymentGateway
           "<form action=\"/checkout/three_d_secure_response\" method=\"post\" data-remote=\"true\">
             <p>Simulate 3DS Authorization</p>
             <input type=\"radio\" id=\"success\" name=\"ResponseCode\" value=\"1\">
-            <label for=\"success\">Success (Payment will eventually fail anyway because capture won't be successful without real 3ds...)</label><br>
+            <label for=\"success\">Success (Payment will eventually fail anyway because capture won't be successful without real 3ds...)</label><br>
             <input type=\"radio\" id=\"failure\" name=\"ResponseCode\" value=\"0\">
-            <label for=\"failure\">Failure</label><br>
+            <label for=\"failure\">Failure</label><br>
             <input type=\"hidden\" name=\"OrderID\" value=\"#{order_number.split('-').last}\">
             <input type=\"submit\" name=\"title\">
           </form>"

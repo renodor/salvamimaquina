@@ -37,7 +37,6 @@ import { tradeInForm } from '../components/trade_in_form';
 // Internal Plugins
 import { swiperSlider } from '../plugins/swiper_slider';
 import { initMapbox } from '../plugins/init_mapbox';
-import { initBacCheckout } from '../plugins/bac_checkout';
 
 // Call your functions here
 document.addEventListener('turbolinks:load', () => {
@@ -57,5 +56,4 @@ document.addEventListener('turbolinks:load', () => {
 
   initMapbox();
   swiperSlider();
-  initBacCheckout();
 });

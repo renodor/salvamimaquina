@@ -169,7 +169,6 @@ Rails.application.config.spree.calculators.shipping_methods << Spree::Calculator
 
 # Add custom payment method
 Rails.application.config.spree.payment_methods << Spree::PaymentMethod::BacCreditCard
-Rails.application.config.spree.payment_methods << Spree::PaymentMethod::BacClave
 
 # Add custom promotion rule
 Rails.application.config.spree.promotions.rules << Spree::Promotion::Rules::ShippingMethod

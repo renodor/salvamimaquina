@@ -26,7 +26,6 @@ Rails.application.routes.draw do
     end
 
     post '/checkout/three_d_secure_response', to: 'checkout#three_d_secure_response'
-    get '/bac/bac_checkout', to: 'bac#bac_checkout'
 
     namespace :api, defaults: { format: 'json' } do
       resources :districts, only: :index

@@ -1,5 +1,0 @@
-const initBacCheckout = () => {
-
-};
-
-export { initBacCheckout };
