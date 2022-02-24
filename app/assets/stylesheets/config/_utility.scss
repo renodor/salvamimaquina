@@ -46,6 +46,10 @@
   width: 100%;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 @media ($max-m) {
   .hidden-m {
     display: none;
