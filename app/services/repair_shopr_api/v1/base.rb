@@ -11,6 +11,7 @@ class RepairShoprApi::V1::Base
   ForbiddenError = Class.new(RepairShoprApiError)
   NotFoundError = Class.new(RepairShoprApiError)
   UnprocessableEntityError = Class.new(RepairShoprApiError)
+  TooManyRequestsError = Class.new(RepairShoprApiError)
   ApiError = Class.new(RepairShoprApiError)
 
   HTTP_OK_CODE = 200
@@ -18,7 +19,8 @@ class RepairShoprApi::V1::Base
   HTTP_UNAUTHORIZED_CODE = 401
   HTTP_FORBIDDEN_CODE = 403
   HTTP_NOT_FOUND_CODE = 404
-  HTTP_UNPROCESSABLE_ENTITY_CODE = 429
+  HTTP_UNPROCESSABLE_ENTITY_CODE = 422
+  HTTP_TOO_MANY_REQUESTS = 429
 
   class << self
     # rubocop:disable Naming/AccessorMethodName
@@ -136,11 +138,14 @@ class RepairShoprApi::V1::Base
         NotFoundError
       when HTTP_UNPROCESSABLE_ENTITY_CODE
         UnprocessableEntityError
+      when HTTP_TOO_MANY_REQUESTS
+        TooManyRequestsError
       else
         ApiError
       end
     end
 
+    # rubocop:disable Metrics/MethodLength
     def fake_response(endpoint, payload)
       case endpoint
       when 'invoices'
@@ -170,7 +175,49 @@ class RepairShoprApi::V1::Base
             'user_id' => 1
           }
         }
+      when 'customers'
+        {
+          'customer' => {
+            'id' => 1,
+            'firstname' => payload[:firstname],
+            'lastname' => payload[:lastname],
+            'fullname' => payload[:fullname],
+            'business_name' => nil,
+            'email' => payload[:email],
+            'phone' => payload[:phone],
+            'mobile' => nil,
+            'created_at' => DateTime.current,
+            'updated_at' => DateTime.current,
+            'pdf_url' => nil,
+            'address' => payload[:address],
+            'address_2' => payload[:address_2],
+            'city' => payload[:city],
+            'state' => payload[:state],
+            'zip' => nil,
+            'latitude' => nil,
+            'longitude' => nil,
+            'notes' => payload[:notes],
+            'get_sms' => false,
+            'opt_out' => false,
+            'disabled' => false,
+            'no_email' => true,
+            'location_name' => nil,
+            'location_id' => nil,
+            'properties' => {},
+            'online_profile_url' => nil,
+            'tax_rate_id' => nil,
+            'notification_email' => nil,
+            'invoice_cc_emails' => nil,
+            'invoice_term_id' => nil,
+            'referred_by' => nil,
+            'ref_customer_id' => nil,
+            'business_and_full_name' => payload[:fullname],
+            'business_then_name' => payload[:fullname],
+            'contacts' => []
+          }
+        }
       end
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end

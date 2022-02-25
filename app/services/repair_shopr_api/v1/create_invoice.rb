@@ -10,10 +10,9 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       repair_shopr_invoice = build_repair_shopr_invoice
       repair_shopr_invoice[:line_items] = build_repair_shopr_line_items
       repair_shopr_invoice[:line_items] << build_repair_shopr_shipping
-      repair_shopr_invoice[:line_items] << build_repair_shopr_promotions
+      repair_shopr_invoice[:line_items] << build_repair_shopr_promotions if @order.promotions.any?
 
       invoice = post_invoices(repair_shopr_invoice)['invoice']
-      # TODO: send notif/error/email/anything... if invoice is not correctly created on RS...
 
       # RepairShopr will take line item prices with ITBMS and calculate the price without taxes from that and then re-calculate the price with ITBMS...
       # During this calcul some cents could be added or removed from the order sub-total (because of roundup...)
@@ -29,6 +28,22 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       end
 
       RepairShoprApi::V1::CreatePayment.call(invoice)
+    rescue RepairShoprApi::V1::Base::BadRequestError, RepairShoprApi::V1::Base::UnprocessableEntityError, RepairShoprApi::V1::Base::NotFoundError => e
+      # Rescue RepairShoprApi client error response because thise class is called from a background job,
+      # and we don't want sidekiq to retry the job if its failing because of a client error,
+      # otherwise it could create an unlimited number of RepairShopr (wrong) invoices...
+      # But we make sure that we properly notify admins of what is happening
+      Sentry.capture_exception(
+        e,
+        {
+          extra: {
+            info: 'Error creating a RepairShopr invoice',
+            order: @order.as_json,
+            invoice: repair_shopr_invoice
+          }
+        }
+      )
+      AdminNotificationMailer.invoice_error_message(order: @order).deliver_later
     end
 
     def create_or_update_repair_shopr_customer
@@ -67,7 +82,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         total: @order.total,
         tax: @order.additional_tax_total,
         is_paid: @order.payment_state == 'paid',
-        location_id: define_invoice_location_id(@order.shipments),
+        location_id: @order.define_stock_location.repair_shopr_id,
         note: "Sold from Ecommerce Website. To deliver to: #{@order.ship_address.google_maps_link}"
       }
     end
@@ -116,22 +131,6 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         taxable: false,
         price: adjustment
       }
-    end
-
-    # Bella Vista id = 1928
-    # San Francisco id = 1927
-    # Check the quantity of items by location
-    # Set the invoice location to the location that has more items
-    # If both locations have the same item quantities, set the invoice location to Bella Vista
-    def define_invoice_location_id(shipments)
-      stock_location_repair_shopr_ids = Hash.new(0)
-      shipments.each do |shipment|
-        stock_location_repair_shopr_ids[shipment.stock_location.repair_shopr_id] += shipment.line_items.map(&:quantity).sum
-      end
-
-      return 1928 if stock_location_repair_shopr_ids[1928] == stock_location_repair_shopr_ids[1927]
-
-      stock_location_repair_shopr_ids.max_by { |_, qty| qty }[0]
     end
   end
 end
