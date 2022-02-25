@@ -31,7 +31,7 @@ module Spree
         .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
     end
 
-    # Check the quantity of line items by location and return the one that has more items
+    # Return the stock location that has more line items quantity
     # If both locations have the same line item quantities, return Bella Vista
     def define_stock_location
       quantity_by_stock_location = Hash.new(0)
