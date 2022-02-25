@@ -2,7 +2,7 @@
 
 ## About The Project
 
-[![salva mi maquina logo]](app/assets/images/logo-smm.png)
+![salva mi maquina logo](app/assets/images/logo-smm.png)
 
 This is the showcase website and Ecommerce platform of Salva Mi Máquina, a company that sells and repairs smartphones, tablets, and computers.
 
