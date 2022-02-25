@@ -1,0 +1,31 @@
+<h1>Invoice ERROR on www.salvamimaquina.com</h1>
+
+<h2><b style="color: red;">!!! Warning this is an important message !!!</b></h2>
+
+<p>A customer did a purchase on www.salvamimaquina.com but the corresponding invoice couldn't be created correctly on RepairShopr.</p>
+<p>Please contact the customer to make sure its purchase is complete and its payment has been confirmed.</p>
+<p>Then check RepairShopr invoices and manualy create or update invoice if needed.</p>
+
+<b>Client Information:</b>
+<ul>
+  <li>email: <%= @order.email %></li>
+  <li>first name: <%= @ship_address.firstname %></li>
+  <li>last name: <%= @ship_address.lastname %></li>
+  <li>address: <%= @ship_address.address1 %></li>
+  <li>address 2: <%= @ship_address.address2 %></li>
+  <li>city: <%= "#{@ship_address.district.name} - #{@ship_address.city}" %></li>
+  <li>state: <%= @ship_address.state.name %></li>
+  <li>phone: <%= @ship_address.phone %></li>
+  <li><a href="<%= @ship_address.google_maps_link %>">google maps link</a></li>
+</ul>
+
+<b>Order Information</b>:
+<ul>
+  <li>number: <%= @order.number %></li>
+  <li>date: <%= @order.completed_at.strftime("%d %b %Y") %></li>
+  <li>subtotal: <%= number_to_currency(@order.item_total) %></li>
+  <li>total: <%= number_to_currency(@order.total) %></li>
+  <li>tax: <%= number_to_currency(@order.additional_tax_total) %></li>
+  <li>balance_due: <%= number_to_currency(@order.total) %></li>
+  <li>stock location: <%= @order.define_stock_location.name %></li>
+</ul>

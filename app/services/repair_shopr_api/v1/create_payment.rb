@@ -12,7 +12,22 @@ class RepairShoprApi::V1::CreatePayment < RepairShoprApi::V1::Base
       }
 
       post_payments(payment)
-      # TODO: send notif/error/email/anything... if payment is not correctly created on RS...
+    rescue RepairShoprApi::V1::Base::BadRequestError, RepairShoprApi::V1::Base::UnprocessableEntityError, RepairShoprApi::V1::Base::NotFoundError => e
+      # Rescue RepairShoprApi client error response because thise class is called from a background job,
+      # and we don't want sidekiq to retry the job if its failing because of a client error,
+      # otherwise it could create an unlimited number of RepairShopr (wrong) payments...
+      # But we make sure that we properly notify admins of what is happening
+      Sentry.capture_exception(
+        e,
+        {
+          extra: {
+            info: 'Error creating a RepairShopr payment',
+            invoice: invoice,
+            payment: payment
+          }
+        }
+      )
+      AdminNotificationMailer.payment_error_message(invoice: invoice).deliver_later
     end
   end
 end

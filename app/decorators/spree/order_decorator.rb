@@ -31,6 +31,21 @@ module Spree
         .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
     end
 
+    # Check the quantity of items by location
+    # Set the invoice location to the location that has more items
+    # If both locations have the same item quantities, set the invoice location to Bella Vista
+    def define_stock_location
+      quantity_by_stock_location = Hash.new(0)
+      shipments.each do |shipment|
+        quantity_by_stock_location[shipment.stock_location.id] += shipment.line_items.map(&:quantity).sum
+      end
+
+      return Spree::StockLocation.find_by(name: 'Bella Vista') if quantity_by_stock_location.values.uniq == 1
+
+      max_quantity_stock_location_id = quantity_by_stock_location.max_by { |_, qty| qty }[0]
+      Spree::StockLocation.find(max_quantity_stock_location_id)
+    end
+
     Spree::Order.prepend self
   end
 end
