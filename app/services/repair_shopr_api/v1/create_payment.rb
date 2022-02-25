@@ -27,7 +27,7 @@ class RepairShoprApi::V1::CreatePayment < RepairShoprApi::V1::Base
           }
         }
       )
-      AdminNotificationMailer.payment_error_message(invoice: invoice).deliver_later
+      AdminNotificationMailer.payment_error_email(invoice).deliver_later
     end
   end
 end

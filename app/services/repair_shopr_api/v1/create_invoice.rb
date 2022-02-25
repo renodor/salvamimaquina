@@ -43,7 +43,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
           }
         }
       )
-      AdminNotificationMailer.invoice_error_message(order: @order).deliver_later
+      AdminNotificationMailer.invoice_error_email(@order).deliver_later
     end
 
     def create_or_update_repair_shopr_customer

@@ -44,11 +44,7 @@ module Spree
     def create_user_message
       @user_message = UserMessage.new(user_message_params)
       if @user_message.save
-        UserMessageMailer.contact_message(
-          user_message: @user_message,
-          subject: 'New Message from salvamimaquina.com contact form',
-          to: 'administracion@salvamimaquina.com'
-        ).deliver_later
+        AdminNotificationMailer.user_message_email(@user_message).deliver_later
         flash.notice = t('message_sent')
         redirect_to contact_path
       else
@@ -60,11 +56,7 @@ module Spree
     def create_corporate_client_message
       @user_message = UserMessage.new(user_message_params)
       if @user_message.save
-        UserMessageMailer.contact_message(
-          user_message: @user_message,
-          subject: 'New message from salvamimaquina.com corporate client contact form',
-          to: ['administracion@salvamimaquina.com', 'quentin@salvamimaquina.com']
-        ).deliver_later
+        AdminNotificationMailer.corporate_message_email(@user_message).deliver_later
         flash.notice = t('message_sent')
         redirect_to corporate_clients_path
       else

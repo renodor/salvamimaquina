@@ -17,13 +17,4 @@ class TradeInRequestMailer < ApplicationMailer
       subject: "#{t('.subject')}#{@trade_in_request.with_promo ? " - #{@trade_in_request.coupon_code}" : ''}"
     )
   end
-
-  def admin_confirmation_email(trade_in_request)
-    @trade_in_request = trade_in_request
-    @variant = @trade_in_request.variant
-    @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
-    @store = Spree::Store.default
-
-    mail(to: @store.mail_from_address, from: @store.mail_from_address, subject: 'New trade-in request from www.salvamimaquina.com')
-  end
 end
