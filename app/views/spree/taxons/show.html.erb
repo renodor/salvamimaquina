@@ -1,5 +1,7 @@
+<% self.title = @taxon.name %>
+
 <div id="taxon-header">
-  <h1 class="taxon-title flex-1"><%= t("spree.#{@taxon.name.downcase}", default: nil ) || @taxon.name %></h1>
+  <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
   <%= render 'spree/shared/products_sorting', version: :desktop %>
 </div>
 
