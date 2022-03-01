@@ -16,7 +16,7 @@ module Spree
     end
 
     # Adds a new item to the order (creating a new order if none already exists)
-    # (Need to decorate this method only to modify the last redirect_to line to redirect to the es_MX path...)
+    # (Decorate this method only to modify the last redirect_to line to redirect to the es_MX path...)
     def populate
       @order = current_order(create_order_if_necessary: true)
       authorize! :update, @order, cookies.signed[:guest_token]
