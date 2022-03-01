@@ -10,7 +10,7 @@ Spree.config do |config|
   config.currency = 'USD'
 
   # from address for transactional emails
-  config.mails_from = 'store@example.com'
+  config.mails_from = 'administraction@salvamimaquina.com'
 
   # set Panama has the default country
   config.default_country_iso = 'PA'

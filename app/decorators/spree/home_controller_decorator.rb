@@ -60,6 +60,15 @@ module Spree
         flash.notice = t('message_sent')
         redirect_to corporate_clients_path
       else
+        # TODO: improve how we deal with this data... Maybe create a CorporateService model?
+        @corporate_services = %w[
+          repair
+          customer_service
+          emergency
+          credit
+          quality
+          delivery
+        ]
         find_corporate_clients_banner_and_slider
         render :corporate_clients
       end

@@ -282,3 +282,25 @@ es-MX:
   trade_in_request_mailer:
     confirmation_email:
       subject: 'Su Solicitud de Trade-in en Salva Mi Máquina'
+  routes:
+    reparation_categories: 'catagorias_de_reparaciones'
+    products: 'productos'
+    corporate_clients: 'empresas'
+    account: 'mi_cuenta'
+    edit_user_address: 'editar_direccion'
+    new_user_address: 'nueva_direccion'
+    contact: 'contacto'
+    about: 'nosotros'
+    shipping_informations: 'informacion_de_entrega'
+    payment_methods: 'metodos_de_pago'
+    controllers:
+      spree:
+        reparation_requests:
+          reparation_requests: 'reparacion'
+          new: 'nueva'
+          thank_you: 'gracias'
+        trade_in_requests:
+          trade_in_requests: 'trade_in'
+          new: 'nuevo'
+        products:
+          products: 'productos'

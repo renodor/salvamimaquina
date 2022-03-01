@@ -33,31 +33,51 @@ Rails.application.routes.draw do
 
     delete '/frontend/orders/:order_id/line_items/:id', to: 'frontend/line_items#destroy', as: :frontend_line_item
 
-    resources :reparation_categories, only: [:index] do
-      resources :reparation_requests, only: %i[new create]
+    localized do
+      resources :reparation_categories, only: [:index] do
+        resources :reparation_requests, only: %i[new create]
+      end
+      get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
     end
 
-    resources :trade_in_requests, only: %i[new create show], param: :token
+    localized do
+      resources :trade_in_requests, only: %i[new create show], param: :token
+    end
     get 'trade_in_requests/variant_infos/:variant_id', to: 'trade_in_requests#variant_infos'
 
-    get '/account/edit_user_address', to: 'users#edit_user_address'
-    get '/account/new_user_address', to: 'users#new_user_address'
+    localized do
+      get '/account/edit_user_address', to: 'users#edit_user_address'
+      get '/account/new_user_address', to: 'users#new_user_address'
+    end
     put '/account/update_user_address', to: 'users#update_user_address'
 
     get '/t/filter_products', to: 'taxons#filter_products'
     get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
     get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
-    get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
 
-    get 'corporate_clients', to: 'home#corporate_clients'
+    localized do
+      get 'corporate_clients', to: 'home#corporate_clients'
+    end
     post 'create_corporate_client_message', to: 'home#create_corporate_client_message'
-    get 'contact', to: 'home#contact'
-    get 'about', to: 'home#about'
+
+    localized do
+      get 'contact', to: 'home#contact'
+      get 'about', to: 'home#about'
+      get 'shipping_informations', to: 'home#shipping_informations'
+      get 'payment_methods', to: 'home#payment_methods'
+    end
     post 'create_user_message', to: 'home#create_user_message'
-    get 'shipping_informations', to: 'home#shipping_informations'
-    get 'payment_methods', to: 'home#payment_methods'
 
     get '/fake_api_call/show_request', to: 'fake_api_calls#show_request'
+
+    # Solidus Routes can't be localized using the localized block...
+    # So we have to manually defined the routes we want to translate here...
+    get '/productos', to: 'products#index', as: 'products_es_mx'
+    get '/productos/:id', to: 'products#show', as: 'product_es_mx'
+    get '/carrito', to: 'orders#edit', as: 'cart_es_mx'
+    get '/mi_cuenta', to: 'users#show', as: 'account_es_mx'
+    get '/mi_cuenta/editar', to: 'users#edit', as: 'edit_account_es_mx'
+    get '/pedidos/:id', to: 'orders#show', as: 'orders_es_mx'
   end
 
   namespace :repair_shopr_webhook do

@@ -41,7 +41,7 @@
           </span>
           <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
         </span>
-        <%= link_to '', spree.product_path(product, taxon_id: @taxon.try(:id)), class: 'product-link full-absolute', itemprop: "name", title: product.name %>
+        <%= link_to '', spree.product_es_mx_path(product, taxon_id: @taxon.try(:id)), class: 'product-link full-absolute', itemprop: "name", title: product.name %>
       </li>
     <% end %>
   </ul>
