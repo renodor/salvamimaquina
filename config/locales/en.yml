@@ -211,7 +211,7 @@ en:
     locations: 'Locations'
     open_times: 'Open times'
     shipping_prices_zones_and_times: 'Shipping prices, zones and times'
-    identify_your_model: 'Identify your device's model'
+    identify_your_model: "Identify your device's model"
   simple_form:
     options:
       reparation_request:
