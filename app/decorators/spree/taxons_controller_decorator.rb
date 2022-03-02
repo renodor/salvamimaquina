@@ -7,7 +7,7 @@ module Spree
     end
 
     def show
-      @categories = Spree::Taxon.includes(children: :children).find_by(name: 'Categories').children
+      @categories = Spree::Taxon.includes(children: :children).find_by(depth: 0).children
       @products = @products.descend_by_available_on # Currently our default sorting
     end
 

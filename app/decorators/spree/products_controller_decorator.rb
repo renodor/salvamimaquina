@@ -4,7 +4,7 @@ module Spree
   module ProductsControllerDecorator
     def index
       @taxonomies = Spree::Taxonomy.includes(root: :children)
-      @categories_taxon = Spree::Taxon.includes(children: [icon_attachment: :blob]).find_by(name: 'Categories')
+      @root_taxon = Spree::Taxon.includes(children: [icon_attachment: :blob]).find_by(depth: 0)
       @banner = Banner.find_by(location: :shop)
     end
 

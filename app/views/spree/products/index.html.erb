@@ -1,8 +1,8 @@
 <%= render 'spree/shared/banner', banner: @banner %>
 <div id="categories">
-  <h2><%= @categories_taxon.name.capitalize %></h2>
+  <h2><%= @root_taxon.name.capitalize %></h2>
   <div id="categories-grid">
-    <% @categories_taxon.children.each do |category| %>
+    <% @root_taxon.children.each do |category| %>
       <div class="position-relative category">
         <p><%= category.name %></p>
         <%= cl_image_tag_with_folder(category.icon, width: 500, crop: :fill, model: Spree::Taxon) %>

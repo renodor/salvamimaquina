@@ -4,7 +4,6 @@ class RepairShoprWebhook::ProductsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def product_updated
-    # TODO: improve this "test" VS prod thing
     repair_shopr_subdomain = Rails.env.production? ? Rails.application.credentials.repair_shopr_subdomain : Rails.application.credentials.repair_shopr_subdomain_test
 
     # Only accept requests coming from the correct RS sender

@@ -6,7 +6,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       # Product categories (taxons) all belong to one parent taxon named "Categories",
       # that itself belong to one parent taxonomy names "Categories"
       @categories_taxonomy = Spree::Taxonomy.find_by(name: 'Categories') || raise('Categories Taxonomy is needed')
-      @categories_taxon = Spree::Taxon.find_by(name: 'Categories', taxonomy_id: @categories_taxonomy.id) || raise('Categories Taxon is needed')
+      @root_taxon = Spree::Taxon.find_by(depth: 0, taxonomy_id: @categories_taxonomy.id) || raise('Root Taxon named "Categorias" is needed')
 
       # Fetch all product categories from RepairShopr
       # (Only the categories below the root category "ecom" will be returned)
@@ -19,7 +19,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
 
       # All taxons, belonging to categories taxonomy, that are not present in the taxon_ids array or is not the categories_taxon
       # need to be deleted (It means they have been deleted from RepairShopr)
-      deleted_taxons = @categories_taxonomy.taxons.where.not(id: taxon_ids + [@categories_taxon.id]).destroy_all
+      deleted_taxons = @categories_taxonomy.taxons.where.not(id: taxon_ids + [@root_taxon.id]).destroy_all
 
       sync_logs.synced_product_categories = taxon_ids.size
       sync_logs.deleted_product_categories = deleted_taxons.size
@@ -40,7 +40,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
         taxon = Spree::Taxon.find_or_initialize_by(repair_shopr_id: product_category['id'], taxonomy_id: @categories_taxonomy.id)
         taxon.update!(name: product_category['name'], description: product_category['description'])
         # Product category without "/" in ancestry has only one ancester, which is necessarly the root category "ecom"
-        # So in our current hierarchy, it will be directly under the @categories_taxon
+        # So in our current hierarchy, it will be directly under the @root_taxon
         { taxon: taxon, parent: product_category['ancestry'].include?('/') ? product_category['ancestry'] : nil }
       end
     end
@@ -53,7 +53,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
           taxon_parent = Spree::Taxon.find_by(repair_shopr_id: taxon_and_parent[:parent].split('/').last.to_i)
           taxon_and_parent[:taxon].update!(parent: taxon_parent)
         else
-          taxon_and_parent[:taxon].update!(parent: @categories_taxon)
+          taxon_and_parent[:taxon].update!(parent: @root_taxon)
         end
 
         taxon_and_parent[:taxon].id
