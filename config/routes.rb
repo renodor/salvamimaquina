@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       get 'about', to: 'home#about'
       get 'shipping_informations', to: 'home#shipping_informations'
       get 'payment_methods', to: 'home#payment_methods'
+      get 'identify_your_model', to: 'home#identify_your_model'
     end
     post 'create_user_message', to: 'home#create_user_message'
 

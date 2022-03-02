@@ -17,6 +17,7 @@ es-MX:
   thanks_for_your_request: 'Gracias por su solicitud'
   trade_in: 'Trade-in'
   product_you_want_to_trade_in: 'Equipo que desea dar en Trade-in'
+  identify_your_model: '¿No conoces el modelo de su equipo? Identifícalo aquí'
   choose_product_category: 'Elige categoría de producto'
   choose_product: 'Elige producto'
   what_product_you_want_to_buy: '¿Qué equipo quiere comprar?'
@@ -246,14 +247,18 @@ es-MX:
     delivery:
       title: 'Puerta a puerta'
       text: 'Gracias a nuestra mensajería especializada, le brindamos servicios directamente en el cede de su empresa.'
+  identify_the_model_of_your_product: 'Identificar el modelo de su equipo'
+  you_have_an: '¿Tienes un %{model_type}?'
+  find_what_model_you_have: 'Descubre qué modelo de %{model_type} tienes'
   footer:
     social: 'Redes'
     shops: 'Tiendas'
-    ecommerce: 'Ecommerce'
+    ecommerce: 'Ecommerce & Trade-in'
     locations: 'Ubicaciones'
     open_times: 'Horarios de aperturas'
     shipping_prices_zones_and_times: 'Zonas, precios y tiempos de entrega'
     payment_methods: 'Métodos de pago'
+    identify_your_model: 'Identificar el modelo de su equipo'
   simple_form:
     options:
       reparation_request:
@@ -294,6 +299,7 @@ es-MX:
     about: 'nosotros'
     shipping_informations: 'informacion_de_entrega'
     payment_methods: 'metodos_de_pago'
+    identify_your_model: 'identificar_su_modelo'
     controllers:
       spree:
         reparation_requests:

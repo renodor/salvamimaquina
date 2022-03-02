@@ -5,6 +5,7 @@
     <div class="trade-in-first-part">
       <h2><%= t('product_you_want_to_trade_in') %></h2>
 
+      <p><%= link_to t('identify_your_model'), identify_your_model_path, target: :blank %></p>
       <div>
         <%=
           select_tag 'trade_in_category_id',

@@ -84,6 +84,22 @@ module Spree
 
     def payment_methods; end
 
+    def identify_your_model
+      identify_model_links = {
+        ipad: 'https://support.apple.com/es-es/HT201471',
+        iphone: 'https://support.apple.com/es-es/HT201296',
+        mac: 'https://support.apple.com/es-es/HT201581'
+      }
+
+      @model_types = %w[iPhone iPad Mac].map do |model_type|
+        {
+          name: model_type,
+          image: Spree::Taxon.find_by(name: model_type).icon,
+          identify_model_link: identify_model_links[model_type.downcase.to_sym]
+        }
+      end
+    end
+
     private
 
     def user_message_params

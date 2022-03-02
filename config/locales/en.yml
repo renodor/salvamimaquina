@@ -47,6 +47,7 @@ en:
   thanks_for_your_request: 'Thanks for your request'
   trade_in: 'Trade-in'
   product_you_want_to_trade_in: 'Product you want to Trade-in'
+  identify_your_model: "You don't know the model of your product? Identify it here"
   choose_product_category: 'Choose product category'
   choose_product: 'Choose product'
   what_product_you_want_to_buy: 'What product you want to buy?'
@@ -200,13 +201,17 @@ en:
     delivery:
       title: 'Door to door'
       text: 'Thanks to our special delivery service we bring results directly at the door of your company.'
+  identify_the_model_of_your_product: 'Identify the model of your product'
+  you_have_an: 'You have a %{model_type}?'
+  find_what_model_you_have: 'Find out what model of %{model_type} you have'
   footer:
     social: 'Social Media'
     shops: 'Shops'
-    ecommerce: 'Ecommerce'
+    ecommerce: 'Ecommerce & Trade-in'
     locations: 'Locations'
     open_times: 'Open times'
     shipping_prices_zones_and_times: 'Shipping prices, zones and times'
+    identify_your_model: 'Identify your device's model'
   simple_form:
     options:
       reparation_request:
