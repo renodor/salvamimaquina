@@ -1,6 +1,37 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "050b4f02f47f3b559c1ba09b503b6b099115afd7613f5083e2a4d76a562842c0",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/spree/trade_in_requests/show.html.erb",
+      "line": 10,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "t(\"complete_trade_in_to_have_a_promo\", :shop => TradeInRequest.find_by(:token => params[:token]).shop.titleize, :validity => (\"#{7} #{I18n.t(\"day\", :count => 7).downcase}\"), :amount => \"20%\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Spree::TradeInRequestsController",
+          "method": "show",
+          "line": 31,
+          "file": "app/controllers/spree/trade_in_requests_controller.rb",
+          "rendered": {
+            "name": "spree/trade_in_requests/show",
+            "file": "app/views/spree/trade_in_requests/show.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "spree/trade_in_requests/show"
+      },
+      "user_input": "TradeInRequest.find_by(:token => params[:token]).shop",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "7e3c72d461582893fb9edccce54534ab17f24c4c37af2d276d57a1ed79140560",
@@ -17,7 +48,8 @@
         "method": null
       },
       "user_input": "is_on_sale",
-      "confidence": "Weak"
+      "confidence": "Weak",
+      "note": ""
     },
     {
       "warning_type": "SQL Injection",
@@ -36,9 +68,10 @@
         "method": null
       },
       "user_input": "is_on_sale",
-      "confidence": "Weak"
+      "confidence": "Weak",
+      "note": ""
     }
   ],
-  "updated": "2021-11-07 12:00:20 +0100",
+  "updated": "2022-03-02 15:38:19 +0100",
   "brakeman_version": "5.0.4"
 }

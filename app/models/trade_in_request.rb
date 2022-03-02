@@ -23,11 +23,21 @@ class TradeInRequest < ApplicationRecord
   end
 
   def min_value
-    variant.price - model_max_value
+    variant&.price.to_f - model_max_value
   end
 
   def max_value
-    variant.price - model_min_value
+    variant&.price.to_f - model_min_value
+  end
+
+  # TODO: maybe store those addresses somewhere... We are using it in different places of the code
+  def shop_address
+    case shop
+    when 'bella_vista'
+      'https://www.google.com/maps/place/Salva+Mi+Maquina+%7C+Bella+Vista/@8.9805139,-79.529011,17z/data=!3m1!4b1!4m5!3m4!1s0x8faca8fb88936ebb:0x56016f2bcd0f178d!8m2!3d8.9805139!4d-79.5268223'
+    when 'san_francisco'
+      'https://www.google.com/maps/place/Salva+Mi+Maquina+%7C+San+Francisco/@8.9946759,-79.504031,17z/data=!3m1!4b1!4m5!3m4!1s0x8faca91d36aa9129:0x160543d69b5ca01f!8m2!3d8.9947064!4d-79.5018527'
+    end
   end
 
   private

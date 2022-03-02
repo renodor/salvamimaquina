@@ -10,6 +10,7 @@ class TradeInRequestMailer < ApplicationMailer
     @coupon_validity = TradeInRequest::COUPON_VALIDITY_DAYS
     @coupon_validity_text = "#{@coupon_validity} #{I18n.t('day', count: @coupon_validity).downcase}"
     @store = Spree::Store.default
+    @shop_name = @trade_in_request.shop.titleize
 
     mail(
       to: @trade_in_request.email,
