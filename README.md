@@ -6,7 +6,7 @@ This is the showcase website and Ecommerce platform of Salva Mi Máquina, a comp
 
 Salva Mi Máquina uses an entreprise resource planning (ERP) software called [RepairShopr](https://www.repairshopr.com/) to manage, among other things, their products (inventory, prices, skus, images, descriptions etc..), their invoices, their client database... One of the biggest challenges of this project was to integrate RepairShopr with the Ecommerce so that both platforms are automatically synchronized:
 * Creating a new product on RepairShopr will automatically create it on the Ecommerce
-* Making a purchase on the Ecommerce will automatically create an invoice on RepairShopr
+* Making a purchase on the Ecommerce will automatically update stocks and create an invoice on RepairShopr
 * Inventory levels are synchronized between both platforms in real time
 * etc...
 
