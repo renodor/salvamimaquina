@@ -14,10 +14,6 @@ const productFilters = () => {
       Array.from(form.elements).forEach((formElement) => {
         formElement.addEventListener('change', (event) => {
           fetchProductsfromFormData();
-          // If on mobile, filters are in a modal, and we need to close that modal once filters are applied
-          if (window.innerWidth <= 767) {
-            $('#productFiltersModal').modal('hide');
-          }
         });
       });
     });
