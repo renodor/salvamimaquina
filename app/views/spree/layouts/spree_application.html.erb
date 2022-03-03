@@ -9,7 +9,7 @@
     <%= RailsCriticalCssServer::Rewrite.call self do %>
       <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <% end %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', async: Rails.env.production? %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= Gon::Base.render_data %>
   </head>
   <body id="<%= @body_id || 'default' %>" data-hook="body">
