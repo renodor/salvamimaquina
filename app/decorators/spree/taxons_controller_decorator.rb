@@ -9,6 +9,7 @@ module Spree
     def show
       @categories = Spree::Taxon.includes(children: :children).find_by(depth: 0).children
       @products = @products.descend_by_available_on # Currently our default sorting
+      @products = @products.in_name_or_description(params[:keywords]) if params[:keywords].present?
     end
 
     def filter_products
@@ -21,7 +22,8 @@ module Spree
       safe_params = product_filters_params
       @searcher = build_searcher(safe_params.merge(taxon: @taxon.id))
       @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
-      sort_products(safe_params[:sort_products]) if Spree::Product.sorting_options.keys.include?(safe_params[:sort_products]&.to_sym)
+      @products = sort_products(safe_params[:sort_products]) if Spree::Product.sorting_options.keys.include?(safe_params[:sort_products]&.to_sym)
+      @products = @products.in_name_or_description(safe_params[:search_products]) if safe_params[:search_products].present?
     end
 
     # TOOD: sort_products should be normal product scopes applied when doing build_searcher.retrieve_products...
@@ -57,7 +59,7 @@ module Spree
     end
 
     def product_filters_params
-      params.permit(:per_page, :id, :sort_products, scopes: {}, search: {}, price_between: [])
+      params.permit(:per_page, :id, :sort_products, :search_products, scopes: {}, search: {}, price_between: [])
     end
 
     Spree::TaxonsController.prepend self

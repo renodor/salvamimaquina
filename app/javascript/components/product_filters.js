@@ -4,13 +4,17 @@ const productFilters = () => {
 
   if (sidebar) {
     // Get product filter form
-    const productsFiltersForm = document.querySelector('#sidebar_products_search');
+    const productsFiltersForm = document.querySelector('#sidebar-products-filter');
+
     // Get products sorting forms
     const productsSortingFormDesktop = document.querySelector('.products-sorting-form.desktop');
     const productsSortingFormMobile = document.querySelector('.products-sorting-form.mobile');
 
+    // Get products search form
+    const productsSearchForm = document.querySelector('#products-search');
+
     // Fetch new products each time a product filter or a product sort is selected
-    [productsFiltersForm, productsSortingFormDesktop, productsSortingFormMobile].forEach((form) => {
+    [productsFiltersForm, productsSortingFormDesktop, productsSortingFormMobile, productsSearchForm].forEach((form) => {
       Array.from(form.elements).forEach((formElement) => {
         formElement.addEventListener('change', (event) => {
           fetchProductsfromFormData();
@@ -21,11 +25,19 @@ const productFilters = () => {
     const fetchProductsfromFormData = () => {
       // If on mobile get products sorting form mobile data, otherwise get products sorting form desktop data
       const productsSortingFormData = new FormData(window.innerWidth <= 767 ? productsSortingFormMobile : productsSortingFormDesktop);
+
       // Get product filter form data
       const productFiltersFormData = new FormData(productsFiltersForm);
-      // Build query string from product filter form data and product sort form data
+
+      // Get products search form data
+      const productsSearchFormData = new FormData(productsSearchForm);
+
+      // Build query string from product filter form data, product sort form data, and products search form data
       const queryString = new URLSearchParams(productFiltersFormData);
       queryString.append('sort_products', productsSortingFormData.get('sort_products'));
+      queryString.append('search_products', productsSearchFormData.get('keywords'));
+
+      for (const [key, value] of queryString) { console.log(key, value) }
 
       // Fetch new products from those form data
       fetch(`/t/filter_products?${queryString.toString()}`, { headers: { 'accept': 'application/json' } })

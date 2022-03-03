@@ -3,6 +3,7 @@
 <div id="taxon-header">
   <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
   <%= render 'spree/shared/products_sorting', version: :desktop %>
+  <%= render 'spree/shared/search' %>
 </div>
 
 <% content_for :sidebar do %>
