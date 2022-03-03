@@ -37,8 +37,6 @@ const productFilters = () => {
       queryString.append('sort_products', productsSortingFormData.get('sort_products'));
       queryString.append('search_products', productsSearchFormData.get('keywords'));
 
-      for (const [key, value] of queryString) { console.log(key, value) }
-
       // Fetch new products from those form data
       fetch(`/t/filter_products?${queryString.toString()}`, { headers: { 'accept': 'application/json' } })
           .then((response) => response.json())
