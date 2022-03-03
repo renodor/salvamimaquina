@@ -69,6 +69,11 @@ gem 'invisible_captcha'
 
 gem 'route_translator'
 
+gem 'solidus_auth_devise', '2.5.4'
+
+# Eliminate render-blocking CSS in above-the-fold content
+gem 'rails_critical_css_server'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'
@@ -106,5 +111,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem 'solidus_auth_devise', '2.5.4'
