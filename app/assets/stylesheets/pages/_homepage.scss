@@ -1,3 +1,16 @@
+#homepage-intro {
+  margin: 50px 0;
+  padding: 30px 0;
+  text-align: center;
+  border-top: 1px solid $light-gray;
+  border-bottom: 1px solid $light-gray;
+  h1 {
+    margin-bottom: 15px;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
 .homepage-block {
   margin: 50px 0 100px 0;
   .homepage-title {

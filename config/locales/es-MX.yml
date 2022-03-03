@@ -216,8 +216,8 @@ es-MX:
       spree_user:
         signed_out: 'Sesión finalizada.'
   home_page:
-    apple_experts: '¡Somos expertos en dispositivos Apple!'
-    all_what_you_need: 'Un solo lugar para todo lo que necesites.'
+    intro_title: 'Salva Mi Máquina ¡Somos expertos en dispositivos Apple!'
+    intro: 'Lideres en reparacion de equipos Apple. Venta y servicio técnico de equipos Apple y Windows. Diagnostico rápido y precios accesibles.'
     reparation_service_title: '¿Cómo funciona el servicio de reparación?'
     features:
       feature_one_title: 'Diagnóstico'
