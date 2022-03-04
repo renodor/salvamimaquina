@@ -43,21 +43,26 @@
       </li>
     </ul>
   </div>
-  <div>
-    <%= link_to spree.account_es_mx_path, class: 'nav-link navbar-account-link' do %>
-      <% if spree_current_user %>
-        <%= svg 'user-fill' %>
-      <% else %>
-        <%= svg 'user' %>
+  <div id="navbar-icons">
+    <div>
+      <%= render 'spree/shared/products_search' %>
+    </div>
+    <div>
+      <%= link_to spree.account_es_mx_path, class: 'nav-link navbar-account-link' do %>
+        <% if spree_current_user %>
+          <%= svg 'user-fill' %>
+        <% else %>
+          <%= svg 'user' %>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
-  <div>
-    <%= link_to spree.cart_es_mx_path, class: 'nav-link navbar-cart-link' do %>
-      <%= svg 'cart' %>
-      <% if current_order&.quantity.to_i > 0 %>
-        <span class="navbar-cart-quantity"><%= current_order&.quantity %></span>
+    </div>
+    <div>
+      <%= link_to spree.cart_es_mx_path, class: 'nav-link navbar-cart-link' do %>
+        <%= svg 'cart' %>
+        <% if current_order&.quantity.to_i > 0 %>
+          <span class="navbar-cart-quantity"><%= current_order&.quantity %></span>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </nav>

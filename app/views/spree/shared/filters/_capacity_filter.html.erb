@@ -11,6 +11,7 @@
                   id="<%= capacity_id %>"
                   name="<%= "search[with_option][#{capacity_option_type.id}][]" %>"
                   value="<%= capacity_id %>"
+                  form="products-searcher"
                   <%= params.dig(:search, :with_option, capacity_option_type.id.to_s)&.include?(capacity_id.to_s) ? "checked" : "" %>
           />
           <label class="product-filter-label" for="<%= capacity_id %>">

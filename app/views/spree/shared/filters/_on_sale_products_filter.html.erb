@@ -5,6 +5,7 @@
         <input type="checkbox"
                 id="on-sale-products"
                 name="scopes[on_sale]"
+                form="products-searcher"
                 <%= params[:scopes] && params[:scopes][:on_sale] ? "checked" : "" %>
         />
         <label class="product-filter-label" for="on-sale-products">

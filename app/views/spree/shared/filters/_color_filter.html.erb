@@ -10,6 +10,7 @@
                   id="<%= color_id %>"
                   name="<%= "search[with_option][#{color_option_type.id}][]" %>"
                   value="<%= color_id %>"
+                  form="products-searcher"
                   <%= params.dig(:search, :with_option, color_option_type.id.to_s)&.include?(color_id.to_s) ? "checked" : "" %>
           />
           <label class="color-filter-label" style="background-color: <%= color_code(color) %>;" for="<%= color_id %>">

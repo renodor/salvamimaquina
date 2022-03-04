@@ -11,6 +11,7 @@
                   id="<%= model_id %>"
                   name="<%= "search[with_option][#{model_option_type.id}][]" %>"
                   value="<%= model_id %>"
+                  form="products-searcher"
                   <%= params.dig(:search, :with_option, model_option_type.id.to_s)&.include?(model_id.to_s) ? "checked" : "" %>
           />
           <label class="product-filter-label" for="<%= model_id %>">

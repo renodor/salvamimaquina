@@ -28,7 +28,7 @@ import { productShowVariants } from '../components/product_show_variants';
 import { productShowThumbnails } from '../components/product_show_thumbnails';
 import { productSorting } from '../components/product_sorting';
 import { productFiltersModal } from '../components/product_filters_modal';
-import { productFilters } from '../components/product_filters';
+// import { productFilters } from '../components/product_filters';
 import { quantitySelector } from '../components/quantity_selector';
 import { cart } from '../components/cart';
 import { previewImageOnFileSelect } from '../components/preview_image_on_file_select';
@@ -48,7 +48,7 @@ document.addEventListener('turbolinks:load', () => {
   productShowThumbnails();
   productSorting();
   productFiltersModal();
-  productFilters();
+  // productFilters();
   quantitySelector();
   cart();
   previewImageOnFileSelect();
