@@ -16,28 +16,32 @@
   .dropdown-menu {
     width: 100%;
     border-radius: 0;
-    border-color: $light-gray;
-    .dropdown-item {
-      padding: 0;
-    }
-  }
-  label {
-    width: 100%;
-    padding: 5px 15px;
-    cursor: pointer;
-    color: $dark-gray;
+    border: 1px solid $light-gray;
     background-color: white;
-    @include default-transition(background-color, color);
-    &:hover {
-      background-color: $light-green;
-      color: $green;
-    }
   }
-  input {
-    display: none;
-    &:checked + label {
-      background-color: $light-green;
-      color: $green;
+  .dropdown-item {
+    padding: 0;
+    &:hover {
+      background-color: white;
+    }
+    label {
+      width: 100%;
+      padding: 5px 10px;
+      cursor: pointer;
+      color: $dark-gray;
+      background-color: white;
+      @include default-transition(background-color, color);
+      &:hover {
+        background-color: $light-green;
+        color: $green;
+      }
+    }
+    input {
+      display: none;
+      &:checked + label {
+        background-color: $light-green;
+        color: $green;
+      }
     }
   }
 }

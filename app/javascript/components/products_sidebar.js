@@ -8,6 +8,23 @@ const productsSidebar = () => {
     const showProductsSidebarContent = productsSidebar.querySelector('#show-products-sidebar-content');
     const hideProductsSidebarContent = productsSidebar.querySelector('#hide-products-sidebar-content');
 
+    const displayFilterTab = () => {
+      const filterTabId = 'product-filters-tab';
+      const sortingTabId = 'products-sorting-tab';
+      const productsFilterTabBtn = productsSidebar.querySelector(`#${filterTabId}`);
+      const productsSortingTabBtn = productsSidebar.querySelector(`#${sortingTabId}`);
+      const productsFilterTabContent = productsSidebar.querySelector(`#${filterTabId}-content`);
+      const productsSortingTabContent = productsSidebar.querySelector(`#${sortingTabId}-content`);
+
+      productsFilterTabBtn.classList.add('active');
+      productsFilterTabBtn.ariaSelected = true;
+      productsSortingTabBtn.classList.remove('active');
+      productsSortingTabBtn.ariaSelected = false;
+
+      productsFilterTabContent.classList.add('active', 'show');
+      productsSortingTabContent.classList.remove('active', 'show');
+    };
+
     const setProductsSidebar = () => {
       if (window.innerWidth > 767) {
         productsSidebarContent.classList.remove('mobile');
@@ -15,6 +32,7 @@ const productsSidebar = () => {
       } else {
         productsSidebarContent.classList.add('mobile');
         body.classList.remove('overflow-hidden');
+        displayFilterTab();
       }
     };
 

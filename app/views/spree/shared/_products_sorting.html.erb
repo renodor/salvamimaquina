@@ -1,9 +1,11 @@
 <div class="products-sorting dropdown">
-  <div id="productsSortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
-    <%= t('spree.newest') %> <!-- Currently our default sorting -->
-    <%= svg 'chevron_down' %>
-  </div>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="productsSortingDropdown">
+  <% if version == :desktop %>
+    <div id="productsSortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
+      <span><%= t('spree.newest') %></span> <!-- Currently our default sorting -->
+      <%= svg 'chevron_down' %>
+    </div>
+  <% end %>
+  <div class="<%= version == :desktop ? 'dropdown-menu dropdown-menu-end' : '' %>" aria-labelledby="productsSortingDropdown">
     <% Spree::Product.sorting_options.each do |sort_id, sort_name| %>
       <div class="dropdown-item">
         <!-- Current default sorting is "newest to oldest" so we select :descend_by_available_on scope by default -->

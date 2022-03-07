@@ -2,7 +2,9 @@
 
 <div id="taxon-header">
   <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
-  <%= render 'spree/shared/products_sorting', version: :desktop, form: 'products-searcher' %>
+  <div class="hide-m">
+    <%= render 'spree/shared/products_sorting', version: :desktop, form: 'products-searcher' %>
+  </div>
 </div>
 
 <%= render 'spree/shared/products_sidebar' %>
