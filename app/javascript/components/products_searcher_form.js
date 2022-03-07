@@ -1,3 +1,17 @@
+const productsSearcherForm = () => {
+  const productsSearcherForm = document.querySelector('form#products-searcher');
+
+  if (productsSearcherForm) {
+    [...productsSearcherForm.elements].forEach((input) => {
+      input.addEventListener('change', (event) => {
+        productsSearcherForm.submit();
+      });
+    });
+  }
+};
+
+export { productsSearcherForm };
+
 // // This module will refresh products on product grid regarding what product filter and product order is selected
 // const productFilters = () => {
 //   const sidebar = document.getElementById('sidebar');

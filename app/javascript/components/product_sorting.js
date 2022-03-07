@@ -6,26 +6,28 @@ const productSorting = () => {
   const productsSorting = document.querySelector('.products-sorting');
 
   if (productsSorting) {
-    const productsSortingToggle = document.querySelector('#products-sorting-toggle');
-    const productsSortingForms = document.querySelectorAll('.products-sorting-form');
+    // const productsSortingItems = productsSorting.querySelector('.dropdown-item');
+    // productsSortingItems.addEventListener('click', (event) => {
 
-    // Set product sorting displayed text regarding what sorting is currently applied
-    productsSortingForms.forEach((productsSortingForm) => {
-      Array.from(productsSortingForm.elements).forEach((formElement) => {
-        formElement.addEventListener('change', (event) => {
-          const selectedSortingKey = event.currentTarget.dataset.key;
-          document.querySelectorAll(`input[data-key=${selectedSortingKey}]`).forEach((selectedSortingInput) => {
-            selectedSortingInput.checked = true;
-          });
+    // })
 
-          // Each time a new sorting is selected, get the data of the product sorting form
-          // with the currently selected input we retrieve the input node element, which contains its label in a dataset
-          const selectedSorting = new FormData(productsSortingForm).get('sort_products');
-          const selectedSortingLabel = productsSortingForm.querySelector(`input[data-key=${selectedSorting}]`).dataset.label;
-          productsSortingToggle.innerHTML = selectedSortingLabel;
-        });
-      });
-    });
+    // // Set product sorting displayed text regarding what sorting is currently applied
+    // productsSortingForms.forEach((productsSortingForm) => {
+    //   [...productsSortingForm.elements].forEach((formElement) => {
+    //     formElement.addEventListener('change', (event) => {
+    //       // const selectedSortingKey = event.currentTarget.dataset.key;
+    //       // document.querySelectorAll(`input[data-key=${selectedSortingKey}]`).forEach((selectedSortingInput) => {
+    //       //   selectedSortingInput.checked = true;
+    //       // });
+
+    //       // Each time a new sorting is selected, get the data of the product sorting form
+    //       // with the currently selected input we retrieve the input node element, which contains its label in a dataset
+    //       const selectedSorting = new FormData(productsSortingForm).get('sort_products');
+    //       const selectedSortingLabel = productsSortingForm.querySelector(`input[data-key=${selectedSorting}]`).dataset.label;
+    //       productsSortingToggle.innerHTML = selectedSortingLabel;
+    //     });
+    //   });
+    // });
   };
 };
 

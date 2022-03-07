@@ -52,12 +52,20 @@
 
 @media ($max-m) {
   .hidden-m {
-    display: none;
+    display: none!important;
+  }
+}
+
+@media($max-m) {
+  .hide-m {
+    display: none!important;
   }
 }
 
 @media ($min-m) {
   .show-m {
-    display: none;
+    display: none!important;
   }
 }
+
+
