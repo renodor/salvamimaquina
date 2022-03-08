@@ -1,8 +1,10 @@
 .products-sorting {
+  margin-bottom: 30px;
   #productsSortingDropdown {
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     column-gap: 10px;
     svg {
       @include default-transition(transform);
@@ -15,11 +17,12 @@
   }
   .dropdown-menu {
     width: 100%;
+    max-width: 200px;
     border-radius: 0;
     border: 1px solid $light-gray;
     background-color: white;
   }
-  .dropdown-item {
+  .products-sorting-option {
     padding: 0;
     &:hover {
       background-color: white;
@@ -38,7 +41,7 @@
     }
     input {
       display: none;
-      &:checked + label {
+      &.selected + label {
         background-color: $light-green;
         color: $green;
       }

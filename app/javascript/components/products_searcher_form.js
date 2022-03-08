@@ -57,24 +57,19 @@ const productsSearcherForm = () => {
       });
     };
 
-    const setProductsSortingDropdownText = (selectedSortingId) => {
-      const selectedSortingLabel = document.querySelector(`.products-sorting input[data-key=${selectedSortingId}]`).dataset.label;
-      document.querySelector('#productsSortingDropdown span').innerHTML = selectedSortingLabel;
-    };
-
     [...productsSearcherForm.elements].forEach((input) => {
-      input.addEventListener('change', (event) => {
+      input.addEventListener('change', () => {
         const formData = new FormData(productsSearcherForm);
         const queryString = new URLSearchParams(formData);
+        const searchKeywordsQuery = new URLSearchParams(window.location.search).get('keywords');
+        if (searchKeywordsQuery) { queryString.set('keywords', searchKeywordsQuery); }
 
         // Fetch new products from those form data
-        fetch(`/t/filter_products?${queryString.toString()}`, { headers: { 'accept': 'application/json' } })
+        fetch(`/products/filter?${queryString.toString()}`, { headers: { 'accept': 'application/json' } })
             .then((response) => response.json())
             .then(({ products, noProductsMessage }) => {
               products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
             });
-
-        setProductsSortingDropdownText(formData.get('sort_products'));
       });
     });
   }

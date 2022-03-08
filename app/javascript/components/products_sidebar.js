@@ -5,8 +5,8 @@ const productsSidebar = () => {
   if (productsSidebar) {
     const body = document.querySelector('body');
     const productsSidebarContent = productsSidebar.querySelector('#products-sidebar-content');
-    const showProductsSidebarContent = productsSidebar.querySelector('#show-products-sidebar-content');
-    const hideProductsSidebarContent = productsSidebar.querySelector('#hide-products-sidebar-content');
+    const showProductsSidebarContentBtn = productsSidebar.querySelector('#show-products-sidebar-content');
+    const hideProductsSidebarContentBtns = productsSidebar.querySelectorAll('.hide-products-sidebar-content');
 
     const displayFilterTab = () => {
       const filterTabId = 'product-filters-tab';
@@ -42,14 +42,16 @@ const productsSidebar = () => {
 
     setProductsSidebar();
 
-    showProductsSidebarContent.addEventListener('click', () => {
+    showProductsSidebarContentBtn.addEventListener('click', () => {
       productsSidebarContent.classList.add('show');
       body.classList.add('overflow-hidden');
     });
 
-    hideProductsSidebarContent.addEventListener('click', () => {
-      productsSidebarContent.classList.remove('show');
-      body.classList.remove('overflow-hidden');
+    hideProductsSidebarContentBtns.forEach((hideProductsSidebarContentBtn) => {
+      hideProductsSidebarContentBtn.addEventListener('click', () => {
+        productsSidebarContent.classList.remove('show');
+        body.classList.remove('overflow-hidden');
+      });
     });
 
     //   // Add/remove bootstrap modal classes regarding if we are on desktop or mobile

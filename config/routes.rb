@@ -51,7 +51,8 @@ Rails.application.routes.draw do
     end
     put '/account/update_user_address', to: 'users#update_user_address'
 
-    get '/t/filter_products', to: 'taxons#filter_products'
+    get '/products/search_results', to: 'products#search_results'
+    get '/products/filter', to: 'products#filter'
     get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
     get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
 

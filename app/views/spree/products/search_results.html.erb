@@ -1,0 +1,14 @@
+<% self.title = "Search Results for #{params[:keywords]}" %>
+
+<%= render 'spree/shared/products_sidebar', with_categories: false %>
+
+<% if params.key?(:keywords) %>
+  <div>
+    <h6 class="search-results-title"><%= t('spree.search_results') %> <span>"<%= h(params[:keywords]) %>"</span></h6>
+  </div>
+<% end %>
+
+<div class="hide-m">
+  <%= render 'spree/shared/products_sorting', version: :desktop, form: 'products-searcher' %>
+</div>
+<%= render partial: 'spree/shared/products', locals: { products: @products } %>

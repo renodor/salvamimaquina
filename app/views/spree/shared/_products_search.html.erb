@@ -17,7 +17,7 @@
           <h5 class="modal-title" id="productsSearchModalLabel">¿Que producto estas buscando?</h5>
         </div>
         <div class="modal-body">
-          <%= form_tag nested_taxons_path(@taxon || Spree::Taxon.find_by(depth: 0)), method: :get, id: 'products-searcher' do %>
+          <%= form_tag products_search_results_path, method: :get do %>
             <%= text_field_tag :keywords, params[:keywords], placeholder: t('spree.search') %>
             <button type="submit">
               <%= svg 'search' %>

@@ -28,6 +28,7 @@ import { productShowVariants } from '../components/product_show_variants';
 import { productShowThumbnails } from '../components/product_show_thumbnails';
 import { productsSidebar } from '../components/products_sidebar';
 import { productsSearcherForm } from '../components/products_searcher_form';
+import { productSorting } from '../components/product_sorting';
 import { quantitySelector } from '../components/quantity_selector';
 import { cart } from '../components/cart';
 import { previewImageOnFileSelect } from '../components/preview_image_on_file_select';
@@ -47,6 +48,7 @@ document.addEventListener('turbolinks:load', () => {
   productShowThumbnails();
   productsSidebar();
   productsSearcherForm();
+  productSorting();
   quantitySelector();
   cart();
   previewImageOnFileSelect();

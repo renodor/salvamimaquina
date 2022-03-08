@@ -11,6 +11,7 @@ es-MX:
   panama: 'Panamá'
   trade_in: 'Trade in'
   send: 'Envíar'
+  erase: 'Borrar'
   reparation: 'Reparación'
   choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
   reparation_explanation: 'Incluir datos específicos del dispositivo como año, modelo y sistema operativo, además de una breve descripción del problema:'
@@ -177,6 +178,7 @@ es-MX:
     order_mutex_admin_error: 'El Pedido está siendo modificado por alguien. Por favor, inténtelo otra vez.'
     order_mutex_error: 'Algo salió mal. Por favor, vuelva a intentarlo.'
     order_not_found: 'No podemos encontrar su pedido. Por favor, inténtelo otra vez'
+    search_results: 'Resultados de búsqueda para'
   activerecord:
     attributes:
       spree/credit_card:

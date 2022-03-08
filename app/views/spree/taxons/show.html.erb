@@ -7,9 +7,9 @@
   </div>
 </div>
 
-<%= render 'spree/shared/products_sidebar' %>
+<%= render 'spree/shared/products_sidebar', with_categories: true %>
 <div data-hook="taxon_products">
-  <%= render partial: 'spree/shared/products', locals: { products: @products, taxon: @taxon } %>
+  <%= render partial: 'spree/shared/products', locals: { products: @products } %>
 </div>
 
 <%

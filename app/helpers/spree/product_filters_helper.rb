@@ -52,7 +52,7 @@ module Spree
     end
 
     def checkbox_product_filter(option_type)
-      variants = @taxon&.all_variants&.includes(:option_values)
+      variants = @taxon&.all_variants&.includes(:option_values) || @products.map(&:variants_including_master).flatten
 
       return nil unless variants
 

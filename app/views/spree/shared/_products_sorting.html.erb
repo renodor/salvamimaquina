@@ -1,20 +1,21 @@
 <div class="products-sorting dropdown">
   <% if version == :desktop %>
     <div id="productsSortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
-      <span><%= t('spree.newest') %></span> <!-- Currently our default sorting -->
+      <span id="current-product-sorting"><%= t('spree.newest') %></span> <!-- Currently our default sorting -->
       <%= svg 'chevron_down' %>
     </div>
   <% end %>
   <div class="<%= version == :desktop ? 'dropdown-menu dropdown-menu-end' : '' %>" aria-labelledby="productsSortingDropdown">
     <% Spree::Product.sorting_options.each do |sort_id, sort_name| %>
-      <div class="dropdown-item">
+      <div class="dropdown-item products-sorting-option">
         <!-- Current default sorting is "newest to oldest" so we select :descend_by_available_on scope by default -->
         <%= radio_button_tag(
           :sort_products,
           sort_id,
-          true,
+          sort_id == :descend_by_available_on,
           id: "#{sort_id}-#{version}",
           form: 'products-searcher',
+          class: sort_id == :descend_by_available_on ? 'selected'  : '',
           data: { label: t("spree.#{sort_name}"), key: sort_id })
         %>
         <%= label_tag "#{sort_id}-#{version}", t("spree.#{sort_name}") %>

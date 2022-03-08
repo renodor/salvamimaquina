@@ -1,9 +1,11 @@
 <div id="sidebar-products-filter">
-  <%= hidden_field_tag 'per_page', params[:per_page], form: 'products-searcher' %>
-  <%= hidden_field_tag 'id', @taxon.permalink, form: 'products-searcher' %>
-  <%= render 'spree/shared/filters/model_filter' %>
-  <%= render 'spree/shared/filters/color_filter' %>
-  <%= render 'spree/shared/filters/price_range_slider' %>
-  <%= render 'spree/shared/filters/capacity_filter' %>
-  <%= render 'spree/shared/filters/on_sale_products_filter' %>
+  <%= form_tag products_filter_path, method: :get, id: 'products-searcher' do %>
+    <%= hidden_field_tag 'per_page', params[:per_page] %>
+    <%= hidden_field_tag 'taxon_id', @taxon&.id %>
+    <%= render 'spree/shared/filters/model_filter' %>
+    <%= render 'spree/shared/filters/color_filter' %>
+    <%= render 'spree/shared/filters/price_range_slider' %>
+    <%= render 'spree/shared/filters/capacity_filter' %>
+    <%= render 'spree/shared/filters/on_sale_products_filter' %>
+  <% end %>
 </div>
