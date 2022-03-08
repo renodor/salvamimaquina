@@ -26,7 +26,7 @@
   .homepage-features {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 50px;
+    column-gap: 50px;
     margin-top: 30px;
     .homepage-feature {
       text-align: center;

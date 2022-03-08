@@ -48,7 +48,7 @@
       .user-infos-title {
         display: flex;
         justify-content: space-between;
-        grid-column-gap: 10px;
+        column-gap: 10px;
         .edit-user-account {
           padding: 0 20px;
           height: 100%;

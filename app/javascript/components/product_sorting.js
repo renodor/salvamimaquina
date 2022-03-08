@@ -1,4 +1,3 @@
-
 const productSorting = () => {
   // There are actually 2 products sortings. So this selector will get the first one,
   // it is enough to know if we should execute this script or not

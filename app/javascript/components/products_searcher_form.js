@@ -57,6 +57,28 @@ const productsSearcherForm = () => {
       });
     };
 
+    const updateFilterCount = (formDataEntries) => {
+      let count = 0;
+      const priceRangeSlider = productsSearcherForm.querySelector('.price-range-slider .slider input');
+      const priceRangeSlideMinMax = [priceRangeSlider.min, priceRangeSlider.max];
+      for (const [key, value] of formDataEntries) {
+        if (key === 'search[price_between][]' && !priceRangeSlideMinMax.includes(value)) {
+          count += 1;
+        } else if (key.startsWith('search') && key != 'search[price_between][]') {
+          count += 1;
+        }
+      }
+
+      const filterCounts = document.querySelectorAll('#products-sidebar .filter-count');
+      filterCounts.forEach((filterCount) => {
+        if (count > 0) {
+          filterCount.innerHTML = `(${count})`;
+        } else {
+          filterCount.innerHtml = '';
+        }
+      });
+    };
+
     [...productsSearcherForm.elements].forEach((input) => {
       input.addEventListener('change', () => {
         const formData = new FormData(productsSearcherForm);
@@ -70,6 +92,8 @@ const productsSearcherForm = () => {
             .then(({ products, noProductsMessage }) => {
               products.length === 0 ? displayNoProductsMessage(noProductsMessage) : updateProducts(products);
             });
+
+        updateFilterCount(formData.entries());
       });
     });
   }

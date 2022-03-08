@@ -60,7 +60,7 @@ module Spree
     end
 
     def search_results
-      @products = Spree::Product.in_name_or_description(params[:keywords])
+      @products = Spree::Product.in_name_or_description(product_filters_params[:keywords])
     end
 
     private

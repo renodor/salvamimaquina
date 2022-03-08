@@ -2,11 +2,13 @@
   width: 200px;
   height: 100%;
   border: 1px solid $light-gray;
-  margin-right: 25px;
-  padding: 20px 10px;
   flex-shrink: 0;
   text-align: left!important;
   #products-sidebar {
+    .filter-count {
+      margin-left: 5px;
+      font-weight: bolder;
+    }
     #show-products-sidebar-content {
       display: flex;
       align-items: center;
@@ -80,7 +82,7 @@
       #products-sidebar-content-footer {
         display: grid;
         grid-template-columns: 3fr 1fr;
-        grid-column-gap: 10px;
+        column-gap: 10px;
         padding: 20px;
         background-color: white;
         border-top: 1px solid $light-gray;

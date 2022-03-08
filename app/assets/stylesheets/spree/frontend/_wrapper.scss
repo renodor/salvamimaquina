@@ -2,6 +2,7 @@
   min-height: calc(100vh - 110px - 150px);
   &.sidebar-layout {
     display: flex;
+    column-gap: 25px;
   }
   #content {
     padding: 0;

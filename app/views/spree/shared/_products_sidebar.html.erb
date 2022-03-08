@@ -3,6 +3,7 @@
     <button id="show-products-sidebar-content" class="show-m">
       <%= svg 'filters' %>
       <%= t('spree.filter') %>
+      <span class="filter-count"></span>
     </button>
 
     <div id="products-sidebar-content">
@@ -34,6 +35,8 @@
         <%= link_to request.original_fullpath do %>
           <button type="button" class="btn w-100 remove-products-filters">
             <%= t('erase') %>
+            <span class="filter-count">
+            </span>
           </button>
         <% end %>
       </div>
