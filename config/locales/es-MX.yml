@@ -306,6 +306,7 @@ es-MX:
     shipping_informations: 'informacion_de_entrega'
     payment_methods: 'metodos_de_pago'
     identify_your_model: 'identificar_su_modelo'
+    search_results: 'buscar'
     controllers:
       spree:
         reparation_requests:

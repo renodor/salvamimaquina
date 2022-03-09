@@ -51,11 +51,6 @@ Rails.application.routes.draw do
     end
     put '/account/update_user_address', to: 'users#update_user_address'
 
-    get '/products/search_results', to: 'products#search_results'
-    get '/products/filter', to: 'products#filter'
-    get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
-    get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
-
     localized do
       get 'corporate_clients', to: 'home#corporate_clients'
     end
@@ -71,6 +66,13 @@ Rails.application.routes.draw do
     post 'create_user_message', to: 'home#create_user_message'
 
     get '/fake_api_call/show_request', to: 'fake_api_calls#show_request'
+
+    localized do
+      get '/products/search_results', to: 'products#search_results'
+    end
+    get '/products/filter', to: 'products#filter'
+    get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
+    get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
 
     # Solidus Routes can't be localized using the localized block...
     # So we have to manually define the routes we want to translate here...
