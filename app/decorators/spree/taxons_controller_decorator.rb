@@ -14,7 +14,7 @@ module Spree
 
     def set_categories
       if @taxon.depth.zero?
-        @categories = Spree::Taxon.includes(children: :children).find_by(depth: 0).children
+        @categories = Spree::Taxon.find_by(depth: 0).children
       else
         @categories = @taxon.children
         @parent_category = @taxon.parent

@@ -60,7 +60,9 @@ module Spree
     end
 
     def search_results
-      @products = Spree::Product.in_name_or_description(product_filters_params[:keywords])
+      @products = Spree::Product
+                  .in_name_or_description(product_filters_params[:keywords])
+                  .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
     end
 
     private

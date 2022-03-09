@@ -37,6 +37,8 @@ module Spree
       lowest_price = prices[0].price.floor
       highest_price = prices[-1].price.ceil
 
+      return nil if lowest_price == highest_price
+
       if params[:search] && params[:search][:price_between]
         parsed_prices = params[:search][:price_between].map(&:to_i)
         current_min = parsed_prices.min
@@ -52,7 +54,7 @@ module Spree
     end
 
     def checkbox_product_filter(option_type)
-      variants = @taxon&.all_variants&.includes(:option_values) || @products.map(&:variants_including_master).flatten
+      variants = @taxon&.all_variants&.includes(:option_values) || Spree::Variant.where(product: @products).includes(:option_values)
 
       return nil unless variants
 
