@@ -1,5 +1,5 @@
 <div id="products-filters">
-  <%= form_tag products_filter_path, method: :get, id: 'products-searcher' do %>
+  <%= form_tag products_filter_path, method: :get, id: 'products-filters-form' do %>
     <%= hidden_field_tag 'per_page', params[:per_page] %>
     <%= hidden_field_tag 'taxon_id', @taxon&.id %>
     <!-- We need this extra div so that the previous hidden field tags are not taken into account when applying CSS :first-child and :last-child selectors -->

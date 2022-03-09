@@ -1,5 +1,5 @@
-const productsSearcherForm = () => {
-  const productsSearcherForm = document.querySelector('form#products-searcher');
+const productsFiltersForm = () => {
+  const productsSearcherForm = document.querySelector('form#products-filters-form');
 
   if (productsSearcherForm) {
     // HTML of a product card to display on front end
@@ -99,4 +99,4 @@ const productsSearcherForm = () => {
   }
 };
 
-export { productsSearcherForm };
+export { productsFiltersForm };

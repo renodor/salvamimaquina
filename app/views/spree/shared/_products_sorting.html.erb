@@ -14,7 +14,7 @@
           sort_id,
           sort_id == :descend_by_available_on,
           id: "#{sort_id}-#{version}",
-          form: 'products-searcher',
+          form: 'products-filters-form',
           # we need this selected class because the default :checked css selector does not work properly,
           # because this form is displayed 2 times on the same page, so we have 2 inputs with the same id...
           class: sort_id == :descend_by_available_on ? 'selected'  : '',
