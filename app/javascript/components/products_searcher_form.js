@@ -74,7 +74,7 @@ const productsSearcherForm = () => {
         if (count > 0) {
           filterCount.innerHTML = `(${count})`;
         } else {
-          filterCount.innerHtml = '';
+          filterCount.innerHTML = '';
         }
       });
     };
