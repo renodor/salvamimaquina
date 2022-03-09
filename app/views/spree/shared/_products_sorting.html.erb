@@ -5,7 +5,7 @@
       <%= svg 'chevron_down' %>
     </div>
   <% end %>
-  <div class="<%= version == :desktop ? 'dropdown-menu dropdown-menu-end' : '' %>" aria-labelledby="productsSortingDropdown">
+  <div class="<%= version == :desktop ? 'dropdown-menu dropdown-menu-end' : 'products-sorting-options-mobile' %>" aria-labelledby="productsSortingDropdown">
     <% Spree::Product.sorting_options.each do |sort_id, sort_name| %>
       <div class="dropdown-item products-sorting-option">
         <!-- Current default sorting is "newest to oldest" so we select :descend_by_available_on scope by default -->
