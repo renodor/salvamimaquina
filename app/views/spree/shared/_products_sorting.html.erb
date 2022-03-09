@@ -14,6 +14,8 @@
           sort_id,
           sort_id == :descend_by_available_on,
           id: "#{sort_id}-#{version}",
+          # Those inputs arenot directly inside an html <form> tag, because they are positionned in another part of the page,
+          # but we can still link it to a specific form thanks to the "form" attribute:
           form: 'products-filters-form',
           # we need this selected class because the default :checked css selector does not work properly,
           # because this form is displayed 2 times on the same page, so we have 2 inputs with the same id...
