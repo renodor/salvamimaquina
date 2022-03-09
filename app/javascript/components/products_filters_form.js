@@ -52,11 +52,11 @@ const productsFiltersForm = () => {
     // On mobile we display the number of selected filters (on the filters modal trigger, and erase filter button)
     // This method update filters count each time a filter is added/removed
     const updateFilterCount = (formDataEntries) => {
-      let count = 0;
       const priceRangeSlider = productsSearcherForm.querySelector('.price-range-slider .slider input');
 
       if (!priceRangeSlider) { return; }
 
+      let count = 0;
       const priceRangeSlideMinMax = [priceRangeSlider.min, priceRangeSlider.max];
 
       // Loop over all filters to determine if we count it or not.
