@@ -178,7 +178,10 @@ es-MX:
     order_mutex_admin_error: 'El Pedido está siendo modificado por alguien. Por favor, inténtelo otra vez.'
     order_mutex_error: 'Algo salió mal. Por favor, vuelva a intentarlo.'
     order_not_found: 'No podemos encontrar su pedido. Por favor, inténtelo otra vez'
-    search_results: 'Resultados de búsqueda para'
+    search_results:
+      zero: 'Ningún resultado de búsqueda para'
+      one: '%{count} resultado de busqueda para'
+      other: '%{count} resultados de busqueda para'
   activerecord:
     attributes:
       spree/credit_card:

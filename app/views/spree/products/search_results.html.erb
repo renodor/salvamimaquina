@@ -4,7 +4,9 @@
 
 <% if params.key?(:keywords) %>
   <div>
-    <h6 class="search-results-title"><%= t('spree.search_results') %> <span>"<%= h(params[:keywords]) %>"</span></h6>
+    <h6 class="search-results-title">
+      <%= t('spree.search_results', count: @products.size) %> <span>"<%= h(params[:keywords]) %>"</span>
+    </h6>
   </div>
 <% end %>
 

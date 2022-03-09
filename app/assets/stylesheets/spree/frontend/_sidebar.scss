@@ -140,10 +140,6 @@
                 column-gap: 5px;
                 align-items: center;
                 @include default-transition(color, background-color);
-                &:hover {
-                  color: $green;
-                  background-color: $light-green;
-                }
                 svg {
                   display: none;
                   flex-shrink: 0;

@@ -6,8 +6,7 @@ module Spree
       set_categories
       @searcher = build_searcher(params.merge(taxon_id: @taxon.id))
       @products = @searcher.retrieve_products.includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
-      # @products = @products.descend_by_available_on # Currently our default sorting
-      # @products = @products.in_name_or_description(params[:keywords]) if params[:keywords].present?
+      @products = @products.descend_by_available_on # Currently our default sorting
     end
 
     private
