@@ -1,7 +1,7 @@
 <div class="products-sorting dropdown">
   <% if version == :desktop %>
     <div id="productsSortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
-      <span id="current-product-sorting"><%= t('spree.newest') %></span> <!-- Currently our default sorting -->
+      <span id="current-products-sorting"><%= t('spree.newest') %></span> <!-- Currently our default sorting -->
       <%= svg 'chevron_down' %>
     </div>
   <% end %>
@@ -18,7 +18,7 @@
           # but we can still link it to a specific form thanks to the "form" attribute:
           form: 'products-filters-form',
           # we need this selected class because the default :checked css selector does not work properly,
-          # because this form is displayed 2 times on the same page, so we have 2 inputs with the same id...
+          # because those inputs are displayed 2 times on the same page, so we have 2 inputs with the same id...
           class: sort_id == :descend_by_available_on ? 'selected'  : '',
           data: { label: t("spree.#{sort_name}"), key: sort_id })
         %>

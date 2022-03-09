@@ -1,3 +1,4 @@
+// Focus on search input when products search model is open
 const productsSearch = () => {
   const productsSearchModal = document.querySelector('#productsSearchModal');
 
