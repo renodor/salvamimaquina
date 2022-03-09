@@ -1,18 +1,22 @@
 #wrapper {
   min-height: calc(100vh - 110px - 150px);
-  &.sidebar-layout {
-    display: flex;
-    column-gap: 25px;
-  }
-  #content {
-    padding: 0;
-    width: 100%;
+  #wrapper-content {
+    &.sidebar-layout {
+      display: flex;
+      column-gap: 25px;
+    }
+    #content {
+      padding: 0;
+      width: 100%;
+    }
   }
 }
 
 @media ($max-m) {
-  #wrapper.sidebar-layout {
+  #wrapper {
+    #wrapper-content.sidebar-layout {
       flex-direction: column;
+    }
   }
 }
 

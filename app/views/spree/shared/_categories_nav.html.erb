@@ -1,0 +1,19 @@
+<% content_for :content_header do %>
+  <nav id="categories-nav">
+    <% if @parent_category %>
+      <div id="categories-nav-parent-item">
+        <%= link_to spree.nested_taxons_path(@taxon.parent), class: 'category-nav-link' do %>
+          <%= svg 'double_chevron_left' %>
+          <%= @parent_category.name %>
+        <% end %>
+      </div>
+    <% end %>
+    <div id="categories-nav-links-container">
+      <div id="categories-nav-links">
+        <% @categories.each_with_index do |category, i| %>
+          <%= link_to category.name, spree.nested_taxons_path(category), class: @taxon.id == category.id ? 'category-nav-link active' : 'category-nav-link ' %>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+<% end %>

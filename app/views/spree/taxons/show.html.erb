@@ -1,5 +1,6 @@
 <% self.title = @taxon.name %>
 
+<%= render 'spree/shared/categories_nav' %>
 <div id="taxon-header">
   <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
   <div class="hide-m">
@@ -7,7 +8,7 @@
   </div>
 </div>
 
-<%= render 'spree/shared/products_sidebar', with_categories: true %>
+<%= render 'spree/shared/products_sidebar' %>
 <div data-hook="taxon_products">
   <%= render partial: 'spree/shared/products', locals: { products: @products } %>
 </div>

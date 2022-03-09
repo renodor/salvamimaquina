@@ -56,8 +56,8 @@ namespace :setup_prod_db do
   task :create_taxonomies do
     Rails.logger.info('Create Categories Taxonomies')
     categories_taxonomy = Spree::Taxonomy.find_or_create_by!(name: 'Categories', position: 1)
-    categories_taxon = categories_taxonomy.taxons.find_or_initialize_by(name: 'Categorias', position: 1)
-    categories_taxon.update!(permalink: 'categorias')
+    categories_taxon = categories_taxonomy.taxons.find_or_initialize_by(name: 'Todo', position: 1)
+    categories_taxon.update!(permalink: 'todos_los_productos')
 
     Spree::Taxonomy.where.not(id: categories_taxonomy.id).destroy_all
   end
