@@ -12,9 +12,9 @@
       flex-grow: 1;
       overflow-x: auto;
       &::-webkit-scrollbar {
-        height: 2px; /* Mostly for horizontal scrollbars */
+        height: 2px;
       }
-      &::-webkit-scrollbar-thumb { /* Foreground */
+      &::-webkit-scrollbar-thumb {
         background: $light-gray;
       }
       #categories-nav-links {
