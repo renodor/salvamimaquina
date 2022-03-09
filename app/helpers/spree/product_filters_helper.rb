@@ -28,7 +28,7 @@ module Spree
     }.freeze
 
     def build_price_range_slider_values
-      variant_ids = @taxon&.all_variants&.pluck(:id)
+      variant_ids = @taxon&.all_variants&.pluck(:id) || Spree::Variant.where(product: @products).pluck(:id)
 
       return nil unless variant_ids.present?
 

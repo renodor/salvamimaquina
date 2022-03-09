@@ -141,6 +141,9 @@
               @include default-transition(color, background-color);
               svg {
                 display: none;
+                width: 10px;
+                height: 10px;
+                fill: $green;
                 flex-shrink: 0;
               }
             }
