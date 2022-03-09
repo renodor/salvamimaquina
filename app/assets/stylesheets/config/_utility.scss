@@ -50,12 +50,6 @@
   overflow: hidden;
 }
 
-@media ($max-m) {
-  .hidden-m {
-    display: none!important;
-  }
-}
-
 @media($max-m) {
   .hide-m {
     display: none!important;

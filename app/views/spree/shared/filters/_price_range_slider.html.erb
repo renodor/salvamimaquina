@@ -1,7 +1,7 @@
 <% if price_range_slider = build_price_range_slider_values %>
   <div class="product-filter">
     <div class="product-filter-content">
-      <h6 class="filter-title"><%= I18n.t('spree.price') %></h6>
+      <h6 class="product-filter-title"><%= I18n.t('spree.price') %></h6>
       <div class="price-range-slider">
         <div class="current-values">
           <span>$<%= price_range_slider[:current_min] %></span>

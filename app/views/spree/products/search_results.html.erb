@@ -1,4 +1,4 @@
-<% self.title = "Search Results for #{h(params[:keywords])}" %>
+<% self.title = t('spree.search_result', keyword: h(params[:keywords])) %>
 
 <%= render 'spree/shared/products_sidebar' %>
 

@@ -1,6 +1,10 @@
 <% self.title = @taxon.name %>
 
+
 <%= render 'spree/shared/categories_nav' %>
+
+<%= render 'spree/shared/products_sidebar' %>
+
 <div id="taxon-header">
   <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
   <div class="hide-m">
@@ -8,20 +12,6 @@
   </div>
 </div>
 
-<%= render 'spree/shared/products_sidebar' %>
 <div data-hook="taxon_products">
   <%= render partial: 'spree/shared/products', locals: { products: @products } %>
 </div>
-
-<%
-=begin%>
- <% unless params[:keywords].present? %>
-  <div data-hook="taxon_children">
-    <% cache [I18n.locale, @taxon] do %>
-      <%= render partial: 'taxon', collection: @taxon.children %>
-    <% end %>
-  </div>
-<% end %> 
-<%
-=end%>
-

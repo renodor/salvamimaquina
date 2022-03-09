@@ -1,10 +1,10 @@
 <% content_for :content_header do %>
   <nav id="categories-nav">
-    <% if @parent_category %>
+    <% unless @taxon.depth.zero? %>
       <div id="categories-nav-parent-item">
         <%= link_to spree.nested_taxons_path(@taxon.parent), class: 'category-nav-link' do %>
           <%= svg 'double_chevron_left' %>
-          <%= @parent_category.name %>
+          <%= @taxon.parent.name %>
         <% end %>
       </div>
     <% end %>

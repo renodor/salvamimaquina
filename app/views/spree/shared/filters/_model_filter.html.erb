@@ -1,11 +1,10 @@
 <!-- TODO: can be refacto in the same partial with color_filter, and capacity -->
 <% model_filter = checkbox_product_filter('model') %>
 <% model_option_type = Spree::OptionType.find_by(name: 'model') %>
-
 <% if model_filter.present? %>
   <div class="product-filter">
     <div class="product-filter-content">
-      <h6 class="filter-title"><%= t('spree.model', count: model_filter.size) %></h6>
+      <h6 class="product-filter-title"><%= t('spree.model', count: model_filter.size) %></h6>
       <ul>
         <% model_filter.each do |model_name, model_id| %>
           <li>
@@ -13,7 +12,6 @@
                     id="<%= model_id %>"
                     name="<%= "search[with_option][#{model_option_type.id}][]" %>"
                     value="<%= model_id %>"
-                    form="products-searcher"
                     <%= params.dig(:search, :with_option, model_option_type.id.to_s)&.include?(model_id.to_s) ? "checked" : "" %>
             />
             <label class="product-filter-label" for="<%= model_id %>">

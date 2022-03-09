@@ -4,7 +4,7 @@
 <% if capacity_filter.present? %>
   <div class="product-filter">
     <div class="product-filter-content">
-      <h6 class="filter-title"><%= t('spree.capacity') %></h6>
+      <h6 class="product-filter-title"><%= t('spree.capacity') %></h6>
       <ul>
         <% capacity_filter.each do |capacity, capacity_id| %>
           <li>
@@ -12,7 +12,6 @@
                     id="<%= capacity_id %>"
                     name="<%= "search[with_option][#{capacity_option_type.id}][]" %>"
                     value="<%= capacity_id %>"
-                    form="products-searcher"
                     <%= params.dig(:search, :with_option, capacity_option_type.id.to_s)&.include?(capacity_id.to_s) ? "checked" : "" %>
             />
             <label class="product-filter-label" for="<%= capacity_id %>">

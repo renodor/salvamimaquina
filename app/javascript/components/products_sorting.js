@@ -1,4 +1,4 @@
-const productSorting = () => {
+const productsSorting = () => {
   // There are actually 2 products sortings. So this selector will get the first one,
   // it is enough to know if we should execute this script or not
   // (But we won't use it later in the script because we need to work with both forms)
@@ -24,4 +24,4 @@ const productSorting = () => {
   };
 };
 
-export { productSorting };
+export { productsSorting };
