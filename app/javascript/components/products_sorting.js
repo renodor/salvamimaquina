@@ -1,4 +1,4 @@
-// Set product sorting displayed text regarding what sorting is currently applied
+// Set products sorting displayed text regarding what sorting is currently applied
 const productsSorting = () => {
   // There are actually 2 products sortings. So this selector will get the first one,
   // it is enough to know if we should execute this script or not
@@ -15,8 +15,8 @@ const productsSorting = () => {
         productsSortingOptions.forEach((option) => option.classList.remove('selected'));
         document.querySelectorAll(`input[value=${selectedSortingKey}]`).forEach((selectedSortingInput) => {
           selectedSortingInput.checked = true;
-          // we need this selected class because the default :checked css selector does not work properly,
-          // because those inputes are displayed 2 times on the same page, so we have 2 inputs with the same id...
+          // we need this .selected class because the default :checked css selector does not work properly,
+          // because those inputs are displayed 2 times on the same page, so we have 2 inputs with the same id...
           selectedSortingInput.classList.add('selected');
         });
 

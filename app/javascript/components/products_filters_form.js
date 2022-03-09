@@ -57,7 +57,7 @@ const productsFiltersForm = () => {
       const priceRangeSlideMinMax = [priceRangeSlider.min, priceRangeSlider.max];
 
       // Loop over all filters to determine if we count it or not.
-      // Indeed, we don't count "sorting", and we count price range only if they have been used (if the value are different from the original min and max values)
+      // Indeed, we don't count "sorting", and we count price range only if they have been used (if the values are different from the original min and max values)
       for (const [key, value] of formDataEntries) {
         if (key === 'search[price_between][]') {
           if (!priceRangeSlideMinMax.includes(value)) {
