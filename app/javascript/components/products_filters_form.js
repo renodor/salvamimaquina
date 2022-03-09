@@ -54,6 +54,9 @@ const productsFiltersForm = () => {
     const updateFilterCount = (formDataEntries) => {
       let count = 0;
       const priceRangeSlider = productsSearcherForm.querySelector('.price-range-slider .slider input');
+
+      if (!priceRangeSlider) { return; }
+
       const priceRangeSlideMinMax = [priceRangeSlider.min, priceRangeSlider.max];
 
       // Loop over all filters to determine if we count it or not.
