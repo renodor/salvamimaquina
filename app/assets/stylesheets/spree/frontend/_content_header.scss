@@ -11,6 +11,12 @@
       justify-content: flex-start;
       flex-grow: 1;
       overflow-x: auto;
+      &::-webkit-scrollbar {
+        height: 2px; /* Mostly for horizontal scrollbars */
+      }
+      &::-webkit-scrollbar-thumb { /* Foreground */
+        background: $light-gray;
+      }
       #categories-nav-links {
         flex-grow: 1;
         display: flex;
