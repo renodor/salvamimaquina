@@ -29,7 +29,9 @@
       &.mobile {
         position: fixed;
         top: 100%;
+        bottom: 0;
         left: 0;
+        right: 0;
         width: 100%;
         height: 100%;
         z-index: 100;
@@ -40,8 +42,7 @@
         flex-direction: column;
       }
       &.show {
-        top: 0;
-        bottom: 0;
+        top: 0px;
       }
       #products-sidebar-content-header {
         padding: 20px;
