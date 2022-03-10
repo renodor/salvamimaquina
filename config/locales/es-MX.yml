@@ -223,15 +223,15 @@ es-MX:
         signed_out: 'Sesión finalizada.'
   home_page:
     intro_title: 'Salva Mi Máquina ¡Somos expertos en dispositivos Apple!'
-    intro: 'Lideres en reparacion de equipos Apple. Venta y servicio técnico de equipos Apple y Windows. Diagnostico rápido y precios accesibles.'
+    intro: 'Empresa líder en Panamá dedicada a la reparación y venta de dispositivos Apple como iPads, iPhones, Mac y PC basadas en Windows. Diagnósticos de tu Macbook, PC o teléfono en tiempos óptimos y precios accesibles.'
     reparation_service_title: '¿Cómo funciona el servicio de reparación?'
     features:
       feature_one_title: 'Diagnóstico'
-      feature_one_text: 'Te presentaremos un diagnóstico y tiempo de reparación dependiendo de su dispositivo y tipo de problema.'
+      feature_one_text: 'Diagnóstico de tu computador MacBook o Windows en un tiempo optimo. Cambios de pantallas de iPhone en 40 minutos.'
       feature_two_title: 'Elegir el lugar'
       feature_two_text: 'Escoger entre llevar su equipo a una de nuestras dos sucursales y programar un servicio de mensajería a domicilio.'
-      feature_three_title: 'Poner una sonrisa en su cara'
-      feature_three_text: 'Se le notificará automáticamente cuando su equipo esté listo. Se beneficiará de una garantía de hasta 1 año.'
+      feature_three_title: 'Quédate tranquilo'
+      feature_three_text: 'Recibirá un email apenas su computador o teléfono este listo. La mayoría de nuestras reparaciones tienen 6 meses de garantía!'
     shop_name: 'Tienda Salva Mi Máquina'
     best_at_best_price: 'Lo mejor de Apple, ¡al mejor precio!'
   corporate_services:
