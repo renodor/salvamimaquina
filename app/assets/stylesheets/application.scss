@@ -12,6 +12,7 @@
 // Components
 @import 'components/container';
 @import 'components/navbar';
+@import 'components/products_search';
 @import 'components/banner';
 @import 'components/slider';
 @import 'components/btn';
@@ -25,6 +26,7 @@
 
 // Spree Components
 @import 'spree/frontend/wrapper';
+@import 'spree/frontend/content_header';
 @import 'spree/frontend/login';
 @import 'spree/frontend/categories_grid';
 @import 'spree/frontend/sidebar';
@@ -53,6 +55,7 @@
 @import 'pages/user_account';
 @import 'pages/trade_in';
 @import 'pages/identify_your_model';
+@import 'pages/search_results';
 
 body {
   color: $dark-gray;

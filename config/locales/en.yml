@@ -41,6 +41,8 @@ en:
   about: 'About'
   panama: 'Panama'
   trade_in: 'Trade in'
+  send: 'Send'
+  erase: 'Clean'
   reparation: 'Reparation'
   choose_reparation_category: 'What type of equipment do you need to repair?'
   reparation_explanation: 'Include specific information about your device, like the year, the model, the operative system, and add a short description of the issue you are facing.'
@@ -150,6 +152,11 @@ en:
         disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'
         new_ecommerce_order: 'New order on salvamimaquina.com'
         client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
+    search_result: 'Search results for %{keyword}'
+    search_results:
+      zero: 'No search results for'
+      one: '%{count} search result for'
+      other: '%{count} search results for'
   activerecord:
     attributes:
       spree/promotion/rules/shipping_method:

@@ -6,7 +6,7 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
       # Product categories (taxons) all belong to one parent taxon named "Categories",
       # that itself belong to one parent taxonomy names "Categories"
       @categories_taxonomy = Spree::Taxonomy.find_by(name: 'Categories') || raise('Categories Taxonomy is needed')
-      @root_taxon = Spree::Taxon.find_by(depth: 0, taxonomy_id: @categories_taxonomy.id) || raise('Root Taxon named "Categorias" is needed')
+      @root_taxon = Spree::Taxon.find_by(depth: 0, taxonomy_id: @categories_taxonomy.id) || raise('Root Taxon is needed')
 
       # Fetch all product categories from RepairShopr
       # (Only the categories below the root category "ecom" will be returned)

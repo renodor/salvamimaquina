@@ -1,66 +1,17 @@
 <% self.title = @taxon.name %>
 
+
+<%= render 'spree/shared/categories_nav' %>
+
+<%= render 'spree/shared/products_sidebar' %>
+
 <div id="taxon-header">
   <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
-  <%= render 'spree/shared/products_sorting', version: :desktop %>
-</div>
-
-<% content_for :sidebar do %>
-  <div id="product-filters-modal">
-    <span id="product-filters-modal-toggle" class="show-m" data-bs-toggle="modal" data-bs-target="#productFiltersModal">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
-      </svg>
-      <%= t('spree.filter') %>
-    </span>
-
-    <!-- Bootstrap modal classes (modal fade) will be added/removed by JS depending on the screen size -->
-    <div class="" id="productFiltersModal" tabindex="-1" aria-labelledby="productFiltersModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <ul class="nav nav-tabs" id="productFiltersAndSortingTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="product-filters-tab" data-bs-toggle="tab" data-bs-target="#product-filters-tab-content" type="button" role="tab" aria-controls="product-filters-tab-content" aria-selected="true"><%= t('spree.filter') %></button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="products-sorting-tab" data-bs-toggle="tab" data-bs-target="#products-sorting-tab-content" type="button" role="tab" aria-controls="products-sorting-tab-content" aria-selected="false"><%= t('spree.sort') %></button>
-              </li>
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div data-hook="taxon_sidebar_navigation">
-              <div class="tab-content" id="productFiltersAndSortingTabContent">
-                <div class="tab-pane fade show active" id="product-filters-tab-content" role="tabpanel" aria-labelledby="product-filters-tab">
-                  <%= render 'spree/shared/categories' %>
-                  <%= render 'spree/shared/filters' %>
-                </div>
-                <div class="tab-pane fade" id="products-sorting-tab-content" role="tabpanel" aria-labelledby="products-sorting-tab">
-                  <%= render 'spree/shared/products_sorting', version: :mobile %>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="hide-m">
+    <%= render 'spree/shared/products_sorting', version: :desktop %>
   </div>
-<% end %>
+</div>
 
 <div data-hook="taxon_products">
-  <%= render partial: 'spree/shared/products', locals: { products: @products, taxon: @taxon } %>
+  <%= render partial: 'spree/shared/products', locals: { products: @products } %>
 </div>
-
-<%
-=begin%>
- <% unless params[:keywords].present? %>
-  <div data-hook="taxon_children">
-    <% cache [I18n.locale, @taxon] do %>
-      <%= render partial: 'taxon', collection: @taxon.children %>
-    <% end %>
-  </div>
-<% end %> 
-<%
-=end%>
-

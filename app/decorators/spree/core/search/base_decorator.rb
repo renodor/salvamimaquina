@@ -13,7 +13,8 @@ module Spree
         protected
 
         def get_base_scope # rubocop:disable Naming/AccessorMethodName
-          base_scope = Spree::Product.in_taxon(@properties[:taxon]) unless @properties[:taxon].blank?
+          base_scope = Spree::Product.all
+          base_scope = base_scope.in_taxon(@properties[:taxon]) if @properties[:taxon].present?
           base_scope = get_products_conditions_for(base_scope, @properties[:keywords])
           base_scope = add_simple_scopes(base_scope)
           add_search_scopes(base_scope)
@@ -43,8 +44,14 @@ module Spree
         end
 
         def prepare(params)
-          super
+          @properties[:taxon] = Spree::Taxon.find_by(id: params[:taxon_id])
+          @properties[:keywords] = params[:keywords]
+          @properties[:search] = params[:search]
+          @properties[:include_images] = params[:include_images]
 
+          per_page = params[:per_page].to_i
+          @properties[:per_page] = per_page.positive? ? per_page : Spree::Config[:products_per_page]
+          @properties[:page] = params[:page].to_i <= 0 ? 1 : params[:page].to_i
           @properties[:scopes] = params[:scopes]
         end
 

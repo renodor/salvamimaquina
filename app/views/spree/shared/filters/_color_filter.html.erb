@@ -2,19 +2,21 @@
 <% color_filter = checkbox_product_filter('color') %>
 <% color_option_type = Spree::OptionType.find_by(name: 'color') %>
 <% if color_filter.present? %>
-  <div class="navigation product-filter" data-hook="navigation">
-    <h6 class="filter-title"><%= t('spree.color', count: color_filter.size) %></h6>
-    <div id="color-filter" class="color-badges">
-      <% color_filter.each do |color, color_id| %>
-          <input type="checkbox"
-                  id="<%= color_id %>"
-                  name="<%= "search[with_option][#{color_option_type.id}][]" %>"
-                  value="<%= color_id %>"
-                  <%= params.dig(:search, :with_option, color_option_type.id.to_s)&.include?(color_id.to_s) ? "checked" : "" %>
-          />
-          <label class="color-filter-label" style="background-color: <%= color_code(color) %>;" for="<%= color_id %>">
-          </label>
-      <% end %>
+  <div class="product-filter">
+    <div class="product-filter-content">
+      <h6 class="product-filter-title"><%= t('spree.color', count: color_filter.size) %></h6>
+      <div id="color-filter" class="color-badges">
+        <% color_filter.each do |color, color_id| %>
+            <input type="checkbox"
+                    id="<%= color_id %>"
+                    name="<%= "search[with_option][#{color_option_type.id}][]" %>"
+                    value="<%= color_id %>"
+                    <%= params.dig(:search, :with_option, color_option_type.id.to_s)&.include?(color_id.to_s) ? "checked" : "" %>
+            />
+            <label class="color-filter-label" style="background-color: <%= color_code(color) %>;" for="<%= color_id %>">
+            </label>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

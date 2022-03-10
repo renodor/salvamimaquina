@@ -51,13 +51,15 @@
 }
 
 @media ($max-m) {
-  .hidden-m {
-    display: none;
+  .hide-m {
+    display: none!important;
   }
 }
 
 @media ($min-m) {
   .show-m {
-    display: none;
+    display: none!important;
   }
 }
+
+

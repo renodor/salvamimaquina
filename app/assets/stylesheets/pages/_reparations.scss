@@ -6,7 +6,7 @@
   #reparation-categories-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 20px;
+    column-gap: 20px;
     grid-row-gap: 20px;
     .reparation-category {
       padding: 15px;

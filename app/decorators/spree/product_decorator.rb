@@ -14,6 +14,7 @@ module Spree
       add_search_scope :with_option do |option_type_id, option_value_id| # option_value_id can be one single id or an array of ids, it works the same
         joins(:option_types, variants_including_master: :option_values)
           .where(option_types: { id: option_type_id }, option_values: { id: option_value_id })
+          .distinct
       end
 
       # Modify the solidus in_taxon scope to remove ordering and thus greatly simplify its SQL

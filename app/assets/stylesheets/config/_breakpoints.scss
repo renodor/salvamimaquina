@@ -15,9 +15,3 @@ $min-m: 'min-width: #{$medium + 1}';
 $min-l: 'min-width: #{$large + 1}';
 $min-xl: 'min-width: #{$x-large + 1}';
 $min-xxl: 'min-width: #{$xx-large + 1}';
-
-@media($max-m) {
-  .hide-m {
-    display: none;
-  }
-}

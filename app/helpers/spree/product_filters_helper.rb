@@ -28,7 +28,7 @@ module Spree
     }.freeze
 
     def build_price_range_slider_values
-      variant_ids = @taxon&.all_variants&.pluck(:id)
+      variant_ids = @taxon&.all_variants&.pluck(:id) || Spree::Variant.where(product: @products).pluck(:id)
 
       return nil unless variant_ids.present?
 
@@ -36,6 +36,8 @@ module Spree
 
       lowest_price = prices[0].price.floor
       highest_price = prices[-1].price.ceil
+
+      return nil if lowest_price == highest_price
 
       if params[:search] && params[:search][:price_between]
         parsed_prices = params[:search][:price_between].map(&:to_i)
@@ -52,7 +54,7 @@ module Spree
     end
 
     def checkbox_product_filter(option_type)
-      variants = @taxon&.all_variants&.includes(:option_values)
+      variants = @taxon&.all_variants&.includes(:option_values) || Spree::Variant.where(product: @products).includes(:option_values)
 
       return nil unless variants
 

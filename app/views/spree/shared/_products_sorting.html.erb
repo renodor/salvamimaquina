@@ -1,18 +1,29 @@
-<div class="products-sorting <%= version == :desktop ? 'dropdown hide-m' : '' %>">
+<div class="products-sorting dropdown">
   <% if version == :desktop %>
-    <div id="products-sorting-toggle" id="productsSortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
-      <%= t('spree.newest') %> <!-- Currently our default sorting -->
+    <div id="productsSortingDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
+      <span id="current-products-sorting"><%= t('spree.newest') %></span> <!-- Currently our default sorting -->
+      <%= svg 'chevron_down' %>
     </div>
   <% end %>
-  <div class="<%= version == :desktop ? 'dropdown-menu dropdown-menu-end' : '' %>" aria-labelledby="productsSortingDropdown">
-    <%= form_tag '', method: :get, class: "products-sorting-form #{version}" do %>
-      <% Spree::Product.sorting_options.each do |sort_id, sort_name| %>
-        <div class="<%= version == :desktop ? 'dropdown-item' : '' %>">
-          <!-- Current default sorting is "newest to oldest" so we select :descend_by_available_on scope by default -->
-          <%= radio_button_tag(:sort_products, sort_id, sort_id == :descend_by_available_on, id: "#{sort_id}-#{version}", data: { label: t("spree.#{sort_name}"), key: sort_id }) %>
-          <%= label_tag "#{sort_id}-#{version}", t("spree.#{sort_name}") %>
-        </div>
-      <% end %>
+  <div class="<%= version == :desktop ? 'dropdown-menu dropdown-menu-end' : 'products-sorting-options-mobile' %>" aria-labelledby="productsSortingDropdown">
+    <% Spree::Product.sorting_options.each do |sort_id, sort_name| %>
+      <div class="dropdown-item products-sorting-option">
+        <!-- Current default sorting is "newest to oldest" so we select :descend_by_available_on scope by default -->
+        <%= radio_button_tag(
+          :sort_products,
+          sort_id,
+          sort_id == :descend_by_available_on,
+          id: "#{sort_id}-#{version}",
+          # Those inputs are not directly inside an html <form> tag, because they are positionned in another part of the page,
+          # but we can still link it to a specific form thanks to the "form" attribute:
+          form: 'products-filters-form',
+          # we need this selected class because the default :checked css selector does not work properly,
+          # because those inputs are displayed 2 times on the same page, so we have 2 inputs with the same id...
+          class: sort_id == :descend_by_available_on ? 'selected'  : '',
+          data: { label: t("spree.#{sort_name}"), key: sort_id })
+        %>
+        <%= label_tag "#{sort_id}-#{version}", t("spree.#{sort_name}") %>
+      </div>
     <% end %>
   </div>
 </div>
