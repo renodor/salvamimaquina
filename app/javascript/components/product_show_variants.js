@@ -76,6 +76,13 @@ const productShowVariants = () => {
       });
     };
 
+    // Update url params with the new variant id
+    const updateCurrentUrl = (variantId) => {
+      const url = new URL(window.location);
+      url.searchParams.set('variant', variantId);
+      history.pushState({}, '', url);
+    };
+
     // Fetch the selected variant thanks to the current selected option values
     // Then call the different methods to update all the variant informations (price, image, thumbnails etc...)
     const updateVariantInformations = () => {
@@ -90,6 +97,7 @@ const productShowVariants = () => {
             updateQuantityInput(variant);
             updateAddToCartBtn(variant);
             updateVariantPrice(variant);
+            updateCurrentUrl(variant.id);
           });
     };
 
