@@ -164,6 +164,11 @@ module Spree
       shipment_attributes['1'][:selected_shipping_rate_id] = second_shipment_corresponding_shipping_rate_id
     end
 
+    # Provides a route to redirect after order completion
+    def completion_route
+      spree.orders_es_mx_path(@order)
+    end
+
     Spree::CheckoutController.prepend self
   end
 end

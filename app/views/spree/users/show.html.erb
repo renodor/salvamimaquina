@@ -57,7 +57,7 @@
       <% if @orders.present? %>
         <% @orders.each do |order| %>
           <div class="user-order">
-            <div class="order-number"><%= link_to order.number, order_url(order), class: 'btn btn-primary' %></div>
+            <div class="order-number"><%= link_to order.number, orders_es_mx_url(order), class: 'btn btn-primary' %></div>
             <div class="order-date"><%= l order.completed_at.to_date %></div>
             <div class="order-status"><%= t("spree.order_state.#{order.state}").titleize %></div>
             <div class="order-payment-state"><%= t("spree.payment_states.#{order.payment_state}").titleize if order.payment_state %></div>
