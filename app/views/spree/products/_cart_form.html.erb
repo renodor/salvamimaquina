@@ -77,6 +77,7 @@
             <%= number_to_currency(price) %>
           </span>
         </div>
+        <meta itemprop="priceCurrency" content="USD">
       </div>
 
       <div class="add-to-cart">
@@ -100,12 +101,16 @@
           <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.buy').upcase %>
           <% end %>
+          <link itemprop="availability" href="http://schema.org/InStock">
         <% else %>
           <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.out_of_stock').upcase %>
           <% end %>
+          <link itemprop="availability" href="http://schema.org/OutOfStock">
         <% end %>
       </div>
     </div>
+
+    <link itemprop="itemCondition" href="http://schema.org/NewCondition">
   </div>
 <% end %>
