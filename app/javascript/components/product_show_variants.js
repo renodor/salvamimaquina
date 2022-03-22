@@ -79,7 +79,7 @@ const productShowVariants = () => {
     // Update url params with the new variant id
     const updateCurrentUrl = (variantId) => {
       const url = new URL(window.location);
-      url.searchParams.set('variant', variantId);
+      url.searchParams.set('variant_id', variantId);
       history.pushState({}, '', url);
     };
 

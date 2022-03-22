@@ -2,7 +2,7 @@
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
     <%= hidden_field_tag :product_id, @product.id %>
     <% if @product_has_variant %>
-      <% cheapest_variant_option_values = @product.cheapest_variant.option_values %>
+      <% current_variant_option_values = @current_variant&.option_values || @product.cheapest_variant.option_values %>
       <div id="product-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
           <% if option_type.name == 'model' %>
@@ -18,7 +18,7 @@
                     <%=
                       radio_button_tag "variant_options[option_type_#{option_type.id}]",
                       color.id,
-                      cheapest_variant_option_values.find_by(option_type_id: option_type.id).id == color.id,
+                      current_variant_option_values.find_by(option_type_id: option_type.id).id == color.id,
                       { data: { option_type_id: option_type.id } }
                     %>
                     <%=
@@ -41,7 +41,7 @@
                         option_value.name,
                         option_value.id,
                         {
-                          selected: cheapest_variant_option_values.find_by(option_type_id: option_type.id).id == option_value.id,
+                          selected: current_variant_option_values.find_by(option_type_id: option_type.id).id == option_value.id,
                           data: { option_type_id: option_type.id }
                         }
                       ]
@@ -60,6 +60,7 @@
       </div>
     <% end %>
     <%# If products has no variant the variant_id is the master id. If it has variants the variant_id will be defined by JS %>
+    <%# TODO now: conflict between this params['variant_id] and the one added in the URL? %>
     <%= hidden_field_tag 'variant_id', @master.id %>
 
     <%# Only take into account the product master for the case it has no variants,
