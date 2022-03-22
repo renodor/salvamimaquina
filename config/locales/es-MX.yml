@@ -193,6 +193,7 @@ es-MX:
         shop: 'Sucursal'
         name: 'Nombre'
         email: 'Correo'
+        phone: 'Teléfono'
         comment: 'Comentario'
         shops:
           bella_vista: 'Bella Vista'

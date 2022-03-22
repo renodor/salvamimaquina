@@ -24,7 +24,7 @@ module Spree
     private
 
     def reparation_request_params
-      params.require(:reparation_request).permit(:product, :damage, :shop, :name, :email, :comment)
+      params.require(:reparation_request).permit(:product, :damage, :shop, :name, :email, :phone, :comment)
     end
   end
 end
