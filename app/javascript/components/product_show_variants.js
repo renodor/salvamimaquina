@@ -28,12 +28,15 @@ const productShowVariants = () => {
     // Enable/disable add to cart btn and update its text regarding if variant is available or not
     const updateAddToCartBtn = ({ totalStock }) => {
       const addToCartBtn = cartForm.querySelector('.add-to-cart #add-to-cart-btn');
+      const itemPropAvailability = cartForm.querySelector('link[itemprop=availability]');
       if (totalStock > 0) {
         addToCartBtn.disabled = false;
         addToCartBtn.innerHTML = addToCartBtn.dataset.buy.toUpperCase();
+        itemPropAvailability.href = 'http://schema.org/InStock';
       } else {
         addToCartBtn.disabled = true;
         addToCartBtn.innerHTML = addToCartBtn.dataset.outOfStock.toUpperCase();
+        itemPropAvailability.href = 'http://schema.org/OutOfStock';
       }
     };
 
@@ -44,12 +47,16 @@ const productShowVariants = () => {
       const discountPriceTag = cartForm.querySelector('#product-price .price.discount');
       discountPriceTag.innerHTML = discountPrice;
 
+      const itemPropPrice = cartForm.querySelector('meta[itemprop=price]');
+
       if (onSale) {
         priceTag.classList.add('crossed');
         discountPriceTag.classList.remove('display-none');
+        itemPropPrice.content = price.replace('$', '');
       } else {
         discountPriceTag.classList.add('display-none');
         priceTag.classList.remove('crossed');
+        itemPropPrice.content = discountPrice.replace('$', '');
       }
     };
 
@@ -80,7 +87,8 @@ const productShowVariants = () => {
     const updateCurrentUrl = (variantId) => {
       const url = new URL(window.location);
       url.searchParams.set('variant_id', variantId);
-      history.pushState({}, '', url);
+      history.replaceState(history.state, '', url);
+      productShow.querySelector('[itemprop=url]').content = url;
     };
 
     // Fetch the selected variant thanks to the current selected option values

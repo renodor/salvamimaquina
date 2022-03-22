@@ -70,14 +70,15 @@
       <div id="product-price">
         <div>
           <% discount_price = @master.price %>
-          <span class="price selling discount <%= master_on_sale ? '' : 'display-none' %>" itemprop="price" content="<%= discount_price %>">
+          <span class="price selling discount <%= master_on_sale ? '' : 'display-none' %>">
             <%= number_to_currency(discount_price) %>
           </span>
           <% price = @master.original_price %>
-          <span class="price selling original <%= master_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= price %>">
+          <span class="price selling original <%= master_on_sale ? 'crossed' : '' %>">
             <%= number_to_currency(price) %>
           </span>
         </div>
+        <meta itemprop="price" content="<%= master_on_sale ?  discount_price : price %>">
         <meta itemprop="priceCurrency" content="USD">
       </div>
 
