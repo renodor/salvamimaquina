@@ -11,7 +11,7 @@ if products has variants, the corresponding thumbnail will be selected by JS %>
       data-image-url="<%= cl_image_path_with_folder(image_attachment, width: 600, crop: :fit, model: Spree::Image) %>"
       data-key="<%= image_attachment&.key %>"
     >
-      <%= cl_image_tag_with_folder image_attachment, height: 48, crop: :fit, model: Spree::Image, itemprop: "image" %>
+      <%= cl_image_tag_with_folder image_attachment, height: 48, crop: :fit, model: Spree::Image %>
     </div>
   <% end %>
 <% end %>
