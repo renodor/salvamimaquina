@@ -84,6 +84,7 @@ const productShowVariants = () => {
     };
 
     // Update url params with the new variant id
+    // And the itemprop url meta tag with the new url
     const updateCurrentUrl = (variantId) => {
       const url = new URL(window.location);
       url.searchParams.set('variant_id', variantId);
