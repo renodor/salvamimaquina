@@ -4,7 +4,6 @@ module Spree
   module UsersControllerDecorator
     def edit
       load_object
-      gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     end
 
     def show

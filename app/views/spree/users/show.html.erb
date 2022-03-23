@@ -48,7 +48,13 @@
         </div>
       </div>
       <% if @address %>
-        <div id="static-map" style="width: 100%; height: 550px;" data-latitude="<%= @address.latitude %>" data-longitude="<%= @address.longitude %>"></div>
+        <div
+          id="static-map"
+          style="width: 100%; height: 550px;"
+          data-latitude="<%= @address.latitude %>"
+          data-longitude="<%= @address.longitude %>"
+        >
+        </div>
       <% end %>
     </div>
   </div>
