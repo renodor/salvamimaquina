@@ -6,11 +6,15 @@
 <%= t('.order_summary_canceled') %>
 ============================================================
 <% @order.line_items.each do |item| %>
-  <%= item.variant.sku %> <%= raw(item.variant.product.name) %> <%= raw(item.variant.options_text(show_option_type: true, show_model: true) -%> (<%=item.quantity%>) @ <%= item.single_money %> = <%= item.display_amount %>
+  <%= item.variant.sku %>
+  <%= raw(item.variant.product.name) %>
+  <%= raw(item.variant.options_text(show_option_type: true, show_model: true)) -%>
+  (<%=item.quantity%>) @
+  <%= item.single_money %> = <%= item.display_amount %>
 <% end %>
 ============================================================
-<%= t('.subtotal') %> <%= @order.display_item_total %>
+Subtotal: <%= @order.display_item_total %>
 <% @order.adjustments.eligible.each do |adjustment| %>
   <%= raw(adjustment.label) %> <%= adjustment.display_amount %>
 <% end %>
-<%= t('.total') %> <%= @order.display_total %>
+Total: <%= @order.display_total %>
