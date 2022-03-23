@@ -52,11 +52,11 @@ const productShowVariants = () => {
       if (onSale) {
         priceTag.classList.add('crossed');
         discountPriceTag.classList.remove('display-none');
-        itemPropPrice.content = price.replace('$', '');
+        itemPropPrice.content = discountPrice.replace('$', '');
       } else {
         discountPriceTag.classList.add('display-none');
         priceTag.classList.remove('crossed');
-        itemPropPrice.content = discountPrice.replace('$', '');
+        itemPropPrice.content = price.replace('$', '');
       }
     };
 
