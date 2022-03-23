@@ -60,7 +60,6 @@
       </div>
     <% end %>
     <%# If products has no variant the variant_id is the master id. If it has variants the variant_id will be defined by JS %>
-    <%# TODO now: conflict between this params['variant_id] and the one added in the URL? %>
     <%= hidden_field_tag 'variant_id', @master.id %>
 
     <%# Only take into account the product master for the case it has no variants,
