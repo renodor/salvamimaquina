@@ -11,6 +11,7 @@ module Spree
     def show
       @variants = @product.variants.includes(prices: :active_sale_prices)
       @master = @product.master
+      @current_variant = @product.variants.find_by(id: variant_params['variant_id'])
       @product_has_variant = @product.has_variants?
 
       @product_images = @product.gallery.images.includes(attachment_attachment: :blob)
@@ -109,6 +110,10 @@ module Spree
 
     def product_filters_params
       params.permit(:per_page, :taxon_id, :sort_products, :keywords, scopes: {}, search: {}, price_between: [])
+    end
+
+    def variant_params
+      params.permit(:variant_id)
     end
 
     Spree::ProductsController.prepend self

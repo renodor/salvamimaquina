@@ -2,7 +2,7 @@
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
     <%= hidden_field_tag :product_id, @product.id %>
     <% if @product_has_variant %>
-      <% cheapest_variant_option_values = @product.cheapest_variant.option_values %>
+      <% current_variant_option_values = @current_variant&.option_values || @product.cheapest_variant.option_values %>
       <div id="product-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
           <% if option_type.name == 'model' %>
@@ -18,7 +18,7 @@
                     <%=
                       radio_button_tag "variant_options[option_type_#{option_type.id}]",
                       color.id,
-                      cheapest_variant_option_values.find_by(option_type_id: option_type.id).id == color.id,
+                      current_variant_option_values.find_by(option_type_id: option_type.id).id == color.id,
                       { data: { option_type_id: option_type.id } }
                     %>
                     <%=
@@ -41,7 +41,7 @@
                         option_value.name,
                         option_value.id,
                         {
-                          selected: cheapest_variant_option_values.find_by(option_type_id: option_type.id).id == option_value.id,
+                          selected: current_variant_option_values.find_by(option_type_id: option_type.id).id == option_value.id,
                           data: { option_type_id: option_type.id }
                         }
                       ]
@@ -69,14 +69,16 @@
       <div id="product-price">
         <div>
           <% discount_price = @master.price %>
-          <span class="price selling discount <%= master_on_sale ? '' : 'display-none' %>" itemprop="price" content="<%= discount_price %>">
+          <span class="price selling discount <%= master_on_sale ? '' : 'display-none' %>">
             <%= number_to_currency(discount_price) %>
           </span>
           <% price = @master.original_price %>
-          <span class="price selling original <%= master_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= price %>">
+          <span class="price selling original <%= master_on_sale ? 'crossed' : '' %>">
             <%= number_to_currency(price) %>
           </span>
         </div>
+        <meta itemprop="price" content="<%= master_on_sale ?  discount_price : price %>">
+        <meta itemprop="priceCurrency" content="USD">
       </div>
 
       <div class="add-to-cart">
@@ -100,12 +102,16 @@
           <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.buy').upcase %>
           <% end %>
+          <link itemprop="availability" href="http://schema.org/InStock">
         <% else %>
           <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
             <%= t('spree.out_of_stock').upcase %>
           <% end %>
+          <link itemprop="availability" href="http://schema.org/OutOfStock">
         <% end %>
       </div>
     </div>
+
+    <link itemprop="itemCondition" href="http://schema.org/NewCondition">
   </div>
 <% end %>
