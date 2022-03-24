@@ -35,16 +35,27 @@ module Spree
         @order.errors.add(:base, t('spree.please_enter_reasonable_quantity'))
       end
 
-      respond_with(@order) do |format|
-        format.html do
-          if @order.errors.any?
-            flash[:error] = @order.errors.full_messages.join(', ')
-            redirect_back_or_default(spree.root_path)
-            return
-          else
-            redirect_to cart_es_mx_path
-          end
-        end
+      # respond_to do |format|
+      #   format.html do
+      #     if @order.errors.any?
+      #       flash[:error] = @order.errors.full_messages.join(', ')
+      #       redirect_back_or_default(spree.root_path)
+      #       return
+      #     else
+      #       redirect_to cart_es_mx_path
+      #     end
+      #   end
+      # end
+
+      if @order.errors.any?
+        render json: {
+          error: 'TODO DEAL ERROR'
+        }, status: 422
+      else
+        render json: {
+          variantName: "#{variant.product.name} - #{variant.options_text}",
+          quantity: quantity
+        }
       end
     end
 

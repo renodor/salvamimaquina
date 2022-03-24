@@ -31,6 +31,7 @@ import { productsFiltersForm } from '../components/products_filters_form';
 import { productsSorting } from '../components/products_sorting';
 import { productsSearch } from '../components/products_search';
 import { quantitySelector } from '../components/quantity_selector';
+import { addToCart } from '../components/add_to_cart';
 import { cart } from '../components/cart';
 import { previewImageOnFileSelect } from '../components/preview_image_on_file_select';
 import { tradeInForm } from '../components/trade_in_form';
@@ -52,6 +53,7 @@ document.addEventListener('turbolinks:load', () => {
   productsSorting();
   productsSearch();
   quantitySelector();
+  addToCart();
   cart();
   previewImageOnFileSelect();
   tradeInForm();
