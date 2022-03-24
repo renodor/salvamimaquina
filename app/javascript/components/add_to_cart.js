@@ -6,7 +6,10 @@ const addToCart = () => {
 
     cartForm.addEventListener('ajax:success', (event) => {
       // currently can't disable Eslint for that because of this bug: https://github.com/typescript-eslint/typescript-eslint/issues/4691
-      const [payload, _status, _xhr] = event.detail;
+
+      /* eslint-disable */
+      const [payload, _status, _xhr] = event.detail; 
+      /* eslint-enable */
 
       const cartQuantityTag = document.querySelector('#navbar-icons .navbar-cart-quantity');
       const newCartQuantity = parseInt(cartQuantityTag.innerHTML) + payload.quantity;
