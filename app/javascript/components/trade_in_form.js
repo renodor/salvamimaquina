@@ -1,5 +1,3 @@
-window.Modal = require('bootstrap/js/dist/modal');
-
 const tradeInForm = () => {
   const tradeInForm = document.querySelector('#trade-in-form form');
 
@@ -215,6 +213,7 @@ const tradeInForm = () => {
           tradeInCta
       );
 
+      window.Modal = require('bootstrap/js/dist/modal');
       const myModal = new Modal(document.getElementById('tradeInFormModal'));
       myModal.show();
     }
