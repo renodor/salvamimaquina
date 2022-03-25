@@ -35,9 +35,6 @@ module Spree
         @order.errors.add(:base, t('spree.please_enter_reasonable_quantity'))
       end
 
-      @order.errors.add(:base, t('spree.please_enter_reasonable_quantity'))
-      @order.errors.add(:base, 'another error')
-
       if @order.errors.any?
         # Not confident to display any order error on front end as it is (maybe not clear to understand)
         # so instead we display a generic error and send the real error to Sentry
@@ -55,8 +52,10 @@ module Spree
           error: t('spree.cant_add_to_cart')
         }, status: 422
       else
+        options_text = variant.options_text
+        variant_full_name = options_text.present? ? "#{variant.product.name} - #{variant.options_text}" : variant.product.name
         render json: {
-          variantName: "#{variant.product.name} - #{variant.options_text}",
+          variantName: variant_full_name,
           quantity: quantity
         }
       end
