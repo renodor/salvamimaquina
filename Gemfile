@@ -99,6 +99,8 @@ group :development do
 
   # Find N+1 queries
   gem 'bullet'
+
+  gem 'brakeman'
 end
 
 group :test do
