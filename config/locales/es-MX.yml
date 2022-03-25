@@ -131,6 +131,7 @@ es-MX:
     out_of_stock: 'Agotado'
     not_enough_stock: 'No hay suficiente inventario'
     added_to_your_cart: 'añadido a su carrito'
+    cant_add_to_cart: 'Hubo un problema tratando de añadir el producto a su carrito. Por favor reintentar más tarde.'
     continue_shopping: 'Seguir comprando'
     see_cart: 'Ver carrito'
     shopping_cart: 'Mi Carrito'

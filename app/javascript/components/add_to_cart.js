@@ -5,11 +5,7 @@ const addToCart = () => {
     window.Modal = require('bootstrap/js/dist/modal');
 
     cartForm.addEventListener('ajax:success', (event) => {
-      // currently can't disable Eslint for that because of this bug: https://github.com/typescript-eslint/typescript-eslint/issues/4691
-
-      /* eslint-disable */
-      const [payload, _status, _xhr] = event.detail; 
-      /* eslint-enable */
+      const payload = event.detail[0];
 
       const cartQuantityTag = document.querySelector('#navbar-icons .navbar-cart-quantity');
       const newCartQuantity = parseInt(cartQuantityTag.innerHTML) + payload.quantity;
@@ -22,7 +18,10 @@ const addToCart = () => {
     });
 
     cartForm.addEventListener('ajax:error', (event) => {
-      console.log(event.detail);
+      const content = document.querySelector('body #wrapper #content');
+      content.insertAdjacentHTML('afterbegin', `
+        <div class="flash error">${event.detail[0].error}</div>
+      `)
     });
   }
 };

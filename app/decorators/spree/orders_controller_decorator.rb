@@ -35,21 +35,24 @@ module Spree
         @order.errors.add(:base, t('spree.please_enter_reasonable_quantity'))
       end
 
-      # respond_to do |format|
-      #   format.html do
-      #     if @order.errors.any?
-      #       flash[:error] = @order.errors.full_messages.join(', ')
-      #       redirect_back_or_default(spree.root_path)
-      #       return
-      #     else
-      #       redirect_to cart_es_mx_path
-      #     end
-      #   end
-      # end
+      @order.errors.add(:base, t('spree.please_enter_reasonable_quantity'))
+      @order.errors.add(:base, 'another error')
 
       if @order.errors.any?
+        # Not confident to display any order error on front end as it is (maybe not clear to understand)
+        # so instead we display a generic error and send the real error to Sentry
+        Sentry.capture_message(
+          'Error when adding variant to cart',
+          {
+            extra: {
+              errors: @order.errors.messages,
+              order: @order.as_json,
+              variant: variant.as_json
+            }
+          }
+        )
         render json: {
-          error: 'TODO DEAL ERROR'
+          error: t('spree.cant_add_to_cart')
         }, status: 422
       else
         render json: {
