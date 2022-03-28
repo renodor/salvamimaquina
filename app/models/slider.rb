@@ -4,11 +4,14 @@ class Slider < ApplicationRecord
   has_many :slides, dependent: :destroy
 
   enum location: {
-    corporate_clients: 0,
     home_page: 1,
     products: 2,
     trade_in: 3,
-    reparation: 4
+    reparation: 4,
+    corporate_clients_1: 5,
+    corporate_clients_2: 6,
+    about: 7,
+    contact: 8
   }
 
   validates :name, :location, :delay_between_slides, :image_per_slide_xl, :image_per_slide_l, :image_per_slide_m, :image_per_slide_s, :space_between_slides, presence: true

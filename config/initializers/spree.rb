@@ -140,14 +140,8 @@ Spree::Backend::Config.configure do |config|
       url: '/admin/sync_repair_shopr'
     ),
     config.class::MenuItem.new(
-      [:banners],
+      [:sliders_and_banners],
       'picture-o',
-      condition: -> { current_spree_user&.has_spree_role?(:admin) },
-      url: '/admin/banners'
-    ),
-    config.class::MenuItem.new(
-      [:sliders],
-      'forward',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
       url: '/admin/sliders'
     )

@@ -1,34 +1,38 @@
-<h1 class="text-center"><%= t('contact') %></h1>
-<div id="users-contact-form" class="contact-form centered-flexbox">
-  <%= simple_form_for @user_message, url: create_user_message_path do |f| %>
-    <%= invisible_captcha %>
-    <%= f.input :name, label: false, placeholder: :name, required: true %>
-    <%= f.input :email, label: false, placeholder: :email, required: true %>
-    <%= f.input :message, label: false, placeholder: :message, required: true %>
-    <%= f.submit t('send').upcase, class: 'btn btn-primary w-100' %>
-  <% end %>
-</div>
-<div id="shops" class="centered-flexbox">
-  <div class="shop text-center">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7881.818153459288!2d-79.526822!3d8.980514!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x56016f2bcd0f178d!2sSalva%20Mi%20Maquina%20%7C%20Bella%20Vista!5e0!3m2!1sen!2sus!4v1630921791184!5m2!1sen!2sus" width="450" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    <h2>Salva Mi Máquina Bella Vista</h2>
-    <p>+507 203-2055</p>
-  </div>
-  <div class="shop text-center">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15763.020802214649!2d-79.501836!3d8.994659!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x160543d69b5ca01f!2sSalva%20Mi%20Maquina%20%7C%20San%20Francisco!5e0!3m2!1sen!2sus!4v1630921885655!5m2!1sen!2sus" width="450" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    <h2>Salva Mi Máquina San Francisco</h2>
-    <p>+507 394-9351</p>
-  </div>
-</div>
-<div id="business-hours" class="centered-flexbox">
-  <div>
-    <h2 class="text-center"><%= t('business_hours') %></h2>
-    <% @business_hours.each do |business_hour| %>
-      <% if business_hour[:closed] %>
-        <p><b><span class="business-day"><%= t("#{business_hour[:day].downcase}") %></span></b><%= t('closed') %></p>
-      <% else %>
-        <p><b><span class="business-day"><%= t("#{business_hour[:day].downcase}") %></span></b><%= business_hour[:start] %> - <%= business_hour[:end] %></p>
-      <% end %>
+<%= render 'spree/shared/slider', slider: @slider %>
+
+<div id="contact">
+  <h1 class="text-center"><%= t('contact') %></h1>
+  <div id="users-contact-form" class="contact-form centered-flexbox">
+    <%= simple_form_for @user_message, url: create_user_message_path do |f| %>
+      <%= invisible_captcha %>
+      <%= f.input :name, label: false, placeholder: :name, required: true %>
+      <%= f.input :email, label: false, placeholder: :email, required: true %>
+      <%= f.input :message, label: false, placeholder: :message, required: true %>
+      <%= f.submit t('send').upcase, class: 'btn btn-primary w-100' %>
     <% end %>
+  </div>
+  <div id="shops" class="centered-flexbox">
+    <div class="shop text-center">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7881.818153459288!2d-79.526822!3d8.980514!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x56016f2bcd0f178d!2sSalva%20Mi%20Maquina%20%7C%20Bella%20Vista!5e0!3m2!1sen!2sus!4v1630921791184!5m2!1sen!2sus" width="450" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      <h2>Salva Mi Máquina Bella Vista</h2>
+      <p>+507 203-2055</p>
+    </div>
+    <div class="shop text-center">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15763.020802214649!2d-79.501836!3d8.994659!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x160543d69b5ca01f!2sSalva%20Mi%20Maquina%20%7C%20San%20Francisco!5e0!3m2!1sen!2sus!4v1630921885655!5m2!1sen!2sus" width="450" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      <h2>Salva Mi Máquina San Francisco</h2>
+      <p>+507 394-9351</p>
+    </div>
+  </div>
+  <div id="business-hours" class="centered-flexbox">
+    <div>
+      <h2 class="text-center"><%= t('business_hours') %></h2>
+      <% @business_hours.each do |business_hour| %>
+        <% if business_hour[:closed] %>
+          <p><b><span class="business-day"><%= t("#{business_hour[:day].downcase}") %></span></b><%= t('closed') %></p>
+        <% else %>
+          <p><b><span class="business-day"><%= t("#{business_hour[:day].downcase}") %></span></b><%= business_hour[:start] %> - <%= business_hour[:end] %></p>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -23,12 +23,13 @@ module Spree
 
     def contact
       @user_message = UserMessage.new
+      @slider = Slider.find_by(location: :contact)
       generate_business_hours
     end
 
     def corporate_clients
       @user_message = UserMessage.new
-      find_corporate_clients_banner_and_slider
+      find_corporate_clients_sliders
 
       # TODO: improve how we deal with this data... Maybe create a CorporateService model?
       @corporate_services = %w[
@@ -69,12 +70,14 @@ module Spree
           quality
           delivery
         ]
-        find_corporate_clients_banner_and_slider
+        find_corporate_clients_sliders
         render :corporate_clients
       end
     end
 
-    def about; end
+    def about
+      @slider = Slider.find_by(location: :about)
+    end
 
     def shipping_informations
       @shipping_methods = Spree::ShippingMethod.includes(:calculator, zones: [zone_members: :zoneable]).where(service_level: 'delivery').order(:code)
@@ -119,9 +122,9 @@ module Spree
       @business_hours = business_hours.sort_by! { |day| %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].index(day[:day]) }
     end
 
-    def find_corporate_clients_banner_and_slider
-      @banner = Banner.find_by(location: :corporate_clients)
-      @slider = Slider.find_by(location: :corporate_clients)
+    def find_corporate_clients_sliders
+      @slider_1 = Slider.find_by(location: :corporate_clients_1)
+      @slider_2 = Slider.find_by(location: :corporate_clients_2)
     end
 
     Spree::HomeController.prepend self
