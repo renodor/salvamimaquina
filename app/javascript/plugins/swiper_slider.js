@@ -7,9 +7,9 @@ const swiperSlider = () => {
 
   if (sliders.length > 0) {
     // Set currentDevice variable and slider device type to track when we need to change slides
-    let currentDevice = '';
-    const setCurrentDevice = () => (currentDevice = window.innerWidth > 575 ? 'desktop' : 'mobile');
-    setCurrentDevice();
+    // let currentDevice = '';
+    // const setCurrentDevice = () => (currentDevice = window.innerWidth > 575 ? 'desktop' : 'mobile');
+    // setCurrentDevice();
 
     // Add slides to slider
     const addRelevantSlides = (slider, slides) => {
@@ -17,27 +17,14 @@ const swiperSlider = () => {
       // So we 1) add a placeholder > 2) remove all other slides > 3) add new slides > 4) remove placeholder
       slider.prependSlide('<div class="swiper-slide placeholder-slide">'); // 1)
       slider.removeSlide([...Array(slider.slides.length).keys()].slice(1)); // 2)
-      slider.appendSlide(slides.map(({ link, image, imageMobile }) => { // 3)
+      slider.appendSlide(slides.map(({ link, images, imageMobile }) => { // 3)
         return `<div class="swiper-slide centered-flexbox">
           ${link ? `<a href="${link}">` : ''}
-            <img src="${window.innerWidth > 575 ? image : imageMobile || image}" />
-           ${link ? `</a>` : ''}
+            <img src="${images[slider.currentBreakpoint]}" />
+          ${link ? `</a>` : ''}
         </div>`;
       }));
       slider.removeSlide(0); // 4)
-    };
-
-    const setSwiperDeviceType = (slider) => (slider.wrapperEl.dataset.deviceType = currentDevice);
-
-    // When window is resized and we pass a breakpoint, change slides (desktop VS mobile) if needed
-    const changeSlidesOnWindowsResize = (slider, slides) => {
-      slider.on('breakpoint', () => {
-        setCurrentDevice();
-        if (currentDevice != slider.wrapperEl.dataset.deviceType) {
-          setSwiperDeviceType(slider);
-          addRelevantSlides(slider, slides);
-        }
-      });
     };
 
     sliders.forEach((slider) => {
@@ -78,9 +65,8 @@ const swiperSlider = () => {
       // Get slide infos from HTML view
       const slides = JSON.parse(slider.dataset.slides);
 
-      setSwiperDeviceType(swiperSlider);
       addRelevantSlides(swiperSlider, slides);
-      changeSlidesOnWindowsResize(swiperSlider, slides);
+      swiperSlider.on('breakpoint', (event) => (addRelevantSlides(swiperSlider, slides)));
     });
   }
 };

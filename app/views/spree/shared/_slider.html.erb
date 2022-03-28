@@ -18,8 +18,13 @@
     slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
       {
         link: slide.link,
-        image: cl_image_path_with_folder(slide.image, model: Slide, no_fallback: !slider.fallback_image),
-        imageMobile: cl_image_path_with_folder(slide.image_mobile, model: Slide, no_fallback: true)
+        images: {
+          'max' => cl_image_path_with_folder(slide.image_mobile, model: Slide, no_fallback: true),
+          '576' => cl_image_path_with_folder(slide.image, width: 576, crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '768' => cl_image_path_with_folder(slide.image, width: 768, crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '992' => cl_image_path_with_folder(slide.image, width: 992, crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '1200' => cl_image_path_with_folder(slide.image, model: Slide, no_fallback: !slider.fallback_image)
+        }
       }
     end
   %>
