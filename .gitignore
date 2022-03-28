@@ -31,8 +31,22 @@
 /public/packs
 /public/packs-test
 /node_modules
+
+/solidus-master
+
+# Ignore yarn files as described here: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+# But ignore as well the cache folder (unlike recommanded by yarn doc)
+.yarn/*
+# !.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+/public/packs
+/public/packs-test
+/node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
-
-/solidus-master

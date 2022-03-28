@@ -59,9 +59,9 @@
     <div>
       <%= link_to spree.cart_es_mx_path, class: 'nav-link navbar-cart-link' do %>
         <%= svg 'cart' %>
-        <% if current_order&.quantity.to_i > 0 %>
-          <span class="navbar-cart-quantity"><%= current_order&.quantity %></span>
-        <% end %>
+        <span class="navbar-cart-quantity <%= current_order&.quantity.to_i == 0 ? 'display-none' : '' %>">
+          <%= current_order&.quantity %>
+        </span>
       <% end %>
     </div>
   </div>
