@@ -5,6 +5,7 @@ module Spree
     def new
       set_form_variables
       @trade_in_request = TradeInRequest.new
+      @slider = Slider.find_by(location: :trade_in)
     end
 
     def create
