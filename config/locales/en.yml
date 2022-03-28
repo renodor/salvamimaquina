@@ -117,6 +117,10 @@ en:
       other: 'Districts'
     district_based: District Based
     not_enough_stock: 'Not enough stock'
+    added_to_your_cart: 'added to cart'
+    cant_add_to_cart: 'There were an issue adding the product to your cart. Please try later.'
+    continue_shopping: 'Keep shopping'
+    see_cart: 'See cart'
     admin:
       tab:
         sync_repair_shopr: Sync RepairShopr
