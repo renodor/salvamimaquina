@@ -41,7 +41,8 @@ Rails.application.routes.draw do
     end
 
     localized do
-      resources :trade_in_requests, only: %i[new create show], param: :token
+      resources :trade_in_requests, only: %i[new create], param: :token
+      get 'trade_in_requests/confirmed/:token', to: 'trade_in_requests#show', param: :token, as: :trade_in_request
     end
     get 'trade_in_requests/variant_infos/:variant_id', to: 'trade_in_requests#variant_infos'
 

@@ -4,6 +4,7 @@ class TradeInRequest < ApplicationRecord
   belongs_to :variant, class_name: 'Spree::Variant'
 
   validates :model_name_with_options, :model_min_value, :model_max_value, :shop, :name, :phone, :email, presence: true
+  validates :email, format: { with: /\A\S+@\S+\.\S+\z/i }
 
   enum shop: { bella_vista: 0, san_francisco: 1 }
 

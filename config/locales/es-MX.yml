@@ -321,5 +321,6 @@ es-MX:
         trade_in_requests:
           trade_in_requests: 'trade_in'
           new: 'nuevo'
+          confirmed: 'confirmado'
         products:
           products: 'productos'
