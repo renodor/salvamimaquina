@@ -15,7 +15,7 @@
     end
   %>
   <!-- Slider main container -->
-  <div class="swiper"
+  <div class="swiper" id="<%= "#{slider.location}-slider" %>"
     data-slider-id=<%= slider.id %>
     data-slider-options=<%= slider.options.to_json %>
     data-slides=<%= slides_object.to_json %>
@@ -27,7 +27,7 @@
       <div class="swiper-slide placeholder-slide"></div>
     </div>
 
-    <% if slider.navigation %>
+    <% if slider.options[:navigation] %>
       <div class="swiper-navigation swiper-prev">
         <%= svg 'chevron_left' %>
       </div>
@@ -36,7 +36,7 @@
       </div>
     <% end %>
 
-    <% if slider.pagination %>
+    <% if slider.options[:pagination] %>
       <div class="swiper-pagination"></div>
     <% end %>
   </div>

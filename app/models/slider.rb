@@ -56,13 +56,14 @@ class Slider < ApplicationRecord
   end
 
   def options
+    is_banner = (slides.size == 1)
     {
-      disableLoop: slides.size == 1,
-      autoplay: auto_play,
-      delayBetweenSlides: delay_between_slides,
-      spaceBetweenSlides: space_between_slides,
-      navigation: navigation,
-      pagination: pagination,
+      disableLoop: is_banner,
+      autoplay: is_banner ? false : auto_play,
+      delayBetweenSlides: is_banner ? 0 : delay_between_slides,
+      spaceBetweenSlides: is_banner ? 0 : space_between_slides,
+      navigation: is_banner ? false : navigation,
+      pagination: is_banner ? false : pagination,
       imagePerSlideS: image_per_slide_s,
       imagePerSlideM: image_per_slide_m,
       imagePerSlideL: image_per_slide_l,

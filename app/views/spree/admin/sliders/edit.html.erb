@@ -5,6 +5,9 @@
 
 <%= simple_form_for @slider, url: admin_slider_path, html: { id: 'slider-form' } do |f| %>
   <%= f.input :location, collection: Slider.locations.keys %>
+  <% if @slider_location_url %>
+    <p><b>This slider/banner appears here: <%= link_to @slider_location_url, @slider_location_url, target: :blank %></b></p>
+  <% end %>
   <%= f.input :name %>
   <%= f.input :auto_play %>
   <%= f.input :navigation %>
@@ -20,6 +23,9 @@
     <%= f.input :image_per_slide_xl, hint: 'Images per slides on big screen' %>
   </div>
   <%= f.submit class: 'btn btn-primary' %>
+  <br />
+  <br />
+  <b>A slider with only 1 slide will automatically behave like a banner (All options like "auto play", "navigation", "pagination", "delay between slides" etc... will be disabled)</b>
   <div class="slides">
     <% @slider.slides.order(:order).each_with_index do |slide, index| %>
       <div class="slide">
