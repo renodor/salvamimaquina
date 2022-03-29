@@ -1,4 +1,4 @@
-// import Swiper JS
+// import Swiper JS: https://swiperjs.com/
 import Swiper, { Autoplay, Navigation, Pagination, Manipulation } from 'swiper';
 Swiper.use([Autoplay, Navigation, Pagination, Manipulation]); // https://github.com/JayChase/angular2-useful-swiper/issues/48
 
@@ -6,11 +6,6 @@ const swiperSlider = () => {
   const sliders = document.querySelectorAll('.swiper');
 
   if (sliders.length > 0) {
-    // Set currentDevice variable and slider device type to track when we need to change slides
-    // let currentDevice = '';
-    // const setCurrentDevice = () => (currentDevice = window.innerWidth > 575 ? 'desktop' : 'mobile');
-    // setCurrentDevice();
-
     // Add slides to slider
     const addRelevantSlides = (slider, slides) => {
       // Because swiper needs at least 1 slide to initiate loop we can't just remove all slides at the same time
@@ -27,6 +22,7 @@ const swiperSlider = () => {
       slider.removeSlide(0); // 4)
     };
 
+    // Generate sliders with correct options for all DOM elements that have the .swiper class
     sliders.forEach((slider) => {
       // Get slider options from HTML view
       const sliderOptions = JSON.parse(slider.dataset.sliderOptions);
@@ -65,11 +61,12 @@ const swiperSlider = () => {
       });
       if (sliderOptions.disableLoop) { swiperSlider.disable(); }
 
-      // Get slide infos from HTML view
+      // Get slide data from HTML view
       const slides = JSON.parse(slider.dataset.slides);
 
       addRelevantSlides(swiperSlider, slides);
-      swiperSlider.on('breakpoint', (event) => (addRelevantSlides(swiperSlider, slides)));
+      // Whenever windows size hit a new breakpoint, update sliders with slides of the correct size
+      swiperSlider.on('breakpoint', () => (addRelevantSlides(swiperSlider, slides)));
     });
   }
 };
