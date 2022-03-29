@@ -57,6 +57,9 @@ const swiperSlider = () => {
           },
           1200: {
             slidesPerView: sliderOptions.imagePerSlideXl
+          },
+          1400: { // We don't use this breakpoint for imagePerSlide config, but use it to display the slide image at the correct size
+            slidesPerView: sliderOptions.imagePerSlideXl
           }
         }
       });

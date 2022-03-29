@@ -54,4 +54,19 @@ class Slider < ApplicationRecord
       }
     end
   end
+
+  def options
+    {
+      disableLoop: slides.size == 1,
+      autoplay: auto_play,
+      delayBetweenSlides: delay_between_slides,
+      spaceBetweenSlides: space_between_slides,
+      navigation: navigation,
+      pagination: pagination,
+      imagePerSlideS: image_per_slide_s,
+      imagePerSlideM: image_per_slide_m,
+      imagePerSlideL: image_per_slide_l,
+      imagePerSlideXl: image_per_slide_xl
+    }
+  end
 end
