@@ -15,7 +15,7 @@
       hint: "
         Recommanded image sizes:
         <br />
-        width: #{@slider.slide_sizes_by_slider_location[:desktop][:width]}px | height: #{@slider.slide_sizes_by_slider_location[:desktop][:height]}px
+        width: #{@slider.recommanded_slide_sizes[:desktop][:width]}px | height: #{@slider.recommanded_slide_sizes[:desktop][:height]}px
       ".html_safe,
       input_html: { data: { id: 'desktop-image'} }
     %>
@@ -38,7 +38,7 @@
       hint: "
         Recommanded image sizes:
         <br />
-        width: #{@slider.slide_sizes_by_slider_location[:mobile][:width]}px | height: #{@slider.slide_sizes_by_slider_location[:mobile][:height]}px
+        width: #{@slider.recommanded_slide_sizes[:mobile][:width]}px | height: #{@slider.recommanded_slide_sizes[:mobile][:height]}px
       ".html_safe,
       input_html: { data: { id: 'mobile-image'} }
     %>

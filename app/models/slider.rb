@@ -17,7 +17,9 @@ class Slider < ApplicationRecord
   validates :name, :location, :delay_between_slides, :image_per_slide_xl, :image_per_slide_l, :image_per_slide_m, :image_per_slide_s, :space_between_slides, presence: true
   validates :location, uniqueness: { message: ->(slider, _) { "has to be unique. There is already one \"#{slider.location}\" slider, please edit the one that already exists" } }
 
-  def slide_sizes_by_slider_location
+  # Only used to display recommanded slide sizes on admin slide forms
+  # (won't have any impact on the actualy slide sizes)
+  def recommanded_slide_sizes
     case location
     when 'home_page'
       {
@@ -30,7 +32,7 @@ class Slider < ApplicationRecord
           height: 535
         }
       }
-    when 'corporate_clients'
+    when 'corporate_clients_2'
       {
         desktop: {
           width: 150,
