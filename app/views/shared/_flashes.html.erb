@@ -1,0 +1,9 @@
+
+<% if flash.any? %>
+  <% flash.each do |type, message| %>
+    <div class="flash <%= type%>">
+      <span><%= message %></span>
+      <%= svg 'cross', class: 'close-flash' %>
+    </div>
+  <% end %>
+<% end %>
