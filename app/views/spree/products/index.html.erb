@@ -1,7 +1,7 @@
 <%= render 'spree/shared/slider', slider: @slider %>
 
 <div id="categories">
-  <h2><%= @root_taxon.name.capitalize %></h2>
+  <h2><%= t('spree.categories') %></h2>
   <div id="categories-grid">
     <% @root_taxon.children.each do |category| %>
       <div class="position-relative category">
