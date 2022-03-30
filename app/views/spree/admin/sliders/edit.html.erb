@@ -5,8 +5,8 @@
 
 <%= simple_form_for @slider, url: admin_slider_path, html: { id: 'slider-form' } do |f| %>
   <%= f.input :location, collection: Slider.locations.keys %>
-  <% if @slider_location_url %>
-    <p><b>This slider/banner appears here: <%= link_to @slider_location_url, @slider_location_url, target: :blank %></b></p>
+  <% if slider_location_url(@slider) %>
+    <p><b>This slider/banner appears here: <%= link_to slider_location_url(@slider), slider_location_url(@slider), target: :blank %></b></p>
   <% end %>
   <%= f.input :name %>
   <%= f.input :auto_play %>
