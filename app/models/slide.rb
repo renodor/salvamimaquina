@@ -12,6 +12,10 @@ class Slide < ApplicationRecord
   validates :image, presence: true
   validate :correct_image_type
 
+  def correct_width(screen_width:)
+    slider.force_slide_full_width ? screen_width : image.metadata[:width]
+  end
+
   private
 
   def correct_image_type

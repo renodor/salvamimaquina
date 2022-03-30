@@ -9,7 +9,16 @@
   <%= f.input :order, label: 'Slide number' %>
   <div class="image-input">
     <%= cl_image_tag_with_folder @slide.image, width: 300, model: Slide, class: 'image-preview', data: { id: 'desktop-image' } %>
-    <%= f.input :image, as: :file, hint: 'Image width: 1300px | Image height: 550px', input_html: { data: { id: 'desktop-image'} } %>
+    <%=
+      f.input :image,
+      as: :file,
+      hint: "
+        Recommanded image sizes:
+        <br />
+        width: #{@slider.recommanded_slide_sizes[:desktop][:width]}px | height: #{@slider.recommanded_slide_sizes[:desktop][:height]}px
+      ".html_safe,
+      input_html: { data: { id: 'desktop-image'} }
+    %>
     <p class="invalid-feedback display-block"><%= @slide.errors[:image]&.join(', ') %></p>
   </div>
   <div class="image-input">
@@ -23,7 +32,16 @@
         data: { id: 'mobile-image' }
       )
       %>
-    <%= f.input :image_mobile, as: :file, hint: 'Image width: 535px | Image height: 535px', input_html: { data: { id: 'mobile-image'} } %>
+    <%=
+      f.input :image_mobile,
+      as: :file,
+      hint: "
+        Recommanded image sizes:
+        <br />
+        width: #{@slider.recommanded_slide_sizes[:mobile][:width]}px | height: #{@slider.recommanded_slide_sizes[:mobile][:height]}px
+      ".html_safe,
+      input_html: { data: { id: 'mobile-image'} }
+    %>
     <p class="invalid-feedback display-block"><%= @slide.errors[:image_mobile]&.join(', ') %></p>
   </div>
   <%= f.submit class: 'btn btn-primary' %>

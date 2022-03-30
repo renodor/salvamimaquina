@@ -4,7 +4,7 @@ module Spree
   class ReparationCategoriesController < Spree::StoreController
     def index
       @categories = ReparationCategory.includes(photo_attachment: :blob).all
-      @banner = Banner.find_by(location: :reparation)
+      @slider = Slider.find_by(location: :reparation)
     end
   end
 end

@@ -1,31 +1,23 @@
-<% if slider.is_a?(Slider) %>
-  <%
-    slider_options = {
-      disableLoop: slider.slides.size == 1,
-      autoplay: slider.auto_play,
-      delayBetweenSlides: slider.delay_between_slides,
-      spaceBetweenSlides: slider.space_between_slides,
-      navigation: slider.navigation,
-      pagination: slider.pagination,
-      imagePerSlideS: slider.image_per_slide_s,
-      imagePerSlideM: slider.image_per_slide_m,
-      imagePerSlideL: slider.image_per_slide_l,
-      imagePerSlideXl: slider.image_per_slide_xl
-    }
-  %>
-
+<% if slider.is_a?(Slider) && slider&.slides.present? %>
   <%
     slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
       {
         link: slide.link,
-        image: cl_image_path_with_folder(slide.image, model: Slide, no_fallback: !slider.fallback_image),
-        imageMobile: cl_image_path_with_folder(slide.image_mobile, model: Slide, no_fallback: true)
+        images: {
+          'max' => cl_image_path_with_folder(slide.image_mobile.presence || slide.image, width: slide.correct_width(screen_width: 575), crop: :fill, model: Slide, no_fallback: true),
+          '576' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 576), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '768' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 768), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '992' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 992), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '1200' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 1200), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '1400' => cl_image_path_with_folder(slide.image, model: Slide, no_fallback: !slider.fallback_image)
+        }
       }
     end
   %>
   <!-- Slider main container -->
-  <div class="swiper"
-    data-slider-options=<%= slider_options.to_json %>
+  <div class="swiper" id="<%= "#{slider.location}-slider" %>"
+    data-slider-id=<%= slider.id %>
+    data-slider-options=<%= slider.options.to_json %>
     data-slides=<%= slides_object.to_json %>
   >
     <!-- Additional required wrapper -->
@@ -35,7 +27,7 @@
       <div class="swiper-slide placeholder-slide"></div>
     </div>
 
-    <% if slider.navigation %>
+    <% if slider.options[:navigation] %>
       <div class="swiper-navigation swiper-prev">
         <%= svg 'chevron_left' %>
       </div>
@@ -44,7 +36,7 @@
       </div>
     <% end %>
 
-    <% if slider.pagination %>
+    <% if slider.options[:pagination] %>
       <div class="swiper-pagination"></div>
     <% end %>
   </div>
