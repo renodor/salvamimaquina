@@ -21,7 +21,7 @@ import 'bootstrap';
 
 // Internal Components
 import { navbar } from '../components/navbar';
-import { flash } from '../components/flash';
+import { addDinamysmToFlash } from '../components/flash';
 import { checkoutForm } from '../components/checkout_form';
 import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
@@ -44,7 +44,7 @@ import { initMapbox } from '../plugins/init_mapbox';
 // Call your functions here
 document.addEventListener('turbolinks:load', () => {
   navbar();
-  flash();
+  addDinamysmToFlash();
   checkoutForm();
   addressForm();
   priceRangeSlider();
