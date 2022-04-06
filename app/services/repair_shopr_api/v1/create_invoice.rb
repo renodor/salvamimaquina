@@ -83,8 +83,17 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         tax: @order.additional_tax_total,
         is_paid: @order.payment_state == 'paid',
         location_id: @order.define_stock_location.repair_shopr_id,
-        note: "Sold from Ecommerce Website. To deliver to: #{@order.ship_address.google_maps_link}"
+        note: "Sold from Ecommerce Website. #{buil_invoice_note}"
       }
+    end
+
+    def buil_invoice_note
+      shipping_method = @order.shipments.first.shipping_method
+      if shipping_method.service_level == 'delivery'
+        "To deliver to: #{@order.ship_address.google_maps_link}"
+      else
+        shipping_method.name
+      end
     end
 
     def build_repair_shopr_line_items
