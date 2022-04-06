@@ -29,7 +29,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
 
       RepairShoprApi::V1::CreatePayment.call(invoice)
     rescue RepairShoprApi::V1::Base::BadRequestError, RepairShoprApi::V1::Base::UnprocessableEntityError, RepairShoprApi::V1::Base::NotFoundError => e
-      # Rescue RepairShoprApi client error response because thise class is called from a background job,
+      # Rescue RepairShoprApi client error response because this class is called from a background job,
       # and we don't want sidekiq to retry the job if its failing because of a client error,
       # otherwise it could create an unlimited number of RepairShopr (wrong) invoices...
       # But we make sure that we properly notify admins of what is happening
