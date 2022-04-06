@@ -8,7 +8,7 @@ const addFlashToDom = (flash) => {
 };
 
 // Remove flash when clicking on cross and auto remove it after 10 seconds
-// (is imported in application.js, so will be called automatically when page load,
+// (is imported in application.js, so it will be called automatically when page load,
 // and is also called by addFlashToDom() when needed)
 const addDinamysmToFlash = () => {
   const flash = document.querySelector('.flash');
