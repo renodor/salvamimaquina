@@ -1,4 +1,6 @@
 // Update front end when a variant has been added to cart (via Ajax)
+import { addFlashToDom } from './flash';
+
 const addToCart = () => {
   const cartForm = document.querySelector('#cart-form form');
 
@@ -23,12 +25,7 @@ const addToCart = () => {
 
     // Listen on cart form ajax:error event (when there is an error trying to add a product to cart), and:
     // - display a flash error message
-    cartForm.addEventListener('ajax:error', (event) => {
-      const content = document.querySelector('body #wrapper #content');
-      content.insertAdjacentHTML('afterbegin', `
-        <div class="flash error">${event.detail[0].error}</div>
-      `);
-    });
+    cartForm.addEventListener('ajax:error', (event) => (addFlashToDom(event.detail[0].flash)));
   }
 };
 

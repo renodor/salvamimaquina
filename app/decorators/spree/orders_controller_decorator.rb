@@ -49,7 +49,7 @@ module Spree
           }
         )
         render json: {
-          error: t('spree.cant_add_to_cart')
+          flash: helpers.build_flash('error', t('spree.cant_add_to_cart'))
         }, status: 422
       else
         options_text = variant.options_text
