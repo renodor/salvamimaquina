@@ -21,7 +21,7 @@
       <%= render partial: 'spree/shared/sidebar' if content_for? :sidebar %>
       <!-- <div id="content" class="columns <%#= !content_for?(:sidebar) ? "sixteen" : "twelve omega" %>" data-hook> -->
       <div id="content" class="<%= content_for?(:sidebar) ?  'col-lg-10' : '' %>" data-hook>
-        <%= render 'shared/flashes' %>
+        <%= render 'shared/flash' %>
         <%= yield %>
       </div>
       <%= yield :templates %>

@@ -1,7 +1,0 @@
-<% if flash.any? %>
-  <% flash.each do |type, message| %>
-    <!-- We build flash through rails helpers (instead of normal html) so that we can easily build it in controllers
-    when we need to build it after an ajax request and send it to JS -->
-    <%= build_flash(type, message) %>
-  <% end %>
-<% end %>

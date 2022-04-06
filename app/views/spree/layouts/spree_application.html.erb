@@ -22,7 +22,7 @@
         <div id="wrapper-content" class="<%= content_for?(:sidebar) ? 'sidebar-layout' : '' %>">
           <%= render partial: 'spree/shared/sidebar' if content_for? :sidebar %>
           <div id="content" data-hook>
-            <%= render 'shared/flashes' %>
+            <%= render 'shared/flash' %>
             <%= yield %>
           </div>
           <%= yield :templates %>
