@@ -1,0 +1,9 @@
+<!-- insert_before 'div[data-hook="admin_shipment_form"]' -->
+<fieldset align="center">
+  <% shipping_method = shipment.shipping_method %>
+  <% if shipping_method.service_level == 'delivery' %>
+    <p><b>Shipping method:</b> To deliver to <%= link_to 'this address', shipment.order.ship_address.google_maps_link, target: :blank %></p>
+  <% else %>
+    <p><b>Shipping method:</b> <%= shipping_method.name %></p>
+  <% end %>
+</fieldset>
