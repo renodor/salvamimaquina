@@ -51,7 +51,8 @@ module Spree
         discountPrice: helpers.number_to_currency(variant.price),
         totalStock: variant.total_on_hand,
         imageKey: variant_image_key,
-        imageUrl: helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit, model: Spree::Image)
+        imageUrl: helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit, model: Spree::Image),
+        condition: variant.condition
       }
     end
 

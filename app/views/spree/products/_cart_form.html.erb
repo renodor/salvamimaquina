@@ -112,6 +112,10 @@
       </div>
     </div>
 
-    <link itemprop="itemCondition" href="http://schema.org/NewCondition">
+    <% if @master.condition == 'original' %>
+      <link itemprop="itemCondition" href="http://schema.org/NewCondition">
+    <% else %>
+      <link itemprop="itemCondition" href="http://schema.org/RefurbishedCondition">
+    <% end %>
   </div>
 <% end %>

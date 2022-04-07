@@ -84,12 +84,18 @@ const productShowVariants = () => {
     };
 
     // Update url params with the new variant id
-    // And the itemprop url meta tag with the new url
+    // And the schema itemprop url meta tag with the new url
     const updateCurrentUrl = (variantId) => {
       const url = new URL(window.location);
       url.searchParams.set('variant_id', variantId);
       history.replaceState(history.state, '', url);
       productShow.querySelector('[itemprop=url]').content = url;
+    };
+
+    // Update the schema itemprop condition meta tag with the new variant condition
+    const updateConditionMetaTag = (variantCondition) => {
+      const conditionMetaTag = productShow.querySelector('[itemprop=itemCondition]');
+      conditionMetaTag.href = variantCondition === 'original' ? 'http://schema.org/NewCondition' : 'http://schema.org/RefurbishedCondition';
     };
 
     // Fetch the selected variant thanks to the current selected option values
@@ -107,6 +113,7 @@ const productShowVariants = () => {
             updateAddToCartBtn(variant);
             updateVariantPrice(variant);
             updateCurrentUrl(variant.id);
+            updateConditionMetaTag(variant.condition);
           });
     };
 
