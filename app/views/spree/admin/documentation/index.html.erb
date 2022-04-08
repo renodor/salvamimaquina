@@ -1,0 +1,2 @@
+<% markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {}) %>
+<%= markdown.render(render 'doc.md').html_safe %>

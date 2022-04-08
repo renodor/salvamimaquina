@@ -23,6 +23,8 @@ Rails.application.routes.draw do
         end
       end
       resources :trade_in_requests, only: %i[index]
+
+      get '/documentation', to: 'documentation#index'
     end
 
     post '/checkout/three_d_secure_response', to: 'checkout#three_d_secure_response'

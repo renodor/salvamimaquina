@@ -74,6 +74,9 @@ gem 'solidus_auth_devise', '2.5.4'
 # Eliminate render-blocking CSS in above-the-fold content
 gem 'rails_critical_css_server'
 
+# Render markdown to HTML
+gem 'redcarpet'
+
 group :development, :test do
   # For debugging
   gem 'pry-byebug'
