@@ -37,3 +37,7 @@
     <% end %>
   </ul>
 <% end %>
+
+<% if products.respond_to?(:total_pages) %>
+  <%= paginate products, theme: 'bootstrap4' %>
+<% end %>

@@ -104,7 +104,7 @@ Spree.config do |config|
   #   test_mode: !Rails.env.production?
   # )
 
-  config.products_per_page = 1000
+  config.products_per_page = 5
 end
 
 Spree::Frontend::Config.configure do |config|
