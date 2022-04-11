@@ -42,7 +42,7 @@ module Spree
       private
 
       def slide_params
-        params.require(:slide).permit(:link, :order, :image, :image_mobile)
+        params.require(:slide).permit(:link, :order, :alt, :image, :image_mobile)
       end
     end
   end

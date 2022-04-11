@@ -12,10 +12,10 @@ const swiperSlider = () => {
       // So we 1) add a placeholder > 2) remove all other slides > 3) add new slides > 4) remove placeholder
       slider.prependSlide('<div class="swiper-slide placeholder-slide">'); // 1)
       slider.removeSlide([...Array(slider.slides.length).keys()].slice(1)); // 2)
-      slider.appendSlide(slides.map(({ link, images, imageMobile }) => { // 3)
+      slider.appendSlide(slides.map(({ link, images, alt }) => { // 3)
         return `<div class="swiper-slide centered-flexbox">
-          ${link ? `<a href="${link}">` : ''}
-            <img src="${images[slider.currentBreakpoint]}" />
+          ${link ? `<a href="${decodeURIComponent(link)}">` : ''}
+            <img src="${images[slider.currentBreakpoint]}", alt="${decodeURIComponent(alt).replace(/\+/g, ' ')}" />
           ${link ? `</a>` : ''}
         </div>`;
       }));

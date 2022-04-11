@@ -7,6 +7,7 @@
 <%= simple_form_for [@slider, @slide], url: admin_slider_slides_path, html: { class: 'form-with-images' } do |f| %>
   <%= f.input :link, as: :string %>
   <%= f.input :order, label: 'Slide number' %>
+  <%= f.input :alt, label: 'Slide image description', hint: 'This is the image ALT tag, useful for SEO' %>
   <div class="image-input">
     <%= image_tag '', width: 300, class: 'display-none image-preview', data: { id: 'desktop-image' } %>
     <%=

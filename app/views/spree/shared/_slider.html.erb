@@ -2,7 +2,8 @@
   <%
     slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
       {
-        link: slide.link,
+        link: URI.encode_www_form_component(slide.link),
+        alt: URI.encode_www_form_component(slide.alt),
         images: {
           'max' => cl_image_path_with_folder(slide.image_mobile.presence || slide.image, width: slide.correct_width(screen_width: 575), crop: :fill, model: Slide, no_fallback: true),
           '576' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 576), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
