@@ -2,7 +2,7 @@
 
 class Spree::Admin::SyncRepairShoprController < Spree::Admin::BaseController
   def index
-    @sync_logs = RepairShoprProductsSyncLog.all.order(created_at: :desc).limit(100) # TODO: paginate instead of limiting to 100
+    @sync_logs = RepairShoprProductsSyncLog.order(created_at: :desc).page(params[:page]) # TODO: paginate instead of limiting to 100
   end
 
   def new
