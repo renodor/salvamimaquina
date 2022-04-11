@@ -1,6 +1,6 @@
 <div id="reparation-request" class="centered-flexbox vertical-flexbox">
   <h1><%= @category.name %></h1>
-  <%= cl_image_tag_with_folder @category.photo, height: 200, width: 300, crop: :fill, model: ReparationCategory %>
+  <%= cl_image_tag_with_folder @category.photo, height: 200, width: 300, crop: :fill, model: ReparationCategory, alt: @category.name %>
 
   <%= simple_form_for [@category, @reparation_request] do |f| %>
     <%= f.input :product, collection: @category.products %>

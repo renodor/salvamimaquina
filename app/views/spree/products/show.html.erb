@@ -8,9 +8,17 @@
           <div id="main-image" data-hook>
             <% if @product_has_variant %>
               <%# The src will be added by JS depending what variant is selected, this is just a small placeholder empty gif %>
-              <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="<%= @product.name %>" itemprop="image" data-key="">
+              <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" itemprop="image" data-key="">
             <% else %>
-              <%= cl_image_tag_with_folder @first_image, width: 600, crop: :fit, model: Spree::Image, itemprop: "image", data: { key: @first_image&.key } %>
+              <%= cl_image_tag_with_folder(
+                @first_image,
+                width: 600,
+                crop: :fit,
+                model: Spree::Image,
+                itemprop: "image",
+                alt: @product.name,
+                data: { key: @first_image&.key }
+              ) %>
             <% end %>
           </div>
           <div id="thumbnails" data-hook>

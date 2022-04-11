@@ -26,7 +26,7 @@ module Spree
     end
 
     # Takes the current product (thanks to params[:product_id])
-    # Search among this product variants the ones that have the selected option values (thanks to params[:seelcted_option_type] and params[:selected_option_value])
+    # Search among this product variants the ones that have the selected option values (thanks to params[:selected_option_type] and params[:selected_option_value])
     # Then returns a hash of those variants Spree::OptionValue grouped by Spree::OptionType
     def product_variants_with_option_values
       product = Spree::Product.find(params[:product_id])
@@ -52,6 +52,7 @@ module Spree
         totalStock: variant.total_on_hand,
         imageKey: variant_image_key,
         imageUrl: helpers.cl_image_path_with_folder(variant.images.first&.attachment, width: 600, crop: :fit, model: Spree::Image),
+        imageAlt: "#{variant.product.name} - #{variant.options_text}",
         condition: variant.condition
       }
     end

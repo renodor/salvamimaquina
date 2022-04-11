@@ -6,7 +6,7 @@
     <% @categories.each do |category| %>
       <div class="reparation-category position-relative">
         <p class="reparation-category-name text-center"><%= category.name %></p>
-        <%= cl_image_tag_with_folder(category.photo, width: 500, crop: :fill, model: ReparationCategory) %>
+        <%= cl_image_tag_with_folder(category.photo, width: 500, crop: :fill, model: ReparationCategory, alt: category.name) %>
         <%= link_to '', new_reparation_category_reparation_request_path(category), class: 'full-absolute' %>
       </div>
     <% end %>

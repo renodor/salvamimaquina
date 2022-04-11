@@ -38,7 +38,7 @@ module Spree
         name: variant.name,
         price: helpers.number_to_currency(variant.price),
         options: variant.options_text,
-        imageTag: helpers.cl_image_tag_with_folder(variant.images.first&.attachment, width: 200, crop: :fill, model: Spree::Image),
+        imageTag: helpers.cl_image_tag_with_folder(variant.images.first&.attachment, width: 200, crop: :fill, model: Spree::Image, alt: "#{variant.product.name} - #{variant.options_text}"),
         minValue: helpers.number_to_currency(variant.price - params[:trade_in_max_value].to_f),
         maxValue: helpers.number_to_currency(variant.price - params[:trade_in_min_value].to_f)
       }

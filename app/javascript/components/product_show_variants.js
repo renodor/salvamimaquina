@@ -61,9 +61,10 @@ const productShowVariants = () => {
     };
 
     // Update image regarding what variant is selected
-    const updateVariantImage = ({ imageUrl, imageKey }) => {
+    const updateVariantImage = ({ imageUrl, imageKey, imageAlt }) => {
       mainImage.src = imageUrl;
       mainImage.dataset.key = imageKey;
+      mainImage.alt = imageAlt;
     };
 
     // Update thumbnails regarding what variant is selected

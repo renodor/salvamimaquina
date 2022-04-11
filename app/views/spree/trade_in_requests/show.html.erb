@@ -51,7 +51,13 @@
         </div>
       </div>
       <div class="variant-image">
-        <%= cl_image_tag_with_folder(@variant.images.first&.attachment, width: 200, crop: :fill, model: Spree::Image) %>
+        <%= cl_image_tag_with_folder(
+          @variant.images.first&.attachment,
+          width: 200,
+          crop: :fill,
+          model: Spree::Image,
+          alt: "#{@variant.product.name} - #{@variant.options_text}"
+        ) %>
       </div>
       <p>
         <i>(<%= t('instead_of') %> <b class="variant-price"><%= number_to_currency(@variant.price) %></b>)</i>
