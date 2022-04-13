@@ -50,7 +50,7 @@ const productsSidebar = () => {
 
     // Button that opens the products filters and sorting modal
     showProductsSidebarContentBtn.addEventListener('click', () => {
-      body.classList.add('overflow-hidden');
+      body.classList.add('overflow-hidden', 'position-relative');
       const contentOverlay = document.createElement('div');
       contentOverlay.classList.add('content-overlay');
       body.appendChild(contentOverlay);
@@ -62,7 +62,7 @@ const productsSidebar = () => {
       hideProductsSidebarContentBtn.addEventListener('click', () => {
         productsSidebarContent.classList.remove('show');
         document.querySelector('.content-overlay').remove();
-        body.classList.remove('overflow-hidden');
+        body.classList.remove('overflow-hidden', 'position-relative');
       });
     });
   }

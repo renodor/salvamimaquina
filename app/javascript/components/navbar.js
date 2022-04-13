@@ -10,9 +10,9 @@ const navbar = () => {
       if (navbarCollapse.classList.contains('active')) {
         navbarCollapse.classList.remove('active');
         document.querySelector('.content-overlay').remove();
-        body.classList.remove('overflow-hidden');
+        body.classList.remove('overflow-hidden', 'position-relative');
       } else {
-        body.classList.add('overflow-hidden');
+        body.classList.add('overflow-hidden', 'position-relative');
         const contentOverlay = document.createElement('div');
         contentOverlay.classList.add('content-overlay');
         body.appendChild(contentOverlay);
