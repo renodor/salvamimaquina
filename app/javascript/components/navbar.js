@@ -7,8 +7,17 @@ const navbar = () => {
   // listen clicks on the navbar toggle and open the navbar when clicked
   navbarTogglers.forEach((navbarToggler) => {
     navbarToggler.addEventListener('click', () => {
-      navbarCollapse.classList.toggle('active');
-      body.classList.toggle('overflow-hidden');
+      if (navbarCollapse.classList.contains('active')) {
+        navbarCollapse.classList.remove('active');
+        document.querySelector('.content-overlay').remove();
+        body.classList.remove('overflow-hidden');
+      } else {
+        body.classList.add('overflow-hidden');
+        const contentOverlay = document.createElement('div');
+        contentOverlay.classList.add('content-overlay');
+        body.appendChild(contentOverlay);
+        navbarCollapse.classList.add('active');
+      }
     });
   });
 };
