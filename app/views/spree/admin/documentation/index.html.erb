@@ -1,2 +1,13 @@
-<% markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {}) %>
-<%= markdown.render(render 'doc.md').html_safe %>
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb('Website documentation') %>
+
+<h2>Products</h2>
+<p>All products are synchronized from Salva Mi Máquina RepairShopr account and <b>shouldn't be modified from the website admin.</b> Things like product details, images, variants, prices, stock, product categories (taxonomies) etc shouldn't be touched at all on website admin and are all synchronized directly from RepairShopr. The only product related features that have to be handle in website admin are:</p>
+
+<h3>Product discounts</h3>
+<p>On RepairShopr we can't create a discount for a specific product. So this can be done on the website admin</p>
+<%= image_tag 'doc/product-discount.png' %>
+<hr />
+
+<h2>Sync History</h2>
