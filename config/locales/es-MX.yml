@@ -91,6 +91,8 @@ es-MX:
     items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'
     billing_address: 'Dirección'
     apply_code: 'Aplicar código'
+    coupon_code_removed: 'El código cupón fue quitado de su orden'
+    coupon_code_applied: 'El código cupón fue aplicado a su orden'
     order_number: "Número de orden: %{number}"
     order_total: 'Total'
     payment_methods:
