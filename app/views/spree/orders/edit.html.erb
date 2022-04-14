@@ -1,36 +1,27 @@
 <% @body_id = 'cart' %>
-<div data-hook="cart_container">
-  <h1><%= t('spree.shopping_cart') %></h1>
+<h1><%= t('spree.shopping_cart') %></h1>
 
-  <% if @order.line_items.empty? %>
+<% if @order.line_items.empty? %>
 
-    <div data-hook="empty_cart">
-      <p><%= t('spree.your_cart_is_empty') %></p>
-      <p><%= link_to t('spree.continue_shopping'), products_es_mx_path, class: 'btn btn-primary' %></p>
-    </div>
+  <div data-hook="empty_cart">
+    <p><%= t('spree.your_cart_is_empty') %></p>
+    <p><%= link_to t('spree.continue_shopping'), products_es_mx_path, class: 'btn btn-primary' %></p>
+  </div>
 
-  <% else %>
+<% else %>
 
+  <div id="cart-content">
     <%= form_for @order, url: update_cart_path, html: { id: 'update-cart' } do |order_form| %>
-      <div id="inside-cart-form" data-hook="inside_cart_form">
-        <div class="line-items" data-hook="cart_items">
-          <%= render 'spree/shared/error_messages', target: order_form.object %>
-          <% order_form.object.line_items.includes(variant: [:product, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
-            <%= order_form.fields_for :line_items, line_item do |item_form| -%>
-              <%= render 'spree/orders/line_item', line_item: line_item, static: false %>
-            <% end %>
+      <div class="line-items" data-hook="cart_items">
+        <%= render 'spree/shared/error_messages', target: order_form.object %>
+        <% order_form.object.line_items.includes(variant: [:product, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
+          <%= order_form.fields_for :line_items, line_item do |item_form| -%>
+            <%= render 'spree/orders/line_item', line_item: line_item, static: false %>
           <% end %>
-        </div>
-        <div id="checkout-summary">
-          <%= render 'spree/checkout/summary', order: @order %>
-          <div class="cart-buttons" data-hook="cart_buttons">
-            <%= button_tag class: 'btn btn-primary w-100', id: 'checkout-link', name: 'checkout' do %>
-              <%= t('spree.checkout') %>
-            <% end %>
-          </div>
-        </div>
+        <% end %>
       </div>
     <% end %>
-  <% end %>
-  <%= render 'spree/shared/related_products', related_products: @order.related_products %>
-</div>
+    <%= render 'spree/checkout/summary', order: @order, show_checkout_button: true %>
+  </div>
+<% end %>
+<%= render 'spree/shared/related_products', related_products: @order.related_products %>

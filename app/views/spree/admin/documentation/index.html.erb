@@ -2,12 +2,55 @@
 
 <% admin_breadcrumb('Website documentation') %>
 
-<h2>Products</h2>
-<p>All products are synchronized from Salva Mi Máquina RepairShopr account and <b>shouldn't be modified from the website admin.</b> Things like product details, images, variants, prices, stock, product categories (taxonomies) etc shouldn't be touched at all on website admin and are all synchronized directly from RepairShopr. The only product related features that have to be handle in website admin are:</p>
+<div id="admin-doc">
+  <div class="admin-doc-block">
+    <h2>Products</h2>
+    <p>All products are synchronized from Salva Mi Máquina RepairShopr account and <b>shouldn't be modified from the website admin.</b> Things like product details, images, variants, prices, stock, product categories (taxonomies) etc shouldn't be touched at all on website admin and are all synchronized directly from RepairShopr. The only product related features that have to be handle in website admin are:</p>
 
-<h3>Product discounts</h3>
-<p>On RepairShopr we can't create a discount for a specific product. So this can be done on the website admin</p>
-<%= image_tag 'doc/product-discount.png' %>
-<hr />
+    <h3 id="products-discount">Products discount</h3>
+    <p>On RepairShopr we can't create a discount for a specific product. So this can be done on the website admin</p>
+    <ol>
+      <li>Go to <%= link_to 'admin > products', admin_products_path, target: :blank %> and select the product you want to discount</li>
+      <li>Click on the <b>"Sale Prices"</b> tab</li>
+      <li>Select the variant you want to discount and click on the "New Sale Price" button</li>
+      <li>Type the discount price, select a start and end date (optional), and click on "Create". If you don't select start and end date, the discount will always be active. If you select a start date in the future, the discount will be programmed to only start at this date. (Like that you can program discount to start and end whenever you want)</li>
+      <li>If a product has an active discount, you will see the discount price (and the normal price crossed) on the product page</li>
+    </ol>
 
-<h2>Sync History</h2>
+    <%= image_tag 'doc/product-discount.png' %>
+    <%= image_tag 'doc/product-discount2.png' %>
+    <%= image_tag 'doc/product-discount3.png' %>
+    <%= image_tag 'doc/product-discount4.png' %>
+
+    <hr />
+
+    <h3 id="related-products">Related Products</h3>
+    <p>You can link 2 products together so that they will appear on the product pages of each other and cart "Productos Relacionados" section</p>
+    <ol>
+      <li>Go to <%= link_to 'admin > products', admin_products_path, target: :blank %> and select the product to relate to another product</li>
+      <li>Click on the <b>"Related Products"</b> tab</li>
+      <li>On the "Name or SKU" field type the name of the product you want to link and then click on the "Add" button</li>
+      <li>You will now see this related product on the product pages of each other, on the cart and on all checkout steps (you can add several related products)</li>
+    </ol>
+
+    <%= image_tag 'doc/related-products.png' %>
+    <%= image_tag 'doc/related-products2.png' %>
+    <%= image_tag 'doc/related-products3.png' %>
+    <%= image_tag 'doc/related-products4.png' %>
+    <%= image_tag 'doc/related-products5.png' %>
+  </div>
+
+  <div class="admin-doc-block">
+    <h2>Promotions</h2>
+    <p>You can generate complexe promotions or coupon codes that would applies to all products (giving for example 30% discount to all users with a specific coupon code), but we currently hide this feature. Please contact admin if you want to start using it.</p>
+
+    <h3>Free Shipping Promotion</h3>
+    <p></p>
+    <ol>
+      <li>Go to <%= link_to 'admin > promotions', admin_promotions_path, target: :blank %> and click "New Promotion" button</li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ol>
+  </div>
+</div>

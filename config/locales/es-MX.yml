@@ -187,6 +187,9 @@ es-MX:
       zero: 'Ningún resultado de búsqueda para'
       one: '%{count} resultado de busqueda para'
       other: '%{count} resultados de busqueda para'
+    eligibility_errors:
+      messages:
+        limit_once_per_user: 'Este usuario ya utilizó este código cupón'
   activerecord:
     attributes:
       spree/credit_card:
