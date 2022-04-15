@@ -7,13 +7,13 @@
     <h2>Products</h2>
     <p>All products are synchronized from Salva Mi Máquina RepairShopr account and <b>shouldn't be modified from the website admin.</b> Things like product details, images, variants, prices, stock, product categories (taxonomies) etc shouldn't be touched at all on website admin and are all synchronized directly from RepairShopr. The only product related features that have to be handle in website admin are:</p>
 
-    <h3 id="products-discount">Products discount</h3>
+    <h3 id="products-discount">Products Discount</h3>
     <p>On RepairShopr we can't create a discount for a specific product. So this can be done on the website admin</p>
     <ol>
       <li>Go to <%= link_to 'admin > products', admin_products_path, target: :blank %> and select the product you want to discount</li>
       <li>Click on the <b>"Sale Prices"</b> tab</li>
-      <li>Select the variant you want to discount and click on the "New Sale Price" button</li>
-      <li>Type the discount price, select a start and end date (optional), and click on "Create". If you don't select start and end date, the discount will always be active. If you select a start date in the future, the discount will be programmed to only start at this date. (Like that you can program discount to start and end whenever you want)</li>
+      <li>Select the variant you want to discount and click on the <b>"New Sale Price"</b> button</li>
+      <li>Type the discount price, select a start and end date (optional), and click on <b>"Create"</b>. If you don't select start and end date, the discount will always be active. If you select a start date in the future, the discount will be programmed to only start at this date. (Like that you can program discount to start and end whenever you want)</li>
       <li>If a product has an active discount, you will see the discount price (and the normal price crossed) on the product page</li>
     </ol>
 
@@ -29,7 +29,7 @@
     <ol>
       <li>Go to <%= link_to 'admin > products', admin_products_path, target: :blank %> and select the product to relate to another product</li>
       <li>Click on the <b>"Related Products"</b> tab</li>
-      <li>On the "Name or SKU" field type the name of the product you want to link and then click on the "Add" button</li>
+      <li>On the "Name or SKU" field type the name of the product you want to link and then click on the <b>"Add"</b> button</li>
       <li>You will now see this related product on the product pages of each other, on the cart and on all checkout steps (you can add several related products)</li>
     </ol>
 
@@ -42,15 +42,34 @@
 
   <div class="admin-doc-block">
     <h2>Promotions</h2>
-    <p>You can generate complexe promotions or coupon codes that would applies to all products (giving for example 30% discount to all users with a specific coupon code), but we currently hide this feature. Please contact admin if you want to start using it.</p>
+    <p>You can generate promotions or coupon codes that would applies to all products (giving for example 30% discount to all users with a specific coupon code). You can even create promotions with complexe logic (that applies to only certain products, or for a certain amount of order, or only 1 time by user etc...), but we didn't test any of these yet so please contact admin to make sure to test any complexe promotion before publishing.</p>
 
-    <h3>Free Shipping Promotion</h3>
-    <p></p>
+    <h3 id="coupon-code-promotions">Coupon Code Promotions</h3>
     <ol>
       <li>Go to <%= link_to 'admin > promotions', admin_promotions_path, target: :blank %> and click "New Promotion" button</li>
-      <li></li>
-      <li></li>
-      <li></li>
+      <li>Choose a promotion name (will be displayed on the checkout summary), select <b>"Single promotion code"</b>, and chose your promotion code (example here: <b>"smm-navidad-30-off"</b>). You can also chose a start and an end date if you want. Then click the <b>"Create"</b> button</li>
+      <li>You can now choose specific rules defining when the promotion will apply (the "Discount Rules" dropdown), and choose the amount of your promotion (the "Adjustment type" dropdown). For example, for a discount that will apply to the whole amount of the order, select "Create whole-order adjustment" and click the "Add" button</li>
+      <li>On the new block that appeared, select "Calculated by": "Flat Percent" and choose your % discount (ex: 30, for 30% discount). Then click on <b>"Update"</b> button</li>
+      <li>Your coupon code is now valid, and add it to your order on the cart page, or at any step of your checkout</li>
     </ol>
+
+    <%= image_tag 'doc/coupon-code-promotions.png' %>
+    <%= image_tag 'doc/coupon-code-promotions2.png' %>
+    <%= image_tag 'doc/coupon-code-promotions3.png' %>
+    <%= image_tag 'doc/coupon-code-promotions4.png' %>
+    <%= image_tag 'doc/coupon-code-promotions5.png' %>
+    <%= image_tag 'doc/coupon-code-promotions6.png' %>
+
+    <hr />
+
+    <h3 id="free-shipping-promotion">Free Shipping Promotion</h3>
+    <p>We have a permanently active promotion named "Entrega Gratis" that offers free shipping for deliveries in Panama City Zone 1 and 2 for orders above a certain amount. The current amount is <b>150.00 $</b>. To change this amount just do the following:</p>
+    <ol>
+      <li>Go to <%= link_to 'admin > promotions', admin_promotions_path, target: :blank %> and click the edit icon of the <b>"Entrega Gratis"</b> promotion</li>
+      <li>Change the amount on the Order total meets these criteria block, and click the <b>"Update"</b> button</li>
+    </ol>
+
+    <%= image_tag 'doc/free-shipping-promotion.png' %>
+    <%= image_tag 'doc/free-shipping-promotion2.png' %>
   </div>
 </div>

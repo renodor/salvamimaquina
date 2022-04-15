@@ -134,6 +134,8 @@ en:
         documentation: 'Documentation'
         products_discount: 'Products discount'
         related_products: 'Related products'
+        coupon_code_promotions: 'Coupon code promotions'
+        free_shipping_promotion: 'Free shipping promotion'
     different_billing_address: 'If you need a different billing address please contact us;'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'

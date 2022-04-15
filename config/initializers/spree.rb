@@ -146,7 +146,7 @@ Spree::Backend::Config.configure do |config|
       url: '/admin/sliders'
     ),
     config.class::MenuItem.new(
-      %i[products_discount related_products],
+      %i[products_discount related_products coupon_code_promotions free_shipping_promotion],
       'book',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
       partial: 'spree/admin/shared/documentation_sub_menu',
