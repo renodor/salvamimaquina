@@ -1,6 +1,5 @@
 <ul class="admin-subnav" data-hook="admin_product_sub_tabs">
-  <%= tab :products_discount, url: admin_documentation_path(anchor: 'products-discount') %>
-  <%= tab :related_products, url: admin_documentation_path(anchor: 'related-products') %>
-  <%= tab :coupon_code_promotions, url: admin_documentation_path(anchor: 'coupon-code-promotions') %>
-  <%= tab :free_shipping_promotion, url: admin_documentation_path(anchor: 'free-shipping-promotion') %>
+  <% %i[products_discount related_products coupon_code_promotions free_shipping_promotion admin_users store_settings shipping_methods zones trade_in_models trade_in_requests reparation_categories reparation_requests sync_repair_shopr].map do |sub_menu| %>
+    <%= tab sub_menu, url: admin_documentation_path(anchor: sub_menu.to_s.gsub('_', '-')) %>
+  <% end %>
 </ul>

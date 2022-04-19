@@ -5,7 +5,11 @@
 <div id="admin-doc">
   <div class="admin-doc-block">
     <h2>Products</h2>
-    <p>All products are synchronized from Salva Mi Máquina RepairShopr account and <b>shouldn't be modified from the website admin.</b> Things like product details, images, variants, prices, stock, product categories (taxonomies) etc shouldn't be touched at all on website admin and are all synchronized directly from RepairShopr. The only product related features that have to be handle in website admin are:</p>
+    <p class="doc-warning">
+      <%= svg 'warning' %>
+      All products are synchronized from Salva Mi Máquina RepairShopr account and shouldn't be modified from the website admin. Things like product details, images, variants, prices, stock, product categories (taxonomies) etc shouldn't be touched at all on website admin and are all synchronized directly from RepairShopr.
+    </p>
+    <p>The only product related features that have to be handle in website admin are:</p>
 
     <h3 id="products-discount">Products Discount</h3>
     <p>On RepairShopr we can't create a discount for a specific product. So this can be done on the website admin</p>
@@ -66,10 +70,133 @@
     <p>We have a permanently active promotion named "Entrega Gratis" that offers free shipping for deliveries in Panama City Zone 1 and 2 for orders above a certain amount. The current amount is <b>150.00 $</b>. To change this amount just do the following:</p>
     <ol>
       <li>Go to <%= link_to 'admin > promotions', admin_promotions_path, target: :blank %> and click the edit icon of the <b>"Entrega Gratis"</b> promotion</li>
-      <li>Change the amount on the Order total meets these criteria block, and click the <b>"Update"</b> button</li>
+      <li>Change the amount on the "Order total meets these criteria" block, and click the <b>"Update"</b> button</li>
     </ol>
 
     <%= image_tag 'doc/free-shipping-promotion.png' %>
     <%= image_tag 'doc/free-shipping-promotion2.png' %>
+  </div>
+
+  <div class="admin-doc-block">
+    <h2>Users</h2>
+    <p>On the user page you can see all customers that created an account on the website. This is also were you can define users who should have Admin access rights.</p>
+
+    <h3 id="admin-users">Give Admin Rights to User</h3>
+    <p class="doc-warning">
+      <%= svg 'warning' %>
+      If you give admin rights to an user he/she will have access to the website admin and will be able to perform all actions described in this documentation
+    </p>
+    <ol>
+      <li>Go to <%= link_to 'admin > promotions', admin_users_path, target: :blank %> and click the edit icon to the user you want to edit</li>
+      <li>Check the "admin" checkbox</li>
+      <li>Click the <b>"Update"</b> button</li>
+    </ol>
+
+    <%= image_tag 'doc/admin-user.png' %>
+    <%= image_tag 'doc/admin-user2.png' %>
+  </div>
+
+  <div class="admin-doc-block">
+    <h2>Settings</h2>
+    <p>Where you define the settings of the website</p>
+    <h3 id="store-settings">Store Settings</h3>
+    <p>On the <%= link_to 'store settings page', edit_admin_store_path(current_store), target: :blank %> you can define general website settings (Those settings have been correctly configured for now, please change it only if you are sure of what you are doing):</p>
+    <ul>
+      <li><b>Site name:</b> the website name that will appear on top of internet browser tabs. Also used for SEO</li>
+      <li><b>Slug:</b> used internally on the code to find your store</li>
+      <li><b>Seo Title:</b> title of the website used for SEO</li>
+      <li><b>Meta Keywords:</b> was used for SEO in the past but is not used anymore</li>
+      <li><b>Meta Description: </b> description of the website used for SEO</li>
+      <li><b>Site URL: </b> used internally on the code to define the website domain name</li>
+      <li><b>Mail From Address: </b> the admin email address that will be used to send AND receive all website emails (order confirmations, trade-in requests, reparation requests, contact form messages etc...)</li>
+      <li><b>Default Currency:</b> currency of the ecommerce</li>
+      <li><b>Locales Available in the Storefront: </b> the default language of the website</li>
+    </ul>
+
+    <%= image_tag 'doc/store-settings.png' %>
+
+    <hr>
+
+    <h3 id="shipping-methods">Shipping methods</h3>
+    <p>On the <%= link_to 'shipping page', admin_shipping_methods_path, target: :blank %> we define the different shippping methods available on the ecommerce. Current available shipping methods are: delivery to Panama City zone 1, 2, 3, and pick up in Bella Vista and San Francisco stores. You can change the price of a shipping method by doing the following:</p>
+    <ul>
+      <li>Go to <%= link_to 'admin > shipping', admin_shipping_methods_path, target: :blank %> and click the edit icon of the shipping method you want to edit</li>
+      <li>Change the amount</li>
+      <li>Click on the <b>"Update"</b> button</li>
+    </ul>
+
+    <%= image_tag 'doc/shipping-methods.png' %>
+    <%= image_tag 'doc/shipping-methods2.png' %>
+
+    <hr>
+
+    <h3 id="zones">Zones</h3>
+    <p>The zones are geographical areas used to define what shipping method should be applied to each order shipping address. We currently have 4 zones:</p>
+    <ul>
+      <li><b>Panama (the entire country):</b> used for pick up in stores shipping methods</li>
+      <li><b>Panama Zone 1:</b> used for Panama Zone 1 shipping method</li>
+      <li><b>Panama Zone 2:</b> used for Panama Zone 2 shipping method</li>
+      <li><b>Panama Zone 3:</b> used for Panama Zone 3 shipping method</li>
+    </ul>
+    <p class="doc-warning">
+      <%= svg 'warning' %>
+      Don't delete any zone or the shipping methods won't work properly
+    </p>
+    <p>You can see what district (corregimiento) is linked to a particular zone:</p>
+    <ul>
+      <li>Go to <%= link_to 'admin > zones', admin_zones_path, target: :blank %> and click the edit icon of the zone you want to edit</li>
+      <li>Here on the "District" field you can see all districts linked to this specific zone</li>
+    </ul>
+
+    <%= image_tag 'doc/zones.png' %>
+    <%= image_tag 'doc/zones2.png' %>
+  </div>
+
+  <div class="admin-doc-block">
+    <h2>Trade In</h2>
+    <h3 id="trade-in-models">Trade-in models</h3>
+    <p>On the <%= link_to 'trade-in models page', admin_trade_in_models_path, target: :blank %> you can see all models available for trade-in with their names, minimum values, maximum values and categories. These models are automatically synchronized everyday at 00:00am from <%= link_to 'this google sheet', "https://docs.google.com/spreadsheets/u/2/d/#{Rails.application.credentials.trade_in_google_sheet_id}/edit", target: :blank %>. You can also trigger a synchronization whenever you want by clicking on the <b>"Sync Trade In Models"</b> button on the top right of the page</p>
+
+    <%= image_tag 'doc/trade-in-models.png' %>
+
+    <hr>
+
+    <h3 id="trade-in-requests">Trade-in requests</h3>
+    <p>On the <%= link_to 'trade-in requests page', admin_trade_in_requests_path, target: :blank %> you can see all trade-in requests made by users on the website. Each time a trade-in request is made you also receive an email to <%= Spree::Store.default.mail_from_address %></p>
+
+    <%= image_tag 'doc/trade-in-requests.png' %>
+  </div>
+
+  <div class="admin-doc-block">
+    <h2>Reparations</h2>
+    <h3 id="reparation-categories">Reparation Categories</h3>
+    <p>This is where you define the different reparation categories that will appear on <%= link_to 'this page', reparation_categories_path, target: :blank %>. You can edit or create a reparation category by doing the following:</p>
+    <ol>
+      <li>Go to <%= link_to 'admin > reparation categories', admin_reparation_categories_path, target: :blank %> and click the edit icon of the reparation you want to edit. Or click on the <b>"New Reparation Category"</b> button on the top right of the page if you want to create a new one</li>
+      <li>You can now define the name of your reparation category, the different products belonging to this category, and the different damage types belonging to this category. (To add new product fields or new damage fields, you have to add a product name or a damage type on the "New Product" or "New Damage Type" field, and then save your changes)</li>
+      <li>To save your changes click on the <b>"Update Reparation category"</b> button at the bottom of the page</li>
+    </ol>
+
+    <%= image_tag 'doc/reparation-categories.png' %>
+    <%= image_tag 'doc/reparation-categories2.png' %>
+    <%= image_tag 'doc/reparation-categories3.png' %>
+
+    <hr>
+
+    <h3 id="reparation-requests">Reparation Requests</h3>
+    <p>On the <%= link_to 'reparation requests page', admin_reparation_requests_path, target: :blank %> you can see all reparation requests made by users on the website. Each time a reparation request is made you also receive an email to <%= Spree::Store.default.mail_from_address %></p>
+
+    <%= image_tag 'doc/reparation-requests.png' %>
+  </div>
+
+  <div class="admin-doc-block">
+    <h2 id="sync-repair-shopr">Sync RepairShopr</h2>
+    <p>On the <%= link_to 'sync RepairShopr page', admin_sync_repair_shopr_index_path, target: :blank %> you can see sync RepairShopr products to the website and see previous synchronization status. A Synchronization is done automatically every day at 00:00am. You can do a manual synchronization whenever you want by clicking on the <b>"Synchronize"</b> button</p>
+    <p class="doc-warning">
+      <%= svg 'warning' %>
+      If you launch a synchronization, you will see a new line appearing on the "Sync History" table, with a "pending" status. Don't launch a new synchronization until this one is complete. You will have to refresh the page until you see the status as "complete"
+    </p>
+
+    <%= image_tag 'doc/sync-repair-shopr.png' %>
   </div>
 </div>
