@@ -21,11 +21,23 @@
     .doc-warning {
       display: flex;
       align-items: center;
-      column-gap: 5px;
+      column-gap: 10px;
       color: $red;
+      padding-bottom: 1rem;
       svg {
         fill: $red;
         flex-shrink: 0;
+      }
+      a {
+        color: $red;
+      }
+    }
+    .doc-code {
+      background-color: #eee;
+      padding: 15px;
+      font-family: monospace;
+      span {
+        display: block;
       }
     }
   }
