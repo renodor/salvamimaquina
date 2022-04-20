@@ -2,14 +2,11 @@
 <h1><%= t('spree.shopping_cart') %></h1>
 
 <% if @order.line_items.empty? %>
-
   <div data-hook="empty_cart">
     <p><%= t('spree.your_cart_is_empty') %></p>
     <p><%= link_to t('spree.continue_shopping'), products_es_mx_path, class: 'btn btn-primary' %></p>
   </div>
-
 <% else %>
-
   <div id="cart-content">
     <%= form_for @order, url: update_cart_path, html: { id: 'update-cart' } do |order_form| %>
       <div class="line-items" data-hook="cart_items">
