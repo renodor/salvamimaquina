@@ -35,7 +35,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
 
       @variant
-    rescue RepairShoprApi::V1::Base::NotFoundError # TODO: replace RepairShoprApi::V1::Base with self?
+    rescue RepairShoprApi::V1::Base::NotFoundError
       sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
       false
     rescue => e # rubocop:disable Style/RescueStandardError

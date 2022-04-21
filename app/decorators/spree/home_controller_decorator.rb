@@ -31,15 +31,7 @@ module Spree
       @user_message = UserMessage.new
       find_corporate_clients_sliders
 
-      # TODO: improve how we deal with this data... Maybe create a CorporateService model?
-      @corporate_services = %w[
-        repair
-        customer_service
-        emergency
-        credit
-        quality
-        delivery
-      ]
+      @corporate_services = corporate_services
     end
 
     def create_user_message
@@ -61,15 +53,8 @@ module Spree
         flash.notice = t('message_sent')
         redirect_to corporate_clients_path
       else
-        # TODO: improve how we deal with this data... Maybe create a CorporateService model?
-        @corporate_services = %w[
-          repair
-          customer_service
-          emergency
-          credit
-          quality
-          delivery
-        ]
+
+        @corporate_services = corporate_services
         find_corporate_clients_sliders
         render :corporate_clients
       end
@@ -125,6 +110,18 @@ module Spree
     def find_corporate_clients_sliders
       @slider_1 = Slider.find_by(location: :corporate_clients_1)
       @slider_2 = Slider.find_by(location: :corporate_clients_2)
+    end
+
+    # TODO: improve how we deal with this data... Maybe create a CorporateService model?
+    def corporate_services
+      %w[
+        repair
+        customer_service
+        emergency
+        credit
+        quality
+        delivery
+      ]
     end
 
     Spree::HomeController.prepend self

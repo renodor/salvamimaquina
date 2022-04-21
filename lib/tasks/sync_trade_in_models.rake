@@ -2,5 +2,5 @@
 
 # Runs every day at 5:00 AM UTC
 task sync_trade_in_models: :environment do
-  ImportTradeInFromGoogleSheet.call
+  SyncTradeInModels.call
 end

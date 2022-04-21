@@ -8,7 +8,13 @@ module Spree
       end
 
       def sync
-        ImportTradeInFromGoogleSheet.call
+        payload = SyncTradeInModels.call
+
+        if payload[:success?]
+          flash[:success] = 'Trade in models Synchronized correctly'
+        else
+          flash[:error] = "Trade in models couldn't be synchronized, please review your Google Sheet file and try again"
+        end
         redirect_to admin_trade_in_models_path
       end
     end

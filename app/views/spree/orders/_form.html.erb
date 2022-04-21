@@ -1,5 +1,0 @@
-<% order = order_form.object %>
-<%= render 'spree/shared/error_messages', target: order %>
-<div id="cart-detail"> <!-- TODO: replace this table with a css grid or flexbox... -->
-  <%= render partial: 'spree/orders/line_item', collection: order.line_items, locals: { order_form: order_form } %>
-</div>
