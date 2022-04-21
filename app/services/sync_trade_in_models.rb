@@ -2,8 +2,10 @@
 
 require 'csv'
 
-class ImportTradeInFromGoogleSheet
+class SyncTradeInModels
   FILE_ID = Rails.application.credentials.trade_in_google_sheet_id
+
+  SyncTradeInModelsError = Class.new(StandardError)
 
   class << self
     def call
@@ -16,7 +18,10 @@ class ImportTradeInFromGoogleSheet
         trade_in_category.trade_in_models.create!(name: row[1], min_value: row[2].delete('$').to_f, max_value: row[3].delete('$').to_f)
       end
 
-      # TODO: return open struct with display flash success etc...
+      { success?: true }
+    rescue ActiveRecord::RecordInvalid, SyncTradeInModelsError => e
+      Sentry.capture_exception(e)
+      { success?: false }
     end
 
     private
@@ -33,8 +38,7 @@ class ImportTradeInFromGoogleSheet
 
       return response.body if response.status == 200
 
-      # TODO: return open struct with success false, send event to sentry, display flash error message
-      raise "Code: #{response.status}, response: #{response.body}"
+      raise SyncTradeInModelsError, "Code: #{response.status}, response: #{response.body}"
     end
   end
 end
