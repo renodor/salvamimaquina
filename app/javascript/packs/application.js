@@ -23,7 +23,7 @@ import 'bootstrap';
 import { navbar } from '../components/navbar';
 import { addDinamysmToFlash } from '../components/flash';
 import { checkoutForm } from '../components/checkout_form';
-import { addressForm } from '../components/address_form';
+// import { addressForm } from '../components/address_form';
 import { priceRangeSlider } from '../components/price_range_slider';
 import { productShowVariants } from '../components/product_show_variants';
 import { productShowThumbnails } from '../components/product_show_thumbnails';
@@ -46,7 +46,7 @@ document.addEventListener('turbolinks:load', () => {
   navbar();
   addDinamysmToFlash();
   checkoutForm();
-  addressForm();
+  // addressForm();
   priceRangeSlider();
   productShowVariants();
   productShowThumbnails();

@@ -11,6 +11,8 @@
   <%= f.input :pagination %>
   <%= f.input :fallback_image, hint: 'Show a grey image placeholder of 1300*550 px when a slide image is missing?' %>
   <%= f.input :delay_between_slides, hint: 'Milliseconds' %>
+  <%= f.input :space_between_slides, hint: 'Pixels' %>
+  <%= f.input :force_slide_full_width, hint: 'Make sure that slide image will take 100% of the slide width' %>
   <div class="image-per-slide">
     <%= f.input :image_per_slide_s %>
     <%= f.input :image_per_slide_m %>

@@ -144,6 +144,14 @@ Spree::Backend::Config.configure do |config|
       'picture-o',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
       url: '/admin/sliders'
+    ),
+    config.class::MenuItem.new(
+      %i[doc_products doc_promotions doc_users doc_settings doc_trade_in doc_reparations doc_repair_shopr doc_sliders],
+      'book',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      partial: 'spree/admin/shared/documentation_sub_menu',
+      url: '/admin/documentation',
+      label: :documentation
     )
   ]
 end

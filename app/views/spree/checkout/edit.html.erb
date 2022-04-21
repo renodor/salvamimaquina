@@ -18,9 +18,7 @@
       <% end %>
     </div>
     <% if @order.state != 'confirm' %>
-      <div id="checkout-summary" data-hook="checkout_summary_box">
-        <%= render partial: 'summary', locals: { order: @order } %>
-      </div>
+      <%= render partial: 'summary', locals: { order: @order, show_checkout_button: false } %>
     <% end %>
   </div>
   <%= render 'spree/shared/related_products', related_products: @order.related_products %>

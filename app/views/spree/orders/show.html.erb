@@ -13,9 +13,7 @@
       <% end %>
     </div>
 
-    <div id="checkout-summary" data-hook="checkout_summary_box">
-      <%= render partial: 'spree/checkout/summary', locals: { order: @order } %>
-    </div>
+    <%= render partial: 'spree/checkout/summary', locals: { order: @order, show_checkout_button: false } %>
 
     <div id="order-back-link" data-hook="links">
       <% if order_just_completed?(@order) %>
