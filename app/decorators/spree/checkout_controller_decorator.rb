@@ -155,7 +155,11 @@ module Spree
       # Add an aditional net safety to find the @order if it can't be find with the cookie
       # (It could happend when coming back from 3DS, the cookie may be lost between redirects, (even if it shouldn't...))
       @order ||= Spree::Order.find_by(number: params[:OrderID]&.split('-')&.first)
-      redirect_to(spree.cart_path) && return unless @order
+      return if @order
+
+      Rails.logger.debug('########## CANT FIND ORDER ########')
+      Rails.logger.debug("########## #{params} ########")
+      redirect_to(spree.cart_path)
     end
 
     # If the order have splitted packages (products shipped from Bella Vista and others from San Francisco), we don't want the user to see it and pay 2 shippings.
