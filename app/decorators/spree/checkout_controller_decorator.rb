@@ -159,7 +159,7 @@ module Spree
 
       Rails.logger.debug('########## CANT FIND ORDER ########')
       Rails.logger.debug("########## #{params} ########")
-      redirect_to(spree.cart_path)
+      # redirect_to(spree.cart_path)
     end
 
     # If the order have splitted packages (products shipped from Bella Vista and others from San Francisco), we don't want the user to see it and pay 2 shippings.
