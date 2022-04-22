@@ -27,6 +27,11 @@ module Spree
     end
 
     def three_d_secure_response
+      Rails.logger.debug('-------- DEBUG LOGS')
+      Rails.logger.debug("FOUND PAYMENT ID: #{params[:OrderID].split('-').last}")
+      Rails.logger.debug("ORDER NUMBER: #{@order.number}")
+      Rails.logger.debug("ORDER PAYMENT NUMBERS: #{@order.payments.map(&:number)}")
+      Rails.logger.debug('DEBUG LOGS --------')
       @order.payments.find_by(number: params[:OrderID].split('-').last).process_3ds_response(params)
       order_transition_and_completion_logic
     end
