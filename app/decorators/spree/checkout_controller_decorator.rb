@@ -169,9 +169,9 @@ module Spree
 
     def create_test_order
       variant = Spree::Product.find(308).master
-      @order = Spree::Order.create!(state: 'payment', item_total: variant.price, item_count: 1, email: 'test@email.com')
-      @order.ship_address = Spree::Address.find(1570)
-      @order.bill_address = Spree::Address.find(1570)
+      @order = Spree::Order.create!(state: 'payment', item_total: variant.price, item_count: 1, email: 'renaud_test@email.com')
+      @order.ship_address = Spree::Address.last
+      @order.bill_address = Spree::Address.last
       line_item = Spree::LineItem.create!(
         variant_id: variant.id,
         order_id: @order.id,
@@ -210,7 +210,7 @@ module Spree
         last_digits: '2222',
         number: '2222222222222222',
         verification_value: '222',
-        name: 'Ren Test',
+        name: 'Renaud Test',
         payment_method_id: Spree::PaymentMethod.last.id
       )
 
