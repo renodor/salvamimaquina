@@ -74,4 +74,6 @@ Rails.application.configure do
 
   # Enable serving of images from an asset server for emails
   config.action_mailer.asset_host = 'localhost:3000'
+
+  config.hosts << '548e-109-14-65-142.ngrok.io'
 end

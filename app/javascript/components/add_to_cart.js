@@ -14,9 +14,12 @@ const addToCart = () => {
       const payload = event.detail[0];
 
       const cartQuantityTag = document.querySelector('#navbar-icons .navbar-cart-quantity');
-      const newCartQuantity = parseInt(cartQuantityTag.innerHTML) + payload.quantity;
-      cartQuantityTag.innerHTML = newCartQuantity;
-      cartQuantityTag.classList.remove('display-none');
+
+      if (cartQuantityTag) {
+        const newCartQuantity = parseInt(cartQuantityTag.innerHTML) + payload.quantity;
+        cartQuantityTag.innerHTML = newCartQuantity;
+        cartQuantityTag.classList.remove('display-none');
+      }
 
       const addToCartModal = document.getElementById('addToCartModal');
       addToCartModal.querySelector('.modal-body #variant-name').innerHTML = payload.variantName;

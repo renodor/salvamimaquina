@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Spree
+  # rubocop:disable Metrics/ModuleLength
   module CheckoutControllerDecorator
     def self.prepended(base)
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
@@ -35,6 +36,8 @@ module Spree
       @order.payments.find_by(number: params[:OrderID].split('-').last).process_3ds_response(params)
       order_transition_and_completion_logic
     end
+
+    def test_payment; end
 
     private
 
@@ -116,6 +119,7 @@ module Spree
 
       packages = @order.shipments.includes(:stock_location).map(&:to_package)
       @differentiator = Spree::Stock::Differentiator.new(@order, packages)
+
       @differentiator.missing.each do |variant, quantity|
         @order.contents.remove(variant, quantity)
       end
@@ -160,6 +164,63 @@ module Spree
       Rails.logger.debug('########## CANT FIND ORDER ########')
       Rails.logger.debug("########## #{params} ########")
       # redirect_to(spree.cart_path)
+      create_test_order if params[:action] == 'test_payment'
+    end
+
+    def create_test_order
+      variant = Spree::Product.find(308).master
+      @order = Spree::Order.create!(state: 'payment', item_total: variant.price, item_count: 1, email: 'test@email.com')
+      @order.ship_address = Spree::Address.find(1570)
+      @order.bill_address = Spree::Address.find(1570)
+      line_item = Spree::LineItem.create!(
+        variant_id: variant.id,
+        order_id: @order.id,
+        price: variant.price,
+        adjustment_total: Spree::TaxCategory.default.tax_rates.first.amount * variant.price,
+        additional_tax_total: Spree::TaxCategory.default.tax_rates.first.amount * variant.price,
+        quantity: 1
+      )
+      @order.update!(total: @order.line_items.first.total)
+      cookies.signed[:guest_token] = @order.guest_token
+
+      shipment = Spree::Shipment.create!(
+        order_id: @order.id,
+        stock_location_id: Spree::StockLocation.first.id,
+        state: 'ready'
+      )
+
+      Spree::InventoryUnit.create!(
+        state: 'on_hand',
+        variant_id: variant.id,
+        shipment_id: shipment.id,
+        line_item_id: line_item.id
+      )
+
+      Spree::ShippingRate.create!(
+        shipment_id: shipment.id,
+        shipping_method_id: Spree::ShippingMethod.find_by(admin_name: 'San Francisco').id,
+        cost: 0,
+        selected: true
+      )
+
+      @payment_source = Spree::CreditCard.create!(
+        month: '10',
+        year: '2023',
+        cc_type: 'visa',
+        last_digits: '2222',
+        number: '2222222222222222',
+        verification_value: '222',
+        name: 'Ren Test',
+        payment_method_id: Spree::PaymentMethod.last.id
+      )
+
+      Spree::Payment.create!(
+        amount: @order.total,
+        order_id: @order.id,
+        source_type: 'Spree::CreditCard',
+        payment_method_id: Spree::PaymentMethod.last.id,
+        source_id: @payment_source.id
+      )
     end
 
     # If the order have splitted packages (products shipped from Bella Vista and others from San Francisco), we don't want the user to see it and pay 2 shippings.
@@ -180,4 +241,5 @@ module Spree
 
     Spree::CheckoutController.prepend self
   end
+  # rubocop:enable Metrics/ModuleLength
 end

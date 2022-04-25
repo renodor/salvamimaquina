@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     end
 
     post '/checkout/three_d_secure_response', to: 'checkout#three_d_secure_response'
+    get '/checkout/test_payment', to: 'checkout#test_payment'
 
     namespace :api, defaults: { format: 'json' } do
       resources :districts, only: :index
