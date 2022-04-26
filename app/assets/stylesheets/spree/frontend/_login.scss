@@ -1,8 +1,10 @@
 #registration {
   display: flex;
   justify-content: space-between;
+  gap: 30px;
   #account, #guest_checkout {
-    width: 500px;
+    max-width: 500px;
+    width: 50%;
   }
 }
 #existing-customer, #new-customer, #forgot-password {
@@ -23,5 +25,15 @@ input.login-input {
   font-size: 16px;
   &::placeholder {
     font-size: 16px;
+  }
+}
+
+@media ($max-l) {
+  #registration {
+    flex-direction: column-reverse;
+    align-items: center;
+    #account, #guest_checkout {
+      width: 100%;
+    }
   }
 }
