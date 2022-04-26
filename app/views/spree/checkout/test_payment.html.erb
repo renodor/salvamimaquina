@@ -1,10 +1,13 @@
 <div id="checkout-content" data-hook="checkout_content">
+  <% if @order.user %>
+    <p><b>Order user:</b> <%= @order.user.email %></p>
+  <% end %>
   <div id="<%= @order.state %>-wrapper" class="checkout-details" data-hook="checkout_form_wrapper">
     <%= form_for @order, url: update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}" } do |form| %>
       <% payment_method = Spree::PaymentMethod.last %>
       <% param_prefix = "payment_source[#{payment_method.id}]" %>
       <div>
-        <%= text_field_tag "#{param_prefix}[name]", @order.billing_name %>
+        <%= text_field_tag "#{param_prefix}[name]", @payment_source.name %>
       </div>
 
       <div>
@@ -18,8 +21,9 @@
       </div>
 
       <%= hidden_field_tag "#{param_prefix}[cc_type]", '', id: "cc_type", class: 'ccType' %>
+      <%= hidden_field_tag 'order[payment_method_id]', payment_method.id, id: "cc_type", class: 'ccType' %>
 
-       <%= hidden_field_tag 'order[payment_method_id]', payment_method.id, id: "cc_type", class: 'ccType' %>
+      <br />
 
       <%= submit_tag 'TEST PAYMENT' %>
     <% end %>

@@ -4,6 +4,8 @@ module Spree
   # rubocop:disable Metrics/ModuleLength
   module CheckoutControllerDecorator
     def self.prepended(base)
+      base.prepend_before_action :maybe_login_user_or_set_guest_token, only: :three_d_secure_response
+      base.prepend_before_action :create_test_order, only: :test_payment
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
     end
 
@@ -28,15 +30,12 @@ module Spree
     end
 
     def three_d_secure_response
-      Rails.logger.debug('-------- DEBUG LOGS')
-      Rails.logger.debug("FOUND PAYMENT ID: #{params[:OrderID].split('-').last}")
-      Rails.logger.debug("ORDER NUMBER: #{@order.number}")
-      Rails.logger.debug("ORDER PAYMENT NUMBERS: #{@order.payments.map(&:number)}")
-      Rails.logger.debug('DEBUG LOGS --------')
       @order.payments.find_by(number: params[:OrderID].split('-').last).process_3ds_response(params)
       order_transition_and_completion_logic
     end
 
+    # Used locally to test order creations and payment easily without having to fill up all checkout steps
+    # (See #create_test_order method)
     def test_payment; end
 
     private
@@ -151,76 +150,32 @@ module Spree
     def rescue_from_spree_gateway_error(exception)
       flash[:error] = t('spree.spree_gateway_error_flash_for_checkout')
       @order.errors.add(:base, exception.message)
+
+      Sentry.capture_exception(
+        exception,
+        {
+          extra: {
+            order: @order.as_json,
+            order_errors: @order.errors.as_json
+          }
+        }
+      )
+
       redirect_to checkout_state_path(@order.state)
     end
 
     def load_order
       @order = current_order
-      # Add an aditional net safety to find the @order if it can't be find with the cookie
-      # (It could happend when coming back from 3DS, the cookie may be lost between redirects, (even if it shouldn't...))
-      @order ||= Spree::Order.find_by(number: params[:OrderID]&.split('-')&.first)
+
       return if @order
 
-      Rails.logger.debug('########## CANT FIND ORDER ########')
-      Rails.logger.debug("########## #{params} ########")
-      # redirect_to(spree.cart_path)
-      create_test_order if params[:action] == 'test_payment'
-    end
-
-    def create_test_order
-      variant = Spree::Product.find(308).master
-      @order = Spree::Order.create!(state: 'payment', item_total: variant.price, item_count: 1, email: 'renaud_test@email.com')
-      @order.ship_address = Spree::Address.last
-      @order.bill_address = Spree::Address.last
-      line_item = Spree::LineItem.create!(
-        variant_id: variant.id,
-        order_id: @order.id,
-        price: variant.price,
-        adjustment_total: Spree::TaxCategory.default.tax_rates.first.amount * variant.price,
-        additional_tax_total: Spree::TaxCategory.default.tax_rates.first.amount * variant.price,
-        quantity: 1
-      )
-      @order.update!(total: @order.line_items.first.total)
-      cookies.signed[:guest_token] = @order.guest_token
-
-      shipment = Spree::Shipment.create!(
-        order_id: @order.id,
-        stock_location_id: Spree::StockLocation.first.id,
-        state: 'ready'
+      Sentry.capture_message(
+        'Error on checkout retrieving current order',
+        { extra: { params: params.as_json } }
       )
 
-      Spree::InventoryUnit.create!(
-        state: 'on_hand',
-        variant_id: variant.id,
-        shipment_id: shipment.id,
-        line_item_id: line_item.id
-      )
-
-      Spree::ShippingRate.create!(
-        shipment_id: shipment.id,
-        shipping_method_id: Spree::ShippingMethod.find_by(admin_name: 'San Francisco').id,
-        cost: 0,
-        selected: true
-      )
-
-      @payment_source = Spree::CreditCard.create!(
-        month: '10',
-        year: '2023',
-        cc_type: 'visa',
-        last_digits: '2222',
-        number: '2222222222222222',
-        verification_value: '222',
-        name: 'Renaud Test',
-        payment_method_id: Spree::PaymentMethod.last.id
-      )
-
-      Spree::Payment.create!(
-        amount: @order.total,
-        order_id: @order.id,
-        source_type: 'Spree::CreditCard',
-        payment_method_id: Spree::PaymentMethod.last.id,
-        source_id: @payment_source.id
-      )
+      flash[:error] = t('spree.spree_gateway_generic_error')
+      redirect_to(spree.cart_path)
     end
 
     # If the order have splitted packages (products shipped from Bella Vista and others from San Francisco), we don't want the user to see it and pay 2 shippings.
@@ -238,6 +193,118 @@ module Spree
     def completion_route
       spree.orders_es_mx_path(@order)
     end
+
+    # This method is executed before anything else when returning from 3DS
+    # indeed we already experienced silent errors during 3DS process:
+    # the guest_token was lost and solidus_auth_devise was redirecting the user to registration page
+    # without any information on what happened with their orders or their payments...
+    # So when returning from 3DS we make sure that:
+    # - we can retrieve the order from 3DS payload
+    # - if the order has an associated user, we logg this user in
+    # - if the order has no associated user and the guest_token cookie is lost, we rebuild it
+    # - + make sure to notify users and Sentry if something goes wrong
+    def maybe_login_user_or_set_guest_token
+      order = Spree::Order.find_by!(number: params[:OrderID]&.split('-')&.first)
+
+      if order.user && !spree_current_user
+        sign_in(order.user)
+      elsif !order.user && cookies.signed[:guest_token].blank?
+        cookies.signed[:guest_token] = Spree::Config[:guest_token_cookie_options].merge(
+          value: order.guest_token,
+          httponly: true
+        )
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      Sentry.capture_exception(
+        e,
+        {
+          extra: {
+            info: 'Error returning from 3DSecure: Order could not be found...',
+            retrieved_order_number: params[:OrderID]&.split('-')&.first,
+            params: params.as_json
+          }
+        }
+      )
+      flash[:error] = t('spree.spree_gateway_error_3ds')
+      redirect_to cart_es_mx_path
+    end
+
+    # rubocop:disable Metrics/MethodLength
+    def create_test_order
+      redirect_to root_path and return if Rails.env.production?
+
+      variant = Spree::Product.find_by!(slug: 'ecom-test').master
+
+      @order = Spree::Order.new(
+        state: 'payment',
+        item_total: variant.price,
+        item_count: 1,
+        email: 'renaud_test@email.com'
+      )
+
+      if params[:with_user].present?
+        user = Spree::User.find_by(email: 'renaud.dor@gmail.com')
+        sign_in(user)
+        @order.user = user
+      end
+
+      @order.ship_address = user ? user.ship_address : Spree::Address.last
+      @order.bill_address = user ? user.bill_address : Spree::Address.last
+
+      @order.save!
+
+      cookies.signed[:guest_token] = @order.guest_token
+
+      line_item = Spree::LineItem.create!(
+        variant_id: variant.id,
+        order_id: @order.id,
+        price: variant.price,
+        adjustment_total: Spree::TaxCategory.default.tax_rates.first.amount * variant.price,
+        additional_tax_total: Spree::TaxCategory.default.tax_rates.first.amount * variant.price,
+        quantity: 1
+      )
+      @order.update!(total: @order.line_items.first.total)
+
+      shipment = Spree::Shipment.create!(
+        order_id: @order.id,
+        stock_location_id: Spree::StockLocation.first.id,
+        state: 'ready'
+      )
+
+      Spree::InventoryUnit.create!(
+        state: 'on_hand',
+        variant_id: variant.id,
+        shipment_id: shipment.id,
+        line_item_id: line_item.id
+      )
+
+      Spree::ShippingRate.create!(
+        shipment_id: shipment.id,
+        shipping_method_id: Spree::ShippingMethod.find_by(admin_name: 'Bella Vista').id,
+        cost: 0,
+        selected: true
+      )
+
+      @payment_source = Spree::CreditCard.create!(
+        month: '09',
+        year: '2025',
+        cc_type: 'visa',
+        last_digits: '4444',
+        number: '4444444444444444',
+        verification_value: '728',
+        name: 'TEST CREDIT CARD',
+        payment_method_id: Spree::PaymentMethod.last.id
+      )
+
+      Spree::Payment.create!(
+        amount: @order.total,
+        order_id: @order.id,
+        source_type: 'Spree::CreditCard',
+        payment_method_id: Spree::PaymentMethod.last.id,
+        source_id: @payment_source.id
+      )
+    end
+    # rubocop:enable Metrics/MethodLength
 
     Spree::CheckoutController.prepend self
   end

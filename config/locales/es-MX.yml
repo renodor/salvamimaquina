@@ -160,8 +160,10 @@ es-MX:
     card_code: "Código CVV de la tarjeta"
     transaction_secured: "Todas las transacciones están aseguradas"
     ending_in: "Termina con:"
-    cvv_explaination: "Código de seguridqd de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente."
+    cvv_explaination: "Código de seguridad de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente."
+    spree_gateway_generic_error: "Hubo un problema procesando su pedido. Por favor inténtelo de nuevo."
     spree_gateway_error_flash_for_checkout: "Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo."
+    spree_gateway_error_3ds: "Hubo un problema procesando su pedido. Su pago no fue debitado. Por favor inténtelo de nuevo, y si el problema sigue contacte a Salva Mi Máquina."
     thank_you_for_your_order: "¡Gracias por su pedido!"
     adjustment_labels:
       line_item: '%{promotion} (%{promotion_name})'

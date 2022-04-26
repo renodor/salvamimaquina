@@ -11,8 +11,8 @@ module PaymentGateway
           {
             success: xml_parsed_response.xpath('//ResponseCode').text == '0',
             message: xml_parsed_response.xpath('//ResponseCodeDescription').text,
-            # html_form: xml_parsed_response.xpath('//HTMLFormData').text
-            html_form: Rails.env.production? ? xml_parsed_response.xpath('//HTMLFormData').text : test_mode_3ds_response_html_form(order_number)
+            html_form: xml_parsed_response.xpath('//HTMLFormData').text
+            # html_form: Rails.env.production? ? xml_parsed_response.xpath('//HTMLFormData').text : test_mode_3ds_response_html_form(order_number)
           }
         end
 
@@ -26,7 +26,7 @@ module PaymentGateway
               <CardNumber>#{card_info[:card_number]}</CardNumber>
               <Installments>0</Installments>
             </CardDetails>
-            <MerchantResponseURL>https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '548e-109-14-65-142.ngrok.io'}/checkout/three_d_secure_response</MerchantResponseURL>
+            <MerchantResponseURL>https://#{Rails.env.production? ? 'www.salvamimaquina.com' : 'e1b9-109-14-65-142.ngrok.io'}/checkout/three_d_secure_response</MerchantResponseURL>
             <TransactionDetails>
               <AcquirerId>#{FirstAtlanticCommerce::Base::ACQUIRER_ID}</AcquirerId>
               <Amount>#{amount}</Amount>
