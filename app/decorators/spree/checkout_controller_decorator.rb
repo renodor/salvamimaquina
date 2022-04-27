@@ -250,7 +250,6 @@ module Spree
 
       @order.ship_address = user ? user.ship_address : Spree::Address.last
       @order.bill_address = user ? user.bill_address : Spree::Address.last
-
       @order.save!
 
       cookies.signed[:guest_token] = @order.guest_token
