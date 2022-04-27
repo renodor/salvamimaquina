@@ -198,10 +198,10 @@ module Spree
     # indeed we already experienced silent errors during 3DS process:
     # the guest_token was lost and solidus_auth_devise was redirecting the user to registration page
     # without any information on what happened with their orders or their payments...
-    # So when returning from 3DS we make sure that:
-    # - we can retrieve the order from 3DS payload
-    # - if the order has an associated user, we logg this user in
-    # - if the order has no associated user and the guest_token cookie is lost, we rebuild it
+    # So when returning from 3DS: we make sure that:
+    # - we make sure that the order can be retrieved from from 3DS payload
+    # - if the order has an associated user, we make sure that this user is logged in
+    # - if the order has no associated user, we make sure that the guest token is present
     # - + make sure to notify users and Sentry if something goes wrong
     def maybe_login_user_or_set_guest_token
       order = Spree::Order.find_by!(number: params[:OrderID]&.split('-')&.first)
