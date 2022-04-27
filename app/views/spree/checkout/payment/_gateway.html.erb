@@ -2,7 +2,7 @@
 
 <div class="field field-required card_name" data-hook="card_name">
   <%#= label_tag "name_on_card_#{payment_method.id}", t('spree.name_on_card') %>
-  <%= text_field_tag "#{param_prefix}[name]", @order.billing_name, { id: "name_on_card_#{payment_method.id}", placeholder: t('spree.name_on_card'), autocomplete: "cc-name", class: 'cardName', required: true } %>
+  <%= text_field_tag "#{param_prefix}[name]", '', { id: "name_on_card_#{payment_method.id}", placeholder: t('spree.name_on_card'), autocomplete: "cc-name", class: 'cardName', required: true } %>
 </div>
 
 <div class="field field-required card_number" data-hook="card_number">

@@ -5,6 +5,8 @@ Sentry.init do |config|
   config.dsn = 'https://24a55419e6214cdcbdc3dd58c2e637d9@o555754.ingest.sentry.io/5685830'
   config.breadcrumbs_logger = [:active_support_logger]
 
+  config.excluded_exceptions -= ['ActiveRecord::RecordNotFound']
+
   config.async = lambda do |event, hint|
     SendEventToSentryJob.perform_later(event, hint)
   end
