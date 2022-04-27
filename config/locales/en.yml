@@ -157,6 +157,9 @@ en:
     between_1_and_3_days: 'Between one and three days.'
     transaction_secured: "All transactions are secured"
     cvv_explaination: "3-digit security code usually found on the back of your card. American Express cards have a 4-digit code located on the front."
+    spree_gateway_generic_error: "There were an issue processing your order. Please try again later."
+    spree_gateway_error_flash_for_checkout: "There were an issue with your payment information. Please review it and try again."
+    spree_gateway_error_3ds: "There were an issue processing your order. Your credit card was not debited. Please try again later, if the probleme remains contact Salva Mi Máquina."
     thank_you_for_your_order: "Thank you for your order!"
     order_mailer:
       confirm_email:
