@@ -4,8 +4,8 @@ module Spree
   # rubocop:disable Metrics/ModuleLength
   module CheckoutControllerDecorator
     def self.prepended(base)
-      base.prepend_before_action :maybe_login_user_or_set_guest_token, only: :three_d_secure_response
       base.prepend_before_action :create_test_order, only: :test_payment
+      base.prepend_before_action :maybe_login_user_or_set_guest_token, only: :three_d_secure_response
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
     end
 
