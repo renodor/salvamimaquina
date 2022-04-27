@@ -196,9 +196,9 @@ module Spree
 
     # This method is executed before anything else when returning from 3DS
     # indeed we already experienced silent errors during 3DS process:
-    # the guest_token was lost and solidus_auth_devise was redirecting the user to registration page
-    # without any information on what happened with their orders or their payments...
-    # So when returning from 3DS: we make sure that:
+    # the guest_token was lost and solidus_auth_devise was redirecting users to registration page
+    # without any information on what happened to their orders or their payments...
+    # So when returning from 3DS:
     # - we make sure that the order can be retrieved from from 3DS payload
     # - if the order has an associated user, we make sure that this user is logged in
     # - if the order has no associated user, we make sure that the guest token is present
