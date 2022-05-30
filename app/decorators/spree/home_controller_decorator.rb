@@ -5,7 +5,7 @@ module Spree
     extend ActiveSupport::Concern
 
     prepended do
-      invisible_captcha only: %i[create_user_message create_corporate_client_message]
+      invisible_captcha only: %i[create_user_message create_corporate_client_message], honeypot: :names
       layout 'spree/layouts/spree_application'
     end
 
