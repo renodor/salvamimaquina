@@ -11,6 +11,21 @@
     </div>
     <p>The only product related features that have to be handle in website admin are:</p>
 
+    <h3>Product Category Banners</h3>
+    <p>On RepairShopr we can't associate an image to a product category. So this can be done on the website admin</p>
+    <ol>
+      <li>Go to <%= link_to 'admin > products > taxonomies', admin_taxonomies_path, target: :blank %> and click the edit button of the "Categories" taxonomy</li>
+      <li>(You may have to reload the page to see the content...). Click on the edit button of the category you want to edit</li>
+      <li>Click on the <b>"Choose File"</b> button and choose the category image (image size should be 500px width and 500px height)</li>
+      <li>Click on the <b>"Update"</b> button</li>
+      <li>Those images will appear under the category name on the "Tienda en Línea" page (<%= link_to "here", products_path, target: :blank %>)</li>
+    </ol>
+
+    <%= image_tag 'doc/product-category-banners.png' %>
+    <%= image_tag 'doc/product-category-banners2.png' %>
+    <%= image_tag 'doc/product-category-banners3.png' %>
+    <%= image_tag 'doc/product-category-banners4.png' %>
+
     <h3>Products Discount</h3>
     <p>On RepairShopr we can't create a discount for a specific product. So this can be done on the website admin</p>
     <ol>
@@ -235,7 +250,7 @@
       <span>capacity: 64gb</span>
     </p>
     <p>RepairShopr products with the same <i>parent_product</i> will appear on the same product page on the website like this:</p>
-    <%= image_tag 'doc/parent_product.png' %>
+    <%= image_tag 'doc/parent-product.png' %>
 
     <div class="doc-warning">
       <%= svg 'warning' %>
