@@ -8,12 +8,11 @@ module Spree
 
     def authorize(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(
-        amount: amount.to_f,
+        amount: fac_formated_amount(amount),
         card_info: {
-          number: source[:number].delete(' '),
-          expiry_date: source[:expiry].split(' / ').reverse.join,
-          cvv: source[:verification_value],
-          name: source[:name]
+          card_number: source[:number].delete(' '),
+          card_expiry_date: source[:expiry].delete(' / '),
+          card_cvv: source[:verification_value]
         },
         order_number: options[:order_id],
         email: options[:email],
@@ -24,13 +23,12 @@ module Spree
     end
 
     def authorize_3ds(amount, source, options)
-      response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(
-        amount: amount.to_f,
+      response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
+        amount: fac_formated_amount(amount),
         card_info: {
-          number: source[:number].delete(' '),
-          expiry_date: source[:expiry].split(' / ').reverse.join,
-          cvv: source[:verification_value],
-          name: source[:name]
+          card_number: source[:number].delete(' '),
+          card_expiry_date: source[:expiry].delete(' / '),
+          card_cvv: source[:verification_value]
         },
         order_number: options[:order_id],
         email: options[:email],

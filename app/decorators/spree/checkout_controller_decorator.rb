@@ -133,6 +133,7 @@ module Spree
 
     def authorize_3ds(payment)
       @html_form_3ds = payment.authorize_3ds(params[:payment_source][payment.payment_method_id.to_s])
+
       if @html_form_3ds
         render :three_d_secure, layout: 'empty_layout'
         true

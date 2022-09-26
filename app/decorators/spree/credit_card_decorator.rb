@@ -14,7 +14,8 @@ module Spree
     # end
 
     def needs_3ds?
-      payment_method.type == 'Spree::PaymentMethod::BacCreditCard' && %w[visa master].include?(cc_type)
+      # payment_method.type == 'Spree::PaymentMethod::BacCreditCard' && %w[visa master].include?(cc_type)
+      true
     end
 
     Spree::CreditCard.prepend self

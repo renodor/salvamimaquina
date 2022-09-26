@@ -2,10 +2,10 @@
 
 module PaymentGateway
   class FirstAtlanticCommerce::Base
-    BASE_URL = "https://#{Rails.env.production? ? 'TBD' : 'staging'}.ptranz.com/api/spi"
-    # ACQUIRER_ID = Rails.application.credentials.fac_acquirer_id
-    MERCHANT_ID = Rails.application.credentials[:fac_merchant_id]
-    PASSWORD = Rails.application.credentials[:fac_password]
+    BASE_URL = "https://#{Rails.env.production? ? 'marlin' : 'ecm'}.firstatlanticcommerce.com/PGServiceXML"
+    ACQUIRER_ID = Rails.application.credentials.fac_acquirer_id
+    MERCHANT_ID = Rails.application.credentials[Rails.env.production? ? :fac_merchant_id : :fac_merchant_id_test]
+    PASSWORD = Rails.application.credentials[Rails.env.production? ? :fac_password : :fac_password_test]
     PURCHASE_CURRENCY = 840 # FAC code for USD
 
     RepairShoprApiError = Class.new(StandardError)
@@ -27,12 +27,12 @@ module PaymentGateway
       private
 
       def authorize(xml_payload)
-        request(http_method: :post, endpoint: 'Auth', params: xml_payload)
+        request(http_method: :post, endpoint: 'Authorize', params: xml_payload)
       end
 
-      # def authorize_3ds(xml_payload)
-      #   request(http_method: :post, endpoint: '3DS2/Authenticate', params: xml_payload)
-      # end
+      def authorize_3ds(xml_payload)
+        request(http_method: :post, endpoint: 'Authorize3DS', params: xml_payload)
+      end
 
       def capture(xml_payload)
         request(http_method: :post, endpoint: 'TransactionModification', params: xml_payload)
@@ -46,16 +46,14 @@ module PaymentGateway
         Faraday.new(BASE_URL) do |client|
           client.request :url_encoded
           client.adapter Faraday.default_adapter # The default adapter is :net_http
-          client.headers['Content-Type'] = 'application/json'
-          client.headers['PowerTranz-PowerTranzId'] = MERCHANT_ID
-          client.headers['PowerTranz-PowerTranzPassword'] = PASSWORD
+          client.headers['Content-Type'] = 'text/xml'
         end
       end
 
       def request(http_method:, endpoint:, params: {})
         @response = client.public_send(http_method, endpoint, params)
 
-        return JSON.parse(@response.body).symbolize_keys if @response.status == HTTP_OK_CODE
+        return @response.body if @response.status == HTTP_OK_CODE
 
         raise error_class, "Code: #{@response.status}, response: #{@response.body}"
       end
