@@ -30,7 +30,7 @@ module Spree
     end
 
     def three_d_secure_response
-      @order.payments.find_by(number: params[:OrderID].split('-').last).process_3ds_response(params)
+      @order.payments.find_by(number: @payment_number).process_3ds_response(params)
       order_transition_and_completion_logic
     end
 
@@ -205,7 +205,8 @@ module Spree
     # - if the order has no associated user, we make sure that the guest token is present
     # - + make sure to notify users and Sentry if something goes wrong
     def maybe_login_user_or_set_guest_token
-      order = Spree::Order.find_by!(number: params[:OrderID]&.split('-')&.first)
+      order_number, @payment_number = JSON.parse(params[:Response])['OrderIdentifier']&.split('-')
+      order = Spree::Order.find_by!(number: order_number)
 
       if order.user && !spree_current_user
         sign_in(order.user)

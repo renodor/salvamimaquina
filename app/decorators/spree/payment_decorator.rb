@@ -18,8 +18,13 @@ module Spree
     end
 
     def process_3ds_response(response)
+      # binding.pry
       response = payment_method.handle_3ds_response(response)
       handle_response(response, nil, :failure)
+    end
+
+    def generate_uuid
+      self.uuid = SecureRandom.uuid
     end
 
     private

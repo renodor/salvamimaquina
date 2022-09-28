@@ -4,8 +4,8 @@ module PaymentGateway
   module FirstAtlanticCommerce
     class Authorize < FirstAtlanticCommerce::Base
       class << self
-        def call(amount:, card_info:, order_number:, email:, billing_address:)
-          response = authorize(json_payload(amount, card_info, order_number, email, billing_address))
+        def call(amount:, card_info:, order_number:, email:, billing_address:, transaction_uuid:)
+          response = authorize(json_payload(amount, card_info, order_number, email, billing_address, transaction_uuid))
 
           response_code = response[:IsoResponseCode]
 
@@ -19,9 +19,9 @@ module PaymentGateway
 
         private
 
-        def json_payload(amount, card_info, order_number, email, billing_address)
+        def json_payload(amount, card_info, order_number, email, billing_address, transaction_uuid)
           {
-            TransactionIdentifier: 'salvamimaquina',
+            TransactionIdentifier: transaction_uuid,
             TotalAmount: amount,
             CurrencyCode: FirstAtlanticCommerce::Base::PURCHASE_CURRENCY,
             ThreeDSecure: true,
@@ -47,7 +47,7 @@ module PaymentGateway
                 ChallengeWindowSize: 5,
                 MerchantResponseUrl: '01'
               },
-              MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : 'a607-78-120-155-254.ngrok.io'}"
+              MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '0976-78-120-155-254.ngrok.io'}/checkout/three_d_secure_response"
             }
           }.to_json
         end

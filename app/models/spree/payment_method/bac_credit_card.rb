@@ -33,6 +33,7 @@ module Spree
           name: source[:name]
         },
         order_number: options[:order_id],
+        transaction_uuid: options[:originator].uuid,
         email: options[:email],
         billing_address: options[:billing_address]
       )
