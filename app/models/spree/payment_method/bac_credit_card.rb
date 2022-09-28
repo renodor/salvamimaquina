@@ -20,34 +20,56 @@ module Spree
         billing_address: options[:billing_address]
       )
 
-      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { method_name: 'Aut Request' }, { authorization: response[:response_code] })
+      ActiveMerchant::Billing::Response.new(
+        response[:success],
+        response[:message],
+        { method_name: 'Auth Request' }, { authorization: response[:response_code] }
+      )
     end
 
     def authorize_3ds(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize.call(
-        amount: amount.to_f,
+        order_info: {
+          amount: amount.to_f,
+          number: options[:order_id],
+          transaction_uuid: options[:originator].uuid,
+          email: options[:email],
+          billing_address: options[:billing_address]
+        },
         card_info: {
           number: source[:number].delete(' '),
           expiry_date: source[:expiry].split(' / ').reverse.join,
           cvv: source[:verification_value],
           name: source[:name]
-        },
-        order_number: options[:order_id],
-        transaction_uuid: options[:originator].uuid,
-        email: options[:email],
-        billing_address: options[:billing_address]
+        }
       )
 
-      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { html_form: response[:html_form], type: :authorize_3ds_response, method_name: 'Aut3Ds Request' })
+      # TODO: create a response handler that calls ActiveMerchat::Billing::Response.new and call it in every method
+      ActiveMerchant::Billing::Response.new(
+        response[:success],
+        response[:message],
+        { html_form: response[:html_form], type: :authorize_3ds_response, method_name: 'Auth3Ds Request' }
+      )
     end
 
     def handle_3ds_response(response)
-      ActiveMerchant::Billing::Response.new(response['ResponseCode'] == '1', response['ReasonCodeDesc'], { reason_code: response['ReasonCode'], method_name: 'Aut3Ds Response' })
+      valid_eci = response['CardBrand'] == 'MasterCard' ? '02' : '05'
+      success   = response['IsoResponseCode'] == '3D0' && response['RiskManagement']['ThreeDSecure']['Eci'] == valid_eci
+
+      ActiveMerchant::Billing::Response.new(
+        success,
+        response['ResponseMessage'],
+        { reason_code: response['IsoResponseCode'], method_name: 'Auth3Ds Response', spi_token: response['SpiToken'] }
+      )
     end
 
-    def capture(amount, order_number)
-      response = PaymentGateway::FirstAtlanticCommerce::Capture.call(amount: fac_formated_amount(amount), order_number: order_number)
-      ActiveMerchant::Billing::Response.new(response[:success], response[:message], { reason_code: response[:reason_code], method_name: 'Capture' })
+    def payment(spi_token)
+      response = PaymentGateway::FirstAtlanticCommerce::Payment.call(spi_token: spi_token)
+      ActiveMerchant::Billing::Response.new(
+        response[:success],
+        response[:message],
+        { reason_code: response[:reason_code], method_name: 'Payment' }
+      )
     end
 
     # def tokenize(card_number:, customer_reference:, expiry_date:)
@@ -60,8 +82,8 @@ module Spree
     #   ActiveMerchant::Billing::Response.new(response[:success], response[:error_message].presence || response[:token])
     # end
 
-    def purchase(amount, _source, options = {})
-      capture(amount, options[:order_id])
+    def purchase(_amount, _source, options = {})
+      payment(options[:originator].spi_token)
     end
 
     private

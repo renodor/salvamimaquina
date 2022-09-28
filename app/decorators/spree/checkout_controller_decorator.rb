@@ -30,7 +30,7 @@ module Spree
     end
 
     def three_d_secure_response
-      @order.payments.find_by(number: @payment_number).process_3ds_response(params)
+      @order.payments.find_by(number: @payment_number).process_3ds_response(JSON.parse(params[:Response]))
       order_transition_and_completion_logic
     end
 

@@ -18,9 +18,9 @@ module Spree
     end
 
     def process_3ds_response(response)
-      # binding.pry
-      response = payment_method.handle_3ds_response(response)
-      handle_response(response, nil, :failure)
+      handled_3ds_response = payment_method.handle_3ds_response(response)
+
+      handle_response(handled_3ds_response, nil, :failure)
     end
 
     def generate_uuid
@@ -37,6 +37,7 @@ module Spree
       record_response(response) unless response.params['type'] == :authorize_3ds_response
 
       if response.success?
+        # To check what is it? should I update that
         unless response.authorization.nil?
           self.response_code = response.authorization
           self.avs_response = response.avs_result['code']
@@ -46,6 +47,8 @@ module Spree
             self.cvv_response_message = response.cvv_result['message']
           end
         end
+
+        update(spi_token: response.params['spi_token']) if response.params['spi_token'].present?
 
         # Authorize3dsResponse returns an html form that needs to be displayed to the browser for the user to complete
         # So instead of sending payment to next state we need to return this form so that the checkout controller can sends it to the view
@@ -58,6 +61,7 @@ module Spree
           # So authorize_3ds and process_3ds_response methods steps are like "out of" payment state machine, and are like pre-processing steps
           # So when calling this handle_response method, we do so without a success_state
           # In that case, if response is successfull, just return true and don't send payment to a new state
+
           true
         else
           send("#{success_state}!")

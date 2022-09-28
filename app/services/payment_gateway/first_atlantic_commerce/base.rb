@@ -26,16 +26,16 @@ module PaymentGateway
     class << self
       private
 
-      def authorize(xml_payload)
-        request(http_method: :post, endpoint: 'Auth', params: xml_payload)
+      def authorize(json_payload)
+        request(http_method: :post, endpoint: 'sale', params: json_payload)
       end
 
       # def authorize_3ds(xml_payload)
       #   request(http_method: :post, endpoint: '3DS2/Authenticate', params: xml_payload)
       # end
 
-      def capture(xml_payload)
-        request(http_method: :post, endpoint: 'TransactionModification', params: xml_payload)
+      def payment(spi_token)
+        request(http_method: :post, endpoint: 'payment', params: spi_token)
       end
 
       def tokenize(xml_payload)
@@ -46,9 +46,11 @@ module PaymentGateway
         Faraday.new(BASE_URL) do |client|
           client.request :url_encoded
           client.adapter Faraday.default_adapter # The default adapter is :net_http
-          client.headers['Content-Type'] = 'application/json'
-          client.headers['PowerTranz-PowerTranzId'] = MERCHANT_ID
-          client.headers['PowerTranz-PowerTranzPassword'] = PASSWORD
+          client.headers = {
+            'Content-Type' => 'application/json',
+            'PowerTranz-PowerTranzId' => MERCHANT_ID,
+            'PowerTranz-PowerTranzPassword' => PASSWORD
+          }
         end
       end
 
