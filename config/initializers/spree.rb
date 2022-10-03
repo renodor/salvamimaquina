@@ -21,7 +21,7 @@ Spree.config do |config|
   # Use legacy Spree::Order state machine
   config.use_legacy_order_state_machine = false
 
-  # Customized order state machine to remove the confirm checkout step
+  # # Customized order state machine to remove the confirm checkout step
   config.state_machines.order = '::StateMachines::Order'
 
   # Use the legacy address' state validation logic
@@ -111,7 +111,6 @@ Spree::Frontend::Config.configure do |config|
   config.locale = 'es-MX'
 end
 
-# rubocop:disable Metrics/BlockLength
 Spree::Backend::Config.configure do |config|
   config.locale = 'en'
 
@@ -155,7 +154,6 @@ Spree::Backend::Config.configure do |config|
     )
   ]
 end
-# rubocop:enable Metrics/BlockLength
 
 Spree::Api::Config.configure do |config|
   config.requires_authentication = true

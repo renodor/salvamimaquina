@@ -17,9 +17,12 @@ module Spree
 
         if @order.payments.present? && params[:payment_source]
           payment = @order.payments.last
-          return if payment.source.needs_3ds? && authorize_3ds(payment)
 
-          payment.authorize(params[:payment_source][payment.payment_method_id.to_s])
+          @html_form_3ds = payment.sale(params[:payment_source][payment.payment_method_id.to_s])
+          if @html_form_3ds
+            render :three_d_secure, layout: 'empty_layout'
+            return
+          end
         end
 
         order_transition_and_completion_logic
@@ -129,17 +132,6 @@ module Spree
       #   @default_wallet_payment_source = @wallet_payment_sources.detect(&:default) ||
       #                                    @wallet_payment_sources.first
       # end
-    end
-
-    def authorize_3ds(payment)
-      @html_form_3ds = payment.authorize_3ds(params[:payment_source][payment.payment_method_id.to_s])
-
-      if @html_form_3ds
-        render :three_d_secure, layout: 'empty_layout'
-        true
-      else
-        false
-      end
     end
 
     # redirect_to instead of only render
@@ -290,8 +282,8 @@ module Spree
         month: '09',
         year: '2025',
         cc_type: 'visa',
-        last_digits: '4444',
-        number: '4444444444444444',
+        last_digits: '0071',
+        number: '4012000000020071',
         verification_value: '728',
         name: 'TEST CREDIT CARD',
         payment_method_id: Spree::PaymentMethod.last.id

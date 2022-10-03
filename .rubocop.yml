@@ -47,6 +47,7 @@ Style/SlicingWithRange:
   Enabled: true
 
 Metrics/BlockLength:
+  Max: 50
   Exclude:
     - config/environments/development.rb
     - config/environments/production.rb

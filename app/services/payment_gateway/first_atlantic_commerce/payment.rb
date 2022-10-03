@@ -2,17 +2,21 @@
 
 module PaymentGateway
   module FirstAtlanticCommerce
-    class Payment < FirstAtlanticCommerce::Base
-      class << self
-        def call(spi_token:)
-          response = payment(spi_token.to_json)
+    class Payment
+      include Client
 
-          {
-            success: response[:Approved],
-            message: response[:ResponseMessage],
-            reason_code: response[:IsoResponseCode]
-          }
-        end
+      def initialize(spi_token:)
+        @spi_token = spi_token
+      end
+
+      def call
+        response = request(http_method: :post, endpoint: 'payment', params: @spi_token.to_json)
+
+        {
+          success: response[:Approved],
+          message: response[:ResponseMessage],
+          iso_response_code: response[:IsoResponseCode]
+        }
       end
     end
   end

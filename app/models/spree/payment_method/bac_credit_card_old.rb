@@ -22,7 +22,7 @@ module Spree
       ActiveMerchant::Billing::Response.new(response[:success], response[:message], { method_name: 'Aut Request' }, { authorization: response[:response_code] })
     end
 
-    def authorize_3ds(amount, source, options)
+    def sale(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Authorize3ds.call(
         amount: fac_formated_amount(amount),
         card_info: {
