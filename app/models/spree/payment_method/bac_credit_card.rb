@@ -9,7 +9,7 @@ module Spree
     def sale(amount, source, options)
       response = PaymentGateway::FirstAtlanticCommerce::Sale.new(
         order_info: {
-          amount: amount.to_f,
+          amount: amount.to_f / 100,
           number: options[:order_id],
           transaction_uuid: options[:originator].uuid,
           email: options[:email],
@@ -31,8 +31,7 @@ module Spree
     end
 
     def handle_3ds_response(response)
-      valid_eci = response['CardBrand'] == 'MasterCard' ? '02' : '05'
-      success   = response['IsoResponseCode'] == '3D0' && response['RiskManagement']['ThreeDSecure']['Eci'] == valid_eci
+      success = response['IsoResponseCode'] == '3D0' && response['RiskManagement']['ThreeDSecure']['AuthenticationStatus'] != 'N'
 
       active_merchant_response(
         success,
