@@ -2,6 +2,10 @@
 
 module Spree
   module PaymentDecorator
+    def self.prepended(base)
+      base.before_create :generate_uuid
+    end
+
     # TODO: those authorize methods should be called directly by the "process_payments_before_complete" method inside Order model,
     # Instead of being called directly... So that the whole native solidus payment flow is not altered
     # (But not sure it is possible without having to tokenize credit cards)
@@ -19,6 +23,10 @@ module Spree
     end
 
     private
+
+    def generate_uuid
+      self.uuid = SecureRandom.uuid
+    end
 
     def handle_response(response, success_state, failure_state)
       record_response(response) unless response.params['type'] == :authorize_3ds_response

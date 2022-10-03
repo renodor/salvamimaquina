@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_11_131028) do
+ActiveRecord::Schema.define(version: 2022_10_03_145852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -481,6 +481,8 @@ ActiveRecord::Schema.define(version: 2022_04_11_131028) do
     t.string "number"
     t.string "cvv_response_code"
     t.string "cvv_response_message"
+    t.uuid "uuid"
+    t.string "spi_token"
     t.index ["number"], name: "index_spree_payments_on_number", unique: true
     t.index ["order_id"], name: "index_spree_payments_on_order_id"
     t.index ["payment_method_id"], name: "index_spree_payments_on_payment_method_id"
