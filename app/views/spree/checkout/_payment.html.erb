@@ -43,7 +43,6 @@
           <div class="payment-icons">
             <%= svg 'visa' %>
             <%= svg 'master' %>
-            <%= svg 'american_express' %>
             <%= hidden_field_tag "order[payments_attributes][][payment_method_id]", method.id %>
           </div>
           <%#= t(method.name.tr(' ', '_').downcase, scope: 'spree.payment_methods', default: method.name) %>
