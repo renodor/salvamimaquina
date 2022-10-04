@@ -5,7 +5,7 @@ module Spree
   module CheckoutControllerDecorator
     def self.prepended(base)
       base.prepend_before_action :create_test_order, only: :test_payment
-      base.prepend_before_action :maybe_login_user_or_set_guest_token, only: :three_d_secure_response
+      base.prepend_before_action :retrieve_payment_order_and_user, only: :three_d_secure_response
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
     end
 
@@ -33,7 +33,7 @@ module Spree
     end
 
     def three_d_secure_response
-      @order.payments.find_by(number: @payment_number).process_3ds_response(JSON.parse(params[:Response]))
+      @payment.process_3ds_response(JSON.parse(params[:Response]))
       order_transition_and_completion_logic
     end
 
@@ -196,9 +196,10 @@ module Spree
     # - if the order has an associated user, we make sure that this user is logged in
     # - if the order has no associated user, we make sure that the guest token is present
     # - + make sure to notify users and Sentry if something goes wrong
-    def maybe_login_user_or_set_guest_token
-      order_number, @payment_number = JSON.parse(params[:Response])['OrderIdentifier']&.split('-')
-      order = Spree::Order.find_by!(number: order_number)
+    def retrieve_payment_order_and_user
+      payment_uuid = JSON.parse(params['Response'])['TransactionIdentifier']
+      @payment     = Spree::Payment.find_by(uuid: payment_uuid)
+      order        = @payment.order
 
       if order.user && !spree_current_user
         sign_in(order.user)
@@ -213,9 +214,9 @@ module Spree
         e,
         {
           extra: {
-            info: 'Error returning from 3DSecure: Order could not be found...',
-            retrieved_order_number: params[:OrderID]&.split('-')&.first,
-            params: params.as_json
+            info: 'Error returning from 3DSecure',
+            retrieved_payment_uuid: JSON.parse(params['Response'])['TransactionIdentifier'],
+            params: params['Response'].as_json
           }
         }
       )

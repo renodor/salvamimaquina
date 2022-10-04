@@ -32,18 +32,24 @@ module Spree
         save
 
         # "sale" method returns an html form that needs to be displayed to the browser for the user to fill it
-        # So instead of sending payment to next state we need to return this form so that the checkout controller can sends it to the view
-        response.params['html_form'] || send("#{success_state}!")
+        # So if this html form is present, instead of sending payment to next state,
+        # we return this html form so that the checkout controller can sends it to the view
+        if response.params['method_name'] == 'Sale' && response.params['html_form'].present?
+          response.params['html_form']
+        else
+          send("#{success_state}!")
+        end
       else
         Sentry.capture_message(
           payment_method.type,
           {
             extra: {
-              payment_gateway_error: response.message,
-              payment_gateway_response_code: response.params['response_code'],
-              payment_number: number,
+              payment_gateway_iso_response_code: response.params['iso_response_code'],
+              payment_gateway_3ds_status: response.params['three_ds_status'],
+              payment_gateway_error_message: response.message,
+              payment_gateway_method_name: response.params['method_name'],
               order_number: order.number,
-              method_name: response.params['method_name']
+              payment: as_json
             }
           }
         )

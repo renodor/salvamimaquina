@@ -6,11 +6,11 @@ module PaymentGateway
       include Client
 
       def initialize(spi_token:)
-        @spi_token = spi_token
+        @spi_token = spi_token.to_json
       end
 
       def call
-        response = request(http_method: :post, endpoint: 'payment', params: @spi_token.to_json)
+        response = request(http_method: :post, endpoint: 'payment', params: @spi_token)
 
         {
           success: response[:Approved],

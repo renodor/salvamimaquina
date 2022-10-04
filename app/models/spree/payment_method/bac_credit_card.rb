@@ -26,30 +26,49 @@ module Spree
       active_merchant_response(
         response[:success],
         response[:message],
-        { html_form: response[:html_form], iso_response_code: response[:iso_response_code], method_name: 'Sale' }
+        {
+          html_form: response[:html_form],
+          iso_response_code: response[:iso_response_code],
+          method_name: 'Sale'
+        }
       )
     end
 
     def handle_3ds_response(response)
-      success = response['IsoResponseCode'] == '3D0' && response['RiskManagement']['ThreeDSecure']['AuthenticationStatus'] != 'N'
+      authentication_status = response['RiskManagement']['ThreeDSecure']['AuthenticationStatus']
+      iso_response_code     = response['IsoResponseCode']
 
       active_merchant_response(
-        success,
+        iso_response_code == '3D0' && authentication_status != 'N',
         response['ResponseMessage'],
-        { spi_token: response['SpiToken'], iso_response_code: response['IsoResponseCode'], method_name: '3Ds Response' }
+        {
+          spi_token: response['SpiToken'],
+          iso_response_code: iso_response_code,
+          three_ds_status: authentication_status,
+          method_name: '3Ds Response'
+        }
       )
     end
 
     def payment(spi_token)
+      response = PaymentGateway::FirstAtlanticCommerce::Payment.new(spi_token: spi_token).call
+
+      active_merchant_response(
+        response[:success],
+        response[:message],
+        {
+          iso_response_code: response[:iso_response_code],
+          method_name: 'Payment'
+        }
+      )
+    end
+
+    def purchase(_amount, _source, options = {})
+      spi_token = options[:originator].spi_token
+
       # Prevent from calling payment endpoint without a valid spi token, which would raise an exception...
       if spi_token
-        response = PaymentGateway::FirstAtlanticCommerce::Payment.new(spi_token: spi_token).call
-
-        active_merchant_response(
-          response[:success],
-          response[:message],
-          { iso_response_code: response[:iso_response_code], method_name: 'Payment' }
-        )
+        payment(spi_token)
       else
         active_merchant_response(
           false,
@@ -59,15 +78,7 @@ module Spree
       end
     end
 
-    def purchase(_amount, _source, options = {})
-      payment(options[:originator].spi_token)
-    end
-
     private
-
-    def fac_formated_amount(amount)
-      amount.to_s.delete('.').rjust(12, '0')
-    end
 
     def active_merchant_response(success, message, params)
       ActiveMerchant::Billing::Response.new(success, message, params)

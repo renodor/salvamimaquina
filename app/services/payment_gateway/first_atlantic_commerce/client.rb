@@ -3,7 +3,7 @@
 module PaymentGateway
   module FirstAtlanticCommerce
     module Client
-      BASE_URL    = "https://#{Rails.env.production? ? 'TBD' : 'staging'}.ptranz.com/api/spi"
+      BASE_URL    = "https://#{Rails.env.production? ? 'gateway' : 'staging'}.ptranz.com/api/spi"
       MERCHANT_ID = Rails.application.credentials[:fac_merchant_id]
       PASSWORD    = Rails.application.credentials[:fac_password]
 
