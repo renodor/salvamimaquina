@@ -4,8 +4,8 @@ module PaymentGateway
   module FirstAtlanticCommerce
     module Client
       BASE_URL    = "https://#{Rails.env.production? ? 'gateway' : 'staging'}.ptranz.com/api/spi"
-      MERCHANT_ID = Rails.application.credentials[:fac_merchant_id]
-      PASSWORD    = Rails.application.credentials[:fac_password]
+      MERCHANT_ID = Rails.application.credentials[Rails.env.production? ? :fac_merchant_id : :fac_merchant_id_test]
+      PASSWORD    = Rails.application.credentials[Rails.env.production? ? :fac_password : :fac_password_test]
 
       RepairShoprApiError      = Class.new(StandardError)
       BadRequestError          = Class.new(RepairShoprApiError)

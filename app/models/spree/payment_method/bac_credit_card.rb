@@ -39,7 +39,7 @@ module Spree
       iso_response_code     = response['IsoResponseCode']
 
       active_merchant_response(
-        iso_response_code == '3D0' && authentication_status != 'N',
+        iso_response_code == '3D0' && %w[Y A U].include?(authentication_status),
         response['ResponseMessage'],
         {
           spi_token: response['SpiToken'],
