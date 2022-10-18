@@ -5,7 +5,7 @@ module Spree
   module CheckoutControllerDecorator
     def self.prepended(base)
       base.prepend_before_action :create_test_order, only: :test_payment
-      base.prepend_before_action :maybe_login_user_or_set_guest_token, only: :three_d_secure_response
+      base.prepend_before_action :retrieve_payment_order_and_user, only: :three_d_secure_response
       base.skip_before_action :verify_authenticity_token, only: :three_d_secure_response
     end
 
@@ -17,9 +17,12 @@ module Spree
 
         if @order.payments.present? && params[:payment_source]
           payment = @order.payments.last
-          return if payment.source.needs_3ds? && authorize_3ds(payment)
 
-          payment.authorize(params[:payment_source][payment.payment_method_id.to_s])
+          @html_form_3ds = payment.sale(params[:payment_source][payment.payment_method_id.to_s])
+          if @html_form_3ds
+            render :three_d_secure, layout: 'empty_layout'
+            return
+          end
         end
 
         order_transition_and_completion_logic
@@ -30,7 +33,7 @@ module Spree
     end
 
     def three_d_secure_response
-      @order.payments.find_by(number: params[:OrderID].split('-').last).process_3ds_response(params)
+      @payment.process_3ds_response(JSON.parse(params[:Response]))
       order_transition_and_completion_logic
     end
 
@@ -131,16 +134,6 @@ module Spree
       # end
     end
 
-    def authorize_3ds(payment)
-      @html_form_3ds = payment.authorize_3ds(params[:payment_source][payment.payment_method_id.to_s])
-      if @html_form_3ds
-        render :three_d_secure, layout: 'empty_layout'
-        true
-      else
-        false
-      end
-    end
-
     # redirect_to instead of only render
     # Because otherwise we render :edit but we are still in the #update method that has no corresponding route...
     # So if user refresh page it causes a 404 error
@@ -203,8 +196,10 @@ module Spree
     # - if the order has an associated user, we make sure that this user is logged in
     # - if the order has no associated user, we make sure that the guest token is present
     # - + make sure to notify users and Sentry if something goes wrong
-    def maybe_login_user_or_set_guest_token
-      order = Spree::Order.find_by!(number: params[:OrderID]&.split('-')&.first)
+    def retrieve_payment_order_and_user
+      payment_uuid = JSON.parse(params['Response'])['TransactionIdentifier']
+      @payment     = Spree::Payment.find_by(uuid: payment_uuid)
+      order        = @payment.order
 
       if order.user && !spree_current_user
         sign_in(order.user)
@@ -219,9 +214,9 @@ module Spree
         e,
         {
           extra: {
-            info: 'Error returning from 3DSecure: Order could not be found...',
-            retrieved_order_number: params[:OrderID]&.split('-')&.first,
-            params: params.as_json
+            info: 'Error returning from 3DSecure',
+            retrieved_payment_uuid: JSON.parse(params['Response'])['TransactionIdentifier'],
+            params: params['Response'].as_json
           }
         }
       )
@@ -288,8 +283,8 @@ module Spree
         month: '09',
         year: '2025',
         cc_type: 'visa',
-        last_digits: '4444',
-        number: '4444444444444444',
+        last_digits: '0071',
+        number: '4012000000020071',
         verification_value: '728',
         name: 'TEST CREDIT CARD',
         payment_method_id: Spree::PaymentMethod.last.id

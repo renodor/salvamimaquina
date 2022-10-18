@@ -9,7 +9,6 @@ module StateMachines
       klass.extend ClassMethods
     end
 
-    # rubocop:disable Metrics/ModuleLength
     module ClassMethods
       attr_accessor :previous_states
       attr_writer :next_event_transitions, :checkout_steps, :removed_transitions
@@ -216,7 +215,6 @@ module StateMachines
         @removed_transitions ||= []
       end
     end
-    # rubocop:enable Metrics/ModuleLength
 
     def checkout_steps
       steps = self.class.checkout_steps.each_with_object([]) do |(step, options), checkout_steps|

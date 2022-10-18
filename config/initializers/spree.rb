@@ -111,7 +111,6 @@ Spree::Frontend::Config.configure do |config|
   config.locale = 'es-MX'
 end
 
-# rubocop:disable Metrics/BlockLength
 Spree::Backend::Config.configure do |config|
   config.locale = 'en'
 
@@ -155,7 +154,6 @@ Spree::Backend::Config.configure do |config|
     )
   ]
 end
-# rubocop:enable Metrics/BlockLength
 
 Spree::Api::Config.configure do |config|
   config.requires_authentication = true

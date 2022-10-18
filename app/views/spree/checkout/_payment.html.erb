@@ -1,42 +1,5 @@
 <fieldset id="payment" data-hook>
   <div data-hook="checkout_payment_step">
-    <%
-=begin%>
- <% if @wallet_payment_sources.present? %>
-      <div class="card_options">
-        <%= radio_button_tag 'use_existing_card', 'yes', true %>
-        <label for="use_existing_card_yes">
-          <%= t('spree.use_existing_cc') %>
-        </label>
-        <br/>
-        <%= radio_button_tag 'use_existing_card', 'no' %>
-        <label for="use_existing_card_no">
-          <%= t('spree.use_new_cc_or_payment_method') %>
-        </label>
-      </div>
-
-      <div id="existing_cards">
-        <div class="field" data-hook="existing_cards">
-          <table class="existing-credit-card-list">
-            <tbody>
-              <% @wallet_payment_sources.each do |wallet_payment_source| %>
-                <%=
-                  render(
-                    partial: "spree/checkout/existing_payment/#{wallet_payment_source.payment_source.payment_method.partial_name}",
-                    locals: {
-                      wallet_payment_source: wallet_payment_source,
-                      default: wallet_payment_source == @default_wallet_payment_source,
-                    }
-                  )
-                %>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div> 
-<%
-=end%>
-
     <div id="payment-method-fields" data-hook>
       <% @order.available_payment_methods.each do |method| %>
           <!-- Now that we have only one payment method, no need to let the user choose... TODO: when adding CLAVE payment method, display different possible choices -->
