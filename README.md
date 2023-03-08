@@ -22,3 +22,4 @@ Salva Mi Máquina uses an entreprise resource planning (ERP) software called [Re
 * [Sentry](https://sentry.io/) (Exceptions and errors management)
 * [Cloudinary](https://cloudinary.com/) (Images management)
 * [Postmark](https://postmarkapp.com/) (Email delivery service)
+* [Lefthook](https://github.com/evilmartians/lefthook) (Git hooks manager)
