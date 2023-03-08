@@ -13,7 +13,7 @@ Salva Mi Máquina uses an entreprise resource planning (ERP) software called [Re
 [Go to production website](https://www.salvamimaquina.com/)
 
 ### Built With
-* [Ruby on Rails](https://rubyonrails.org/)
+* [Ruby on Rails](https://rubyonrails.org/) (Ruby 2.7.5 / Rails 6.1)
 * [Solidus](https://solidus.io/)
 * [Bootstrap](https://getbootstrap.com/)
 
