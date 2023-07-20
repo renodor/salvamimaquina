@@ -4,7 +4,7 @@ module Spree
   module Admin
     class TradeInModelsController < Spree::Admin::BaseController
       def index
-        @trade_in_models = TradeInModel.all
+        @trade_in_models = TradeInModel.all.order(:order)
       end
 
       def sync
