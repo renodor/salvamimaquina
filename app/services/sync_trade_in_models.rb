@@ -13,9 +13,14 @@ class SyncTradeInModels
 
       TradeInCategory.destroy_all
 
-      CSV.parse(response, headers: :first_row).each do |row|
+      CSV.parse(response, headers: :first_row).each_with_index do |row, line_number|
         trade_in_category = TradeInCategory.find_or_create_by!(name: row[0])
-        trade_in_category.trade_in_models.create!(name: row[1], min_value: row[2].delete('$').to_f, max_value: row[3].delete('$').to_f)
+        trade_in_category.trade_in_models.create!(
+          name: row[1],
+          min_value: row[2].delete('$').to_f,
+          max_value: row[3].delete('$').to_f,
+          order: line_number
+        )
       end
 
       { success?: true }
