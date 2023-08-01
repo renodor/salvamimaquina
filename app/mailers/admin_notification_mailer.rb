@@ -6,7 +6,7 @@ class AdminNotificationMailer < ApplicationMailer
   def user_message_email(user_message)
     @user_message = user_message
     mail(
-      to: [ADMIN_EMAIL, 'manche.victor@gmail.com'].join(', '),
+      to: ADMIN_EMAIL,
       from: ADMIN_EMAIL,
       subject: 'New Message from salvamimaquina.com contact form'
     )
@@ -25,7 +25,7 @@ class AdminNotificationMailer < ApplicationMailer
     @order = order
     @ship_address = @order.ship_address
     mail(
-      to: [ADMIN_EMAIL, 'manche.victor@gmail.com'].join(', '),
+      to: ADMIN_EMAIL,
       from: ADMIN_EMAIL,
       subject: 'www.salvamimaquina.com - Invoice ERROR'
     )
@@ -34,7 +34,7 @@ class AdminNotificationMailer < ApplicationMailer
   def payment_error_email(invoice)
     @invoice = invoice
     mail(
-      to: [ADMIN_EMAIL, 'manche.victor@gmail.com'].join(', '),
+      to: ADMIN_EMAIL,
       from: ADMIN_EMAIL,
       subject: 'www.salvamimaquina.com - Payment ERROR'
     )
@@ -43,7 +43,7 @@ class AdminNotificationMailer < ApplicationMailer
   def reparation_request_email(reparation_request)
     @reparation_request = reparation_request
     mail(
-      to: [ADMIN_EMAIL, 'manche.victor@gmail.com'].join(', '),
+      to: ADMIN_EMAIL,
       from: ADMIN_EMAIL,
       subject: 'New reparation request from www.salvamimaquina.com'
     )
@@ -56,7 +56,7 @@ class AdminNotificationMailer < ApplicationMailer
     @store = Spree::Store.default
 
     mail(
-      to: [ADMIN_EMAIL, 'manche.victor@gmail.com'].join(', '),
+      to: ADMIN_EMAIL,
       from: ADMIN_EMAIL,
       subject: 'New trade-in request from www.salvamimaquina.com'
     )
