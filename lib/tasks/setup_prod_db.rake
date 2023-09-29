@@ -7,6 +7,7 @@ namespace :setup_prod_db do
     create_store
     create_stock_locations
     create_taxonomies
+    create_panama_country
     create_panama_city_corregimientos
     create_panama_zone
     create_panama_city_zones
@@ -16,10 +17,13 @@ namespace :setup_prod_db do
     create_payment_methods
     create_free_shipping_promotion
     create_cross_sells_relation_type
+    create_admin_spree_role
   ]
 
   task :create_store do
-    store = Spree::Store.find(1)
+    Rails.logger.info('Create Store')
+
+    store = Spree::Store.first || Spree::Store.new
 
     store.update!(
       name: 'Salva Mi Máquina',
@@ -55,6 +59,7 @@ namespace :setup_prod_db do
 
   task :create_taxonomies do
     Rails.logger.info('Create Categories Taxonomies')
+
     categories_taxonomy = Spree::Taxonomy.find_or_create_by!(name: 'Categories', position: 1)
     categories_taxon = categories_taxonomy.taxons.find_or_initialize_by(name: 'Todo', position: 1)
     categories_taxon.update!(permalink: 'todos_los_productos')
@@ -62,9 +67,24 @@ namespace :setup_prod_db do
     Spree::Taxonomy.where.not(id: categories_taxonomy.id).destroy_all
   end
 
+  task :create_panama_country do
+    Rails.logger.info('Create Panama country')
+
+    panama_country = Spree::Country.find_or_initialize_by(name: 'Panama')
+    panama_country.update!(
+      iso_name: 'PANAMA',
+      iso: 'PA',
+      iso3: 'PAN',
+      numcode: 591,
+      states_required: true
+    )
+  end
+
   task :create_panama_city_corregimientos do
     Rails.logger.info('Create Panama City corregimientos')
-    panama_state_id = Spree::State.find_by(name: 'Panamá').id
+
+    panama_country = Spree::Country.find_by!(name: 'Panama')
+    panama_state_id = Spree::State.find_or_create_by!(name: 'Panamá', country_id: panama_country.id).id
     corregimientos = [
       {
         name: '24 de Diciembre',
@@ -195,6 +215,7 @@ namespace :setup_prod_db do
 
   task :create_tax_category do
     Rails.logger.info('Create ITBMS Tax Category and Tax Rate')
+
     itbms_tax_category = Spree::TaxCategory.find_or_create_by(repair_shopr_id: 39_011)
     itbms_tax_category.update!(name: 'ITBMS', is_default: true, tax_code: 'itbms')
 
@@ -213,9 +234,9 @@ namespace :setup_prod_db do
   end
 
   task :create_shipping_methods do
-    default_shipping_category = Spree::ShippingCategory.find_by!(name: 'Default')
-
     Rails.logger.info('Create Panama City Shipping Methods by Zone')
+
+    default_shipping_category = Spree::ShippingCategory.find_or_create_by!(name: 'Default')
 
     Spree::ShippingMethod.destroy_all
 
@@ -295,6 +316,8 @@ namespace :setup_prod_db do
   end
 
   task :create_free_shipping_promotion do
+    Rails.logger.info('Create free shipping promotion')
+
     promotion = Spree::Promotion.find_or_create_by!(name: 'Entrega Gratis')
     promotion.apply_automatically = true
     promotion.description = 'free_shipping_threshold'
@@ -310,12 +333,20 @@ namespace :setup_prod_db do
   end
 
   task :create_cross_sells_relation_type do
+    Rails.logger.info('Create cross sells relation type')
+
     Spree::RelationType.find_or_create_by!(
       name: 'Cross Sells',
       applies_to: 'Spree::Product',
       applies_from: 'Spree::Product',
       bidirectional: true
     )
+  end
+
+  task :create_admin_spree_role do
+    Rails.logger.info('Create admmin role')
+
+    Spree::Role.find_or_create_by!(name: 'admin')
   end
 end
 # rubocop:enable Metrics/BlockLength
