@@ -20,6 +20,8 @@ class RepairShoprApi::V1::SyncProducts < RepairShoprApi::V1::Base
       sync_logs.deleted_products += 1
     end
 
+    sync_logs.update!(status: sync_logs.sync_errors.any? ? 'error' : 'complete')
+
     Rails.logger.info('Products synced')
   end
 end

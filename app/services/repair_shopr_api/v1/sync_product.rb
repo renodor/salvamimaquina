@@ -2,32 +2,14 @@
 
 class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
   class << self
-    def call(sync_logs:, attributes: nil, repair_shopr_id: nil)
-      # Fetch product attributes from RepairShopr,
-      # or take the one given as an argument
-      attributes ||= get_product(repair_shopr_id)
-
-      raise ArgumentError, 'attributes or id is needed' unless attributes
-
+    def call(sync_logs:, attributes:)
       Rails.logger.info("Start to sync product with RepairShopr ID: #{attributes['id']}")
 
       add_product_attributes_from_notes(attributes) if attributes['notes'].present?
-
-      # If variant needs to be assigned to a new product,
-      # we need to destroy it and sync it again, because there is currently no way to assign an existing variant to another product in Solidus.
-      existing_variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
-      existing_variant.destroy_and_destroy_product_if_no_other_variants! if existing_variant && variant_needs_to_be_assigned_to_new_product?(existing_variant, attributes)
-
-      # Nulify @variant_options if there are no options, otherwise it may be memoized from previous products and apply wrong options
-      @variant_options = attributes['variant_options'].present? ? create_variant_options(attributes['variant_options']) : nil
-
-      initialize_product_and_variant(attributes)
-
-      assign_product_attributes(attributes)
-      assign_variant_attributes(attributes)
-
+      create_product_and_variant(attributes)
       update_product_stock(attributes['location_quantities'])
-      update_product_classifications(attributes['product_category'])
+      create_taxons(attributes['product_category'], sync_logs)
+      update_product_classifications(attributes['product_category'].split(';').last)
 
       RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
       sync_logs.synced_products += 1
@@ -35,37 +17,56 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
 
       @variant
-    rescue RepairShoprApi::V1::Base::NotFoundError
-      sync_logs.sync_errors << { error: "Couldn't find product with id: #{repair_shopr_id}" }
-      false
     rescue => e # rubocop:disable Style/RescueStandardError
       sync_logs.sync_errors << { product_repair_shopr_id: attributes['id'], error: e }
       false
+    ensure
+      sync_logs.save!
+      Sentry.capture_message(name, { extra: { sync_logs_errors: sync_logs.sync_errors } }) if sync_logs.sync_errors.any?
     end
 
     private
 
-    # If a variant goes from one product to another (The current product name is different from the syncing product name),
-    # or if it is removed from a product (The syncing variant does not have a product, but the current variant is not the master variant)
-    # It means this variant needs to be assigned to a new product
-    def variant_needs_to_be_assigned_to_new_product?(variant, attributes)
-      (attributes['parent_product'] && variant.product.name != attributes['parent_product']) || (attributes['parent_product'].blank? && !variant.is_master?)
-    end
+    # Convert the product notes comming from RS into a Ruby hash
+    # and merge this hash with the product attributes
+    # (We use these product notes to pass additional product attributes not natively supported by RS)
+    def add_product_attributes_from_notes(attributes)
+      attributes['variant_options'] = {}
+      attributes['notes'].split(/\r\n|\n/).reject(&:blank?).map do |attribute|
+        match = attribute.match(/(?<type>.+)[:=](?<value>.+)/)
+        attribute_type = match[:type].strip.downcase
+        attribute_value = match[:value].strip
 
-    def initialize_product_and_variant(attributes)
-      if attributes['parent_product']
-        @product = Spree::Product.find_or_initialize_by(name: attributes['parent_product'])
-        @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
-      else
-        @product = Spree::Variant.find_by(repair_shopr_id: attributes['id'])&.product || Spree::Product.new
-        @product.name = attributes['name']
+        attribute_value.downcase! unless %w[model parent_product].include?(attribute_type)
 
-        @variant = @product.master
-        @variant.repair_shopr_id = attributes['id']
+        if %w[parent_product brand highlight].include?(attribute_type)
+          attributes[attribute_type] = attribute_value
+        else
+          attributes['variant_options'][attribute_type] = attribute_value
+        end
       end
     end
 
-    def assign_product_attributes(attributes)
+    def create_product_and_variant(attributes)
+      @variant = Spree::Variant.find_or_initialize_by(repair_shopr_id: attributes['id'])
+      old_product = @variant.product # Save to maybe delete later
+
+      if attributes['parent_product'].present?
+        @product = Spree::Product.find_or_initialize_by(name: attributes['parent_product'])
+      else
+        @product = @variant.product || Spree::Product.new
+
+        # Edge case where we need to set a new master variant to a persisted product
+        # (When parent_product is removed from an existing product)
+        if @product.persisted? && @variant != @product.master
+          @product.master.update!(deleted_at: Date.current, is_master: false)
+          @product.reload
+        end
+
+        @product.master = @variant
+        @product.name = attributes['name'].strip
+      end
+
       if @product.new_record?
         @product.available_on = Date.today
         @product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id # TODO: memoize that
@@ -81,30 +82,28 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         highlight: attributes['highlight'].present?
       )
 
-      # Add Spree::OptionTypes to product
-      @product.option_types = @variant_options ? @variant_options[:option_types] : []
-      @product.save!
-    end
+      variant_options = create_variant_options(attributes['variant_options'].presence || [])
 
-    def assign_variant_attributes(attributes)
+      # Add Spree::OptionTypes to product
+      @product.option_types = variant_options[:option_types]
+      @product.save!
+
       @variant.assign_attributes(
-        repair_shopr_name: attributes['name'],
+        repair_shopr_name: attributes['name'].strip,
         product_id: @product.id,
         is_master: attributes['parent_product'].blank?,
         sku: attributes['upc_code'] || '',
         cost_price: attributes['price_cost'],
-        weight: attributes['weight'],
-        width: attributes['width'],
-        height: attributes['height'],
-        depth: attributes['depth']
+        condition: attributes['condition'].match('refurbished')&.to_s || 'original'
       )
 
       # Add Spree::OptionValues to variant
-      @variant.option_values = @variant_options ? @variant_options[:option_values] : []
+      @variant.option_values = variant_options[:option_values]
       @variant.price = price_before_tax(attributes['price_retail'])
-      @variant.condition = attributes['condition'] == 'refurbished' ? 'refurbished' : 'original'
-
       @variant.save!
+
+      # If @variant has been assigned to a new product, and old product doesn't have any other variants, we can destroy it
+      old_product.destroy! if old_product != @product && old_product&.variants&.empty?
     end
 
     # Location quantities is a RepairShopr array with the product stock information on each store
@@ -113,18 +112,22 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     # (since we have two stock locations, each product will have 2 stock items)
     def update_product_stock(location_quantities)
       location_quantities.each do |location_quantity|
-        stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id'])
+        stock_location = Spree::StockLocation.find_by!(repair_shopr_id: location_quantity['location_id']) # TODO: memoize that?
         stock_item = @variant.stock_items.find_by!(stock_location: stock_location)
-        next unless stock_item.count_on_hand != location_quantity['quantity']
+        next if stock_item.count_on_hand == location_quantity['quantity']
 
-        absolute_difference = (stock_item.count_on_hand - location_quantity['quantity']).abs
+        stock_item.set_count_on_hand(location_quantity['quantity'])
+      end
+    end
 
-        # To change product stock in Solidus you need to create Spree::StockMovement instances
-        Spree::StockMovement.create!(
-          stock_item_id: stock_item.id,
-          originator_type: self,
-          quantity: stock_item.count_on_hand > location_quantity['quantity'] ? -absolute_difference : absolute_difference
-        )
+    def create_taxons(product_category_names, sync_logs)
+      categories_taxonomy = Spree::Taxonomy.find_by!(name: 'Categories') # TODO: memoize "Categories" taxonomy id
+      parent_taxon = categories_taxonomy.taxons.root # TODO: memoize root taxon
+
+      product_category_names.split(';').reject { |cat| cat == self::RS_ROOT_CATEGORY_NAME }.each do |product_category_name|
+        taxon = categories_taxonomy.taxons.find_or_initialize_by(name: product_category_name)
+        taxon.update!(parent: parent_taxon) # TODO: update sync_logs.synced_categories
+        parent_taxon = taxon
       end
     end
 
@@ -136,30 +139,10 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       # If the product belong to a specific product category on RepairShopr, we make sure it belongs to the correct taxon in Solidus (through classification)
       # If the product belong the root category "ecom" on RepairShopr, we put it under the root taxon "Categories" on Solidus
       categories_taxonomy = Spree::Taxonomy.find_by!(name: 'Categories') # TODO: memoize "Categories" taxonomy id
-      categories_parent_taxon = categories_taxonomy.taxons.find_by(parent_id: nil)
-      taxon_name = product_category_name == self::RS_ROOT_CATEGORY_NAME ? categories_parent_taxon.name : product_category_name.split(';').last
-      taxon = categories_taxonomy.taxons.find_or_create_by!(name: taxon_name) # TODO: This method can create taxons... So if it happens, sync_logs.synced_product_categories need to be updated...
-      Spree::Classification.create!(product_id: @product.id, taxon_id: taxon.id)
-    end
-
-    # Convert the product notes comming from RS into a Ruby hash
-    # and merge this hash with the product attributes
-    # (We use these product notes to pass additional product attributes not natively supported by RS)
-    def add_product_attributes_from_notes(attributes)
-      attributes['variant_options'] = {}
-      attributes['notes'].strip.split(/\r\n|\n/).reject(&:blank?).map do |attribute|
-        attribute_array = attribute.split(/:|=/)
-        attribute_type = attribute_array[0].strip.downcase
-        attribute_value = attribute_array[1].strip
-
-        attribute_value.downcase! unless %w[model parent_product].include?(attribute_type)
-
-        if %w[parent_product brand weight height width depth highlight].include?(attribute_type)
-          attributes[attribute_type] = attribute_value
-        else
-          attributes['variant_options'][attribute_type] = attribute_value
-        end
-      end
+      Spree::Classification.create!(
+        product: @product,
+        taxon: categories_taxonomy.taxons.find_by(name: product_category_name) || categories_taxonomy.taxons.root
+      )
     end
 
     # Find or create Spree::OptionType, it will then be associated to Spree::Product

@@ -30,6 +30,11 @@ class RepairShoprApi::V1::SyncProductCategories < RepairShoprApi::V1::Base
     rescue => e # rubocop:disable Style/RescueStandardError
       sync_logs.sync_errors << { product_categories_error: e.message }
       false
+    ensure
+      sync_logs.status = sync_logs.sync_errors.any? ? 'error' : 'complete'
+      sync_logs.save!
+
+      Sentry.capture_message(name, { extra: { sync_logs_errors: sync_logs.sync_errors } }) if sync_logs.sync_errors.any?
     end
 
     # First find or create taxons from RepairShopr product categories
