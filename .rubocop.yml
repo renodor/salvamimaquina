@@ -55,6 +55,7 @@ Metrics/BlockLength:
     - config/environments/production.rb
     - Guardfile
     - config/routes.rb
+    - spec/**/*
 
 Metrics/AbcSize:
   Enabled: false
