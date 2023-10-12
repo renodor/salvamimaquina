@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'open-uri'
+
 class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
   class << self
     def call(sync_logs:, attributes:)
@@ -8,10 +10,10 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       add_product_attributes_from_notes(attributes) if attributes['notes'].present?
       create_product_and_variant(attributes)
       update_product_stock(attributes['location_quantities'])
-      create_taxons(attributes['product_category'], sync_logs)
+      create_taxons(attributes['product_category'])
       update_product_classifications(attributes['product_category'].split(';').last)
+      sync_variant_images(attributes['photos'], sync_logs)
 
-      RepairShoprApi::V1::SyncProductImages.call(attributes: attributes, sync_logs: sync_logs)
       sync_logs.synced_products += 1
 
       Rails.logger.info("Product with RepairShopr ID: #{attributes['id']} synced")
@@ -120,13 +122,13 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       end
     end
 
-    def create_taxons(product_category_names, sync_logs)
+    def create_taxons(product_category_names)
       categories_taxonomy = Spree::Taxonomy.find_by!(name: 'Categories') # TODO: memoize "Categories" taxonomy id
       parent_taxon = categories_taxonomy.taxons.root # TODO: memoize root taxon
 
       product_category_names.split(';').reject { |cat| cat == self::RS_ROOT_CATEGORY_NAME }.each do |product_category_name|
         taxon = categories_taxonomy.taxons.find_or_initialize_by(name: product_category_name)
-        taxon.update!(parent: parent_taxon) # TODO: update sync_logs.synced_categories
+        taxon.update!(parent: parent_taxon) if taxon.parent != parent_taxon
         parent_taxon = taxon
       end
     end
@@ -176,6 +178,31 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
     # We need to deduce the tax from the retail price to show product prices without tax on the shop, and add tax only at checkout
     def price_before_tax(retail_price)
       retail_price - ((retail_price / 1.07) * 0.07)
+    end
+
+    def sync_variant_images(photos, sync_logs)
+      photos.each do |photo|
+        # Don't update an already existing photo
+        unless @variant.images.find_by(repair_shopr_id: photo['id'])
+          image = Spree::Image.new(
+            viewable_type: 'Spree::Variant',
+            viewable_id: @variant.id,
+            repair_shopr_id: photo['id'],
+            alt: @variant.name
+          )
+          image.attachment.attach(io: URI.parse(photo['photo_url']).open, filename: "#{@variant.product.slug}-#{@variant.repair_shopr_id}")
+          image.save!
+        end
+
+        sync_logs.synced_product_images += 1
+      rescue => e # rubocop:disable Style/RescueStandardError
+        sync_logs.sync_errors << { product_image_repair_shopr_id: photo['id'], error: e.message }
+      end
+
+      # All product images of this same variant with an id not present in the photo_ids array need to be deleted
+      # (Because it means they have been deleted from RepairShopr)
+      deleted_product_images = @variant.images.where.not(repair_shopr_id: photos.map { |photo| photo['id'] }).destroy_all
+      sync_logs.deleted_product_images += deleted_product_images.size
     end
   end
 end

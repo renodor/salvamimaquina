@@ -12,6 +12,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
   let!(:categories_taxonomy) { create(:taxonomy) }
   let(:notes) { '' }
   let(:product_category) { 'ecom;iPhones' }
+  let(:photos) { [] }
   let(:attributes) do
     {
       'id' => 1234,
@@ -69,22 +70,10 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
           'price_retail_cents' => nil
         }
       ],
-      'photos' => [
-        {
-          'id' => 321_855,
-          'created_at' => '2023-06-01T12:30:05.376-05:00',
-          'updated_at' => '2023-06-01T12:30:05.376-05:00',
-          'photo_url' => 'https://attachments.servably.com/uploads/product_photo/25453/321855/716fAVud8PL._AC_SL1500_.jpg',
-          'thumbnail_url' => 'https://attachments.servably.com/uploads/product_photo/25453/321855/thumbnail_716fAVud8PL._AC_SL1500_.jpg'
-        }
-      ]
+      'photos' => photos
     }
   end
   let(:price_before_tax) { attributes['price_retail'] - ((attributes['price_retail'] / 1.07) * 0.07) }
-
-  before do
-    allow(RepairShoprApi::V1::SyncProductImages).to receive(:call)
-  end
 
   it 'logs infos' do
     expect(Rails.logger).to receive(:info).with("Start to sync product with RepairShopr ID: #{attributes['id']}")
@@ -93,7 +82,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     subject
   end
 
-  it 'updates sync logs' do
+  it 'updates sync logs synced products count' do
     expect { subject }.to change(sync_logs, :synced_products).from(0).to(1)
   end
 
@@ -298,7 +287,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     end
 
     it 'uses taxon if it already exists' do
-      create(:taxon, name: 'iPhones', taxonomy: categories_taxonomy)
+      create(:taxon, name: 'Smart Phones', parent: categories_taxonomy.taxons.root, taxonomy: categories_taxonomy)
       expect { subject }.to change(Spree::Taxon, :count).by(2)
       expect(sync_logs.reload.sync_errors).to be_empty
     end
@@ -434,6 +423,95 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
           expect(new_product.variants).to eq([variant])
           expect(variant.reload.price).to eq(price_before_tax.round(2))
         end
+      end
+    end
+  end
+
+  context 'variant images' do
+    let(:photos) do
+      [
+        {
+          'id' => 321_855,
+          'created_at' => '2023-06-01T12:30:05.376-05:00',
+          'updated_at' => '2023-06-01T12:30:05.376-05:00',
+          'photo_url' => "#{Rails.root}/spec/fixtures/product_images/iphone-14a.jpg",
+          'thumbnail_url' => "#{Rails.root}/spec/fixtures/product_images/thumbnail-iphone-14a.jpg"
+        },
+        {
+          'id' => 321_856,
+          'created_at' => '2023-06-01T12:30:09.376-05:00',
+          'updated_at' => '2023-06-01T12:30:09.376-05:00',
+          'photo_url' => "#{Rails.root}/spec/fixtures/product_images/iphone-14b.jpg",
+          'thumbnail_url' => "#{Rails.root}/spec/fixtures/product_images/thumbnail-iphone-14b.jpg"
+        }
+      ]
+    end
+
+    before do
+      # Stub URI::HTTPS so that #open method works with a local URL
+      photos.each do |photo|
+        uri_instance_double = instance_double(URI::HTTPS)
+        allow(URI).to receive(:parse).once.with(photo['photo_url']).and_return(uri_instance_double)
+        allow(uri_instance_double).to receive(:open).and_return(File.open(photo['photo_url']))
+      end
+    end
+
+    after do
+      # Remove attached files
+      FileUtils.rm_rf(Rails.configuration.active_storage.service_configurations['cloudinary_products']['root'])
+    end
+
+    it 'create variant images' do
+      expect { subject }.to change(Spree::Image, :count).by(2)
+      expect(sync_logs.reload.sync_errors).to be_empty
+
+      variant = Spree::Variant.find_by(repair_shopr_id: attributes['id'])
+
+      image1 = variant.images.find_by(repair_shopr_id: 321_855)
+      expect(image1.alt).to eq(variant.name)
+      expect(image1.attachment.attached?).to be true
+      expect(image1.attachment.filename).to eq("#{variant.product.slug}-#{variant.repair_shopr_id}")
+
+      image2 = variant.images.find_by(repair_shopr_id: 321_856)
+      expect(image2.alt).to eq(variant.name)
+      expect(image2.attachment.attached?).to be true
+      expect(image2.attachment.filename).to eq("#{variant.product.slug}-#{variant.repair_shopr_id}")
+    end
+
+    it 'doesnt create image if it already exists' do
+      variant = create(:variant, repair_shopr_id: attributes['id'])
+      variant.images.create!(repair_shopr_id: photos.first['id'])
+
+      expect { subject }.to change(Spree::Image, :count).by(1)
+      expect(sync_logs.reload.sync_errors).to be_empty
+    end
+
+    it 'updates sync_logs synced images count' do
+      expect { subject }.to change(sync_logs.reload, :synced_product_images).from(0).to(2)
+    end
+
+    it 'destroys old variant images' do
+      variant = create(:variant, repair_shopr_id: attributes['id'])
+      old_image = variant.images.create!(repair_shopr_id: 'ABCD')
+
+      expect { subject }.to change(Spree::Image, :count).by(1)
+      expect { old_image.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(sync_logs.reload.deleted_product_images).to eq(1)
+    end
+
+    context 'when variant image cant be created' do
+      before do
+        allow_any_instance_of(Spree::Image).to receive(:save!).and_raise('Booom')
+      end
+
+      it 'rescues error and add it to sync logs' do
+        expect { subject }.not_to raise_error
+        expect(sync_logs.reload.sync_errors).to match_array(
+          [
+            { 'product_image_repair_shopr_id' => photos.first['id'], 'error' => 'Booom' },
+            { 'product_image_repair_shopr_id' => photos.last['id'], 'error' => 'Booom' }
+          ]
+        )
       end
     end
   end
