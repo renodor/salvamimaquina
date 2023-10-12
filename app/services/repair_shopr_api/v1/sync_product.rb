@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'open-uri'
-
 class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
   class << self
     def call(sync_logs:, attributes:)
