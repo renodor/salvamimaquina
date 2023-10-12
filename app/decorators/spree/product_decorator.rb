@@ -4,7 +4,6 @@ module Spree
   module ProductDecorator
     extend ActiveSupport::Concern
 
-    # rubocop:disable Metrics/BlockLength
     prepended do
       scope :ascend_by_purchase_count, -> { order(purchase_count: :asc) }
       scope :descend_by_purchase_count, -> { order(purchase_count: :desc) }
@@ -42,7 +41,6 @@ module Spree
           )
       end
     end
-    # rubocop:enable Metrics/BlockLength
 
     class_methods do
       # Keys are the scope or the method of the sorting option,

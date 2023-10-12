@@ -5,6 +5,8 @@ AllCops:
     - db/schema.rb
     - bin/*
     - node_modules/**/*
+    - Gemfile
+    - Rakefile
 
 Style/Documentation:
   Enabled: false
