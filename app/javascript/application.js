@@ -20,26 +20,26 @@ require('channels');
 import 'bootstrap';
 
 // Internal Components
-import { navbar } from '../components/navbar';
-import { addDinamysmToFlash } from '../components/flash';
-import { checkoutForm } from '../components/checkout_form';
-// import { addressForm } from '../components/address_form';
-import { priceRangeSlider } from '../components/price_range_slider';
-import { productShowVariants } from '../components/product_show_variants';
-import { productShowThumbnails } from '../components/product_show_thumbnails';
-import { productsSidebar } from '../components/products_sidebar';
-import { productsFiltersForm } from '../components/products_filters_form';
-import { productsSorting } from '../components/products_sorting';
-import { productsSearch } from '../components/products_search';
-import { quantitySelector } from '../components/quantity_selector';
-import { addToCart } from '../components/add_to_cart';
-import { cart } from '../components/cart';
-import { previewImageOnFileSelect } from '../components/preview_image_on_file_select';
-import { tradeInForm } from '../components/trade_in_form';
+import { navbar } from './components/navbar';
+import { addDinamysmToFlash } from './components/flash';
+import { checkoutForm } from './components/checkout_form';
+// import { addressForm } from './components/address_form';
+import { priceRangeSlider } from './components/price_range_slider';
+import { productShowVariants } from './components/product_show_variants';
+import { productShowThumbnails } from './components/product_show_thumbnails';
+import { productsSidebar } from './components/products_sidebar';
+import { productsFiltersForm } from './components/products_filters_form';
+import { productsSorting } from './components/products_sorting';
+import { productsSearch } from './components/products_search';
+import { quantitySelector } from './components/quantity_selector';
+import { addToCart } from './components/add_to_cart';
+import { cart } from './components/cart';
+import { previewImageOnFileSelect } from './components/preview_image_on_file_select';
+import { tradeInForm } from './components/trade_in_form';
 
 // Internal Plugins
-import { swiperSlider } from '../plugins/swiper_slider';
-import { initMapbox } from '../plugins/init_mapbox';
+import { swiperSlider } from './plugins/swiper_slider';
+import { initMapbox } from './plugins/init_mapbox';
 
 // Call your functions here
 document.addEventListener('turbolinks:load', () => {
