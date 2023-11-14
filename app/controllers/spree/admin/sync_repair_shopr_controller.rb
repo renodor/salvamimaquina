@@ -6,7 +6,7 @@ class Spree::Admin::SyncRepairShoprController < Spree::Admin::BaseController
   end
 
   def new
-    SyncRepairShoprJob.perform_later(RepairShoprProductsSyncLog.create!)
+    SyncRepairShoprProductsJob.perform_later(RepairShoprProductsSyncLog.create!)
     redirect_to admin_sync_repair_shopr_index_path
   end
 end
