@@ -30,15 +30,16 @@ RSpec.describe RepairShoprApi::V1::Base, type: :service do
     end
 
     describe '#get_products' do
-      let(:fake_product) { { 'id' => 1, 'name' => 'Cool product 1' } }
-      let(:fake_product2) { { 'id' => 2, 'name' => 'Cool product 2' } }
-      let(:fake_product3) { { 'id' => 3, 'name' => 'Cool product 3' } }
-      let(:fake_product4) { { 'id' => 4, 'name' => 'Cool product 4' } }
-      let(:fake_product5) { { 'id' => 5, 'name' => 'Cool product 5' } }
-      let(:fake_product6) { { 'id' => 6, 'name' => 'Cool product 6' } }
-      let(:fake_product7) { { 'id' => 7, 'name' => 'Cool product 7' } }
+      let(:fake_product) { { 'id' => 1, 'name' => 'Cool product 1', 'disabled' => false } }
+      let(:fake_product2) { { 'id' => 2, 'name' => 'Cool product 2', 'disabled' => false } }
+      let(:fake_product3) { { 'id' => 3, 'name' => 'Cool product 3', 'disabled' => false } }
+      let(:fake_product4) { { 'id' => 4, 'name' => 'Cool product 4', 'disabled' => false } }
+      let(:fake_product5) { { 'id' => 5, 'name' => 'Cool product 5', 'disabled' => false } }
+      let(:fake_product6) { { 'id' => 6, 'name' => 'Cool product 6', 'disabled' => false } }
+      let(:fake_product7) { { 'id' => 7, 'name' => 'Cool product 7', 'disabled' => false } }
+      let(:fake_product8) { { 'id' => 8, 'name' => 'Cool product 8', 'disabled' => true } }
 
-      it 'gets all products belonging to repair shopr ecom root category and sub categories' do
+      it 'gets all enabled products belonging to repair shopr ecom root category and sub categories' do
         stub_request(:get, "#{api_path}/products/categories").to_return_json(
           body: {
             categories: [
@@ -84,14 +85,14 @@ RSpec.describe RepairShoprApi::V1::Base, type: :service do
 
         stub_request(:get, "#{api_path}/products").with(query: { category_id: 2, page: 3 }).to_return_json(
           body: {
-            products: [fake_product6],
+            products: [fake_product6, fake_product7],
             meta: { total_pages: 3 }
           }
         )
 
         stub_request(:get, "#{api_path}/products").with(query: { category_id: 3 }).to_return_json(
           body: {
-            products: [fake_product7],
+            products: [fake_product8],
             meta: { total_pages: 1 }
           }
         )
