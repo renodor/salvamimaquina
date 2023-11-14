@@ -14,7 +14,12 @@ class RepairShoprWebhook::ProductsController < ApplicationController
     if params['attributes']['product_category']&.include?(RepairShoprApi::V1::Base::RS_ROOT_CATEGORY_NAME) && !params['attributes']['disabled']
       # Don't sync the params['attributes'] directly as anyone could create such request
       # Instead just get the product id and fetch attributes of this product directly on RepairShopr
-      RepairShoprApi::V1::SyncProduct.call(sync_logs: RepairShoprProductsSyncLog.new, repair_shopr_id: params['attributes']['id'])
+      product = RepairShoprApi::V1::Base.get_product(params['attributes']['id'])
+      sync_logs = RepairShoprProductsSyncLog.create!
+
+      RepairShoprApi::V1::SyncProduct.call(sync_logs: sync_logs, attributes: product)
+
+      sync_logs.update!(status: sync_logs.sync_errors.any? ? 'error' : 'complete')
     elsif (variant = Spree::Variant.find_by(repair_shopr_id: params['attributes']['id']))
       variant.destroy_and_destroy_product_if_no_other_variants!
     end

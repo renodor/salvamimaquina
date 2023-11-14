@@ -1,23 +1,22 @@
-# Storage services are dinamically created on config/initializers/storage.rb
+cloudinary_products:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/products" %>
 
-test:
-  service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
+cloudinary_product_categories:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/product_categories" %>
 
-# local:
-#   service: Disk
-#   root: <%= Rails.root.join("storage") %>
-# cloudinary:
-#   service: Cloudinary
-#   folder: <%= Rails.env %>
+cloudinary_slides:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/slides" %>
 
-# cloudinary_slides:
-#   service: Cloudinary
-#   folder: <%= "#{Rails.env}/slides" %>
+cloudinary_banners:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/banners" %>
 
-# cloudinary_banners:
-#   service: Cloudinary
-#   folder: <%= "#{Rails.env}/banners" %>
+cloudinary_reparation_categories:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/reparation_categories" %>
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

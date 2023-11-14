@@ -31,24 +31,23 @@ class RepairShoprApi::V1::Base
     # Only retrieve enabled products, belonging to "ecom" category or sub categories
     def get_products
       # Find root category and all categories below, and get their ids
-      product_categorie_ids = get_product_categories(include_root_category: true).map { |category| category['id'] }
+      product_categories_ids = get_product_categories(include_root_category: true).map { |category| category['id'] }
       products = []
 
       # Only fetch products belonging to those categories
-      product_categorie_ids.each do |product_category_id|
+      product_categories_ids.each do |product_category_id|
         payload = request(http_method: :get, endpoint: "products?category_id=#{product_category_id}")
+        products += payload['products']
 
         # Fetch every pages
-        # For the first iteration (n == 0), we already have the payload, we got it in order to have the total pages
-        # For other iterations, we need to fetch the payload again at the correct page (starting at page 2)
-        # And each time we need to exclude disabled products
-        payload['meta']['total_pages'].times do |n|
-          payload = request(http_method: :get, endpoint: "products?category_id=#{product_category_id}&page=#{n + 1}") if n.positive?
-          products += payload['products'].reject { |product| product['disabled'] }
+        # starting at page 2 because we already fetched page 1 to have the total_pages count
+        # if there is only 1 page, it will iterate over range (2..1) which won't do anything
+        (2..payload['meta']['total_pages']).each do |page|
+          products += request(http_method: :get, endpoint: "products?category_id=#{product_category_id}&page=#{page}")['products']
         end
       end
 
-      products
+      products.reject { |product| product['disabled'] }
     end
 
     def get_product(id)
@@ -62,7 +61,9 @@ class RepairShoprApi::V1::Base
       return [] unless root_category
 
       # Get only categories below the root category
-      ecom_product_categories = product_categories.filter { |product_category| product_category['ancestry']&.include?(root_category['id'].to_s) }
+      ecom_product_categories = product_categories.filter do |product_category|
+        product_category['ancestry'].to_s.split('/').first == root_category['id'].to_s
+      end
 
       # Return filtered categories including or not root category depending on given argument
       include_root_category ? ecom_product_categories + [root_category] : ecom_product_categories
@@ -114,7 +115,7 @@ class RepairShoprApi::V1::Base
 
         return parsed_response if @response.status == HTTP_OK_CODE
 
-        raise error_class, "Code: #{@response.status}, response: #{@response.body}"
+        raise error_class, "Code: #{@response.status}, response: #{parsed_response}"
       else
         FakeApiCall.new(
           current_base_url: 'http://localhost:3000',
@@ -148,7 +149,7 @@ class RepairShoprApi::V1::Base
     # rubocop:disable Metrics/MethodLength
     def fake_response(endpoint, payload)
       case endpoint
-      when 'invoices'
+      when /invoices/
         {
           'invoice' => {
             'id' => 1,
@@ -175,7 +176,7 @@ class RepairShoprApi::V1::Base
             'user_id' => 1
           }
         }
-      when 'customers'
+      when /customers/
         {
           'customer' => {
             'id' => 1,
