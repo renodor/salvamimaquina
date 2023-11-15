@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_15_105837) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_15_110532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -882,6 +882,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_105837) do
     t.boolean "fulfillable", default: true, null: false
     t.string "code"
     t.boolean "check_stock_on_transfer", default: true
+    t.integer "repair_shopr_id"
     t.index ["country_id"], name: "index_spree_stock_locations_on_country_id"
     t.index ["state_id"], name: "index_spree_stock_locations_on_state_id"
   end
@@ -1050,6 +1051,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_105837) do
     t.string "meta_description"
     t.string "meta_keywords"
     t.integer "depth"
+    t.integer "repair_shopr_id"
     t.index ["lft"], name: "index_spree_taxons_on_lft"
     t.index ["parent_id"], name: "index_taxons_on_parent_id"
     t.index ["permalink"], name: "index_taxons_on_permalink"
