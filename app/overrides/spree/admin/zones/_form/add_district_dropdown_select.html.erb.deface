@@ -1,2 +1,0 @@
-<!-- insert_bottom 'div.js-zones-form .col-5:last-child' -->
-<%= render partial: 'district_members', locals: { zone_form: zone_form } %>

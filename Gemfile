@@ -1,121 +1,95 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.5'
+ruby "3.2.2"
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1', '>= 6.1.3'
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem "rails", "~> 7.0.6"
+
+gem "solidus", "4.2.3"
+
+# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "sprockets-rails"
+
 # Use postgresql as the database for Active Record
-gem 'pg', '>= 0.18', '< 2.0'
-# Use Puma as the app server
-gem 'puma', '~> 4.1'
-# Use SCSS for stylesheets
-gem 'sass-rails', '>= 6'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 6.0.0.rc.6'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-# Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem "pg", "~> 1.1"
 
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
+# Use the Puma web server [https://github.com/puma/puma]
+gem "puma", "~> 5.0"
+
+# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem "importmap-rails"
+
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "turbo-rails"
+
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "stimulus-rails"
+
+# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem "jbuilder"
+
+# Use Redis adapter to run Action Cable in production
+# gem "redis", "~> 4.0"
+
+# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+# gem "kredis"
+
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~> 3.1.7"
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
+gem "bootsnap", require: false
 
-# Ecommerce Framework
-gem 'solidus', github: 'solidusio/solidus', branch: 'v2.11'
-gem 'solidus_sale_prices', github: 'solidusio-contrib/solidus_sale_prices'
-gem 'solidus_related_products', github: 'solidusio-contrib/solidus_related_products'
+# Use Sass to process CSS
+# gem "sassc-rails"
 
-# HTTP client
-gem 'faraday'
-
-# Optimized JSON parser
-gem 'oj'
-
-# Exception management
-gem 'sentry-rails'
-gem 'sentry-ruby'
-
-# Image storage
-gem 'cloudinary', '~> 1.19'
-
-# I18n
-gem 'solidus_i18n', '~> 2.0'
-gem 'rails-i18n'
-gem 'kaminari-i18n', '~> 0.5.0'
-
-# Pass env variables to JS
-gem 'gon'
-
-gem 'sidekiq'
-gem 'sidekiq-failures', '~> 1.0'
-
-gem 'jwt'
-
-# Transactional emails
-gem 'postmark-rails'
-
-gem 'simple_form'
-
-# Honeypot to prevent spam on the contact form
-gem 'invisible_captcha'
-
-gem 'route_translator'
-
-gem 'solidus_auth_devise', '2.5.4'
-
-# Eliminate render-blocking CSS in above-the-fold content
-gem 'rails_critical_css_server'
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  # For debugging
-  gem 'pry-byebug'
-  gem 'pry-rails'
-
-  gem 'rspec-rails', '~> 6.0.0'
-  gem 'factory_bot_rails'
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
 end
 
 group :development do
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
-  gem 'listen', '~> 3.2'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
 
-  # To simulate sending emails
-  gem 'letter_opener'
+  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
+  # gem "rack-mini-profiler"
 
-  # Launch cross-platform applications
-  # (used to open a new browser tab from controller or service class)
-  gem 'launchy'
-
-  gem 'rubocop', require: false
-
-  # Find N+1 queries
-  gem 'bullet'
-
-  gem 'brakeman'
+  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+  # gem "spring"
 end
+
+
+gem "solidus_auth_devise", "~> 2.5"
+gem "responders"
+gem "canonical-rails"
+gem "solidus_support"
+gem "truncate_html"
+gem "view_component", "~> 3.0"
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
-  gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
-
-  # Stubbing http requests
-  gem "webmock"
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "capybara-screenshot", "~> 1.0"
+  gem "database_cleaner", "~> 1.7"
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+group :development, :test do
+  gem "rspec-rails"
+  gem "rails-controller-testing", "~> 1.0.5"
+  gem "rspec-activemodel-mocks", "~> 1.1.0"
+  gem "factory_bot", ">= 4.8"
+  gem "factory_bot_rails"
+  gem "ffaker", "~> 2.13"
+  gem "rubocop", "~> 1.0"
+  gem "rubocop-performance", "~> 1.5"
+  gem "rubocop-rails", "~> 2.3"
+  gem "rubocop-rspec", "~> 2.0"
+end
