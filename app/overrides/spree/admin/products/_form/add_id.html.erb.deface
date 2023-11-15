@@ -1,4 +1,0 @@
-<!-- insert_before 'div[data-hook="admin_product_form_fields"]' -->
-<div style="text-align: right; font-size: 11px;">
-  <span>id: <b><%= @product.id %></b></span>
-</div>
