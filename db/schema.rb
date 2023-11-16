@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_101361) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
     t.string "name", null: false
     t.text "body"
     t.string "record_type", null: false
-    t.bigint "record_id", null: false
+    t.integer "record_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
@@ -38,7 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -48,15 +48,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
-    t.string "checksum"
-    t.datetime "created_at", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -759,6 +759,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
     t.index ["order_id"], name: "index_spree_reimbursements_on_order_id"
   end
 
+  create_table "spree_relation_types", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "applies_to"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.string "applies_from"
+    t.boolean "bidirectional", default: false
+  end
+
+  create_table "spree_relations", id: :serial, force: :cascade do |t|
+    t.integer "relation_type_id"
+    t.string "relatable_type"
+    t.integer "relatable_id"
+    t.string "related_to_type"
+    t.integer "related_to_id"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.decimal "discount_amount", precision: 8, scale: 2, default: "0.0"
+    t.integer "position"
+    t.string "description"
+  end
+
   create_table "spree_return_authorizations", id: :serial, force: :cascade do |t|
     t.string "number"
     t.string "state"
@@ -817,6 +840,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
     t.index ["role_id"], name: "index_spree_roles_users_on_role_id"
     t.index ["user_id", "role_id"], name: "index_spree_roles_users_on_user_id_and_role_id", unique: true
     t.index ["user_id"], name: "index_spree_roles_users_on_user_id"
+  end
+
+  create_table "spree_sale_prices", id: :serial, force: :cascade do |t|
+    t.integer "price_id"
+    t.decimal "value", precision: 10, scale: 2, null: false
+    t.datetime "start_at", precision: nil
+    t.datetime "end_at", precision: nil
+    t.boolean "enabled"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.datetime "deleted_at", precision: nil
+    t.decimal "calculated_price", precision: 10, scale: 2
+    t.index ["deleted_at"], name: "index_spree_sale_prices_on_deleted_at"
+    t.index ["price_id", "start_at", "end_at", "enabled"], name: "index_active_sale_prices_for_price"
+    t.index ["price_id"], name: "index_sale_prices_for_price"
+    t.index ["start_at", "end_at", "enabled"], name: "index_active_sale_prices_for_all_variants"
   end
 
   create_table "spree_shipments", id: :serial, force: :cascade do |t|
@@ -1255,10 +1294,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
     t.integer "tax_category_id"
     t.datetime "updated_at"
     t.datetime "created_at"
-    t.bigint "shipping_category_id"
     t.integer "repair_shopr_id"
     t.string "repair_shopr_name"
     t.integer "condition", default: 0
+    t.bigint "shipping_category_id"
     t.index ["position"], name: "index_spree_variants_on_position"
     t.index ["product_id"], name: "index_spree_variants_on_product_id"
     t.index ["shipping_category_id"], name: "index_spree_variants_on_shipping_category_id"
