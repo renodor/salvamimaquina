@@ -1,4 +1,6 @@
-require "solidus_starter_frontend_spec_helper"
+# frozen_string_literal: true
+
+require 'solidus_starter_frontend_spec_helper'
 
 RSpec.describe FilterComponent, type: :component do
   let(:filter) { Spree::Core::ProductFilters.price_filter }
@@ -20,7 +22,7 @@ RSpec.describe FilterComponent, type: :component do
 
     context 'when a filter list item was checked' do
       let(:search_params) do
-        { price_range_any: ["Under $10.00"] }
+        { price_range_any: ['Under $10.00'] }
       end
 
       it 'renders as checked' do
@@ -29,7 +31,7 @@ RSpec.describe FilterComponent, type: :component do
     end
 
     context 'when a filter list item was not checked' do
-      let(:search_params) { { } }
+      let(:search_params) { {} }
 
       it 'renders as unchecked' do
         expect(inputs.first['checked']).to be_falsey

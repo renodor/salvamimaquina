@@ -1,4 +1,6 @@
-require "solidus_starter_frontend_spec_helper"
+# frozen_string_literal: true
+
+require 'solidus_starter_frontend_spec_helper'
 require 'spree/taxon'
 
 RSpec.describe TaxonsTreeComponent, type: :component do

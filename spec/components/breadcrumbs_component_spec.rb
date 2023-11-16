@@ -1,7 +1,9 @@
-require "solidus_starter_frontend_spec_helper"
+# frozen_string_literal: true
 
-# I'm getting the "NameError Exception: uninitialized constant
-# `#<Class:0x000056478b9a4100>::ActiveStorageAttachment`" in byebug unless I
+require 'solidus_starter_frontend_spec_helper'
+
+# I'm getting the 'NameError Exception: uninitialized constant
+# `#<Class:0x000056478b9a4100>::ActiveStorageAttachment`' in byebug unless I
 # require spree/taxon.
 require 'spree/taxon'
 
