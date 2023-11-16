@@ -1,0 +1,70 @@
+#products-search {
+  #products-search-trigger {
+    background-color: transparent;
+    border: none;
+  }
+  #productsSearchModal {
+    .modal-close {
+      display: flex;
+      justify-content: flex-end;
+      .btn-close {
+        background: none;
+        box-shadow: none;
+        height: auto;
+        width: auto;
+        padding: 20px 30px;
+        @include default-transition(opacity);
+        svg {
+          fill: white;
+          height: 35px;
+          width: 35px;
+        }
+      }
+    }
+    .modal-content {
+      background-color: transparent;
+      border: none;
+      text-align: center;
+      .modal-header {
+        border: none;
+        .modal-title {
+          color: white;
+          font-size: 35px;
+        }
+      }
+      .modal-body {
+        form {
+          display: flex;
+          align-items: center;
+          height: 50px;
+          input[type=text] {
+            width: 100%;
+            height: 100%;
+            padding: 5px 30px;
+            border: none;
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            font-size: 16px;
+            &:focus {
+              border: none;
+            }
+          }
+          button {
+            height: 100%;
+            border: none;
+            padding: 0 30px 0 15px;
+            background-color: white;
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+            svg {
+              fill: $green;
+            }
+          }
+        }
+      }
+      .border-footer {
+        border: none;
+      }
+    }
+  }
+}

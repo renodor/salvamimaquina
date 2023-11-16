@@ -1,0 +1,76 @@
+// Packages
+@import 'bootstrap';
+// @import 'mapbox-gl/dist/mapbox-gl';
+// @import 'swiper/swiper.scss';
+
+// Config
+@import 'config/breakpoints';
+@import 'config/utility';
+@import 'config/colors';
+@import 'config/bootstrap_variables';
+
+// Components
+@import 'components/container';
+@import 'components/content_overlay';
+@import 'components/navbar';
+@import 'components/products_search';
+@import 'components/slider';
+@import 'components/btn';
+@import 'components/flash';
+@import 'components/form';
+@import 'components/tooltip';
+@import 'components/footer';
+@import 'components/copyrights';
+@import 'components/whatsapp_widget';
+@import 'components/contact_form';
+
+// Spree Components
+@import 'spree/frontend/wrapper';
+@import 'spree/frontend/content_header';
+@import 'spree/frontend/login';
+@import 'spree/frontend/categories_grid';
+@import 'spree/frontend/sidebar';
+@import 'spree/frontend/price_range_slider';
+@import 'spree/frontend/image_placeholder';
+@import 'spree/frontend/products_sorting';
+@import 'spree/frontend/product_grid';
+@import 'spree/frontend/product_show';
+@import 'spree/frontend/color_badge';
+@import 'spree/frontend/quantity_selector';
+@import 'spree/frontend/related_products';
+@import 'spree/frontend/add_to_cart_modal';
+@import 'spree/frontend/cart';
+@import 'spree/frontend/line_item';
+@import 'spree/frontend/checkout';
+@import 'spree/frontend/order';
+@import 'spree/frontend/checkout_summary';
+@import 'spree/frontend/map';
+
+// Pages
+@import 'pages/homepage';
+@import 'pages/reparations';
+@import 'pages/corporate_clients';
+@import 'pages/contact';
+@import 'pages/information_pages';
+@import 'pages/about';
+@import 'pages/user_account';
+@import 'pages/trade_in';
+@import 'pages/identify_your_model';
+@import 'pages/search_results';
+
+body {
+  color: $dark-gray;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  color: $dark-gray;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+#errorExplanation {
+  display: none; // TODO: WARNING, don't hide that by default... But try to have better design of error explanations...
+}

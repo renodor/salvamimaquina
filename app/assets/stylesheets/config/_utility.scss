@@ -1,0 +1,65 @@
+@mixin default-transition($properties...) {
+  transition-property: $properties;
+  transition-duration: .3s;
+  transition-timing-function: ease;
+}
+
+.centered-flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-flexbox {
+  flex-direction: column;
+}
+
+.full-absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.crossed {
+  text-decoration: line-through;
+}
+
+.display-none {
+  display: none!important;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.hidden {
+  opacity: 0!important;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+@media ($max-m) {
+  .hide-m {
+    display: none!important;
+  }
+}
+
+@media ($min-m) {
+  .show-m {
+    display: none!important;
+  }
+}
+
+

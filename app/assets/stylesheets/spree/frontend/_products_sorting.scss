@@ -1,0 +1,53 @@
+.products-sorting {
+  margin-bottom: 30px;
+  #productsSortingDropdown {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 10px;
+    svg {
+      @include default-transition(transform);
+    }
+    &.show {
+      svg {
+        transform: scaleY(-1);
+      }
+    }
+  }
+  .products-sorting-options-mobile {
+    padding: 15px;
+  }
+  .dropdown-menu {
+    width: 100%;
+    max-width: 200px;
+    border-radius: 0;
+    border: 1px solid $light-gray;
+    background-color: white;
+  }
+  .products-sorting-option {
+    padding: 0;
+    &:hover {
+      background-color: white;
+    }
+    label {
+      width: 100%;
+      padding: 5px 10px;
+      cursor: pointer;
+      color: $dark-gray;
+      background-color: white;
+      @include default-transition(background-color, color);
+      &:hover {
+        background-color: $light-green;
+        color: $green;
+      }
+    }
+    input {
+      display: none;
+      &.selected + label {
+        background-color: $light-green;
+        color: $green;
+      }
+    }
+  }
+}

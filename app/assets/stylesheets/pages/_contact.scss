@@ -1,0 +1,42 @@
+#contact {
+  margin-top: 35px;
+  #users-contact-form form {
+    width: 50%
+  }
+
+  #shops {
+    .shop {
+      margin: 20px;
+      width: 100%;
+      h2 {
+        margin-top: 10px;
+        font-weight: 200;
+      }
+    }
+  }
+
+  #business-hours {
+    .business-day {
+      width: 110px;
+      display: inline-block;
+    }
+  }
+}
+
+@media ($max-l) {
+  #contact {
+    #shops {
+      flex-direction: column;
+    }
+
+    #users-contact-form form {
+      width: 100%;
+    }
+  }
+}
+
+@media ($max-m) {
+  #contact #shops iframe {
+    width: 100%;
+  }
+}
