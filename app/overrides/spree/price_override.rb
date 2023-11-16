@@ -25,9 +25,9 @@ module Spree
     #   active_sale_prices.present? ? active_sale_prices.first.value : self[:amount]
     # end
 
-    def amount
-      price
-    end
+    # def amount
+    #   price
+    # end
 
     Spree::Price.prepend self
   end
