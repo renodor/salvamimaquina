@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_103738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,6 +74,69 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
+  create_table "repair_shopr_products_sync_logs", force: :cascade do |t|
+    t.integer "synced_products", default: 0
+    t.integer "deleted_products", default: 0
+    t.integer "synced_product_images", default: 0
+    t.integer "deleted_product_images", default: 0
+    t.integer "synced_product_categories", default: 0
+    t.integer "deleted_product_categories", default: 0
+    t.jsonb "sync_errors", default: []
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+  end
+
+  create_table "reparation_categories", force: :cascade do |t|
+    t.string "name"
+    t.string "products", default: [], array: true
+    t.string "damages", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reparation_requests", force: :cascade do |t|
+    t.bigint "reparation_category_id", null: false
+    t.string "damage"
+    t.integer "shop"
+    t.string "name"
+    t.string "email"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "product"
+    t.string "phone"
+    t.index ["reparation_category_id"], name: "index_reparation_requests_on_reparation_category_id"
+  end
+
+  create_table "sliders", force: :cascade do |t|
+    t.integer "location"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "navigation", default: false
+    t.boolean "pagination", default: false
+    t.boolean "auto_play", default: true
+    t.integer "delay_between_slides", default: 3000
+    t.integer "image_per_slide_xl", default: 1
+    t.integer "image_per_slide_l", default: 1
+    t.integer "image_per_slide_m", default: 1
+    t.integer "image_per_slide_s", default: 1
+    t.integer "space_between_slides", default: 10
+    t.boolean "force_slide_full_width", default: true
+    t.boolean "fallback_image", default: true
+  end
+
+  create_table "slides", force: :cascade do |t|
+    t.text "link"
+    t.bigint "slider_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "order"
+    t.string "alt", default: ""
+    t.index ["slider_id"], name: "index_slides_on_slider_id"
+  end
+
   create_table "spree_addresses", id: :serial, force: :cascade do |t|
     t.string "firstname"
     t.string "lastname"
@@ -90,7 +153,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "name"
+    t.bigint "district_id"
+    t.float "latitude"
+    t.float "longitude"
     t.index ["country_id"], name: "index_spree_addresses_on_country_id"
+    t.index ["district_id"], name: "index_spree_addresses_on_district_id"
     t.index ["firstname"], name: "index_addresses_on_firstname"
     t.index ["lastname"], name: "index_addresses_on_lastname"
     t.index ["name"], name: "index_spree_addresses_on_name"
@@ -203,6 +270,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.integer "payment_method_id"
     t.boolean "default", default: false, null: false
     t.integer "address_id"
+    t.string "token"
+    t.string "encoded_cvv"
     t.index ["payment_method_id"], name: "index_spree_credit_cards_on_payment_method_id"
     t.index ["user_id"], name: "index_spree_credit_cards_on_user_id"
   end
@@ -212,6 +281,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.integer "stock_location_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "spree_districts", force: :cascade do |t|
+    t.string "name"
+    t.integer "state_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "latitude"
+    t.float "longitude"
   end
 
   create_table "spree_inventory_units", id: :serial, force: :cascade do |t|
@@ -403,6 +481,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.string "number"
     t.string "cvv_response_code"
     t.string "cvv_response_message"
+    t.uuid "uuid"
+    t.string "spi_token"
     t.index ["number"], name: "index_spree_payments_on_number", unique: true
     t.index ["order_id"], name: "index_spree_payments_on_order_id"
     t.index ["payment_method_id"], name: "index_spree_payments_on_payment_method_id"
@@ -476,7 +556,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.boolean "promotionable", default: true
     t.string "meta_title"
     t.datetime "discontinue_on", precision: nil
-    t.integer "repair_shopr_id"
+    t.integer "purchase_count", default: 0
+    t.boolean "highlight", default: false
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["name"], name: "index_spree_products_on_name"
@@ -801,6 +882,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.string "carrier"
     t.string "service_level"
     t.boolean "available_to_users", default: true
+    t.float "latitude"
+    t.float "longitude"
+    t.text "google_map_link"
     t.index ["tax_category_id"], name: "index_spree_shipping_methods_on_tax_category_id"
   end
 
@@ -1001,6 +1085,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "tax_code"
+    t.integer "repair_shopr_id"
   end
 
   create_table "spree_tax_rate_tax_categories", id: :serial, force: :cascade do |t|
@@ -1171,6 +1256,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.datetime "updated_at"
     t.datetime "created_at"
     t.bigint "shipping_category_id"
+    t.integer "repair_shopr_id"
+    t.string "repair_shopr_name"
+    t.integer "condition", default: 0
     t.index ["position"], name: "index_spree_variants_on_position"
     t.index ["product_id"], name: "index_spree_variants_on_product_id"
     t.index ["shipping_category_id"], name: "index_spree_variants_on_shipping_category_id"
@@ -1208,11 +1296,58 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_15_110633) do
     t.datetime "updated_at"
   end
 
+  create_table "trade_in_categories", force: :cascade do |t|
+    t.string "name"
+    t.integer "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trade_in_models", force: :cascade do |t|
+    t.string "name"
+    t.float "min_value"
+    t.float "max_value"
+    t.bigint "trade_in_category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "order"
+    t.index ["trade_in_category_id"], name: "index_trade_in_models_on_trade_in_category_id"
+  end
+
+  create_table "trade_in_requests", force: :cascade do |t|
+    t.integer "shop"
+    t.boolean "with_promo"
+    t.string "name"
+    t.string "phone"
+    t.string "email"
+    t.string "model_name_with_options"
+    t.float "model_min_value"
+    t.float "model_max_value"
+    t.text "comment"
+    t.text "token"
+    t.integer "variant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_messages", force: :cascade do |t|
+    t.string "email"
+    t.string "name"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "reparation_requests", "reparation_categories"
+  add_foreign_key "slides", "sliders"
+  add_foreign_key "spree_districts", "spree_states", column: "state_id", on_delete: :cascade
   add_foreign_key "spree_promotion_code_batches", "spree_promotions", column: "promotion_id"
   add_foreign_key "spree_promotion_codes", "spree_promotion_code_batches", column: "promotion_code_batch_id"
   add_foreign_key "spree_tax_rate_tax_categories", "spree_tax_categories", column: "tax_category_id"
   add_foreign_key "spree_tax_rate_tax_categories", "spree_tax_rates", column: "tax_rate_id"
   add_foreign_key "spree_wallet_payment_sources", "spree_users", column: "user_id"
+  add_foreign_key "trade_in_models", "trade_in_categories"
+  add_foreign_key "trade_in_requests", "spree_variants", column: "variant_id", on_delete: :cascade
 end
