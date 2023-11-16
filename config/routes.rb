@@ -74,7 +74,64 @@ Rails.application.routes.draw do
   mount Spree::Core::Engine, at: '/'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  resources :reparation_categories, only: [:index] do
-    resources :reparation_requests, only: %i[new create]
+  localized do
+    resources :reparation_categories, only: [:index] do
+      resources :reparation_requests, only: %i[new create]
+    end
+    get 'reparation_requests/thank_you', to: 'reparation_requests#thank_you'
+  end
+
+  localized do
+    resources :trade_in_requests, only: %i[new create], param: :token
+    get 'trade_in_requests/confirmed/:token', to: 'trade_in_requests#show', param: :token, as: :trade_in_request
+  end
+  get 'trade_in_requests/variant_infos/:variant_id', to: 'trade_in_requests#variant_infos'
+
+  localized do
+    get '/account/edit_user_address', to: 'users#edit_user_address'
+    get '/account/new_user_address', to: 'users#new_user_address'
+  end
+  put '/account/update_user_address', to: 'users#update_user_address'
+
+  localized do
+    get 'corporate_clients', to: 'home#corporate_clients'
+  end
+  post 'create_corporate_client_message', to: 'home#create_corporate_client_message'
+
+  localized do
+    get 'contact', to: 'home#contact'
+    get 'about', to: 'home#about'
+    get 'shipping_informations', to: 'home#shipping_informations'
+    get 'payment_methods', to: 'home#payment_methods'
+    get 'identify_your_model', to: 'home#identify_your_model'
+  end
+  post 'create_user_message', to: 'home#create_user_message'
+
+  get '/fake_api_call/show_request', to: 'fake_api_calls#show_request'
+
+  localized do
+    get '/products/search_results', to: 'products#search_results'
+  end
+  get '/products/filter', to: 'products#filter'
+  get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
+  get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
+
+  # Solidus Routes can't be localized using the localized block...
+  # So we have to manually define the routes we want to translate here...
+  get '/productos', to: 'products#index', as: 'products_es_mx'
+  get '/productos/:id', to: 'products#show', as: 'product_es_mx'
+  get '/carrito', to: 'orders#edit', as: 'cart_es_mx'
+  get '/mi_cuenta', to: 'users#show', as: 'account_es_mx'
+  get '/mi_cuenta/editar', to: 'users#edit', as: 'edit_account_es_mx'
+  get '/pedidos/:id', to: 'orders#show', as: 'orders_es_mx'
+
+  namespace :repair_shopr_webhook do
+    post 'product_updated', to: 'products#product_updated'
+  end
+
+  # Sidekiq Web UI, only for admins.
+  require 'sidekiq/web'
+  authenticate :spree_user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 end

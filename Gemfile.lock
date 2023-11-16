@@ -212,6 +212,9 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+    kaminari-i18n (0.5.0)
+      kaminari
+      rails
     kt-paperclip (7.2.1)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -316,6 +319,9 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails-i18n (7.0.8)
+      i18n (>= 0.7, < 2)
+      railties (>= 6.0.0, < 8)
     rails_critical_css_server (0.1.7)
       httparty (>= 0.18)
       rails (>= 3.0)
@@ -488,6 +494,9 @@ GEM
       ransack (~> 2.0)
       sprockets-rails
       state_machines-activerecord (~> 0.6)
+    solidus_i18n (2.2.0)
+      solidus_core (>= 1.1, < 5)
+      solidus_support (~> 0.4)
     solidus_sample (4.2.3)
       solidus_core (= 4.2.3)
     solidus_support (0.10.0)
@@ -563,6 +572,7 @@ DEPENDENCIES
   invisible_captcha
   jbuilder
   jwt
+  kaminari-i18n (~> 0.5.0)
   launchy
   letter_opener
   oj
@@ -573,6 +583,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.6)
   rails-controller-testing (~> 1.0.5)
+  rails-i18n
   rails_critical_css_server
   responders
   route_translator
@@ -590,6 +601,7 @@ DEPENDENCIES
   simple_form
   solidus (= 4.2.3)
   solidus_auth_devise (~> 2.5)
+  solidus_i18n (~> 2.0)
   solidus_support
   sprockets-rails
   stimulus-rails

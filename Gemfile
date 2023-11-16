@@ -142,3 +142,11 @@ gem 'route_translator'
 
 # Eliminate render-blocking CSS in above-the-fold content
 gem 'rails_critical_css_server'
+
+# I18n
+gem 'solidus_i18n', '~> 2.0'
+gem 'rails-i18n'
+gem 'kaminari-i18n', '~> 0.5.0'
+
+# Route translator
+gem 'route_translator'

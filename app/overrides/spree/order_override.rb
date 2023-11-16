@@ -28,7 +28,7 @@ module Spree
         .not_deleted
         .where.not(id: products.pluck(:id))
         .where(id: Spree::Relation.where(related_to: products.pluck(:id)).pluck(:relatable_id))
-        .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
+        .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, :prices])
     end
 
     # Return the stock location that has more line items quantity

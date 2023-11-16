@@ -68,11 +68,13 @@ module Spree
     # to use :active_sale_prices relation in order to be able to includes it in ActiveRecord queries and thus avoid N+1
     # and to avoid using Spree::DefaultPrice module
     def on_sale?
-      prices&.take&.active_sale_prices.present?
+      # prices&.take&.active_sale_prices.present?
+      false
     end
 
     def original_price
-      prices&.take&.original_price
+      # prices&.take&.original_price
+      price
     end
 
     # Simplify Spree::Variant#can_supply method has we don't need all built in solidus options

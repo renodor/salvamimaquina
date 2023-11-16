@@ -1,0 +1,333 @@
+es-MX:
+  to: 'a'
+  and: 'y'
+  home: 'Inicio'
+  day:
+    one: 'Día'
+    other: 'Días'
+  online_shop: 'Tienda en línea'
+  companies: 'Empresas'
+  about: 'Nosotros'
+  panama: 'Panamá'
+  trade_in: 'Trade in'
+  send: 'Envíar'
+  erase: 'Borrar'
+  reparation: 'Reparación'
+  choose_reparation_category: '¿Que tipo de equipo necesita reparar?'
+  reparation_explanation: 'Incluir datos específicos del dispositivo como año, modelo y sistema operativo, además de una breve descripción del problema:'
+  thanks_for_your_request: 'Gracias por su solicitud'
+  trade_in: 'Trade-in'
+  product_you_want_to_trade_in: 'Equipo que desea dar en Trade-in'
+  identify_your_model: '¿No conoces el modelo de su equipo? Identifícalo aquí'
+  choose_product_category: 'Elige categoría de producto'
+  choose_product: 'Elige producto'
+  what_product_you_want_to_buy: '¿Qué equipo quiere comprar?'
+  choose_variant: 'Elegir variación'
+  you_have_a: 'Tiene un'
+  estimated_value_between: 'Valor estimado entre'
+  you_can_by_a: 'Puede comprar un'
+  between: 'entre'
+  instead_of: 'En vez de'
+  please_choose_product_with_higher_value: 'Por favor elige un producto de un valor superior al que quiere devolver'
+  confirm_trade_in_request: 'Confirmar solicitud de TRADE-IN'
+  complete_your_contact_infos: 'Completa tu información de contacto'
+  trade_in_request_confirmed: '¡Solicitud de Trade-in confirmada!'
+  complete_trade_in: 'Completa el proceso en nuestra tienda de %{shop}.'
+  complete_trade_in_to_have_a_promo: 'Si completa el proceso en nuestra tienda de %{shop} dentro de los próximos %{validity},<br /> disfrutaras de <b>%{amount} de descuento en los accesorios de celulares</b> con ese código'
+  you_have_until: 'Tiene hasta el %{date} para usarlo'
+  bring_me_to_shop: 'Llevame a la tienda de %{shop}'
+  not_valid_online: 'No válido en línea'
+  your_trade_in: 'Su Trade-in'
+  trade_in_disclaimer: 'La cotización dada son montos aproximados, se debe evaluar en sitio todos los detalles de su equipo para brindar el valor real.'
+  trade_in_promo_restrictiones: 'Aplican restricciones'
+  contact: 'Contacto'
+  contact_us: 'Contactarnos'
+  contact_soon: 'Estaremos en contacto rapidamente.'
+  message_sent: 'Gracias por su mensaje, le estaremos contactando pronto.'
+  business_hours: 'Horarios'
+  hour: 'Horario'
+  closed: 'Cerrado'
+  monday: 'Lunes'
+  tuesday: 'Martes'
+  wednesday: 'Miércoles'
+  thursday: 'Jueves'
+  friday: 'Viernes'
+  saturday: 'Sábado'
+  sunday: 'Domingo'
+  spree:
+    email: 'Correo'
+    brands: 'Marcas'
+    address: 'Dirección'
+    my_address: 'Mi dirección'
+    no_address: 'Aún no tiene dirección guardada.'
+    create_address: 'Crear dirección'
+    edit_my_address: 'Editar mi dirección'
+    edit_my_account: 'Editar mi cuenta'
+    account_information: 'Información de Cuenta'
+    back_to_my_account: 'Regresar a mi cuenta'
+    model:
+      one: 'Modelo'
+      other: 'Modelos'
+    item:
+      one: 'Artículo'
+      other: 'Artículos'
+    product:
+      one: 'Producto'
+      other: 'Productos'
+    buy: 'Comprar'
+    see_products: 'Ver productos'
+    sort_products: 'Ordenar productos'
+    sort: 'Ordenar'
+    ascend_by_price: 'Precio más bajo'
+    descend_by_price: 'Precio más alto'
+    newest: 'Más nuevo'
+    oldest: 'Más viejo'
+    best_seller: 'Más vendido'
+    on_sale_products: 'Productos rebajados'
+    related_products: 'Productos relacionados'
+    district:
+      one: 'Corregimiento'
+      other: 'Corregimientos'
+    items_cannot_be_shipped: 'No se puede entregar productos a esa dirección'
+    billing_address: 'Dirección'
+    apply_code: 'Aplicar código'
+    coupon_code_removed: 'El código cupón fue quitado de su orden'
+    coupon_code_applied: 'El código cupón fue aplicado a su orden'
+    order_number: "Número de orden: %{number}"
+    order_total: 'Total'
+    payment_methods:
+      credit_card: "Tarjeta de Crédito"
+    helpers:
+      products:
+        price_diff_add_html: "%{amount_html} adicional"
+        price_diff_subtract_html: "%{amount_html} menos"
+    color:
+      one: 'Color'
+      other: 'Colores'
+    colors:
+      black: 'Negro'
+      white: 'Blanco'
+      yellow: 'Amarillo'
+      blue: 'Azul'
+      red: 'Rojo'
+      orange: 'Naranja'
+      green: 'Verde'
+      purple: 'Morado'
+      pink: 'Rosado'
+      gray: 'Gris'
+      brown: 'Marrón'
+      silver: 'Plateado'
+      gold: 'Dorado'
+      beige: 'Beige'
+      turquoise: 'Turquesa'
+      coral: 'Coral'
+      mallow: 'Malva'
+      space_gray: 'Space gray'
+      graphite: 'Grafito'
+      night_green: 'Verde noche'
+      matt_black: 'Negro mate'
+      sierra_blue: 'Sierra blue'
+    capacity: 'Capacidad'
+    keyboard: 'Teclado'
+    product_information: 'Información del Producto'
+    out_of_stock: 'Agotado'
+    not_enough_stock: 'No hay suficiente inventario'
+    added_to_your_cart: 'añadido a su carrito'
+    cant_add_to_cart: 'Hubo un problema tratando de añadir el producto a su carrito. Por favor reintentar más tarde.'
+    continue_shopping: 'Seguir comprando'
+    see_cart: 'Ver carrito'
+    shopping_cart: 'Mi Carrito'
+    checkout: 'Ordenar'
+    create_account: 'Crear cuenta'
+    different_billing_address: 'Por favor contáctenos si necesita una dirección de envío diferente de la de facturación.'
+    street_address_2: 'Punto de referencia'
+    missing_map_pin: 'Elegir punto en el mapa'
+    choose_shipping_method: 'Elegir método de envío'
+    shipping_total: 'Entrega'
+    shipping_information: 'Información de entrega'
+    shipping_methods:
+      pickup_in_store: "Recoger en la tienda de %{store_name}"
+      delivery_zone: "Entrega a domicilio, en Ciudad de Panamá Zona %{zone_number}"
+      panama_zone_1: "Ciudad de Panamá Zona 1"
+      panama_zone_2: "Ciudad de Panamá Zona 2"
+      panama_zone_3: "Ciudad de Panamá Zona 3"
+    shipping_prices: 'Precios de entrega a domicilio'
+    shipping_times: 'Tiempos de entrega'
+    free_shipping_for_orders_above_threshold: '¡Entrega gratis para pedidos arriba de %{free_shipping_threshold}!'
+    pickup_in_stores: 'Recoger pedido en tiendas'
+    between_1_and_3_days: 'De 1 a 3 días habiles.'
+    name_on_card: "Nombre en la tarjeta"
+    card_code: "Código CVV de la tarjeta"
+    transaction_secured: "Todas las transacciones están aseguradas"
+    ending_in: "Termina con:"
+    cvv_explaination: "Código de seguridad de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente."
+    spree_gateway_generic_error: "Hubo un problema procesando su pedido. Por favor inténtelo de nuevo."
+    spree_gateway_error_flash_for_checkout: "Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo."
+    spree_gateway_error_3ds: "Hubo un problema procesando su pedido. Su pago no fue debitado. Por favor inténtelo de nuevo, y si el problema sigue contacte a Salva Mi Máquina."
+    thank_you_for_your_order: "¡Gracias por su pedido!"
+    adjustment_labels:
+      line_item: '%{promotion} (%{promotion_name})'
+      order: '%{promotion} (%{promotion_name})'
+      tax_rates:
+        sales_tax: '%{name}'
+        vat: '%{name} (Incluido en el precio)'
+        sales_tax_with_rate: '%{name} %{amount}'
+        vat_with_rate: '%{name} %{amount} (Incluido en el precio)'
+        sales_tax_refund: 'Reintegro: %{name}'
+        vat_refund: 'Reintegro: %{name} (Incluido en el precio)'
+        sales_tax_refund_with_rate: 'Reintegro: %{name} %{amount}'
+        vat_refund_with_rate: 'Reintegro: %{name} %{amount} (Incluido en el Precio)'
+    order_mailer:
+      confirm_email:
+        see_on_map: 'Ver en el mapa'
+        disclaimer: 'Importante: En el caso de no estar presente a la hora de entrega nos comunicaremos al teléfono incluido en su pedido.'
+        new_ecommerce_order: 'Nuevo pedido en salvamimaquina.com'
+        client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
+    order_mutex_admin_error: 'El Pedido está siendo modificado por alguien. Por favor, inténtelo otra vez.'
+    order_mutex_error: 'Algo salió mal. Por favor, vuelva a intentarlo.'
+    order_not_found: 'No podemos encontrar su pedido. Por favor, inténtelo otra vez'
+    search_result: 'Resultados de búsqueda para %{keyword}'
+    search_results:
+      zero: 'Ningún resultado de búsqueda para'
+      one: '%{count} resultado de busqueda para'
+      other: '%{count} resultados de busqueda para'
+    eligibility_errors:
+      messages:
+        limit_once_per_user: 'Este usuario ya utilizó este código cupón'
+  activerecord:
+    attributes:
+      spree/credit_card:
+        base: ""
+      reparation_request:
+        product: 'Producto'
+        damage: 'Daño'
+        shop: 'Sucursal'
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
+        comment: 'Comentario'
+        shops:
+          bella_vista: 'Bella Vista'
+      trade_in_request:
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
+    errors:
+      models:
+        spree/credit_card:
+          attributes:
+            base:
+              invalid_token: "No se puede validar su número de tarjeta"
+  devise:
+    failure:
+      invalid: 'Correo o contraseña invalida'
+    user_passwords:
+      spree_user:
+        send_instructions: 'Si existe una cuenta con este correo, va a recibir un correo con las instrucciones para cambiar su contraseña'
+    sessions:
+      spree_user:
+        signed_out: 'Desconectado correctamente'
+    user_registrations:
+      spree_user:
+        signed_up: 'Bienvenido. Tu cuenta ha sido creada!'
+    user_sessions:
+      spree_user:
+        signed_out: 'Sesión finalizada.'
+  home_page:
+    intro_title: 'Salva Mi Máquina ¡Somos expertos en dispositivos Apple!'
+    intro: 'Empresa líder en Panamá dedicada a la reparación y venta de dispositivos Apple como iPads, iPhones, Mac y PC basadas en Windows. Diagnósticos de tu Macbook, PC o teléfono en tiempos óptimos y precios accesibles.'
+    reparation_service_title: '¿Cómo funciona el servicio de reparación?'
+    features:
+      feature_one_title: 'Diagnóstico'
+      feature_one_text: 'Diagnóstico de tu computador MacBook o Windows en un tiempo optimo. Cambios de pantallas de iPhone en 40 minutos.'
+      feature_two_title: 'Elegir el lugar'
+      feature_two_text: 'Escoger entre llevar su equipo a una de nuestras dos sucursales y programar un servicio de mensajería a domicilio.'
+      feature_three_title: 'Quédate tranquilo'
+      feature_three_text: 'Recibirá un email apenas su computador o teléfono este listo. La mayoría de nuestras reparaciones tienen 6 meses de garantía!'
+    shop_name: 'Tienda Salva Mi Máquina'
+    best_at_best_price: 'Lo mejor de Apple, ¡al mejor precio!'
+  corporate_services:
+    repair:
+      title: 'Reparacíon y mantenimiento'
+      text: 'Smartphones, tabletas o computadoras. Lideres en reparación de placa lógica APPLE. Tenemos una tasa de éxito mayor a 80%, y tarifas competitivas.'
+    customer_service:
+      title: 'Servicio al cliente'
+      text: 'Servicio personalizado, eficiente y de alta calidad. Una ejecutiva de atención al cliente dedicada a su empresa, para una atención breve.'
+    emergency:
+      title: 'Intervenciones de emergencia'
+      text: 'Smartphones, tabletas o computadoras. Lideres en reparación de placa lógica APPLE. Tenemos una tasa de éxito mayor a 80%, y tarifas competitivas.'
+    credit:
+      title: 'Beneficios financieros'
+      text: 'Damos crédito a nuestros clientes empresariales.'
+    quality:
+      title: 'Somos expertos'
+      text: 'Contamos con 12 técnicos con experiencia en las ramas de teléfonos, tabletas y computadoras Apple y también en equipos Windows. Le garantiza un servicio de alta calidad.'
+    delivery:
+      title: 'Puerta a puerta'
+      text: 'Gracias a nuestra mensajería especializada, le brindamos servicios directamente en el cede de su empresa.'
+  identify_the_model_of_your_product: 'Identificar el modelo de su equipo'
+  you_have_an: '¿Tienes un %{model_type}?'
+  find_what_model_you_have: 'Descubre qué modelo de %{model_type} tienes'
+  footer:
+    social: 'Redes'
+    shops: 'Tiendas'
+    ecommerce: 'Ecommerce & Trade-in'
+    locations: 'Ubicaciones'
+    open_times: 'Horarios de aperturas'
+    shipping_prices_zones_and_times: 'Zonas, precios y tiempos de entrega'
+    payment_methods: 'Métodos de pago'
+    identify_your_model: 'Identificar el modelo de su equipo'
+  simple_form:
+    options:
+      reparation_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'
+      trade_in_request:
+        shop:
+          bella_vista: 'Bella Vista'
+          san_francisco: 'San Francisco'
+    placeholders:
+      user_message:
+        name: 'Nombre'
+        email: 'Correo'
+        message: 'Mensaje'
+      trade_in_request:
+        name: 'Nombre'
+        email: 'Correo'
+        phone: 'Teléfono'
+        comment: 'Comentario'
+    labels:
+      trade_in_request:
+        shop: 'Tienda donde desea hacer el Trade-in'
+  time:
+    formats:
+      simple: "%d %b %Y"
+  trade_in_request_mailer:
+    confirmation_email:
+      subject: 'Su Solicitud de Trade-in en Salva Mi Máquina'
+  routes:
+    reparation_categories: 'catagorias_de_reparaciones'
+    products: 'productos'
+    corporate_clients: 'empresas'
+    account: 'mi_cuenta'
+    edit_user_address: 'editar_direccion'
+    new_user_address: 'nueva_direccion'
+    contact: 'contacto'
+    about: 'nosotros'
+    shipping_informations: 'informacion_de_entrega'
+    payment_methods: 'metodos_de_pago'
+    identify_your_model: 'identificar_su_modelo'
+    search_results: 'buscar'
+    controllers:
+      spree:
+        reparation_requests:
+          reparation_requests: 'reparacion'
+          new: 'nueva'
+          thank_you: 'gracias'
+        trade_in_requests:
+          trade_in_requests: 'trade_in'
+          new: 'nuevo'
+          confirmed: 'confirmado'
+        products:
+          products: 'productos'
