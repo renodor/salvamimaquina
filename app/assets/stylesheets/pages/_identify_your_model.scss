@@ -1,0 +1,37 @@
+#identify-your-model {
+  .model-types {
+    text-align: center;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .model-type {
+      position: relative;
+      padding: 10px;
+      margin-bottom: 30px;
+      h2 {
+        font-size: 24px;
+      }
+      img {
+        margin: 10px 0;
+      }
+      p {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@media($max-l) {
+  #identify-your-model {
+    h1 {
+      text-align: center;
+    }
+    .model-types {
+      flex-direction: column;
+      .model-type {
+        border-bottom: 1px solid $gray;
+      }
+    }
+  }
+}

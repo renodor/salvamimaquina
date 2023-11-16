@@ -1,0 +1,43 @@
+#categories {
+  margin-top: 35px;
+  h2 {
+    text-align: center;
+    margin-bottom: 35px;
+  }
+  #categories-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    .category {
+      padding: 15px;
+      border: 1px solid transparent;
+      @include default-transition(box-shadow, border-color);
+      &:hover {
+        box-shadow: 0 0 3px 0px #b0b3b285;
+        border-color: $light-gray
+      }
+      p {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      img {
+        width: 100%;
+      }
+      a, a:hover {
+        color: $body-color;
+      }
+    }
+  }
+}
+
+@media ($max-l) {
+  #categories #categories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media ($max-s) {
+  #categories #categories-grid {
+    grid-template-columns: 1fr;
+  }
+}

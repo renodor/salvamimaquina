@@ -1,0 +1,92 @@
+#checkout-summary {
+  flex-basis: 30%;
+  height: 100%;
+  background-color: #f3f3f3;
+  padding: 20px;
+  margin: 0;
+  h3 {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .checkout-summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .checkout-summary-element {
+      &:first-child {
+        flex-basis: 70%;
+        text-align: left;
+      }
+      &:last-child {
+        flex-basis: 30%;
+        text-align: right;
+      }
+    }
+  }
+  .coupon-codes {
+    margin-top: 20px;
+    padding: 0;
+    form {
+      display: flex;
+      flex-wrap: nowrap;
+      input[type="text"] {
+        margin-right: 0;
+        border-right: none;
+        flex-grow: 1;
+        padding: 10px;
+        width: 100%;
+        &:focus + button {
+          border-color: $green!important;
+        }
+      }
+      button {
+        background-color: white;
+        border: 1px solid $light-gray!important;
+        border-left: none!important;
+        padding: 10px!important;
+        &:focus {
+          box-shadow: none;
+        }
+        svg {
+          width: 25px;
+          height: 25px;
+          fill: $dark-gray;
+          opacity: 0.8;
+          @include default-transition(opacity);
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+    .coupon-code {
+      padding: 10px;
+      margin: 0;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      text-align: left;
+      background-color: $dark-gray;
+      color: white;
+      svg {
+        fill: white;
+        width: 15px;
+        height: 15px;
+        opacity: 0.7;
+        @include default-transition(opacity);
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  .checkout-button {
+    margin-top: 20px;
+  }
+}
