@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   root to: 'home#index'
 
@@ -72,6 +74,7 @@ Rails.application.routes.draw do
   mount Spree::Core::Engine, at: '/'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :reparation_categories, only: [:index] do
+    resources :reparation_requests, only: %i[new create]
+  end
 end

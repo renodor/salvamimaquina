@@ -1,10 +1,22 @@
-test:
-  service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
+cloudinary_products:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/products" %>
 
-local:
-  service: Disk
-  root: <%= Rails.root.join("storage") %>
+cloudinary_product_categories:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/product_categories" %>
+
+cloudinary_slides:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/slides" %>
+
+cloudinary_banners:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/banners" %>
+
+cloudinary_reparation_categories:
+  service: Cloudinary
+  folder: <%= "#{Rails.env}/reparation_categories" %>
 
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
