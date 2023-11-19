@@ -9,6 +9,10 @@
 @import 'spree/backend/form_with_images';
 @import 'spree/backend/admin_doc';
 
+.solidus-admin--nav--logo img {
+  max-height: 50px;
+}
+
 // Prevent admin nav to collapse
 .admin-nav-hidden {
   padding-left: 200px;

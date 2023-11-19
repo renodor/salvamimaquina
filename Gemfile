@@ -7,6 +7,7 @@ ruby '3.2.2'
 gem 'rails', '~> 7.0.6'
 
 gem 'solidus', '4.2.3'
+gem 'solidus_sale_prices', git: 'https://github.com/renodor/solidus_sale_prices.git', branch: 'master'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'

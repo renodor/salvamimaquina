@@ -1,0 +1,50 @@
+<% admin_breadcrumb('Trade In Requests') %>
+
+<table>
+   <thead>
+      <tr>
+         <th>Name</th>
+         <th>Phone</th>
+         <th>Email</th>
+         <th>Trade-in model</th>
+         <th>Product to buy</th>
+         <th>Min value</th>
+         <th>Max value</th>
+         <th>With a promo?</th>
+         <th>Is still valid?</th>
+         <th>Coupon Code</th>
+         <th>Shop</th>
+         <th>Creation Date</th>
+      </tr>
+   </thead>
+   <tbody>
+    <% @trade_in_requests.each do |trade_in_request| %>
+      <tr>
+        <td><%= trade_in_request.name %></td>
+        <td><%= trade_in_request.phone %></td>
+        <td><%= trade_in_request.email %></td>
+        <td><%= trade_in_request.model_name_with_options %></td>
+        <td><%= trade_in_request.variant&.name %> - <%= trade_in_request.variant&.options_text %></td>
+        <td><%= number_to_currency(trade_in_request.min_value) %></td>
+        <td><%= number_to_currency(trade_in_request.max_value) %></td>
+        <td>
+          <span class="pill pill-<%= trade_in_request.with_promo ? 'active' : 'error' %>">
+            <%= trade_in_request.with_promo ? 'Yes' : 'No' %>
+          </span>
+        </td>
+        <td>
+          <% if trade_in_request.with_promo %>
+            <span class="pill pill-<%= trade_in_request.still_valid? ? 'active' : 'error' %>">
+              <%= trade_in_request.still_valid? ? 'Yes' : 'No' %>
+            </span>
+          <% end %>
+        </td>
+        <td><%= trade_in_request.with_promo ? trade_in_request.coupon_code : '' %></td>
+        <td><%= trade_in_request.shop.titleize %></td>
+        <td><%= trade_in_request.created_at.strftime("%d %b %Y") %></td>
+      </tr>
+    <% end %>
+   </tbody>
+</table>
+
+<%= paginate @trade_in_requests, theme: "solidus_admin" %>
