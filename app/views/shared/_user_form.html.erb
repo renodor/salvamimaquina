@@ -1,0 +1,7 @@
+<%= f.email_field :email, placeholder: t('spree.email'), class: 'login-input' %>
+<div id="password-credentials">
+  <%= f.password_field :password, placeholder: t('spree.password'), class: 'login-input' %>
+  <%= f.password_field :password_confirmation, placeholder: t('spree.confirm_password'), class: 'login-input' %>
+</div>
+
+<div data-hook="signup_below_password_fields"></div>
