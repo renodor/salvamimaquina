@@ -6,7 +6,7 @@
   <% end %>
 </div>
 <% if products.present? %>
-  <ul id="products" class="inline product-listing" data-hook>
+  <ul id="products" class="product-listing" data-hook>
     <% products.each do |product| %>
       <% cheapest_variant = product.cheapest_variant %>
       <li id="product_<%= product.id %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">

@@ -33,7 +33,11 @@ Rails.application.routes.draw do
 
   resource :account, controller: 'users'
 
-  resources :products, only: [:index, :show]
+  resources :products, only: [:index, :show] do
+    collection do
+      get :filter
+    end
+  end
 
   resources :autocomplete_results, only: :index
 
@@ -112,7 +116,7 @@ Rails.application.routes.draw do
   localized do
     get '/products/search_results', to: 'products#search_results'
   end
-  get '/products/filter', to: 'products#filter'
+
   get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
   get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
 

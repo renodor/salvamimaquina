@@ -1,0 +1,26 @@
+<!-- TODO: can be refacto in the same partial with color_filter, and model_filter -->
+<% capacity_filter = checkbox_product_filter('capacity') %>
+<% capacity_option_type = Spree::OptionType.find_by(name: 'capacity') %>
+<% if capacity_filter.present? %>
+  <div class="product-filter">
+    <div class="product-filter-content">
+      <h6 class="product-filter-title"><%= t('spree.capacity') %></h6>
+      <ul>
+        <% capacity_filter.each do |capacity, capacity_id| %>
+          <li>
+            <input type="checkbox"
+                    id="<%= capacity_id %>"
+                    name="<%= "search[with_option][#{capacity_option_type.id}][]" %>"
+                    value="<%= capacity_id %>"
+                    <%= params.dig(:search, :with_option, capacity_option_type.id.to_s)&.include?(capacity_id.to_s) ? "checked" : "" %>
+            />
+            <label class="product-filter-label" for="<%= capacity_id %>">
+              <span><%= capacity %></span>
+              <%= svg 'cross' %>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

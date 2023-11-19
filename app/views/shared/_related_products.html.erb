@@ -1,0 +1,36 @@
+<% if related_products.present? %>
+  <% related_products %>
+  <div id="related-products-container">
+    <h5><%= t('spree.related_products') %></h5>
+    <div id="related-products">
+      <% related_products.each do |related_product| %>
+        <% cheapest_variant = related_product.cheapest_variant %>
+        <div class="related-product">
+          <div>
+            <%= cl_image_tag_with_folder(
+              cheapest_variant.images.first&.attachment,
+              width: 160,
+              crop: :fill,
+              model: Spree::Image,
+              alt: related_product.name
+            ) %>
+          </div>
+          <div class="product-name"><%= related_product.name %></div>
+          <span class="prices">
+            <% cheapest_variant_is_on_sale = cheapest_variant.on_sale? %>
+            <% if cheapest_variant_is_on_sale %>
+              <span itemprop="price" content="<%= cheapest_variant.price %>">
+                <%= number_to_currency(cheapest_variant.price) %>
+              </span>
+            <% end %>
+            <span class="<%= cheapest_variant_is_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= cheapest_variant.original_price %>">
+              <%= number_to_currency(cheapest_variant.original_price) %>
+            </span>
+            <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
+          </span>
+          <%= link_to '', spree.product_path(related_product, taxon_id: @taxon.try(:id)), class: 'product-link full-absolute', itemprop: "name", title: related_product.name %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
