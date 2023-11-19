@@ -12,6 +12,10 @@ class OrdersController < StoreController
     authorize! :show, @order, cookies.signed[:guest_token]
   end
 
+  def edit
+    binding.pry
+  end
+
   private
 
   def accurate_title

@@ -129,6 +129,26 @@ Rails.application.routes.draw do
     post 'product_updated', to: 'products#product_updated'
   end
 
+  Spree::Core::Engine.routes.draw do
+    namespace :admin do
+      resources :sync_repair_shopr, only: %i[index new]
+      resources :reparation_categories, except: :show
+      resources :reparation_requests, only: %i[index show]
+      resources :banners, except: :show
+      resources :sliders do
+        resources :slides
+      end
+      resources :trade_in_models, only: %i[index] do
+        collection do
+          get :sync
+        end
+      end
+      resources :trade_in_requests, only: %i[index]
+
+      get '/documentation', to: 'documentation#index'
+    end
+  end
+
   # Sidekiq Web UI, only for admins.
   require 'sidekiq/web'
   authenticate :spree_user, ->(user) { user.admin? } do

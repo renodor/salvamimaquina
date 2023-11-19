@@ -31,7 +31,7 @@ Spree.config do |config|
   # Admin:
 
   # Custom logo for the admin
-  # config.admin_interface_logo = "logo/solidus.svg"
+  config.admin_interface_logo = 'logo-smm.png'
 
   # Gateway credentials can be configured statically here and referenced from
   # the admin. They can also be fully configured from the admin.
@@ -55,14 +55,13 @@ Spree::Backend::Config.configure do |config|
   # Uncomment and change the following configuration if you want to add
   # a new menu item:
   #
-  # config.menu_items << config.class::MenuItem.new(
-  #   label: :my_reports,
-  #   icon: 'file-text-o', # see https://fontawesome.com/v4/icons/
-  #   url: :my_admin_reports_path,
-  #   condition: -> { can?(:admin, MyReports) },
-  #   partial: 'spree/admin/shared/my_reports_sub_menu',
-  #   match_path: '/reports',
-  # )
+  config.menu_items << config.class::MenuItem.new(
+    label: :trade_in,
+    icon: 'money', # see https://fontawesome.com/v4/icons/
+    url: '/admin/trade_in_models',
+    condition: -> { current_spree_user&.has_spree_role?(:admin) },
+    partial: 'spree/admin/shared/trade_in_sub_menu'
+  )
 
   # Custom frontend product path
   #
@@ -74,7 +73,6 @@ end
 Spree::Api::Config.configure do |config|
   config.requires_authentication = true
 end
-
 
 # Rules for avoiding to store the current path into session for redirects
 # When at least one rule is matched, the request path will not be stored

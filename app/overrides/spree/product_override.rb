@@ -9,7 +9,7 @@ module Spree
       scope :descend_by_purchase_count, -> { order(purchase_count: :desc) }
       scope :ascend_by_available_on, -> { order(available_on: :asc) }
       scope :descend_by_available_on, -> { order(available_on: :desc) }
-      # scope :on_sale, -> { joins(variants_including_master: { prices: :active_sale_prices }).distinct }
+      scope :on_sale, -> { joins(variants_including_master: { prices: :active_sale_prices }).distinct }
       add_search_scope :with_option do |option_type_id, option_value_id| # option_value_id can be one single id or an array of ids, it works the same
         joins(:option_types, variants_including_master: :option_values)
           .where(option_types: { id: option_type_id }, option_values: { id: option_value_id })

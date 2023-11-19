@@ -1,28 +1,31 @@
 <!doctype html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <meta charset="utf-8">
-    <title><%= title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <%== meta_data_tags %>
-    <%= canonical_tag(current_store.url) %>
-    <%= csrf_meta_tags %>
-
-    <%= javascript_include_tag 'solidus_starter_frontend' %>
-    <%= stylesheet_link_tag 'solidus_starter_frontend', media: 'screen' %>
-
+    <%= render partial: 'shared/head' %>
+    <%= RailsCriticalCssServer::Rewrite.call self do %>
+      <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <% end %>
     <%= javascript_importmap_tags %>
-
-    <%= favicon_link_tag 'favicon.ico' %>
-    <%= yield :head %>
+    <%= Gon::Base.render_data %>
   </head>
-  <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-turbo="false">
-    <%= render 'layouts/header', taxons: @taxons, taxon: @taxon %>
-    <%= flash_messages %>
-    <%= render BreadcrumbsComponent.new(@taxon) %>
-    <main>
-      <%= yield %>
-    </main>
-    <%= render 'layouts/footer' %>
+  <body class="<%= body_class %> coucou" id="<%= @body_id || 'default' %>" data-turbo="false">
+    <div class="container">
+      <%= render partial: 'shared/header' %>
+
+      <div id="wrapper">
+        <%= render partial: 'shared/content_header' if content_for? :content_header %>
+        <div id="wrapper-content" class="<%= content_for?(:sidebar) ? 'sidebar-layout' : '' %>">
+          <%= render partial: 'shared/sidebar' if content_for? :sidebar %>
+          <div id="content" data-hook>
+            <%= render 'shared/flash' %>
+            <%= yield %>
+          </div>
+          <%= yield :templates %>
+        </div>
+      </div>
+    </div>
+    <%= render partial: 'shared/footer' %>
+    <%= render partial: 'shared/copyrights' %>
+    <%= render 'shared/whatsapp_widget' %>
   </body>
 </html>

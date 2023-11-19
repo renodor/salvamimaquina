@@ -68,8 +68,7 @@ module Spree
     # to use :active_sale_prices relation in order to be able to includes it in ActiveRecord queries and thus avoid N+1
     # and to avoid using Spree::DefaultPrice module
     def on_sale?
-      # prices&.take&.active_sale_prices.present?
-      false
+      prices&.take&.active_sale_prices.present?
     end
 
     def original_price
