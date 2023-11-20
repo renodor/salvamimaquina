@@ -21,7 +21,7 @@
               ) %>
             <% end %>
           </div>
-          <div id="thumbnails" data-hook>
+          <div id="thumbnails" data-controller="product-show-thumbnails">
             <%# @first_image will be defined only if product has no variants. If it has variants all will be defined by JS anyway %>
             <%= render 'thumbnails', first_image: @first_image %>
           </div>
@@ -63,7 +63,7 @@
   <meta itemprop="url" content="<%= request.original_url %>">
 
   <%=
-    render 'spree/shared/related_products',
+    render 'shared/related_products',
     related_products: @product.cross_sells.includes(
       variants_including_master: [
         { images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }

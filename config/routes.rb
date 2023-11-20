@@ -33,9 +33,14 @@ Rails.application.routes.draw do
 
   resource :account, controller: 'users'
 
-  resources :products, only: [:index, :show] do
-    collection do
-      get :filter
+  localized do
+    resources :products, only: [:index, :show] do
+      collection do
+        get :filter
+        get :search_results
+        get :product_variants_with_option_values
+        get :variant_with_options_hash
+      end
     end
   end
 
@@ -113,17 +118,8 @@ Rails.application.routes.draw do
 
   get '/fake_api_call/show_request', to: 'fake_api_calls#show_request'
 
-  localized do
-    get '/products/search_results', to: 'products#search_results'
-  end
-
-  get '/products/product_variants_with_option_values', to: 'products#product_variants_with_option_values'
-  get '/products/variant_with_options_hash', to: 'products#variant_with_options_hash'
-
   # Solidus Routes can't be localized using the localized block...
   # So we have to manually define the routes we want to translate here...
-  get '/productos', to: 'products#index', as: 'products_es_mx'
-  get '/productos/:id', to: 'products#show', as: 'product_es_mx'
   get '/carrito', to: 'orders#edit', as: 'cart_es_mx'
   get '/mi_cuenta', to: 'users#show', as: 'account_es_mx'
   get '/mi_cuenta/editar', to: 'users#edit', as: 'edit_account_es_mx'

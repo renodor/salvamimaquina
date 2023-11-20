@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-
 export default class extends Controller {
   connect() {
     const tradeInForm = document.querySelector('#trade-in-form form');
