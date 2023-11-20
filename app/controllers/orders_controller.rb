@@ -8,12 +8,9 @@ class OrdersController < StoreController
   before_action :store_guest_token
 
   def show
+    gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     @order = Spree::Order.find_by!(number: params[:id])
     authorize! :show, @order, cookies.signed[:guest_token]
-  end
-
-  def edit
-    binding.pry
   end
 
   private

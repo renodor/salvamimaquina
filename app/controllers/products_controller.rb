@@ -16,7 +16,7 @@ class ProductsController < StoreController
   end
 
   def show
-    @product = @products.friendly.find(params[:id])
+    @product = Spree::Product.friendly.find(params[:id])
     @variants = @product.variants.includes(prices: :active_sale_prices)
     @master = @product.master
     @current_variant = @product.variants.find_by(id: variant_params['variant_id'])
