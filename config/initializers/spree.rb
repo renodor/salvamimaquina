@@ -7,7 +7,9 @@ Spree.load_defaults '4.2.3'
 Spree.config do |config|
   # Core:
   # Default currency for new sites
-  config.currency = "USD"
+  config.currency = 'USD'
+
+  config.default_country_iso = 'PA'
 
   # Uncomment to stop tracking inventory levels in the application
   # config.track_inventory_levels = false
@@ -81,3 +83,6 @@ end
 # the class name:
 #
 # Spree::UserLastUrlStorer.rules << 'Spree::UserLastUrlStorer::Rules::AuthenticationRule'
+
+# Permit custom address attributes
+Spree::PermittedAttributes.address_attributes.push(:district_id, :latitude, :longitude)

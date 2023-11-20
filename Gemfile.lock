@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/renodor/solidus_related_products.git
+  revision: 5e725146745b010d77f779ed17b5d9645eafc841
+  branch: master
+  specs:
+    solidus_related_products (1.1.0)
+      deface (~> 1.0)
+      solidus_backend (>= 2.0.0, <= 4.2.3)
+      solidus_core (>= 2.0.0, <= 4.2.3)
+      solidus_support (~> 0.5)
+
+GIT
   remote: https://github.com/renodor/solidus_sale_prices.git
   revision: 636c9bb7e781c8734828ed3eef455f84200b7d10
   branch: master
@@ -621,6 +632,7 @@ DEPENDENCIES
   solidus (= 4.2.3)
   solidus_auth_devise (~> 2.5)
   solidus_i18n (~> 2.0)
+  solidus_related_products!
   solidus_sale_prices!
   solidus_support
   sprockets-rails

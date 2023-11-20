@@ -38,7 +38,7 @@ class ProductsController < StoreController
   # Then returns a hash of those variants Spree::OptionValue grouped by Spree::OptionType
   def product_variants_with_option_values
     product = Spree::Product.find(params[:product_id])
-    variant_ids = product.variants.has_option(OptionType.find(params[:selected_option_type]), OptionValue.find(params[:selected_option_value])).pluck(:id)
+    variant_ids = product.variants.has_option(Spree::OptionType.find(params[:selected_option_type]), Spree::OptionValue.find(params[:selected_option_value])).pluck(:id)
     render json: Spree::Variant.option_values_by_option_type(variant_ids)
   end
 

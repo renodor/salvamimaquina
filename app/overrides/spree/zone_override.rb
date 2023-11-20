@@ -3,7 +3,7 @@
 require 'active_support/concern'
 
 module Spree
-  module ZoneDecorator
+  module ZoneOverride
     extend ActiveSupport::Concern
 
     class_methods do

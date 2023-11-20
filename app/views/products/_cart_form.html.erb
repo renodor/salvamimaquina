@@ -1,9 +1,9 @@
-<%= form_for :order, url: cart_line_items_path, remote: true do |f| %>
+<%= form_for :order, url: cart_line_items_path, remote: true, authenticity_token: true, data: { controller: 'add-to-cart' } do |f| %>
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
     <%= hidden_field_tag :product_id, @product.id %>
     <% if @product_has_variant %>
       <% current_variant_option_values = @current_variant&.option_values || @product.cheapest_variant.option_values %>
-      <div id="product-variants">
+      <div id="product-variants" data-controller="product-show-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
           <% if option_type.name == 'model' %>
             <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name), class: 'display-none' %>
