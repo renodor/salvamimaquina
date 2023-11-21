@@ -46,10 +46,14 @@ class CartLineItemsController < StoreController
     else
       options_text = variant.options_text
       variant_full_name = options_text.present? ? "#{variant.product.name} - #{variant.options_text}" : variant.product.name
-      render json: {
-        variantName: variant_full_name,
-        quantity: quantity
-      }
+      # render json: {
+      #   variantName: variant_full_name,
+      #   quantity: quantity
+      # }
+
+      # respond_to do |format|
+      #   format.turbo_stream
+      # end
     end
   end
 
