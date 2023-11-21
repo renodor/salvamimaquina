@@ -49,6 +49,15 @@ Spree.config do |config|
   #   server: Rails.env.production? ? 'production' : 'test',
   #   test_mode: !Rails.env.production?
   # )
+
+  # Add custom shipping calculator
+  config.environment.calculators.shipping_methods << 'Spree::Calculator::Shipping::CustomShippingCalculator'
+
+  # Add custom payment method
+  config.environment.payment_methods << 'Spree::PaymentMethod::BacCreditCard'
+
+  # Add custom promotion rule
+  config.environment.promotions.rules << 'Spree::Promotion::Rules::ShippingMethod'
 end
 
 Spree::Backend::Config.configure do |config|

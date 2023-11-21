@@ -2,12 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
+    console.log('ici')
     const cartForm = document.querySelector('#cart-form form');
 
     // Listen on cart form ajax:success event (when a variant has successfully been added to cart), and:
     // - update the navbar cart counter
     // - display the add to cart modal with the variant name
     cartForm.addEventListener('ajax:success', (event) => {
+      debugger
       console.log('youhouuu')
       const payload = event.detail[0];
 
