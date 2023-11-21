@@ -6,6 +6,7 @@ class CartLineItemsController < StoreController
   respond_to :html
 
   before_action :store_guest_token
+  skip_before_action :verify_authenticity_token
 
   # Adds a new item to the order (creating a new order if none already exists)
   def create
