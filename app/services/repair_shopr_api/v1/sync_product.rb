@@ -58,7 +58,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
         # Edge case where we need to set a new master variant to a persisted product
         # (When parent_product is removed from an existing product)
-        if @product.persisted? && @variant != @product.master
+        if @product.persisted? && @product.master.present? && @variant != @product.master
           @product.master.update!(deleted_at: Date.current, is_master: false)
           @product.reload
         end
