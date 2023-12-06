@@ -45,15 +45,12 @@ class CartLineItemsController < StoreController
       }, status: 422
     else
       options_text = variant.options_text
-      variant_full_name = options_text.present? ? "#{variant.product.name} - #{variant.options_text}" : variant.product.name
+      @variant_full_name = options_text.present? ? "#{variant.product.name} - #{variant.options_text}" : variant.product.name
+      # redirect_to product_path(params[:product_id])
       # render json: {
       #   variantName: variant_full_name,
       #   quantity: quantity
       # }
-
-      # respond_to do |format|
-      #   format.turbo_stream
-      # end
     end
   end
 

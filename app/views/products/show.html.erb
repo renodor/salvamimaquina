@@ -71,25 +71,5 @@
     )
   %>
 
-  <!-- Add To Cart Modal -->
-  <div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="btn-close centered-flexbox" data-bs-dismiss="modal" aria-label="Close">
-            <%= svg 'cross' %>
-          </button>
-        </div>
-        <div class="modal-body">
-          <span id="variant-name"></span> <%= t('spree.added_to_your_cart') %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><%= t('spree.continue_shopping') %></button>
-          <%= link_to cart_es_mx_path, class: "btn btn-primary" do %>
-            <%= t('spree.see_cart') %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render "shared/add_to_cart_modal", variant_full_name: '', display_modal: false %>
 </div>
