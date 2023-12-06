@@ -8,7 +8,7 @@
     <%= javascript_importmap_tags %>
     <%= Gon::Base.render_data %>
   </head>
-  <body class="<%= body_class %> coucou" id="<%= @body_id || 'default' %>" data-turbo="false">
+  <body class="<%= body_class %>" id="<%= @body_id || 'default' %>">
     <div class="container">
       <%= render partial: 'shared/header' %>
 
