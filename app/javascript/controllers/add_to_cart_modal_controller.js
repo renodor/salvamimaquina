@@ -7,11 +7,9 @@ export default class extends Controller {
 
   connect() {
     if (this.displayModalValue) {
-      window.Modal = require('bootstrap/js/dist/modal');
-      // console.log(new Modal)
-      // new Modal(this.element).show();
+      const myModal = new bootstrap.Modal(this.element);
+      myModal.show();
     }
-    // console.log('ici')
     // const cartForm = document.querySelector('#cart-form form');
 
     // // Listen on cart form ajax:success event (when a variant has successfully been added to cart), and:

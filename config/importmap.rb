@@ -13,5 +13,4 @@ pin 'bootstrap', to: 'bootstrap.min.js', preload: true
 
 # Components
 pin_all_from 'app/javascript/components', under: 'components'
-
 pin '@hotwired/turbo-rails', to: 'turbo.min.js', preload: true
