@@ -1,11 +1,14 @@
-<% if flash.any? %>
-  <% flash.each do |type, message| %>
+<div id="flash">
+  <% flash.each do |flash_type, message| %>
     <%# flash['order_completed'] is called by Solidus when an order is complete,
     it is then used inside OrdersHelper#order_just_completed? method. It's not a real flash and we need to ignore it %>
-    <% next if type == 'order_completed' %>
+    <% next if flash_type == 'order_completed' %>
 
-    <%# We build flash through rails helpers (instead of normal html) so that we can easily build it in controllers and send it as JSON
-    when we need to add a flash to the DOM via JS after an ajax request (ex: OrdersControllerDecorator#populate) %>
-    <%= build_flash(type, message) %>
+    <div data-controller="flash" class="flash <%= flash_type %>">
+      <span><%= message %></span>
+      <div data-action="click->flash#remove">
+        <%= svg 'cross', class: 'close-flash' %>
+      </div>
+    </div>
   <% end %>
-<% end %>
+</div>

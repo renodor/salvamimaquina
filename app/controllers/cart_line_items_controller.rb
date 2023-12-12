@@ -27,23 +27,20 @@ class CartLineItemsController < StoreController
       @order.errors.add(:base, t('spree.please_enter_reasonable_quantity'))
     end
 
-    if @order.errors.any? || true
+    if @order.errors.any?
       # Not confident to display any order error on front end as it is (maybe not clear to understand)
       # so instead we display a generic error and send the real error to Sentry
-      Sentry.capture_message(
+      SendMessageToSentry.send(
         'Error when adding variant to cart',
         {
-          extra: {
-            errors: @order.errors.messages,
-            order: @order.as_json,
-            variant: variant.as_json
-          }
+          errors: @order.errors.messages,
+          order: @order.as_json,
+          variant: variant.as_json
         }
       )
 
-      render json: {
-        flash: helpers.build_flash('error', t('spree.cant_add_to_cart'))
-      }, status: 422
+      flash.now[:error] = t('spree.cant_add_to_cart')
+      render :create_error, status: :unprocessable_entity
     else
       options_text = variant.options_text
       @variant_full_name = options_text.present? ? "#{variant.product.name} - #{variant.options_text}" : variant.product.name
