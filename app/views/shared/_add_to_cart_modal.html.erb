@@ -1,4 +1,4 @@
-<%= turbo_frame_tag 'add-to-cart-modal' do %>
+<%= turbo_frame_tag 'add-to-cart-modal', target: '_top' do %>
   <div
     data-controller="add-to-cart-modal"
     data-add-to-cart-modal-display-modal-value="<%= display_modal %>"
@@ -20,7 +20,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><%= t('spree.continue_shopping') %></button>
-          <%= link_to cart_es_mx_path, class: "btn btn-primary" do %>
+          <%= link_to cart_path, class: "btn btn-primary" do %>
             <%= t('spree.see_cart') %>
           <% end %>
         </div>

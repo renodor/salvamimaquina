@@ -1,27 +1,24 @@
 <% @body_id = 'cart' %>
+<h1><%= t('spree.shopping_cart') %></h1>
 
-<article class="cart-page" data-controller="cart-page">
-  <% if @order.line_items.empty? %>
-    <%= render 'carts/cart_empty' %>
-  <% else %>
-    <%= form_for @order, url: cart_path, html: {
-      id: 'update-cart',
-      'data-cart-page-target': 'form',
-      'data-action': 'submit->cart-page#disableUpdateButton'
-    } do |order_form| %>
-      <% order = order_form.object %>
-      <%= render 'carts/cart_header', order_form: order_form %>
-      <%= render 'shared/error_messages', target: order %>
-      <%= render 'carts/cart_items', order_form: order_form %>
-      <%= render 'carts/cart_footer', order_form: order_form %>
-    <% end %>
-
-    <div class="cart-page__other-actions">
-      <%= render 'carts/cart_secondary_actions' %>
-
-      <div class="cart-page__coupon-code">
-        <%= render 'orders/coupon_code' %>
+<% if @order.line_items.empty? %>
+  <div data-hook="empty_cart">
+    <p><%= t('spree.your_cart_is_empty') %></p>
+    <p><%= link_to t('spree.continue_shopping'), products_es_mx_path, class: 'btn btn-primary' %></p>
+  </div>
+<% else %>
+  <div id="cart-content">
+    <%= form_for @order, url: cart_path, html: { id: 'update-cart' } do |order_form| %>
+      <div class="line-items" data-hook="cart_items">
+        <%= render 'shared/error_messages', target: order_form.object %>
+        <% order_form.object.line_items.includes(variant: [:product, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
+          <%= order_form.fields_for :line_items, line_item do |item_form| -%>
+            <%= render 'cart_item', line_item: line_item, static: false %>
+          <% end %>
+        <% end %>
       </div>
-    </div>
-  <% end %>
-</article>
+    <% end %>
+    <%= render 'checkouts/checkout_summary', order: @order, show_checkout_button: true %>
+  </div>
+<% end %>
+<%= render 'shared/related_products', related_products: @order.related_products %>

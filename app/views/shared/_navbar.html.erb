@@ -57,13 +57,11 @@
       <% end %>
     </div>
     <div>
-      <%= link_to cart_es_mx_path, class: 'nav-link navbar-cart-link' do %>
+      <%= link_to cart_path, class: 'nav-link navbar-cart-link' do %>
         <%= svg 'cart' %>
-        <span class="navbar-cart-quantity <%= current_order&.quantity.to_i == 0 ? 'display-none' : '' %>">
-          <%= turbo_frame_tag 'navbar-cart-quantity' do %>
-            <%= current_order&.quantity.to_i %>
-          <% end %>
-        </span>
+        <%= turbo_frame_tag 'navbar-cart-quantity' do %>
+          <%= render 'shared/navbar_cart_quantity', quantity: current_order&.quantity.to_i %>
+        <% end %>
       <% end %>
     </div>
   </div>
