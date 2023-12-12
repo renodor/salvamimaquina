@@ -21,6 +21,7 @@ class CartsController < StoreController
   end
 
   def update
+    binding.pry
     authorize! :update, @order, cookies.signed[:guest_token]
     if @order.contents.update_cart(order_params)
       @order.next if params.key?(:checkout) && @order.cart?
@@ -73,5 +74,4 @@ class CartsController < StoreController
       redirect_to(root_path) && return
     end
   end
-
 end

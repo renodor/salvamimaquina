@@ -46,7 +46,7 @@ Rails.application.routes.draw do
 
   resources :autocomplete_results, only: :index
 
-  resources :cart_line_items, only: :create
+  resources :cart_line_items, only: %i[create destroy]
 
   get '/locale/set', to: 'locale#set'
   post '/locale/set', to: 'locale#set', as: :select_locale
