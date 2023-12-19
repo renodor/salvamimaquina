@@ -5,17 +5,26 @@
 }
 
 input, textarea, select {
-  border-color: $light-gray!important;
+  border: 1px solid $light-gray!important;
   &:focus, &:active {
-    border-color: $green!important;
+    border: 1px solid $green!important;
   }
   &.error {
-    border-color: $red!important;
+    border: 1px solid $red!important;
+  }
+}
+
+.field {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  label {
+    margin-bottom: 5px;
   }
 }
 
 .field_with_errors input,
 .field_with_errors textarea,
 .field_with_errors select {
-  border-color: $red!important;
+  border: 1px solid $red!important;
 }

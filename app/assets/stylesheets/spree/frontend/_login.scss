@@ -16,6 +16,12 @@
       color: $green;
     }
   }
+
+  #remember-me {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
 }
 
 input.login-input {
@@ -23,6 +29,7 @@ input.login-input {
   padding: 15px;
   width: 100%;
   font-size: 16px;
+  border: 1px solid #d9d9db;
   &::placeholder {
     font-size: 16px;
   }

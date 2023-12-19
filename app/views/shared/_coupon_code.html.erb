@@ -1,0 +1,19 @@
+<div class="coupon-codes" data-hook='coupon_code'>
+  <% if @order.promotions.coupons.any? %>
+    <% @order.promotions.coupons.each do |promotion| %>
+      <div class="coupon-code">
+        <%= promotion.codes.first.value %>
+
+        <%= link_to svg('cross'), remove_order_coupon_codes_path(@order, promotion.codes.first.value), method: :delete %>
+      </div>
+    <% end %>
+  <% else %>
+    <%= form_with url: order_coupon_codes_path(@order, ), method: :post do |form| %>
+      <%= form.text_field :coupon_code, placeholder: t('spree.coupon_code') %>
+
+      <button type="submit" class="btn btn-secondary">
+        <%= svg 'plus' %>
+      </button>
+    <% end %>
+  <% end %>
+</div>

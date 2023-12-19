@@ -1,6 +1,5 @@
 // Packages
 @import 'bootstrap';
-// @import 'mapbox-gl/dist/mapbox-gl';
 // @import 'swiper/swiper.scss';
 
 // Config
@@ -71,6 +70,18 @@ h1 {
   margin-bottom: 30px;
 }
 
+p {
+  padding: 10px 0;
+}
+
+label {
+  vertical-align: middle;
+}
+
 #errorExplanation {
   display: none; // TODO: WARNING, don't hide that by default... But try to have better design of error explanations...
+}
+
+.row {
+  margin-bottom: 20px;
 }
