@@ -1,16 +1,15 @@
-<article class="checkout">
-  <%= render "shared/error_messages", target: @order %>
+<div id="checkout">
+  <%= render partial: 'spree/shared/error_messages', locals: { target: @order } %>
+
   <%= render "checkout_header" %>
 
-  <div class="checkout__main">
-    <section class="checkout__step">
+  <div id="checkout-content">
+    <div id="<%= @order.state %>-wrapper" class="checkout-details" data-hook="checkout_form_wrapper">
       <%= render "checkout_step", order: @order %>
-    </section>
-
-    <% if @order.state != "confirm" %>
-      <div class="checkout__summary">
-        <%= render "checkout_summary", order: @order %>
-      </div>
+    </div>
+    <% if @order.state != 'confirm' %>
+      <%= render 'checkout_summary', order: @order, show_checkout_button: false %>
     <% end %>
   </div>
-</article>
+  <%= render 'shared/related_products', related_products: @order.related_products %>
+</div>

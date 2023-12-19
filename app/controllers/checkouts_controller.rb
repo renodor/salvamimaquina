@@ -131,11 +131,16 @@ class CheckoutsController < CheckoutBaseController
   end
 
   def before_address
+    gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     @order.assign_default_user_addresses
     # If the user has a default address, the previous method call takes care
     # of setting that; but if he doesn't, we need to build an empty one here
     @order.bill_address ||= Spree::Address.build_default
     @order.ship_address ||= Spree::Address.build_default if @order.checkout_steps.include?('delivery')
+
+    # Set Panama as a default state and default city
+    @order.ship_address.state ||= Spree::State.find_by(name: 'Panamá')
+    @order.ship_address.city ||= 'Panamá'
   end
 
   def before_delivery

@@ -110,7 +110,7 @@ en:
         doc_reparations: 'Reparations'
         doc_repair_shopr: 'RepairShopr'
         doc_sliders: 'Sliders & Banners'
-    different_billing_address: 'If you need a different billing address please contact us;'
+    different_billing_address: 'If you need a different billing address please contact us.'
     missing_map_pin: 'Choose point on the map'
     choose_shipping_method: 'Choose shipping method'
     shipping_information: 'Shipping information'
