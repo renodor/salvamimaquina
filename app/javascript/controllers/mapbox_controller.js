@@ -32,7 +32,7 @@ export default class extends Controller {
     // When loading the page, call updateMap() if a point on the map has already been defined
     // (It happens if user select a point on the map, validates, and then comes back to the page)
     if (this.latitudeTarget.value && this.longitudeTarget.value) {
-      this.updateMap(latitude, longitude);
+      this.updateMap(this.latitudeTarget.value, this.longitudeTarget.value);
     }
 
     // Add en event listener on the area (corregimiento) input

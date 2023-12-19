@@ -154,6 +154,7 @@
       }
       #payment-methods {
         padding-left: 0;
+        list-style: none;
         .card_number, .card_code {
           display: flex;
           .has-tooltip {
@@ -166,6 +167,11 @@
             }
           }
         }
+      }
+    }
+    #address-wrapper {
+      .form-buttons {
+        margin-top: 32px;
       }
     }
     #checkout_form_payment {
