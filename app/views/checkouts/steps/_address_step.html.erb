@@ -1,4 +1,4 @@
-<div data-hook="shipping_fieldset_wrapper">
+<div>
   <fieldset id="shipping">
     <%= form.fields_for :ship_address do |ship_form| %>
       <%= render 'checkouts/steps/address_step/address_inputs', form: ship_form, address_type: 'shipping', address: @order.ship_address %>
@@ -12,9 +12,7 @@
   </fieldset>
 </div>
 
-<hr class="clear" />
-
-<div class="form-buttons" data-hook="buttons">
+<div class="form-buttons">
   <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary', data: { input: 'map_submit' } %>
 </div>
 <br>

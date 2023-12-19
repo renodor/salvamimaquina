@@ -16,23 +16,42 @@ class CheckoutsController < CheckoutBaseController
 
       assign_temp_address
 
-      unless transition_forward
-        redirect_on_failure
-        return
+      if @order.payments.present? && params[:payment_source]
+        payment = @order.payments.last
+
+        @html_form_3ds = payment.sale(params[:payment_source][payment.payment_method_id.to_s])
+        if @html_form_3ds
+          render :three_d_secure, layout: 'empty_layout'
+          return
+        end
       end
 
-      if @order.completed?
-        finalize_order
-      else
-        send_to_next_state
-      end
+      order_transition_and_completion_logic
 
     else
       render :edit
     end
   end
 
+  def three_d_secure_response
+    @payment.process_3ds_response(JSON.parse(params[:Response]))
+    order_transition_and_completion_logic
+  end
+
   private
+
+  def order_transition_and_completion_logic
+    unless transition_forward
+      redirect_on_failure
+      return
+    end
+
+    if @order.completed?
+      finalize_order
+    else
+      send_to_next_state
+    end
+  end
 
   def update_order
     Spree::OrderUpdateAttributes.new(@order, update_params, request_env: request.headers.env).apply
@@ -42,8 +61,10 @@ class CheckoutsController < CheckoutBaseController
     @order.temporary_address = !params[:save_user_address]
   end
 
+  # When there is an error with payment we don't want to display the specific payment gateway error that can be not comprehensible by the user
+  # So we just display the flash message with a generic "payment gateway" error, to indicate something went wrong with payment
   def redirect_on_failure
-    flash[:error] = @order.errors.full_messages.join("\n")
+    flash[:error] = @order.state == 'payment' ? t('spree.spree_gateway_error_flash_for_checkout') : @order.errors.full_messages.join("\n")
     redirect_to(checkout_state_path(@order.state))
   end
 
@@ -73,10 +94,16 @@ class CheckoutsController < CheckoutBaseController
   def update_params
     case params[:state].to_sym
     when :address
+      # We won't do a billing/shipping address distinction
+      # Users will only fill one address (shipping), which will automatically be set as the billing address as well
+      params[:order][:bill_address_attributes] = params[:order][:ship_address_attributes]
+
       massaged_params.require(:order).permit(
         permitted_checkout_address_attributes
       )
     when :delivery
+      equalize_shipments_shipping_methods if @order.shipments.size == 2
+
       massaged_params.require(:order).permit(
         permitted_checkout_delivery_attributes
       )
@@ -146,30 +173,33 @@ class CheckoutsController < CheckoutBaseController
   def before_delivery
     return if params[:order].present?
 
-    packages = @order.shipments.map(&:to_package)
+    packages = @order.shipments.includes(:stock_location, shipping_rates: %i[shipping_method taxes]).map(&:to_package)
     @differentiator = Spree::Stock::Differentiator.new(@order, packages)
+    @delivery_in_first_or_second_zone = @order.shipments.first.shipping_rates.any? do |shipping_rate|
+      shipping_rate.shipping_method.service_level == 'delivery' && [1, 2].include?(shipping_rate.shipping_method.code.to_i)
+    end
+    @free_shipping_threshold = Spree::Promotion::FREE_SHIPPING_THRESHOLD
   end
 
   def before_payment
-    if @order.checkout_steps.include? "delivery"
-      packages = @order.shipments.map(&:to_package)
-      @differentiator = Spree::Stock::Differentiator.new(@order, packages)
-      @differentiator.missing.each do |variant, quantity|
-        @order.contents.remove(variant, quantity)
-      end
+    return unless @order.checkout_steps.include? 'delivery'
+
+    packages = @order.shipments.includes(:stock_location).map(&:to_package)
+    @differentiator = Spree::Stock::Differentiator.new(@order, packages)
+    @differentiator.missing.each do |variant, quantity|
+      @order.contents.remove(variant, quantity)
     end
 
-    if spree_current_user && spree_current_user.respond_to?(:wallet)
-      @wallet_payment_sources = spree_current_user.wallet.wallet_payment_sources
-      @default_wallet_payment_source = @wallet_payment_sources.detect(&:default) ||
-                                       @wallet_payment_sources.first
-    end
+    # Will be needed if we want user to be able to save payment methods
+    # if spree_current_user && spree_current_user.respond_to?(:wallet)
+    #   @wallet_payment_sources = spree_current_user.wallet.wallet_payment_sources
+    #   @default_wallet_payment_source = @wallet_payment_sources.detect(&:default) ||
+    #                                    @wallet_payment_sources.first
+    # end
   end
 
   def order_params
-    params.
-      fetch(:order, {}).
-      permit(:email)
+    params.fetch(:order, {}).permit(:email)
   end
 
   # HACK: We can't remove `skip_state_validation?` as of now because it is
@@ -206,5 +236,16 @@ class CheckoutsController < CheckoutBaseController
     return order_path(@order) if spree_current_user
 
     token_order_path(@order, @order.guest_token)
+  end
+
+  # If the order have splitted packages (products shipped from Bella Vista and others from San Francisco), we don't want the user to see it and pay 2 shippings.
+  # So on front end we are displaying only the first package, and user will choose the shipping method of the first package only.
+  # In this method we make sure that, if there are 2 packages, the second one will have the same shipping method than the first one.
+  # (Because otherwise 2nd package will always have a default shipping method)
+  def equalize_shipments_shipping_methods
+    shipment_attributes = params[:order][:shipments_attributes]
+    first_shipment_shipping_method_id = Spree::ShippingRate.find(shipment_attributes['0'][:selected_shipping_rate_id]).shipping_method.id
+    second_shipment_corresponding_shipping_rate_id = Spree::Shipment.find(shipment_attributes['1'][:id]).shipping_rates.find_by(shipping_method_id: first_shipment_shipping_method_id).id
+    shipment_attributes['1'][:selected_shipping_rate_id] = second_shipment_corresponding_shipping_rate_id
   end
 end
