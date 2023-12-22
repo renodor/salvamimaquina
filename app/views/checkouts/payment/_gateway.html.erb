@@ -22,11 +22,12 @@
       id: 'card_expiry',
       class: "required cardExpiry",
       placeholder: "MM / YY",
+      maxLength: "7",
       type: "tel",
       required: true,
       data: {
         controller: 'credit-card-expiry-date',
-        action: 'creditCardExpiryDate#handleInput'
+        action: 'credit-card-expiry-date#handleInput:prevent'
       }
     %>
   </div>
