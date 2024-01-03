@@ -25,7 +25,6 @@ module PaymentGateway
       def request(http_method:, endpoint:, params: {})
         @response = client.public_send(http_method, endpoint, params)
 
-        binding.pry
         return JSON.parse(@response.body).symbolize_keys if @response.status == HTTP_OK_CODE
 
         raise error_class, "Code: #{@response.status}, response: #{@response.body}"

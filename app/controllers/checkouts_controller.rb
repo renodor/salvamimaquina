@@ -9,6 +9,7 @@ class CheckoutsController < CheckoutBaseController
   before_action :ensure_valid_payment
   before_action :check_registration
   before_action :setup_for_current_state
+  skip_before_action :verify_authenticity_token, only: :three_d_secure_response
 
   # Updates the order and advances to the next state (when possible.)
   def update
@@ -19,15 +20,14 @@ class CheckoutsController < CheckoutBaseController
       if @order.payments.present? && params[:payment_source]
         payment = @order.payments.last
 
-        @html_form_3ds = payment.sale(params[:payment_source][payment.payment_method_id.to_s])
+        @html_form_3ds = payment.sale!(params[:payment_source][payment.payment_method_id.to_s])
         if @html_form_3ds
-          render :three_d_secure, layout: 'empty_layout'
+          render :three_d_secure, layout: 'empty'
           return
         end
       end
 
       order_transition_and_completion_logic
-
     else
       render :edit
     end
@@ -247,5 +247,42 @@ class CheckoutsController < CheckoutBaseController
     first_shipment_shipping_method_id = Spree::ShippingRate.find(shipment_attributes['0'][:selected_shipping_rate_id]).shipping_method.id
     second_shipment_corresponding_shipping_rate_id = Spree::Shipment.find(shipment_attributes['1'][:id]).shipping_rates.find_by(shipping_method_id: first_shipment_shipping_method_id).id
     shipment_attributes['1'][:selected_shipping_rate_id] = second_shipment_corresponding_shipping_rate_id
+  end
+
+  # This method is executed before anything else when returning from 3DS
+  # indeed we already experienced silent errors during 3DS process:
+  # the guest_token was lost and solidus_auth_devise was redirecting users to registration page
+  # without any information on what happened to their orders or their payments...
+  # So when returning from 3DS:
+  # - we make sure that the order can be retrieved from from 3DS payload
+  # - if the order has an associated user, we make sure that this user is logged in
+  # - if the order has no associated user, we make sure that the guest token is present
+  # - + make sure to notify users and Sentry if something goes wrong
+  def retrieve_payment_order_and_user
+    payment_uuid = JSON.parse(params['Response'])['TransactionIdentifier']
+    @payment     = Spree::Payment.find_by(uuid: payment_uuid)
+    order        = @payment.order
+
+    if order.user && !spree_current_user
+      sign_in(order.user)
+    elsif !order.user && cookies.signed[:guest_token] != order.guest_token
+      cookies.signed[:guest_token] = Spree::Config[:guest_token_cookie_options].merge(
+        value: order.guest_token,
+        httponly: true
+      )
+    end
+  rescue ActiveRecord::RecordNotFound => e
+    Sentry.capture_exception(
+      e,
+      {
+        extra: {
+          info: 'Error returning from 3DSecure',
+          retrieved_payment_uuid: JSON.parse(params['Response'])['TransactionIdentifier'],
+          params: params['Response'].as_json
+        }
+      }
+    )
+    flash[:error] = t('spree.spree_gateway_error_3ds')
+    redirect_to cart_es_mx_path
   end
 end
