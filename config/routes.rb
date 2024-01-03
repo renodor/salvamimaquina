@@ -129,6 +129,8 @@ Rails.application.routes.draw do
     post 'product_updated', to: 'products#product_updated'
   end
 
+  post '/checkout/three_d_secure_response', to: 'checkouts#three_d_secure_response'
+
   Spree::Core::Engine.routes.draw do
     namespace :admin do
       resources :sync_repair_shopr, only: %i[index new]

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CheckoutBaseController < StoreController
+  before_action :retrieve_payment_order_and_user, only: :three_d_secure_response
   before_action :load_order
   around_action :lock_order
 

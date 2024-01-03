@@ -22,8 +22,6 @@ module Spree
           name: source[:name]
         }
       ).call
-      
-      binding.pry
 
       active_merchant_response(
         response[:success],
@@ -37,7 +35,7 @@ module Spree
     end
 
     def handle_3ds_response(response)
-      authentication_status = response['RiskManagement']['ThreeDSecure']['AuthenticationStatus']
+      authentication_status = response.dig('RiskManagement', 'ThreeDSecure', 'AuthenticationStatus')
       iso_response_code     = response['IsoResponseCode']
 
       active_merchant_response(
