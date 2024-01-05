@@ -6,6 +6,10 @@
     &.active {
       font-weight: bold;
     }
+
+    &:hover {
+      background-color: white;
+    }
   }
 }
 

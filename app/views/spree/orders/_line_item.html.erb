@@ -1,45 +1,47 @@
 <% variant = line_item.variant -%>
-<div class="line-item" data-id="<%= line_item.id %>">
-  <div class="line-item-image" data-hook="cart_item_image">
-    <%= cl_image_tag_with_folder(
-      variant.images.first&.attachment || variant.product.gallery.images.first&.attachment,
-      height: 150,
-      crop: :fit,
-      model: Spree::Image,
-      alt: "#{variant.product.name} - #{variant.options_text}"
-    ) %>
-  </div>
-  <div class="line-item-description" data-hook="cart_item_description">
-    <h4><%= link_to line_item.name, product_path(variant.product) %></h4>
-    <% if variant.option_values.any? %>
-      <p><%= variant.options_text %></p>
-    <% end %>
-    <% if params[:action] != 'show' && line_item.insufficient_stock? %>
-      <span class="out-of-stock">
-        <%= t('spree.not_enough_stock') %>&nbsp;&nbsp;<br />
-      </span>
-    <% end %>
-    <!-- <span class="line-item-description" data-hook="line_item_description"> -->
-      <%#= line_item_description_text(line_item.description) %>
-    <!-- </span> -->
-    <p class="line-item-quantity" data-hook="cart_item_quantity">
-      <%= t('spree.quantity') %>: <%= line_item.quantity %>
-      <%#= item_form.number_field :quantity, min: 0, class: "line_item_quantity", size: 5 %>
-    </p>
-    <p class="line-item-total" data-hook="cart_item_total">
-      <%= number_to_currency(line_item.amount) unless line_item.quantity.nil? %>
-      <% if line_item.variant.on_sale? %>
-        <span class="line-item-original-price crossed"><%= number_to_currency(line_item.variant.original_price) %></span>
+<% if variant %>
+  <div class="line-item" data-id="<%= line_item.id %>">
+    <div class="line-item-image" data-hook="cart_item_image">
+      <%= cl_image_tag_with_folder(
+        variant.images.first&.attachment || variant.product.gallery.images.first&.attachment,
+        height: 150,
+        crop: :fit,
+        model: Spree::Image,
+        alt: "#{variant.product.name} - #{variant.options_text}"
+      ) %>
+    </div>
+    <div class="line-item-description" data-hook="cart_item_description">
+      <h4><%= link_to line_item.name, product_path(variant.product) %></h4>
+      <% if variant.option_values.any? %>
+        <p><%= variant.options_text %></p>
       <% end %>
-    </p>
-    <% unless static %>
-      <span class="delete-line-item">
-        <%= link_to frontend_line_item_path(@order.id, line_item.id), method: :delete do %>
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-          </svg>
+      <% if params[:action] != 'show' && line_item.insufficient_stock? %>
+        <span class="out-of-stock">
+          <%= t('spree.not_enough_stock') %>&nbsp;&nbsp;<br />
+        </span>
+      <% end %>
+      <!-- <span class="line-item-description" data-hook="line_item_description"> -->
+        <%#= line_item_description_text(line_item.description) %>
+      <!-- </span> -->
+      <p class="line-item-quantity" data-hook="cart_item_quantity">
+        <%= t('spree.quantity') %>: <%= line_item.quantity %>
+        <%#= item_form.number_field :quantity, min: 0, class: "line_item_quantity", size: 5 %>
+      </p>
+      <p class="line-item-total" data-hook="cart_item_total">
+        <%= number_to_currency(line_item.amount) unless line_item.quantity.nil? %>
+        <% if line_item.variant.on_sale? %>
+          <span class="line-item-original-price crossed"><%= number_to_currency(line_item.variant.original_price) %></span>
         <% end %>
-      </span>
-    <% end %>
+      </p>
+      <% unless static %>
+        <span class="delete-line-item">
+          <%= link_to frontend_line_item_path(@order.id, line_item.id), method: :delete do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          <% end %>
+        </span>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
