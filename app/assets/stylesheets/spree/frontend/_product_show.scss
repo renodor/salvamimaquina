@@ -11,9 +11,11 @@
         #main-image {
           border: none;
           padding: 30px;
+          text-align: center;
           img {
             min-height: 0;
-            max-height:474px;
+            max-height: 474px;
+            max-width: 100%;
           }
         }
         #thumbnails {
@@ -39,6 +41,8 @@
       #product-description {
         .product-title {
           border-bottom: none;
+          margin-bottom: 15px;
+          font-size: 24px;
         }
         #product-variants {
           margin-bottom: 30px;
@@ -66,6 +70,7 @@
           .price {
             font-weight: 400;
             padding: 0 5px 0 0;
+            font-size: 20px;
             &.crossed {
               font-size: 15px;
               font-weight: 300;
@@ -75,6 +80,7 @@
         .add-to-cart {
           display: flex;
           column-gap: 10px;
+          margin-top: 15px;
           #add-to-cart-btn {
             width: 140px;
           }

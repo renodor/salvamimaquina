@@ -82,21 +82,31 @@
       </div>
 
       <div class="add-to-cart">
-        <div class="quantity-selector">
+        <div class="quantity-selector" data-controller="quantity-selector">
           <% master_stock = @master.total_on_hand %>
           <div class="quantity-selector-triggers">
-            <span class="<%= master_stock <= 1 ? 'disabled' : '' %>" data-type="add">
+            <span
+              data-action="click->quantity-selector#addQuantity"
+              data-quantity-selector-target="addQuantity"
+              data-type="add"
+              class="<%= master_stock <= 1 ? 'disabled' : '' %>"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
               </svg>
             </span>
-            <span class="disabled" data-type="remove">
+            <span
+              data-action="click->quantity-selector#removeQuantity"
+              data-quantity-selector-target="removeQuantity"
+              data-type="remove"
+              class="disabled"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
               </svg>
             </span>
           </div>
-          <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', data: { total_stock: master_stock } %>
+          <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', data: { total_stock: master_stock, "quantity-selector-target": "quantityInput" } %>
         </div>
         <% if @master.can_supply? %>
           <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
