@@ -59,6 +59,10 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  # Preview email in the browser 
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
@@ -68,5 +72,5 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  config.hosts << '3e47-92-150-24-143.ngrok-free.app'
+  config.hosts << 'f69f-2a02-842a-f751-4c01-56f9-34d1-48bc-103c.ngrok-free.app'
 end

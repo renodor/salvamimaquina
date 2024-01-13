@@ -13,7 +13,7 @@
         <%= render 'shared/error_messages', target: order_form.object %>
         <% order_form.object.line_items.includes(variant: [:product, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
           <%= order_form.fields_for :line_items, line_item do |item_form| -%>
-            <%= render 'cart_item', line_item: line_item, static: false %>
+            <%= render 'orders/line_item', line_item: line_item, static: false %>
           <% end %>
         <% end %>
       </div>

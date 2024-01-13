@@ -1,32 +1,13 @@
-<article class="auth-container" id="edit-account">
-  <h1><%= I18n.t('spree.editing_user') %></h1>
+<%= render partial: 'shared/error_messages', locals: { target: @user } %>
 
-  <%= render 'shared/error_messages', target: @user %>
-
-  <%= form_for @user do |f| %>
-    <div class="auth-form__input-wrapper">
-      <div class="text-input">
-        <%= f.label :email, "#{t("spree.email")}:" %>
-        <%= f.email_field :email %>
-      </div>
-    </div>
-
-    <div class="auth-form__input-wrapper">
-      <div class="text-input">
-        <%= f.label :password, "#{t("spree.password")}:" %>
-        <%= f.password_field :password %>
-      </div>
-    </div>
-
-    <div class="auth-form__input-wrapper">
-      <div class="text-input">
-        <%= f.label :password_confirmation, "#{t("spree.confirm_password")}:" %>
-        <%= f.password_field :password_confirmation %>
-      </div>
-    </div>
-
-    <div class="auth-form__input-wrapper">
-      <%= f.button t("spree.update"), name: :commit, class: 'button-primary button-primary--full-width' %>
-    </div>
-  <% end %>
-</article>
+<div>
+  <h1><%= t('spree.edit_my_account') %></h1>
+  <div>
+    <%= form_for Spree::User.new, as: @user, url: user_path(@user), method: :put do |f| %>
+      <%= render partial: 'shared/user_form', locals: { f: f } %>
+      <p>
+        <%= f.submit t('spree.update').upcase, class: 'btn btn-primary large' %>
+      </p>
+    <% end %>
+  </div>
+</div>

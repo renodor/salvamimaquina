@@ -47,6 +47,8 @@ module SmmUpdated
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    config.active_job.queue_adapter = :sidekiq
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
@@ -59,5 +61,7 @@ module SmmUpdated
     config.generators.system_tests = nil
 
     config.action_view.form_with_generates_remote_forms = true
+
+    config.i18n.default_locale = 'es-MX'
   end
 end

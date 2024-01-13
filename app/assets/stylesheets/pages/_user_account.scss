@@ -17,9 +17,10 @@
     margin-bottom: 0;
     flex-grow: 1;
   }
-  a {
+  .logout-btn {
     color: $gray;
     border: 1px solid $gray;
+    background-color: white;
     text-decoration: none;
     padding: 2px 10px;
     @include default-transition(color, border-color);
