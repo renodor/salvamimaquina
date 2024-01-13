@@ -1,19 +1,17 @@
-<div>
-  <fieldset id="shipping">
-    <%= form.fields_for :ship_address do |ship_form| %>
-      <%= render 'checkouts/steps/address_inputs', form: ship_form, address_type: 'shipping', address: @order.ship_address %>
+<div id="edit-user-address">
+  <h1><%= t('spree.edit_my_address') %></h1>
+  <div>
+    <%= form_for @address, url: account_update_user_address_path, method: :put do |ship_form| %>
+      <%= render 'checkouts/steps/address_inputs', form: ship_form, address_type: 'shipping', address: @address %>
       <div data-controller="mapbox">
         <%= ship_form.hidden_field :latitude, data: { input: 'address_latitude', 'mapbox-target' => 'latitude' } %>
         <%= ship_form.hidden_field :longitude, data: { input: 'address_longitude', 'mapbox-target' => 'longitude' } %>
         <div id="missing-map-pin" class=""><%= t('spree.missing_map_pin') %></div>
         <div data-mapbox-target="map" id="map" style="width: 100%; height: 600px;" >
       </div>
+      <p>
+        <%= ship_form.submit t('spree.update').upcase, class: 'btn btn-primary', data: { input: 'map_submit' } %>
+      </p>
     <% end %>
-  </fieldset>
+  </div>
 </div>
-
-<div class="form-buttons">
-  <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary', data: { input: 'map_submit' } %>
-</div>
-<br>
-<small><%= t('spree.different_billing_address') %></small>

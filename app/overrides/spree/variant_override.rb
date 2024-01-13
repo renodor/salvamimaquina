@@ -5,7 +5,7 @@ module Spree
     extend ActiveSupport::Concern
 
     prepended do
-      validates :repair_shopr_id, uniqueness: true, allow_nil: true
+      validates :repair_shopr_id, uniqueness: { conditions: -> { where(deleted_at: nil) } }, allow_nil: true
       enum condition: { original: 0, refurbished: 1 }
     end
 

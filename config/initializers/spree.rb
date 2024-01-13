@@ -58,6 +58,9 @@ Spree.config do |config|
 
   # Add custom promotion rule
   config.environment.promotions.rules << 'Spree::Promotion::Rules::ShippingMethod'
+
+  # Set our own custom Order mailer
+  config.order_mailer_class = 'OrderCustomMailer'
 end
 
 Spree::Backend::Config.configure do |config|

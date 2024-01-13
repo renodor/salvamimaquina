@@ -60,6 +60,8 @@ en:
     address: 'Address'
     my_address: 'My address'
     no_address: 'You have no saved address yet.'
+    my_profile: 'My profile'
+    my_orders: 'My orders'
     create_address: 'Create address'
     edit_my_address: 'Edit my address'
     edit_my_account: 'Edit my account'
@@ -131,12 +133,13 @@ en:
     spree_gateway_error_flash_for_checkout: "There were an issue with your payment information. Please review it and try again."
     spree_gateway_error_3ds: "There were an issue processing your order. Your credit card was not debited. Please try again later, if the probleme remains contact Salva Mi Máquina."
     thank_you_for_your_order: "Thank you for your order!"
-    order_mailer:
+    order_custom_mailer:
       confirm_email:
         see_on_map: 'See on the map'
         disclaimer: 'Important: If you are not present at delivery, we will call the phone number attached to your order.'
         new_ecommerce_order: 'New order on salvamimaquina.com'
         client_pickup_in_store: 'El cliente viene a recoger el pedido en la tienda de %{store_name}'
+        subject: 'Order confirmation'
     search_result: 'Search results for %{keyword}'
     search_results:
       zero: 'No search results for'

@@ -1,35 +1,92 @@
-<div class="order-details">
-  <div class="order-details__info">
-    <% if order.has_checkout_step?("delivery") %>
-      <%= render(
-        'orders/address_overview',
-        address: order.ship_address,
-        title: t('spree.shipping_address')
-      ) %>
+<% if order.has_checkout_step?('address') && order.has_checkout_step?('delivery') %>
+  <% shipping_method = order.shipments.includes(shipping_rates: :shipping_method).first.shipping_method %>
+  <% order_with_delivery = shipping_method.service_level == 'delivery' %>
+<% end %>
 
-      <%= render(
-        'orders/order_shipments',
-        order: order,
-        title: t('spree.shipments')
-      ) %>
+<div class="order-steps <%= order_with_delivery ? 'three-steps' : 'two-steps' %>">
+  <% if shipping_method %>
+    <% if order_with_delivery %>
+      <div class="order-step" data-hook="order-ship-address">
+        <h6>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+          </svg>
+          <%= t('spree.shipping_address') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:address) unless order.completed? %>
+        </h6>
+        <%= render partial: 'shared/address', locals: { address: order.ship_address } %>
+      </div>
     <% end %>
 
-    <% if order.has_checkout_step?("address") %>
-      <%= render(
-        'orders/address_overview',
-        address: order.bill_address,
-        title: t('spree.billing_address')
-      ) %>
-    <% end %>
+    <div class="order-step" data-hook="order-shipment">
+      <div class="delivery">
+        <% if order_with_delivery %>
+          <h6>
+            <i class='fa fa-truck'></i> <%= t('spree.shipment') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:delivery) unless order.completed? %>
+          </h6>
+          <%= t('spree.shipping_methods.delivery_zone', zone_number: shipping_method.code) %>
+        <% else %>
+          <h6>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+            </svg>
+            <%= t('spree.shipment') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:delivery) unless order.completed? %>
+          </h6>
+            <span>
+              <%= t('spree.shipping_methods.pickup_in_store', store_name: shipping_method.admin_name) %>:
+              <%= link_to t('spree.address'), shipping_method.google_map_link, target: '_blank' %>
+            </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 
-    <% if order.has_checkout_step?("payment") %>
-      <%= render(
-        'orders/payment_info',
-        order: order
-      ) %>
-    <% end %>
-  </div>
-
-  <%= render 'orders/order_items', order: order %>
-  <%= render 'orders/line_items', order: order %>
+  <% if order.has_checkout_step?("payment") %>
+    <div class="order-step">
+      <h6>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
+          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0V4zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7H0zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1z"/>
+        </svg>
+        <%= t('spree.payment_information') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:payment) unless order.completed? %>
+      </h6>
+      <div class="payment-info">
+        <% source = order.payments.completed.valid.last.source %>
+        <% if source.is_a?(Spree::CreditCard) %>
+          <span class="cc-type">
+            <% unless (cc_type = source.cc_type).blank? %>
+              <%= svg "#{cc_type}.svg" %>
+            <% end %>
+            <% if source.last_digits %>
+              <%= t('spree.ending_in') %> <%= source.last_digits %>
+            <% end %>
+          </span>
+          <br />
+          <span class="full-name"><%= source.name %></span>
+        <% elsif source.is_a?(Spree::StoreCredit) %>
+          <%= content_tag(:span, payment.payment_method.name) %>:
+          <%= content_tag(:span, payment.display_amount) %>
+        <% else %>
+          <%= content_tag(:span, payment.payment_method.name) %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
+<% if order_with_delivery %>
+  <div
+    id="static-map"
+    data-controller="mapbox-static"
+    style="width: 100%; height: 300px;"
+    data-mapbox-static-latitude-value="<%= order.ship_address.latitude %>"
+    data-mapbox-static-longitude-value="<%= order.ship_address.longitude %>"
+  >
+  </div>
+<% else %>
+  <div
+    id="static-map"
+    data-controller="mapbox-static"
+    style="width: 100%; height: 300px;"
+    data-mapbox-static-latitude-value="<%= shipping_method.latitude %>"
+    data-mapbox-static-longitude-value="<%= shipping_method.longitude %>"
+  >
+  </div>
+<% end %>

@@ -5,6 +5,7 @@
     <span class="checkout-summary-element"><%= order.item_count %> <%= t('spree.product', count: order.item_count) %></span>
     <span class="checkout-summary-element"><%= order.display_item_total.to_html %></span>
   </div>
+
   <%# Taxes %>
   <% order.all_adjustments.nonzero.tax.eligible.group_by(&:label).each do |label, adjustments| %>
     <div class="checkout-summary-line">
@@ -12,6 +13,8 @@
       <span class="checkout-summary-element"><%= number_to_currency(adjustments.sum(&:amount)) %></span>
     </div>
   <% end %>
+
+  <%# Shipping %>
   <% if order.passed_checkout_step?("delivery") && order.shipments.any? %>
     <%# Shipping price %>
     <div class="checkout-summary-line" data-hook="shipping_total">
@@ -19,30 +22,31 @@
       <span class="checkout-summary-element"><%= number_to_currency(order.shipments.to_a.sum(&:cost)) %></span>
     </div>
 
-    <%# Shipping Promotion(s) data-hook="order_details_shipment_promotion_adjustments"%>
     <% if order.shipment_adjustments.nonzero.exists? %>
       <% order.shipment_adjustments.nonzero.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
-        <div class="checkout-summary-line">
+       <div class="checkout-summary-line">
           <span class="checkout-summary-element"><%= label %></span>
           <span class="checkout-summary-element"><%= number_to_currency(adjustments.sum(&:amount)) %></span>
         </div>
       <% end %>
     <% end %>
   <% end %>
+
   <%# Promotion(s) %>
-  <% if order.adjustments.nonzero.eligible.exists? %>
-    <% order.adjustments.nonzero.eligible.each do |adjustment| %>
-    <% next if (adjustment.source_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
+  <% if order.line_item_adjustments.nonzero.exists? %>
+    <% order.line_item_adjustments.nonzero.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
       <div class="checkout-summary-line">
-        <span class="checkout-summary-element"><%= adjustment.label %></span>
-        <span class="checkout-summary-element"><%= number_to_currency(adjustment.amount) %></span>
+        <span class="checkout-summary-element"><%= label %></span>
+        <span class="checkout-summary-element"><%= number_to_currency(adjustments.amount) %></span>
       </div>
     <% end %>
   <% end %>
+
   <div class="checkout-summary-line">
     <span class="checkout-summary-element"><strong><%= t('spree.order_total').upcase %></strong></span>
     <span class="checkout-summary-element" id='summary-order-total'><strong><%= order.display_order_total_after_store_credit.to_html %></strong></span>
   </div>
+
   <% if show_checkout_button %>
     <%= button_tag class: 'btn btn-primary w-100 checkout-button', name: 'checkout', form: 'update-cart' do %>
       <%= t('spree.checkout').upcase %>
