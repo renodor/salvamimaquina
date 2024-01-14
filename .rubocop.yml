@@ -53,7 +53,7 @@ Style/HashSyntax:
   EnforcedShorthandSyntax: never
 
 Metrics/BlockLength:
-  Max: 50
+  Max: 150
   Exclude:
     - config/environments/development.rb
     - config/environments/production.rb

@@ -1,0 +1,45 @@
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb('Synchronize Ecommerce with RepairShopr') %>
+
+<h4>Synchronize Ecommerce with Repair Shopr</h4>
+<p>(products, product images, and product categories)</p>
+<%= link_to "SYNCHRONIZE", new_admin_sync_repair_shopr_path, class: 'btn btn-primary' %>
+
+<hr />
+
+<h2>Sync History</h2>
+<table>
+   <thead>
+      <tr>
+        <th>Status</th>
+         <th>Date</th>
+         <th>Synced Products</th>
+         <th>Deleted Products</th>
+         <th>Synced Product Images</th>
+         <th>Deleted Product Images</th>
+         <th>Synced Product Categories</th>
+         <th>Deleted Product Categories</th>
+         <th>Sync Errors</th>
+      </tr>
+   </thead>
+   <tbody>
+    <% @sync_logs.each do |sync_log| %>
+      <div>
+        <tr>
+          <td><span class="pill pill-<%= sync_log.status %>"><%= sync_log.status %></span></td>
+          <td><%= sync_log.created_at.in_time_zone('Bogota').strftime("%d/%m/%Y - %H:%M:%S") %></td>
+          <td><%= sync_log.synced_products %></td>
+          <td><%= sync_log.deleted_products %></td>
+          <td><%= sync_log.synced_product_images %></td>
+          <td><%= sync_log.deleted_product_images %></td>
+          <td><%= sync_log.synced_product_categories %></td>
+          <td><%= sync_log.deleted_product_categories %></td>
+          <td><%= sync_log.sync_errors.presence %></td>
+        </tr>
+      </div>
+    <% end %>
+   </tbody>
+</table>
+
+<%= paginate @sync_logs, theme: "solidus_admin" %>

@@ -124,9 +124,6 @@ gem 'sentry-ruby'
 # Image storage
 gem 'cloudinary', '~> 1.28'
 
-# Pass env variables to JS
-gem 'gon'
-
 gem 'sidekiq'
 gem 'sidekiq-failures', '~> 1.0'
 

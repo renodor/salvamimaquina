@@ -1,0 +1,14 @@
+<h1>Reparation information</h2>
+<p><b>Date</b> <%= @reparation_request.created_at.strftime("%d %b %Y") %></p>
+<p><b>Product type:</b> <%= @reparation_request.reparation_category.name %></p>
+<p><b>Product:</b> <%= @reparation_request.product %></p>
+<p><b>Damage:</b> <%= @reparation_request.damage %></p>
+<p><b>Comment:</b> <%= @reparation_request.comment %></p>
+<br />
+<hr>
+<br />
+<h1>Client information</h2>
+<p><b>Name:</b> <%= @reparation_request.name %></p>
+<p><b>Phone:</b> <%= @reparation_request.phone %></p>
+<p><b>Email</b> <%= @reparation_request.email %></p>
+<p><b>Shop:</b> <%= @reparation_request.shop.tr('_', ' ').titleize %></p>

@@ -10,7 +10,6 @@
       <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <% end %>
     <%= javascript_importmap_tags %>
-    <%= Gon::Base.render_data %>
   </head>
   <body id="<%= @body_id || 'default' %>" data-hook="body">
     <div class="container">

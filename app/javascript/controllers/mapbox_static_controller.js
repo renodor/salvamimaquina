@@ -4,14 +4,15 @@ import mapboxgl from 'mapbox-gl'
 export default class extends Controller {
   static values = {
     latitude: Number,
-    longitude: Number
+    longitude: Number,
+    token: String
   }
 
   connect() {
     // Shown on the confirmation page when displaying the shipping address
 
     // initialize a mapbox map with shipping address coordinate
-    mapboxgl.accessToken = gon.mapbox_api_key;
+    mapboxgl.accessToken = this.tokenValue
     this.map = new mapboxgl.Map({
       container: 'static-map', // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL

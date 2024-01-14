@@ -1,0 +1,17 @@
+<h1>Payment ERROR on www.salvamimaquina.com</h1>
+
+<h2><b style="color: red;">!!! Warning this is an important message !!!</b></h2>
+
+<p>A customer did a purchase on www.salvamimaquina.com but the corresponding payment couldn't be created correctly on RepairShopr.</p>
+<p>Please contact the customer to make sure its purchase is complete and its payment has been confirmed.</p>
+<p>Then check RepairShopr payments and manualy create or update payment if needed.</p>
+
+<b>Payment Information</b>:
+<ul>
+  <li>amount (in cents): <%= @invoice['total'].to_f * 100 %></li>
+  <li>invoice number: <%= @invoice['number'] %></li>
+  <li>invoice id: <%= @invoice['id'] %></li>
+  <li>date: <%= @invoice['date'] %></li>
+  <li>payment method: <%= 'Credit Card' %></li>
+  <li>customer id: <%= @invoice['customer_id'] %></li>
+</ul>
