@@ -158,7 +158,6 @@ class CheckoutsController < CheckoutBaseController
   end
 
   def before_address
-    gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
     @order.assign_default_user_addresses
     # If the user has a default address, the previous method call takes care
     # of setting that; but if he doesn't, we need to build an empty one here

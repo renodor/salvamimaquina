@@ -3,12 +3,16 @@ import mapboxgl from 'mapbox-gl'
 
 export default class extends Controller {
   static targets = ['map', 'latitude', 'longitude']
+  static values = {
+    token: String
+  }
 
   connect() {
     // Shown on the address page when defining shipping address
 
     // initialize a mapbox map in the center of Panama City
-    mapboxgl.accessToken = gon.mapbox_api_key;
+    mapboxgl.accessToken = this.tokenValue
+    console.log(this.apiKeyValue)
     this.map = new mapboxgl.Map({
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL

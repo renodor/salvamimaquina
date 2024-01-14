@@ -3,7 +3,6 @@
 class UsersController < StoreController
   skip_before_action :set_current_order, only: :show, raise: false
   prepend_before_action :authorize_actions, only: :new
-  before_action :send_mapbox_api_key_to_gon
 
   include Taxonomies
 
@@ -81,10 +80,6 @@ class UsersController < StoreController
   def load_object
     @user ||= Spree::User.find_by(id: spree_current_user&.id)
     authorize! params[:action].to_sym, @user
-  end
-
-  def send_mapbox_api_key_to_gon
-    gon.mapbox_api_key = Rails.application.credentials.mapbox_api_key
   end
 
   def authorize_actions

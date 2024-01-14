@@ -69,13 +69,95 @@ Spree::Backend::Config.configure do |config|
   # Uncomment and change the following configuration if you want to add
   # a new menu item:
   #
-  config.menu_items << config.class::MenuItem.new(
-    label: :trade_in,
-    icon: 'money', # see https://fontawesome.com/v4/icons/
-    url: '/admin/trade_in_models',
-    condition: -> { current_spree_user&.has_spree_role?(:admin) },
-    partial: 'spree/admin/shared/trade_in_sub_menu'
-  )
+  config.menu_items += [
+    config.class::MenuItem.new(
+      label: :trade_in,
+      icon: 'money', # see https://fontawesome.com/v4/icons/
+      url: '/admin/trade_in_models',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      partial: 'spree/admin/shared/sub_menus/trade_in',
+      children: [
+        config.class::MenuItem.new(
+          label: :trade_in_models,
+          match_path: '/admin/trade_in_models'
+        ),
+        config.class::MenuItem.new(
+          label: :trade_in_requests,
+          match_path: '/admin/trade_in_requests'
+        )
+      ]
+    ),
+    config.class::MenuItem.new(
+      label: :reparations,
+      icon: 'laptop',
+      url: '/admin/reparation_categories',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      partial: 'spree/admin/shared/sub_menus/reparations',
+      children: [
+        config.class::MenuItem.new(
+          label: :reparation_categories,
+          match_path: '/admin/reparation_categories'
+        ),
+        config.class::MenuItem.new(
+          label: :reparation_requests,
+          match_path: '/admin/reparation_requests'
+        )
+      ]
+    ),
+    config.class::MenuItem.new(
+      label: :sync_repair_shopr,
+      icon: 'refresh',
+      url: '/admin/sync_repair_shopr',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+    ),
+    config.class::MenuItem.new(
+      label: :sliders_and_banners,
+      icon: 'picture-o',
+      url: '/admin/sliders',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+    ),
+    config.class::MenuItem.new(
+      label: :documentation,
+      icon: 'book',
+      url: '/admin/documentation',
+      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      partial: 'spree/admin/shared/sub_menus/documentation',
+      children: [
+        config.class::MenuItem.new(
+          label: :doc_products,
+          url: '/admin/documentation'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_promotions,
+          url: '/admin/documentation#promotions'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_users,
+          url: '/admin/documentation#users'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_settings,
+          url: '/admin/documentation#settings'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_trade_in,
+          url: '/admin/documentation#trade_in'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_reparations,
+          url: '/admin/documentation#reparations'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_repair_shopr,
+          url: '/admin/documentation#repair_shopr'
+        ),
+        config.class::MenuItem.new(
+          label: :doc_sliders,
+          url: '/admin/documentation#sliders'
+        )
+      ]
+    )
+  ]
 
   # Custom frontend product path
   #

@@ -7,7 +7,6 @@
       <link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
     <% end %>
     <%= javascript_importmap_tags %>
-    <%= Gon::Base.render_data %>
   </head>
   <body class="<%= body_class %>" id="<%= @body_id || 'default' %>">
     <div class="container">

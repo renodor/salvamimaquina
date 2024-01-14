@@ -2,7 +2,6 @@
 
 class HomeController < StoreController
   invisible_captcha only: %i[create_user_message create_corporate_client_message], honeypot: :names
-  layout 'spree/layouts/spree_application'
 
   def index
     @products = Spree::Product
@@ -77,7 +76,6 @@ class HomeController < StoreController
     @model_types = %w[iPhone iPad Mac].map do |model_type|
       {
         name: model_type,
-        image: Spree::Taxon.find_by(name: model_type).icon,
         identify_model_link: identify_model_links[model_type.downcase.to_sym]
       }
     end

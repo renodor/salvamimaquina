@@ -3,7 +3,7 @@
   <div>
     <%= form_for @user.ship_address, url: account_update_user_address_path, method: :put do |ship_form| %>
       <%= render 'checkouts/steps/address_inputs', form: ship_form, address_type: 'shipping', address: @user.ship_address %>
-      <div data-controller="mapbox">
+      <div data-controller="mapbox" data-mapbox-token-value="<%= Rails.application.credentials.mapbox_api_key %>">
         <%= ship_form.hidden_field :latitude, data: { input: 'address_latitude', 'mapbox-target' => 'latitude' } %>
         <%= ship_form.hidden_field :longitude, data: { input: 'address_longitude', 'mapbox-target' => 'longitude' } %>
         <div id="missing-map-pin" class=""><%= t('spree.missing_map_pin') %></div>

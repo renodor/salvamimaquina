@@ -1,0 +1,24 @@
+<% admin_layout "full-width" %>
+
+<% admin_breadcrumb(link_to 'Reparation Categories', spree.admin_reparation_categories_path) %>
+<% admin_breadcrumb('New Reparation Category') %>
+
+<%= simple_form_for @category, url: admin_reparation_categories_path do |f| %>
+  <%= f.input :name %>
+  <%= f.input :photo, as: :file, hint: 'Image width: 500px | Image height: 300px' %>
+  <p><b>Products:</b></p>
+  <% 5.times do %>
+    <%= text_field_tag 'reparation_category[products][]' %>
+    <br /><br />
+  <% end %>
+  <br /><br />
+  <p><b>Damages:</b></p>
+  <% 5.times do %>
+    <%= text_field_tag 'reparation_category[damages][]' %>
+    <br /><br />
+  <% end %>
+  <br /><br />
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>
+
+<br /><br />

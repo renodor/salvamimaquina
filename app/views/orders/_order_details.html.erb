@@ -71,22 +71,12 @@
     </div>
   <% end %>
 </div>
-<% if order_with_delivery %>
-  <div
-    id="static-map"
-    data-controller="mapbox-static"
-    style="width: 100%; height: 300px;"
-    data-mapbox-static-latitude-value="<%= order.ship_address.latitude %>"
-    data-mapbox-static-longitude-value="<%= order.ship_address.longitude %>"
-  >
-  </div>
-<% else %>
-  <div
-    id="static-map"
-    data-controller="mapbox-static"
-    style="width: 100%; height: 300px;"
-    data-mapbox-static-latitude-value="<%= shipping_method.latitude %>"
-    data-mapbox-static-longitude-value="<%= shipping_method.longitude %>"
-  >
-  </div>
-<% end %>
+<div
+  id="static-map"
+  data-controller="mapbox-static"
+  data-mapbox-static-token-value="<%= Rails.application.credentials.mapbox_api_key %>"
+  style="width: 100%; height: 300px;"
+  data-mapbox-static-latitude-value="<%= order_with_delivery ? order.ship_address.latitude : shipping_method.latitude %>"
+  data-mapbox-static-longitude-value="<%= order_with_delivery ? order.ship_address.longitude : shipping_method.longitude %>"
+>
+</div>
