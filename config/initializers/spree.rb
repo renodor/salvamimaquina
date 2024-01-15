@@ -75,15 +75,16 @@ Spree::Backend::Config.configure do |config|
       icon: 'money', # see https://fontawesome.com/v4/icons/
       url: '/admin/trade_in_models',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
-      partial: 'spree/admin/shared/sub_menus/trade_in',
       children: [
         config.class::MenuItem.new(
           label: :trade_in_models,
-          match_path: '/admin/trade_in_models'
+          match_path: '/admin/trade_in_models',
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :trade_in_requests,
-          match_path: '/admin/trade_in_requests'
+          match_path: '/admin/trade_in_requests',
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         )
       ]
     ),
@@ -92,15 +93,16 @@ Spree::Backend::Config.configure do |config|
       icon: 'laptop',
       url: '/admin/reparation_categories',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
-      partial: 'spree/admin/shared/sub_menus/reparations',
       children: [
         config.class::MenuItem.new(
           label: :reparation_categories,
-          match_path: '/admin/reparation_categories'
+          match_path: '/admin/reparation_categories',
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :reparation_requests,
-          match_path: '/admin/reparation_requests'
+          match_path: '/admin/reparation_requests',
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         )
       ]
     ),
@@ -121,39 +123,54 @@ Spree::Backend::Config.configure do |config|
       icon: 'book',
       url: '/admin/documentation',
       condition: -> { current_spree_user&.has_spree_role?(:admin) },
-      partial: 'spree/admin/shared/sub_menus/documentation',
       children: [
         config.class::MenuItem.new(
           label: :doc_products,
-          url: '/admin/documentation'
+          url: '/admin/documentation?section=products',
+          match_path: /\/admin\/documentation\?section=products/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_promotions,
-          url: '/admin/documentation#promotions'
+          url: '/admin/documentation?section=promotions#promotions',
+          match_path: /\/admin\/documentation\?section=promotions/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_users,
-          url: '/admin/documentation#users'
+          url: '/admin/documentation?section=users#users',
+          match_path: /\/admin\/documentation\?section=users/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_settings,
-          url: '/admin/documentation#settings'
+          url: '/admin/documentation?section=settings#settings',
+          match_path: /\/admin\/documentation\?section=settings/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_trade_in,
-          url: '/admin/documentation#trade_in'
+          url: '/admin/documentation?section=trade-in#trade-in',
+          match_path: /\/admin\/documentation\?section=trade-in/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_reparations,
-          url: '/admin/documentation#reparations'
+          url: '/admin/documentation?section=reparations#reparations',
+          match_path: /\/admin\/documentation\?section=reparations/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_repair_shopr,
-          url: '/admin/documentation#repair_shopr'
+          url: '/admin/documentation?section=repair_shopr#repair-shopr',
+          match_path: /\/admin\/documentation\?section=repair_shopr/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         ),
         config.class::MenuItem.new(
           label: :doc_sliders,
-          url: '/admin/documentation#sliders'
+          url: '/admin/documentation?section=sliders#sliders',
+          match_path: /\/admin\/documentation\?section=sliders/,
+          condition: -> { current_spree_user&.has_spree_role?(:admin) }
         )
       ]
     )
