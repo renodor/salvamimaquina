@@ -5,6 +5,7 @@
     <%= stylesheet_link_tag 'backend', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
   <body class="admin <%= "admin-nav-hidden" if !Spree::Backend::Config.admin_updated_navbar && cookies[:admin_nav_hidden] == "true" %>">
+    <% raise %>
     <% if Spree::Backend::Config.admin_updated_navbar  %>
       <%= render partial: 'spree/admin/shared/navigation_solidus_admin' %>
     <% else %>
