@@ -2,7 +2,7 @@
 
 module Spree
   module Admin
-    class SlidesController < Spree::Admin::BaseController
+    class SlidesController < ResourceController
       def new
         @slider = Slider.find(params[:slider_id])
         @slide = Slide.new
