@@ -3,7 +3,7 @@
 <% content_for :page_actions do %>
   <% if can? :create, Slider %>
     <li>
-      <%= link_to 'New Slider', spree.new_admin_slider_path, class: 'btn btn-primary' %>
+      <%= link_to 'New Slider', new_admin_slider_path, class: 'btn btn-primary' %>
     </li>
   <% end %>
 <% end %>
