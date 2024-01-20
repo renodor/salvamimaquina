@@ -1,7 +1,7 @@
 <% admin_layout "full-width" %>
 
-<% admin_breadcrumb(link_to 'Sliders', spree.admin_sliders_path) %>
-<% admin_breadcrumb(link_to @slider.name, spree.edit_admin_slider_path(@slider.id)) %>
+<% admin_breadcrumb(link_to 'Sliders', admin_sliders_path) %>
+<% admin_breadcrumb(link_to @slider.name, edit_admin_slider_path(@slider.id)) %>
 <% admin_breadcrumb('New Slide') %>
 
 <%= simple_form_for [@slider, @slide], url: admin_slider_slides_path, html: { class: 'form-with-images' } do |f| %>

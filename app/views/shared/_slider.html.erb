@@ -1,6 +1,6 @@
 <% if slider.is_a?(Slider) && slider&.slides.present? %>
   <%
-    slides_object = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
+    slides = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
       {
         link: URI.encode_www_form_component(slide.link),
         alt: URI.encode_www_form_component(slide.alt),
@@ -16,16 +16,16 @@
     end
   %>
   <!-- Slider main container -->
-  <div class="swiper" id="<%= "#{slider.location}-slider" %>"
-    data-slider-id=<%= slider.id %>
-    data-slider-options=<%= slider.options.to_json %>
-    data-slides=<%= slides_object.to_json %>
+  <div
+    data-controller="swiper-slider"
+    data-swiper-slider-options-value=<%= slider.options.to_json %>
+    data-swiper-slider-slides-value=<%= slides.to_json %>
+    id="<%= "#{slider.location}-slider" %>"
+    class="swiper"
   >
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper <%= slider.force_slide_full_width ? 'full-width-slides' : '' %>">
-      <!-- Relevant slides (mobile or desktop) will be added by JS here -->
-      <!-- But we need a placeholder because swiper needs at least 1 slide to initiate loop -->
-      <div class="swiper-slide placeholder-slide"></div>
+      <!-- slides will added by JS -->
     </div>
 
     <% if slider.options[:navigation] %>
