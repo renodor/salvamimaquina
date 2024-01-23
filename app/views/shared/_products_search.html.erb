@@ -1,11 +1,21 @@
-<div id="products-search">
+<div
+  data-controller="products-search"
+  id="products-search"
+>
   <!-- Button trigger modal -->
   <button id="products-search-trigger" class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#productsSearchModal">
     <%= svg 'search' %>
   </button>
 
   <!-- Modal -->
-  <div class="modal fade" id="productsSearchModal" tabindex="-1" aria-labelledby="productsSearchModalLabel" aria-hidden="true">
+  <div
+    data-action="shown.bs.modal->products-search#modalOpened"
+    class="modal fade"
+    id="productsSearchModal"
+    tabindex="-1"
+    aria-labelledby="productsSearchModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-close">
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         <%= svg 'cross' %>
@@ -18,7 +28,12 @@
         </div>
         <div class="modal-body">
           <%= form_tag search_results_products_path, method: :get do %>
-            <%= text_field_tag :keywords, params[:keywords], placeholder: t('spree.search') %>
+            <%=
+              text_field_tag :keywords,
+              params[:keywords],
+              placeholder: t('spree.search'),
+              data: { "products-search-target": "input" }
+            %>
             <button type="submit">
               <%= svg 'search' %>
             </button>

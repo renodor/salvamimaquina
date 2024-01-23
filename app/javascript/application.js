@@ -5,7 +5,5 @@ import 'popper'
 import 'bootstrap'
 
 import 'components/checkout_form'
-import 'components/navbar'
 import 'components/preview_image_on_file_select'
-import 'components/products_search'
 import 'components/quantity_selector'
