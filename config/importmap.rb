@@ -8,8 +8,8 @@ pin '@hotwired/stimulus-loading', to: 'stimulus-loading.js', preload: true
 pin_all_from 'app/javascript/controllers', under: 'controllers'
 
 # Plugins
-pin 'popper', to: 'popper.js', preload: true
-pin 'bootstrap', to: 'bootstrap.min.js', preload: true
+pin 'popper', to: 'popper.js', preload: false
+pin 'bootstrap', to: 'bootstrap.min.js', preload: false
 pin 'mapbox-gl', to: 'https://ga.jspm.io/npm:mapbox-gl@3.0.1/dist/mapbox-gl.js'
 pin 'process', to: 'https://ga.jspm.io/npm:@jspm/core@2.0.1/nodelibs/browser/process-production.js' # what is that? Is it needed?
 

@@ -3,7 +3,7 @@
 <% admin_breadcrumb(link_to 'Sliders', admin_sliders_path) %>
 <% admin_breadcrumb('New Slider') %>
 
-<%= simple_form_for @slider, url: admin_sliders_path, html: { id: 'slider-form', class: 'form-with-images' } do |f| %>
+<%= simple_form_for @slider, url: admin_sliders_path, html: { id: 'slider-form' } do |f| %>
   <%= f.input :location, collection: Slider.locations.keys %>
   <%= f.input :name %>
   <%= f.input :auto_play %>

@@ -4,12 +4,23 @@
 <% admin_breadcrumb(link_to @slider.name, edit_admin_slider_path(@slider.id)) %>
 <% admin_breadcrumb('New Slide') %>
 
-<%= simple_form_for [@slider, @slide], url: admin_slider_slide_path, html: { class: 'form-with-images' } do |f| %>
+<%= simple_form_for [@slider, @slide], url: admin_slider_slide_path, html: { class: 'form-with-images', data: { 'controller': 'form-with-images' } } do |f| %>
   <%= f.input :link, as: :string %>
   <%= f.input :order, label: 'Slide number' %>
   <%= f.input :alt, label: 'Slide image description', hint: 'This is the image ALT tag, useful for SEO' %>
   <div class="image-input">
-    <%= cl_image_tag_with_folder @slide.image, width: 300, model: Slide, class: 'image-preview', data: { id: 'desktop-image' } %>
+    <%=
+      cl_image_tag_with_folder(
+        @slide.image,
+        width: 300,
+        model: Slide,
+        class: 'image-preview',
+        data: {
+          id: 'desktop-image',
+          'form-with-images-target': 'imagePreview'
+        }
+      )
+    %>
     <%=
       f.input :image,
       as: :file,
@@ -18,7 +29,13 @@
         <br />
         width: #{@slider.recommanded_slide_sizes[:desktop][:width]}px | height: #{@slider.recommanded_slide_sizes[:desktop][:height]}px
       ".html_safe,
-      input_html: { data: { id: 'desktop-image'} }
+      input_html: {
+        data: {
+          id: 'desktop-image',
+          action: 'change->form-with-images#imageChanged',
+          'form-with-images-target': 'imageInput'
+        }
+      }
     %>
     <p class="invalid-feedback display-block"><%= @slide.errors[:image]&.join(', ') %></p>
   </div>
@@ -30,7 +47,10 @@
         model: Slide,
         no_fallback: true,
         class: 'image-preview',
-        data: { id: 'mobile-image' }
+        data: {
+          id: 'mobile-image',
+          'form-with-images-target': 'imagePreview'
+        }
       )
       %>
     <%=
@@ -41,7 +61,13 @@
         <br />
         width: #{@slider.recommanded_slide_sizes[:mobile][:width]}px | height: #{@slider.recommanded_slide_sizes[:mobile][:height]}px
       ".html_safe,
-      input_html: { data: { id: 'mobile-image'} }
+      input_html: {
+        data: {
+          id: 'mobile-image',
+          action: 'change->form-with-images#imageChanged',
+          'form-with-images-target': 'imageInput'
+        }
+      }
     %>
     <p class="invalid-feedback display-block"><%= @slide.errors[:image_mobile]&.join(', ') %></p>
   </div>

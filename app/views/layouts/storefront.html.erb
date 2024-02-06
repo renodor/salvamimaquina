@@ -8,6 +8,9 @@
       <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <% end %>
     <%= javascript_importmap_tags %>
+    <%= javascript_import_module_tag "popper" %>
+    <%= javascript_import_module_tag "bootstrap" %>
+
   </head>
   <body class="<%= body_class %>" id="<%= @body_id || 'default' %>">
     <div class="container">

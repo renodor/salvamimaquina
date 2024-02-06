@@ -1,9 +1,4 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import '@hotwired/turbo-rails'
 import 'controllers'
-import 'popper'
-import 'bootstrap'
-
-import 'components/checkout_form'
-import 'components/preview_image_on_file_select'
-import 'components/quantity_selector'
+// 'popper' and 'bootstrap' are added only on storefront.html.erb and application.html.erb
