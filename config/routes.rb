@@ -34,7 +34,11 @@ Rails.application.routes.draw do
   resource :account, controller: 'users'
 
   localized do
-    resources :products, only: [:index, :show] do
+    resources :products, only: %i[index show] do
+      member do
+        post :select_variant
+      end
+
       collection do
         get :filter
         get :search_results

@@ -19,7 +19,7 @@ class ProductsController < StoreController
     @product = Spree::Product.friendly.find(params[:id])
     @variants = @product.variants.includes(prices: :active_sale_prices)
     @master = @product.master
-    @current_variant = @product.variants.find_by(id: variant_params['variant_id'])
+    @current_variant = @product.variants.find_by(id: params[:variant_id]) || @product.cheapest_variant
     @product_has_variant = @product.has_variants?
 
     @product_images = @product.gallery.images.includes(attachment_attachment: :blob)
@@ -31,6 +31,16 @@ class ProductsController < StoreController
       # If product has no variants we will display the first image by default. We need it to have the correct thumbnail "selected"
       @first_image = @product_images.first&.attachment
     end
+  end
+
+  def select_variant
+    @product = Spree::Product.friendly.find(params[:id])
+    @variants = @product.variants.includes(prices: :active_sale_prices)
+    @variant = @product.variants.find_by(id: params[:variant_id]) || @product.cheapest_variant
+
+    select_options = params[:option_value_ids].compact_blank.map(&:to_i)
+    # TODO: find a better way to retrieve this variant
+    @variant = @product.variants.detect { |variant| (variant.option_value_ids - select_options).blank? }
   end
 
   # Takes the current product (thanks to params[:product_id])
@@ -120,9 +130,5 @@ class ProductsController < StoreController
 
   def product_filters_params
     params.permit(:per_page, :taxon_id, :sort_products, :keywords, scopes: {}, search: {}, price_between: [])
-  end
-
-  def variant_params
-    params.permit(:variant_id)
   end
 end

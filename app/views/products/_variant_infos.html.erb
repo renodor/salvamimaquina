@@ -1,0 +1,43 @@
+<div id="product-top-part">
+  <div id="product-left-part" data-hook="product_left_part">
+    <div data-hook="product_left_part_wrap">
+      <div id="product-images" data-hook="product_images">
+        <div id="main-image" data-hook>
+          <%= cl_image_tag_with_folder(
+            variant.images.first,
+            width: 600,
+            crop: :fit,
+            model: Spree::Image,
+            itemprop: "image",
+            alt: variant.product.name,
+            data: { key: variant.images.first.attachment&.key }
+          ) %>
+        </div>
+        <div id="thumbnails" data-controller="product-show-thumbnails">
+          <%# @first_image will be defined only if product has no variants. If it has variants all will be defined by JS anyway %>
+          <%= render 'thumbnails', images: variant.images %>
+        </div>
+      </div>
+
+      <div data-hook="product_properties">
+        <%#= render partial: 'properties' %>
+      </div>
+
+      <div data-hook="promotions">
+        <%#= render partial: 'promotions' %>
+      </div>
+    </div>
+  </div>
+  <div id="product-right-part" data-hook="product_right_part">
+    <div data-hook="product_right_part_wrap">
+      <div id="product-description" data-hook="product_description">
+        <h1 class="product-title" itemprop="name"><%= variant.product.name %></h1>
+
+        <div id="cart-form" data-hook="cart_form">
+          <%= render 'cart_form', variant: variant %>
+        </div>
+      </div>
+      <%#= render partial: 'taxons' %>
+    </div>
+  </div>
+  </div>
