@@ -1,37 +1,50 @@
-<%= form_with url: cart_line_items_path do |f| %>
+<%= form_with url: select_variant_product_path(variant.product), data: { controller: 'product-show-variants' } do |f| %>
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-    <%= hidden_field_tag :product_id, @product.id %>
-    <% if @product_has_variant %>
-      <% current_variant_option_values = @current_variant&.option_values || @product.cheapest_variant.option_values %>
-      <div id="product-variants" data-controller="product-show-variants">
+    <%= hidden_field_tag :product_id, variant.product.id %>
+    <% if variant.product.has_variants? %>
+      <% current_variant_option_values = variant.option_values %>
+      <% possible_option_values = variant.product.variants.filter { |variant| (variant.option_values & current_variant_option_values).any? }.flat_map(&:option_values).uniq %>
+
+      <div id="product-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
           <% if option_type.name == 'model' %>
             <%=
-              select_tag "variant_options[option_type_#{option_type.id}]",
-              options_from_collection_for_select(
-                option_values,
-                :id,
-                :name,
-                current_variant_option_values.find_by(option_type_id: option_type.id)&.id
+              select_tag "option_value_ids[]",
+              options_for_select(
+                option_values.map do |option_value|
+                  [
+                    option_value.name,
+                    option_value.id,
+                    data: {
+                      option_type_id: option_type.id,
+                      option_type_name: 'model'
+                    },
+                    disabled: possible_option_values.exclude?(option_value)
+                  ]
+                end,
+                current_variant_option_values.find_by(option_type_id: option_type.id)&.values_at(:name, :id)
               ),
-              class: 'display-none'
+              data: { action: 'change->product-show-variants#handleInputChange' }
+              # class: 'display-none'
             %>
           <% elsif option_type.name == 'color' %>
-            <!-- "colors" are always the first options to select, so we enable all of it, so the user is able to change
-            and we enable/disable the other options regarding of the cheapest variant available options.
-            If the user change the options, the JS will do its magic and enable/disable the inputs -->
             <div id="variant-colors">
               <p class="variant-option-type"><%= option_type.name.capitalize %></p>
               <div class="color-badges">
                 <% option_values.each do |color, index| %>
                     <%=
-                      radio_button_tag "variant_options[option_type_#{option_type.id}]",
+                      radio_button_tag "option_value_ids[]",
                       color.id,
                       current_variant_option_values.find_by(option_type_id: option_type.id).id == color.id,
-                      { data: { option_type_id: option_type.id } }
+                      id: "color_option_#{color.id}",
+                      data: {
+                        option_type_id: option_type.id,
+                        action: 'change->product-show-variants#handleInputChange'
+                      },
+                      disabled: possible_option_values.exclude?(color)
                     %>
                     <%=
-                      label_tag "variant_options[option_type_#{option_type.id}]_#{color.id}",
+                      label_tag "color_option_#{color.id}",
                       '',
                       style: "background-color: #{color_code(color.name)};"
                     %>
@@ -43,7 +56,7 @@
               <p class="variant-option-type"><%= option_type.name.capitalize %></p>
               <%=
                 select_tag(
-                  "variant_options[option_type_#{option_type.id}]",
+                  "option_value_ids[]",
                   options_for_select(
                     option_values.map do |option_value|
                       [
@@ -56,7 +69,11 @@
                       ]
                     end
                   ),
-                  { class: 'form-select', data: { id: option_type.id } }
+                  class: 'form-select',
+                  data: {
+                    id: option_type.id,
+                    action: 'change->product-show-variants#handleInputChange'
+                  }
                 )
               %>
             </div>
@@ -65,84 +82,85 @@
       </div>
     <% else %>
       <div class="master-description">
-        <%= @master.options_text %>
+        <%= variant.options_text %>
       </div>
     <% end %>
     <%# If products has no variant the variant_id is the master id. If it has variants the variant_id will be defined by JS %>
-    <%= hidden_field_tag 'variant_id', @master.id %>
+    <%#= hidden_field_tag 'variant_id', @master.id %>
 
     <%# Only take into account the product master for the case it has no variants,
     if it has variants, price and atc btn informations will be updated by JS %>
-    <% master_on_sale = @master.on_sale? %>
+    <%# master_on_sale = @master.on_sale? %>
     <div>
       <div id="product-price">
         <div>
-          <% discount_price = @master.price %>
-          <span class="price selling discount <%= master_on_sale ? '' : 'display-none' %>">
+          <% discount_price = variant.product.master.price %>
+          <span class="price selling discount <%= variant.product.master.on_sale? ? '' : 'display-none' %>">
             <%= number_to_currency(discount_price) %>
           </span>
-          <% price = @master.original_price %>
-          <span class="price selling original <%= master_on_sale ? 'crossed' : '' %>">
+          <% price = variant.product.master.original_price %>
+          <span class="price selling original <%= variant.product.master.on_sale? ? 'crossed' : '' %>">
             <%= number_to_currency(price) %>
           </span>
         </div>
-        <meta itemprop="price" content="<%= master_on_sale ?  discount_price : price %>">
+        <meta itemprop="price" content="<%= variant.product.master.on_sale? ?  discount_price : price %>">
         <meta itemprop="priceCurrency" content="USD">
-      </div>
-
-      <div class="add-to-cart">
-        <div class="quantity-selector" data-controller="quantity-selector">
-          <% master_stock = @master.total_on_hand %>
-          <div class="quantity-selector-triggers">
-            <span
-              data-action="click->quantity-selector#addQuantity"
-              data-quantity-selector-target="addQuantity"
-              data-type="add"
-              class="<%= master_stock <= 1 ? 'disabled' : '' %>"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-              </svg>
-            </span>
-            <span
-              data-action="click->quantity-selector#removeQuantity"
-              data-quantity-selector-target="removeQuantity"
-              data-type="remove"
-              class="disabled"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-              </svg>
-            </span>
-          </div>
-          <%=
-            number_field_tag :quantity, 1,
-            class: 'title add-to-cart-quantity',
-            data: {
-              total_stock: master_stock,
-              action: "change->quantity-selector#changeQuantity",
-              "quantity-selector-target": "quantityInput"
-            }
-          %>
-        </div>
-        <% if @master.can_supply? %>
-          <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
-            <%= t('spree.buy').upcase %>
-          <% end %>
-          <link itemprop="availability" href="http://schema.org/InStock">
-        <% else %>
-          <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
-            <%= t('spree.out_of_stock').upcase %>
-          <% end %>
-          <link itemprop="availability" href="http://schema.org/OutOfStock">
-        <% end %>
       </div>
     </div>
 
-    <% if @master.condition == 'original' %>
+    <% if variant.product.master.condition == 'original' %>
       <link itemprop="itemCondition" href="http://schema.org/NewCondition">
     <% else %>
       <link itemprop="itemCondition" href="http://schema.org/RefurbishedCondition">
     <% end %>
   </div>
 <% end %>
+
+<div class="add-to-cart">
+  <div class="quantity-selector" data-controller="quantity-selector">
+    <% master_stock = variant.product.master.total_on_hand %>
+    <div class="quantity-selector-triggers">
+      <span
+        data-action="click->quantity-selector#addQuantity"
+        data-quantity-selector-target="addQuantity"
+        data-type="add"
+        class="<%= master_stock <= 1 ? 'disabled' : '' %>"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+        </svg>
+      </span>
+      <span
+        data-action="click->quantity-selector#removeQuantity"
+        data-quantity-selector-target="removeQuantity"
+        data-type="remove"
+        class="disabled"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </span>
+    </div>
+    <%=
+      number_field_tag :quantity, 1,
+      class: 'title add-to-cart-quantity',
+      data: {
+        total_stock: master_stock,
+        action: "change->quantity-selector#changeQuantity",
+        "quantity-selector-target": "quantityInput"
+      }
+    %>
+  </div>
+
+  <% if variant.product.master.can_supply? %>
+    <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
+      <%= t('spree.buy').upcase %>
+    <% end %>
+    <link itemprop="availability" href="http://schema.org/InStock">
+  <% else %>
+    <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, disabled: true, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
+      <%= t('spree.out_of_stock').upcase %>
+    <% end %>
+    <link itemprop="availability" href="http://schema.org/OutOfStock">
+  <% end %>
+</div>

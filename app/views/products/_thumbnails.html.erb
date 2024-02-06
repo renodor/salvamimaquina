@@ -1,12 +1,11 @@
 <%# no need for thumbnails unless there is more than one image %>
 <%# first_image will be defined only if products has no variants. And in that case we need to select the corresponding thumbnail.
 if products has variants, the corresponding thumbnail will be selected by JS %>
-<% if @product_images.size > 1 %>
-  <% @product_images.each do |image| %>
+<% if images.size > 1 %>
+  <% images.each_with_index do |image, index| %>
     <% image_attachment = image.attachment %>
     <div
-      class="thumbnail <%= first_image == image_attachment&.key ? 'selected' : '' %>"
-      style="<%= @product_has_variant ? 'display: none;' : '' %>"
+      class="thumbnail <%= 'selected' if index.zero? %>"
       data-variant-id="<%= image.viewable_id %>"
       data-image-url="<%= cl_image_path_with_folder(image_attachment, width: 600, crop: :fit, model: Spree::Image) %>"
       data-key="<%= image_attachment&.key %>"
