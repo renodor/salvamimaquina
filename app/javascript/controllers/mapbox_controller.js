@@ -12,7 +12,6 @@ export default class extends Controller {
 
     // initialize a mapbox map in the center of Panama City
     mapboxgl.accessToken = this.tokenValue
-    console.log(this.apiKeyValue)
     this.map = new mapboxgl.Map({
       container: 'map', // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL

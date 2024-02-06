@@ -4,16 +4,22 @@ export default class extends Controller {
   static targets = ["quantityInput", "addQuantity", "removeQuantity"]
 
   addQuantity() {
-    this.changeQuantity(parseInt(this.quantityInputTarget.value) + 1);
+    this.quantityChanger(parseInt(this.quantityInputTarget.value) + 1);
   }
 
   removeQuantity() {
-    this.changeQuantity(parseInt(this.quantityInputTarget.value) - 1);
+    this.quantityChanger(parseInt(this.quantityInputTarget.value) - 1);
   }
 
-  changeQuantity = (newQuantity) => {
+  changeQuantity() {
+    let selectedQuantity = parseInt(this.quantityInputTarget.value);
+    selectedQuantity = isNaN(selectedQuantity) ? 1 : selectedQuantity;
+    this.quantityChanger(selectedQuantity);
+  }
+
+  quantityChanger(newQuantity) {
     const totalStock = parseInt(this.quantityInputTarget.dataset.totalStock);
-    if (totalStock === 1 || totalStock === 0) {
+    if ([0, 1].includes(totalStock)) {
       this.quantityInputTarget.value = 1;
     } else if (newQuantity <= 1) {
       this.quantityInputTarget.value = 1;
@@ -31,20 +37,4 @@ export default class extends Controller {
       this.removeQuantityTarget.classList.remove('disabled');
     }
   };
-}
-
-if (false) {
-  addQuantityTrigger.addEventListener('click', (_event) => {
-    changeQuantity(parseInt(quantityInput.value) + 1);
-  });
-
-  removeQuantityTrigger.addEventListener('click', (_event) => {
-    changeQuantity(parseInt(quantityInput.value) - 1);
-  });
-
-  quantityInput.addEventListener('change', (_event) => {
-    let selectedQuantity = parseInt(quantityInput.value);
-    selectedQuantity = isNaN(selectedQuantity) ? 1 : selectedQuantity;
-    changeQuantity(selectedQuantity);
-  });
 }

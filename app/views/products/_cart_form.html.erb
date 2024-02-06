@@ -6,7 +6,16 @@
       <div id="product-variants" data-controller="product-show-variants">
         <% @product.variant_option_values_by_option_type.each do |option_type, option_values| %>
           <% if option_type.name == 'model' %>
-            <%= select_tag "variant_options[option_type_#{option_type.id}]", options_from_collection_for_select(option_values, :id, :name), class: 'display-none' %>
+            <%=
+              select_tag "variant_options[option_type_#{option_type.id}]",
+              options_from_collection_for_select(
+                option_values,
+                :id,
+                :name,
+                current_variant_option_values.find_by(option_type_id: option_type.id)&.id
+              ),
+              class: 'display-none'
+            %>
           <% elsif option_type.name == 'color' %>
             <!-- "colors" are always the first options to select, so we enable all of it, so the user is able to change
             and we enable/disable the other options regarding of the cheapest variant available options.
@@ -106,7 +115,15 @@
               </svg>
             </span>
           </div>
-          <%= number_field_tag :quantity, 1, class: 'title add-to-cart-quantity', data: { total_stock: master_stock, "quantity-selector-target": "quantityInput" } %>
+          <%=
+            number_field_tag :quantity, 1,
+            class: 'title add-to-cart-quantity',
+            data: {
+              total_stock: master_stock,
+              action: "change->quantity-selector#changeQuantity",
+              "quantity-selector-target": "quantityInput"
+            }
+          %>
         </div>
         <% if @master.can_supply? %>
           <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, data: { buy: t('spree.buy'), out_of_stock: t('spree.out_of_stock') } do %>
