@@ -42,8 +42,6 @@ Rails.application.routes.draw do
       collection do
         get :filter
         get :search_results
-        get :product_variants_with_option_values
-        get :variant_with_options_hash
       end
     end
   end

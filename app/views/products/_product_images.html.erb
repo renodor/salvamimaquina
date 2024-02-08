@@ -1,0 +1,35 @@
+
+<% images = variant&.images&.includes(attachment_attachment: :blob) || [] %>
+<div id="product-images" data-controller="product-show-images">
+  <div id="main-image">
+    <%=
+      cl_image_tag_with_folder(
+        images.first&.attachment,
+        width: 600,
+        crop: :fit,
+        model: Spree::Image,
+        itemprop: "image",
+        alt: variant&.product&.name,
+        data: { 'product-show-images-target': 'mainImage'}
+      )
+    %>
+  </div>
+  <%# no need for thumbnails unless there is more than one image %>
+  <% if images.size > 1 %>
+      <div id="thumbnails">
+      <% images.each_with_index do |image, index| %>
+        <% image_attachment = image.attachment %>
+        <div
+          class="thumbnail <%= 'selected' if index.zero? %>"
+          data-variant-id="<%= image.viewable_id %>"
+          data-image-url="<%= cl_image_path_with_folder(image_attachment, width: 600, crop: :fit, model: Spree::Image) %>"
+          data-key="<%= image_attachment&.key %>"
+          data-action="click->product-show-images#setAsMainImage"
+          data-product-show-images-target="thumbnail"
+        >
+          <%= cl_image_tag_with_folder image_attachment, height: 48, crop: :fit, model: Spree::Image %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

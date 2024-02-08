@@ -1,7 +1,85 @@
 <div id="product-show" data-hook="product_show" itemscope itemtype="http://schema.org/Product">
   <% @body_id = 'product-details' %>
 
-  <%= render 'variant_infos', variant: @current_variant %>
+  <div id="product-top-part">
+    <div id="product-left-part" data-hook="product_left_part">
+      <div data-hook="product_left_part_wrap">
+        <%= render 'product_images', variant: @variant %>
+      </div>
+    </div>
+    <div id="product-right-part" data-hook="product_right_part">
+      <div data-hook="product_right_part_wrap">
+        <div id="product-description" data-hook="product_description">
+          <h1 class="product-title" itemprop="name"><%= @product.name %></h1>
+
+          <%= form_with url: select_variant_product_path(@product), data: { controller: 'select-variant' } do |f| %>
+            <div id="inside-product-cart-form" data-hook="inside_product_cart_form" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+              <%= hidden_field_tag :product_id, @product.id %>
+              <% if @product.has_variants? %>
+                <% variant_option_values = @variant.option_values %>
+                <div id="product-variants">
+                  <% @product.variant_option_values_by_option_type.sort_by { |option_type, _option_value| option_type.name == 'color' ? 0 : 1 }.each do |option_type, option_values| %>
+                    <% if option_type.name == 'color' %>
+                      <div id="variant-colors">
+                        <p class="variant-option-type"><%= option_type.name.capitalize %></p>
+                        <div class="color-badges">
+                          <% option_values.each do |color, index| %>
+                              <%=
+                                radio_button_tag "option_value_ids[]",
+                                color.id,
+                                variant_option_values.include?(color),
+                                id: "color_option_#{color.id}",
+                                data: { action: 'change->select-variant#submitFormWithTurboStream' }
+                              %>
+                              <%=
+                                label_tag "color_option_#{color.id}",
+                                '',
+                                style: "background-color: #{color_code(color.name)};"
+                              %>
+                          <% end %>
+                        </div>
+                      </div>
+                    <% else %>
+                      <div class="variant-options">
+                        <p class="variant-option-type"><%= t("spree.#{option_type.name}", count: 1).capitalize %></p>
+                        <% if option_values.size > 1 %>
+                          <%=
+                            select_tag(
+                              'option_value_ids[]',
+                              options_for_select(
+                                option_values.map do |option_value|
+                                  [
+                                    option_value.name,
+                                    option_value.id,
+                                    { selected: variant_option_values.include?(option_value) }
+                                  ]
+                                end
+                              ),
+                              class: 'form-select',
+                              data: { action: 'change->select-variant#submitFormWithTurboStream' },
+                            )
+                          %>
+                        <% else %>
+                          <div class="select"><%= option_values.first.name %></div>
+                          <%= hidden_field_tag 'option_value_ids[]', option_values.first.id %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="master-description">
+                  <%= @variant.options_text(show_option_type: true, show_model: true) %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%= render 'add_to_cart_form', variant: @variant %>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="product-description">
     <h5><%= t('spree.product_information') %></h5>
@@ -12,7 +90,6 @@
 
   <meta itemprop="brand" content="apple">
   <meta itemprop="productID" content="<%= @product.slug %>">
-  <meta itemprop="url" content="<%= request.original_url %>">
 
   <%=
     render 'shared/related_products',

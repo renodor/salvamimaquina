@@ -73,6 +73,8 @@ en:
     product:
       one: 'Product'
       other: 'Products'
+    product_not_available: 'Product not available'
+    no_product_with_selected_options: 'There is no product with the options you selected. Please choose other options.'
     buy: 'Buy'
     see_products: 'See products'
     sort_products: 'Sort products'

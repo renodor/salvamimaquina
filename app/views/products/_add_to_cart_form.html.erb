@@ -1,0 +1,83 @@
+<div id="add-to-cart-form" data-controller="add-to-cart-form" data-add-to-cart-form-variant-id-value="<%= variant&.id %>">
+  <meta itemprop="url" content="<%= request.original_url %>" data-add-to-cart-form-target="itempropUrl">
+
+  <% if variant.present? %>
+    <%= form_for :order, url: cart_line_items_path do |f| %>
+      <%= hidden_field_tag 'variant_id', variant.id %>
+      <div id="product-price">
+        <div>
+          <% if variant.on_sale? %>
+            <span class="price selling discount">
+              <%= number_to_currency(variant.price) %>
+            </span>
+          <% end %>
+          <span class="price selling original <%= 'crossed' if variant.on_sale? %>">
+            <%= number_to_currency(variant.original_price) %>
+          </span>
+        </div>
+        <meta itemprop="price" content="<%= variant.price %>">
+        <meta itemprop="priceCurrency" content="USD">
+      </div>
+
+      <% if variant.condition == 'original' %>
+        <link itemprop="itemCondition" href="http://schema.org/NewCondition">
+      <% else %>
+        <link itemprop="itemCondition" href="http://schema.org/RefurbishedCondition">
+      <% end %>
+
+      <div class="add-to-cart">
+        <div class="quantity-selector" data-controller="quantity-selector">
+          <% stock = variant.total_on_hand %>
+          <div class="quantity-selector-triggers">
+            <span
+              data-action="click->quantity-selector#addQuantity"
+              data-quantity-selector-target="addQuantity"
+              data-type="add"
+              class="<%= stock <= 1 ? 'disabled' : '' %>"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+              </svg>
+            </span>
+            <span
+              data-action="click->quantity-selector#removeQuantity"
+              data-quantity-selector-target="removeQuantity"
+              data-type="remove"
+              class="disabled"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </div>
+          <%=
+            number_field_tag :quantity, 1,
+            class: 'title add-to-cart-quantity',
+            data: {
+              total_stock: stock,
+              action: "change->quantity-selector#changeQuantity",
+              "quantity-selector-target": "quantityInput"
+            }
+          %>
+        </div>
+
+        <% if variant.can_supply? %>
+          <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit do %>
+            <%= t('spree.buy').upcase %>
+          <% end %>
+          <link itemprop="availability" href="http://schema.org/InStock">
+        <% else %>
+          <%= button_tag class: 'btn btn-primary', id: 'add-to-cart-btn', type: :submit, disabled: true do %>
+            <%= t('spree.out_of_stock').upcase %>
+          <% end %>
+          <link itemprop="availability" href="http://schema.org/OutOfStock">
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <%= button_tag class: 'btn btn-secondary' do %>
+      <%= t('spree.product_not_available').upcase %>
+    <% end %>
+    <p><small><%= t('spree.no_product_with_selected_options') %></small></p>
+  <% end %>
+</div>

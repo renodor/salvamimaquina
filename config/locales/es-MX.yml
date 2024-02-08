@@ -76,6 +76,8 @@ es-MX:
     product:
       one: 'Producto'
       other: 'Productos'
+    product_not_available: 'Producto no disponible'
+    no_product_with_selected_options: 'No exist producto con las opciones seleccionadas. Por favor elija otras opciones.'
     buy: 'Comprar'
     see_products: 'Ver productos'
     sort_products: 'Ordenar productos'

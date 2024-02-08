@@ -72,8 +72,7 @@ module Spree
     end
 
     def original_price
-      # prices&.take&.original_price
-      price
+      prices&.take&.original_price
     end
 
     # Simplify Spree::Variant#can_supply method has we don't need all built in solidus options
