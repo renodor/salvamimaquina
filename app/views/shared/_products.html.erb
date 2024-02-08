@@ -1,39 +1,37 @@
-<div data-hook="products_search_results_heading">
+<div id="products">
   <% if products.blank? %>
-    <div>
-      <%= t('spree.no_products_found') %>
-    </div>
+    <div><%= t('spree.no_products_found') %></div>
+  <% end %>
+  <% if products.present? %>
+    <ul id="products-grid" class="product-listing">
+      <% products.each do |product| %>
+        <% cheapest_variant = product.cheapest_variant %>
+        <li id="product_<%= product.id %>" itemscope itemtype="http://schema.org/Product">
+          <div class="product-image">
+            <%= cl_image_tag_with_folder(
+              cheapest_variant.images.first&.attachment,
+              width: 540,
+              crop: :fill,
+              model: Spree::Image,
+              alt: product.name
+            ) %>
+          </div>
+          <div class="product-name"><%= product.name %></div>
+          <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <% cheapest_variant_is_on_sale = cheapest_variant.on_sale? %>
+            <% if cheapest_variant_is_on_sale %>
+              <span class="price selling" itemprop="price" content="<%= cheapest_variant.price %>">
+                <%= number_to_currency(cheapest_variant.price) %>
+              </span>
+            <% end %>
+            <span class="price selling <%= cheapest_variant_is_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= cheapest_variant.original_price %>">
+              <%= number_to_currency(cheapest_variant.original_price) %>
+            </span>
+            <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
+          </span>
+          <%= link_to '', product_es_mx_path(product), class: 'product-link full-absolute', itemprop: "name", title: product.name %>
+        </li>
+      <% end %>
+    </ul>
   <% end %>
 </div>
-<% if products.present? %>
-  <ul id="products" class="product-listing" data-hook>
-    <% products.each do |product| %>
-      <% cheapest_variant = product.cheapest_variant %>
-      <li id="product_<%= product.id %>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
-        <div class="product-image">
-          <%= cl_image_tag_with_folder(
-            cheapest_variant.images.first&.attachment,
-            width: 540,
-            crop: :fill,
-            model: Spree::Image,
-            alt: product.name
-          ) %>
-        </div>
-        <div class="product-name"><%= product.name %></div>
-        <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-          <% cheapest_variant_is_on_sale = cheapest_variant.on_sale? %>
-          <% if cheapest_variant_is_on_sale %>
-            <span class="price selling" itemprop="price" content="<%= cheapest_variant.price %>">
-              <%= number_to_currency(cheapest_variant.price) %>
-            </span>
-          <% end %>
-          <span class="price selling <%= cheapest_variant_is_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= cheapest_variant.original_price %>">
-            <%= number_to_currency(cheapest_variant.original_price) %>
-          </span>
-          <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
-        </span>
-        <%= link_to '', product_es_mx_path(product), class: 'product-link full-absolute', itemprop: "name", title: product.name %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>

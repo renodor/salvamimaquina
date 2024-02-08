@@ -40,7 +40,7 @@ Rails.application.routes.draw do
       end
 
       collection do
-        get :filter
+        post :filter
         get :search_results
       end
     end

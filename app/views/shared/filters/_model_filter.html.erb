@@ -8,11 +8,13 @@
       <ul>
         <% model_filter.each do |model_name, model_id| %>
           <li>
-            <input type="checkbox"
-                    id="<%= model_id %>"
-                    name="<%= "search[with_option][#{model_option_type.id}][]" %>"
-                    value="<%= model_id %>"
-                    <%= params.dig(:search, :with_option, model_option_type.id.to_s)&.include?(model_id.to_s) ? "checked" : "" %>
+            <input
+              type="checkbox"
+              id="<%= model_id %>"
+              name="<%= "search[with_option][#{model_option_type.id}][]" %>"
+              value="<%= model_id %>"
+              data-action="change->products-filters-form#inputChanged"
+              <%= params.dig(:search, :with_option, model_option_type.id.to_s)&.include?(model_id.to_s) ? "checked" : "" %>
             />
             <label class="product-filter-label" for="<%= model_id %>">
               <span><%= model_name %></span>

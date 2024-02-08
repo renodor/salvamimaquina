@@ -16,6 +16,7 @@
             type="range"
             name="search[price_between][]"
             class="first"
+            data-action="change->products-filters-form#inputChanged"
           >
           <input
             value="<%= price_range_slider[:current_max] %>"
@@ -24,6 +25,7 @@
             step="1"
             type="range"
             name="search[price_between][]"
+            data-action="change->products-filters-form#inputChanged"
           >
         </div>
       </div>
