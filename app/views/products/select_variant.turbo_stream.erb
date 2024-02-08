@@ -1,3 +1,8 @@
-<%= turbo_stream.replace 'product-top-part' do %>
-  <%= render 'variant_infos', variant: @variant %>
+<%= turbo_stream.replace 'product-images' do %>
+  <%= render 'product_images', variant: @variant %>
 <% end %>
+
+<%= turbo_stream.replace 'add-to-cart-form' do %>
+  <%= render 'add_to_cart_form', variant: @variant %>
+<% end %>
+
