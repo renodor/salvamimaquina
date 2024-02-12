@@ -14,7 +14,7 @@
             max="<%= price_range_slider[:max] %>" 
             tep="1"
             type="range"
-            name="search[price_between][]"
+            name="products_filters[search[price_between]][]"
             class="first"
             data-action="change->products-filters-form#inputChanged"
           >
@@ -24,11 +24,15 @@
             max="<%= price_range_slider[:max] %>"
             step="1"
             type="range"
-            name="search[price_between][]"
+            name="products_filters[search[price_between]][]"
             data-action="change->products-filters-form#inputChanged"
           >
         </div>
       </div>
     </div>
+
+    <!-- Used in ProductsController to know if price range slider as been used or not, and thus if we should count it in filter count -->
+    <%= hidden_field_tag 'price_filter_min_max[]', price_range_slider[:min] %>
+    <%= hidden_field_tag 'price_filter_min_max[]', price_range_slider[:max] %>
   </div>
 <% end %>

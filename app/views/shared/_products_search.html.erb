@@ -29,7 +29,7 @@
         <div class="modal-body">
           <%= form_tag search_results_products_path, method: :get do %>
             <%=
-              text_field_tag :keywords,
+              text_field_tag 'products_search[keywords]',
               params[:keywords],
               placeholder: t('spree.search'),
               data: { "products-search-target": "input" }

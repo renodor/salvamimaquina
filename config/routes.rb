@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 
       collection do
         post :filter
+        get :sort
         get :search_results
       end
     end

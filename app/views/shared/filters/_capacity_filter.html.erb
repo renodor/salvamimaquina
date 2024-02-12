@@ -11,7 +11,7 @@
             <input
               type="checkbox"
               id="<%= capacity_id %>"
-              name="<%= "search[with_option][#{capacity_option_type.id}][]" %>"
+              name="<%= "products_filters[search[with_option][#{capacity_option_type.id}]][]" %>"
               value="<%= capacity_id %>"
               data-action="change->products-filters-form#inputChanged"
               <%= params.dig(:search, :with_option, capacity_option_type.id.to_s)&.include?(capacity_id.to_s) ? "checked" : "" %>

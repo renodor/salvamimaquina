@@ -54,13 +54,13 @@ ul#products-grid {
 }
 
 @media ($max-l) {
-  ul#products {
+  ul#products-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media ($max-s) {
-  ul#products {
+  ul#products-grid {
     grid-template-columns: 1fr;
   }
 }

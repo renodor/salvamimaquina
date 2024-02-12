@@ -9,7 +9,7 @@
         <% color_filter.each do |color, color_id| %>
             <input type="checkbox"
                     id="<%= color_id %>"
-                    name="<%= "search[with_option][#{color_option_type.id}][]" %>"
+                    name="<%= "products_filters[search[with_option][#{color_option_type.id}]][]" %>"
                     value="<%= color_id %>"
                     data-action="change->products-filters-form#inputChanged"
                     <%= params.dig(:search, :with_option, color_option_type.id.to_s)&.include?(color_id.to_s) ? "checked" : "" %>
