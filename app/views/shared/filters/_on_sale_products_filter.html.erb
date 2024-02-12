@@ -1,17 +1,20 @@
 <% if @taxon&.all_products.present? %>
-  <div class="navigation product-filter" data-hook="navigation">
-    <ul>
-      <li>
-        <input type="checkbox"
-                id="on-sale-products"
-                name="scopes[on_sale]"
-                <%= params[:scopes] && params[:scopes][:on_sale] ? "checked" : "" %>
-        />
-        <label class="product-filter-label" for="on-sale-products">
-          <span><%= I18n.t('spree.on_sale_products') %></span>
-          <%= svg 'cross' %>
-        </label>
-      </li>
-    </ul>
+  <div class="navigation product-filter">
+    <div class="product-filter-content">
+      <ul>
+        <li>
+          <input type="checkbox"
+                  id="on-sale-products"
+                  name="products_filters[scopes[on_sale]]"
+                  data-action="change->products-filters-form#inputChanged"
+                  <%= params[:scopes] && params[:scopes][:on_sale] ? "checked" : "" %>
+          />
+          <label class="product-filter-label" for="on-sale-products">
+            <span><%= I18n.t('spree.on_sale_products') %></span>
+            <%= svg 'cross' %>
+          </label>
+        </li>
+      </ul>
+    </div>
   </div>
 <% end %>
