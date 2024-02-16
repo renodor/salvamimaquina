@@ -1,5 +1,5 @@
 <div id="products-filters">
-  <%= form_tag filter_products_path, id: 'products-filters-form', data: { turbo_stream: true, turbo_action: :advance, controller: 'products-filters-form' } do %>
+  <%= form_tag filter_products_path, method: :get, id: 'products-filters-form', data: { turbo_stream: true, controller: 'products-filters-form' } do %>
     <%= hidden_field_tag 'products_filters[per_page]', params[:per_page] %>
     <%= hidden_field_tag 'products_filters[taxon_id]', @taxon&.id %>
     <!-- We need this extra div so that the previous hidden field tags are not taken into account when applying CSS :first-child and :last-child selectors -->

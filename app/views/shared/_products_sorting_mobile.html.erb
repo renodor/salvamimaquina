@@ -1,0 +1,15 @@
+<div
+  id="products-sorting-mobile"
+  class="products-sorting dropdown"
+  data-controller="products-filters-form"
+>
+  <div class="products-sorting-options-mobile" aria-labelledby="productsSortingDropdown">
+    <% Spree::Product.sorting_options.each do |sorting_key, sorting_name| %>
+      <div class="dropdown-item products-sorting-option">
+        <!-- inputs are in the products_sorting_desktop version partial.
+          we need to exctract it from the form and use the form HTML attribute because of the HTML layout -->
+        <%= label_tag sorting_key, t("spree.#{sorting_name}"), class: sorting_key == current_sorting_key ? 'checked' : '' %>
+      </div>
+    <% end %>
+  </div>
+</div>

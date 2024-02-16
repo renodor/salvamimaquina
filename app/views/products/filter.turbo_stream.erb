@@ -9,3 +9,11 @@
 <%= turbo_stream.update 'filter-count-button' do %>
   <%= @products_filters_count.zero? ? '' : "(#{@products_filters_count})" %>
 <% end %>
+
+<%= turbo_stream.replace 'products-sorting-desktop' do %>
+  <%= render 'shared/products_sorting_desktop', current_sorting_key: @current_sorting_key.to_sym %>
+<% end %>
+
+<%= turbo_stream.replace 'products-sorting-mobile' do %>
+  <%= render 'shared/products_sorting_mobile', current_sorting_key: @current_sorting_key.to_sym %>
+<% end %>
