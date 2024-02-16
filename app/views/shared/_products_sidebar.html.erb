@@ -25,7 +25,7 @@
           <%= render 'shared/products_filters' %>
         </div>
         <div class="tab-pane fade" id="products-sorting-tab-content" role="tabpanel" aria-labelledby="products-sorting-tab">
-          <%= render 'shared/products_sorting', version: :mobile, form: '' %>
+          <%= render 'shared/products_sorting_mobile', current_sorting_key: current_sorting_key %>
         </div>
       </div>
       <div id="products-sidebar-content-footer" class="show-m">
