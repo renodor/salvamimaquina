@@ -188,11 +188,6 @@ GEM
       activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    gon (6.4.0)
-      actionpack (>= 3.0.20)
-      i18n (>= 0.7)
-      multi_json
-      request_store (>= 1.0)
     handlebars_assets (0.23.9)
       execjs (~> 2.0)
       sprockets (>= 2.0.0)
@@ -275,7 +270,6 @@ GEM
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
     msgpack (1.7.2)
-    multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.4.5)
       date
@@ -373,8 +367,6 @@ GEM
     regexp_parser (2.8.2)
     reline (0.4.0)
       io-console (~> 0.5)
-    request_store (1.5.1)
-      rack (>= 1.4)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
@@ -596,7 +588,6 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   ffaker (~> 2.13)
-  gon
   importmap-rails
   invisible_captcha
   jbuilder
