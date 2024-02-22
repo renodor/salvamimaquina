@@ -50,25 +50,12 @@ class ProductsController < StoreController
     @current_sorting_key = params[:products_sorting]
   end
 
-  def sort
-    @products = Spree::Product.where(id: params[:product_ids])
-
-    return unless Spree::Product.sorting_options.keys.include?(params[:sort_products]&.to_sym)
-
-    @products = case params[:sort_products]
-                when 'ascend_by_price'
-                  @products.sort_by { |product| product.cheapest_variant.price }
-                when 'descend_by_price'
-                  @products.sort_by { |product| - product.cheapest_variant.price }
-                else
-                  @products.send(params[:sort_products])
-                end
-  end
-
   def search_results
     @products = Spree::Product
                 .in_name_or_description(params[:products_search][:keywords])
                 .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
+
+    @current_sorting_key = params[:products_sorting]
   end
 
   private

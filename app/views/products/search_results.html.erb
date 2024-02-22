@@ -1,18 +1,18 @@
-<% self.title = t('spree.search_result', keyword: h(params[:keywords])) %>
+<% self.title = t('spree.search_result', keyword: h(params[:products_search][:keywords])) %>
 
 <% if @products.present? %>
-  <%= render 'shared/products_sidebar' %>
+  <%= render 'shared/products_sidebar', current_sorting_key: @current_sorting_key.presence&.to_sym || :descend_by_available_on %>
 <% end %>
 
 <div>
   <h6 class="search-results-title">
-    <%= t('spree.search_results', count: @products.size) %> <span>"<%= h(params[:keywords]) %>"</span>
+    <%= t('spree.search_results', count: @products.size) %> <span>"<%= h(params[:products_search][:keywords]) %>"</span>
   </h6>
 </div>
 
 <% if @products.present? %>
   <div class="hide-m">
-    <%= render 'shared/products_sorting', version: :desktop %>
+    <%= render 'shared/products_sorting_desktop', current_sorting_key: @current_sorting_key.presence&.to_sym || :descend_by_available_on %>
   </div>
   <%= render partial: 'shared/products', locals: { products: @products } %>
 <% end %>

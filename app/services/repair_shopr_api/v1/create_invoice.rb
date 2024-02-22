@@ -80,7 +80,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         total: @order.total,
         tax: @order.additional_tax_total,
         is_paid: @order.payment_state == 'paid',
-        location_id: @order.define_stock_location.repair_shopr_id,
+        location_id: @order.find_stock_location.repair_shopr_id,
         note: "Sold from Ecommerce Website. #{buil_invoice_note}"
       }
     end

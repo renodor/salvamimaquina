@@ -27,5 +27,5 @@
   <li>total: <%= number_to_currency(@order.total) %></li>
   <li>tax: <%= number_to_currency(@order.additional_tax_total) %></li>
   <li>balance_due: <%= number_to_currency(@order.total) %></li>
-  <li>stock location: <%= @order.define_stock_location.name %></li>
+  <li>stock location: <%= @order.find_stock_location.name %></li>
 </ul>

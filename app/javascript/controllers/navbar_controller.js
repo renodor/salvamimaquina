@@ -10,7 +10,6 @@ export default class extends Controller {
       document.querySelector('.content-overlay').remove();
       body.classList.remove('overflow-hidden', 'position-relative');
     } else {
-      console.log('yo')
       body.classList.add('overflow-hidden', 'position-relative');
       const contentOverlay = document.createElement('div');
       contentOverlay.classList.add('content-overlay');

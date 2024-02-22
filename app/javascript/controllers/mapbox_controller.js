@@ -72,23 +72,4 @@ export default class extends Controller {
     this.map.resize();
     this.map.flyTo({ center: [longitude, latitude] });
   };
-
-  // const staticMapElement = document.getElementById('static-map');
-
-  // // Shown on the confirmation page when displaying the shipping address
-  // if (staticMapElement) {
-  //   const { latitude, longitude } = staticMapElement.dataset;
-  //   // initialize a mapbox map with shipping address coordinate
-  //   mapboxgl.accessToken = gon.mapbox_api_key;
-  //   const map = new mapboxgl.Map({
-  //     container: 'static-map', // container ID
-  //     style: 'mapbox://styles/mapbox/streets-v11', // style URL
-  //     center: [longitude, latitude], // starting position [lng, lat]
-  //     zoom: 15 // starting zoom
-  //   });
-
-  //   new mapboxgl.Marker()
-  //       .setLngLat([longitude, latitude])
-  //       .addTo(map);
-  // }
 }

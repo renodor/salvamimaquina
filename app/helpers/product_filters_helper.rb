@@ -44,11 +44,12 @@ module ProductFiltersHelper
   }.freeze
 
   def build_price_range_slider_values
-    variant_ids = @taxon&.all_variants&.pluck(:id) || Spree::Variant.where(product: @products).pluck(:id)
+    products = @taxon&.all_products&.includes(:variants) || @products.includes(:variants)
+    variants = products.flat_map { |product| product.variants.presence || product.master }
 
-    return nil unless variant_ids.present?
+    return nil unless variants.present?
 
-    prices = Spree::Price.includes(:active_sale_prices).where(variant_id: variant_ids).sort_by(&:price)
+    prices = Spree::Price.includes(:active_sale_prices).where(variant_id: variants.map(&:id)).sort_by(&:price)
 
     lowest_price = prices[0].price.floor
     highest_price = prices[-1].price.ceil
