@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe Spree::Order do
   let(:price) { create(:price, amount: 56.78) }
   let(:price2) { create(:price, amount: 56.78) }
-  let(:calculator) { create(:calculator) }
+  let(:calculator) { create(:fixed_amount_sale_price_calculator) }
   let!(:sale_price) { create(:sale_price, enabled: true, value: 12.34, price: price, calculator: calculator) }
-  let!(:sale_price2) { create(:sale_price, enabled: false, value: 12.34, price: price, calculator: calculator) }
-  let!(:sale_price3) { create(:sale_price, enabled: true, start_at: Time.now + 1.day, value: 12.34, price: price, calculator: calculator) }
+  let!(:sale_price2) { create(:sale_price, enabled: false, value: 11.34, price: price, calculator: calculator) }
+  let!(:sale_price3) { create(:sale_price, enabled: true, start_at: Time.now + 1.day, value: 10.34, price: price, calculator: calculator) }
 
   it 'has many active sales prices' do
     expect(price.active_sale_prices).to eq([sale_price])

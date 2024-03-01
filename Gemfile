@@ -91,7 +91,10 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'capybara-screenshot', '~> 1.0'
-  gem 'database_cleaner', '~> 1.7'
+  gem 'database_cleaner-active_record'
+
+  # Stubbing http requests
+  gem "webmock"
 end
 
 group :development, :test do

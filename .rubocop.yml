@@ -77,7 +77,7 @@ Metrics/CyclomaticComplexity:
   Max: 15
 
 Metrics/PerceivedComplexity:
-  Max: 15
+  Max: 20
 
 Layout/LineLength:
   Max: 300
