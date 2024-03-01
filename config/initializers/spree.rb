@@ -61,6 +61,10 @@ Spree.config do |config|
 
   # Set our own custom Order mailer
   config.order_mailer_class = 'OrderCustomMailer'
+
+  # Facilitates variant creation by first creating variant and then creating its price
+  # As we only set variant prices through RepairShopr import we don't need this validation anyway
+  config.require_master_price = false
 end
 
 Spree::Backend::Config.configure do |config|

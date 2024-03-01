@@ -9,7 +9,7 @@ module Spree
     # # Redecorate Solidus Sales Price gem methods (https://github.com/solidusio-contrib/solidus_sale_prices)
     # # to use :active_sale_prices relation in order to be able to includes it in ActiveRecord queries and thus avoid N+1
     def price
-      active_sale_prices.first&.value || self[:amount]
+      active_sale_prices.order(created_at: :desc)&.take&.calculated_price || self[:amount]
     end
 
     Spree::Price.prepend self

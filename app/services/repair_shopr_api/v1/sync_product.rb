@@ -22,7 +22,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       false
     ensure
       sync_logs.save!
-      Sentry.capture_message(name, { extra: { sync_logs_errors: sync_logs.sync_errors } }) if sync_logs.sync_errors.any?
+      SendMessageToSentry.send(name, { sync_logs_errors: sync_logs.sync_errors }) if sync_logs.sync_errors.any?
     end
 
     private
@@ -70,10 +70,6 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       if @product.new_record?
         @product.available_on = Date.today
         @product.shipping_category_id = Spree::ShippingCategory.find_by(name: 'Default').id # TODO: memoize that
-
-        # Spree::Product.master needs a price for Spree::Product to be valid, so we have to put one here
-        # however, if there are several variants, this master price will never really be used
-        @product.master.prices << Spree::Price.new(amount: price_before_tax(attributes['price_retail']), currency: 'USD')
       end
 
       @product.assign_attributes(
@@ -99,8 +95,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
 
       # Add Spree::OptionValues to variant
       @variant.option_values = variant_options[:option_values]
-      @variant.price = price_before_tax(attributes['price_retail'])
       @variant.save!
+      Spree::Price.create!(amount: price_before_tax(attributes['price_retail']), variant: @variant, currency: 'USD')
 
       # If @variant has been assigned to a new product, and old product doesn't have any other variants, we can destroy it
       old_product.destroy! if old_product != @product && old_product&.variants&.empty?

@@ -34,7 +34,7 @@ module Spree
         left_outer_joins(:variants, :prices, :sale_prices)
           .distinct
           .where(
-            "(#{is_on_sale} AND (spree_sale_prices.value BETWEEN ? AND ?))
+            "(#{is_on_sale} AND (spree_sale_prices.calculated_price BETWEEN ? AND ?))
             OR
             (#{is_not_on_sale} AND (spree_prices.amount BETWEEN ? AND ?))",
             current_time, current_time, min, max, current_time, current_time, min, max
@@ -63,10 +63,6 @@ module Spree
       return variants_including_master.take if variants_including_master.size == 1
 
       variants_including_master.reject(&:is_master).min_by(&:price)
-    end
-
-    def find_variant_by_options_hash(options_hash)
-      variants.includes(:option_values).detect { |variant| variant.options_hash == options_hash }
     end
 
     Spree::Product.prepend self
