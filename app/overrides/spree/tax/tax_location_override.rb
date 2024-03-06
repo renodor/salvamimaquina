@@ -1,16 +1,19 @@
 module Spree
   module Tax
     module TaxLocationOverride
-      attr_reader :country_id, :state_id, :district_id
+      attr_reader :country, :state, :district
 
       def initialize(country: nil, state: nil, district: nil)
-        @country_id = country&.id
-        @state_id = state&.id
-        @district_id = district&.id
+        @country = country
+        @state = state
+        @district = district
       end
+      delegate :id, to: :state, prefix: true, allow_nil: true
+      delegate :id, to: :country, prefix: true, allow_nil: true
+      delegate :id, to: :district, prefix: true, allow_nil: true
 
       def ==(other)
-        state_id == other.state_id && country_id == other.country_id && district_id == other.district_id
+        state == other.state && country == other.country && district == other.district
       end
 
       def empty?
