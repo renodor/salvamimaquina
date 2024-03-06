@@ -4,6 +4,8 @@
 module Spree
   module Stock
     module SimpleCoordinatorOverride
+      private
+
       def build_shipments
         # Turn the Stock::Packages into a Shipment with rates
         packages.each_with_index.map do |package, index|

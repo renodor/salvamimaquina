@@ -5,7 +5,8 @@
         <li>
           <input type="checkbox"
                   id="on-sale-products"
-                  name="products_filters[scopes[on_sale]]"
+                  name="products_filters[scopes][]"
+                  value="on_sale"
                   data-action="change->products-filters-form#inputChanged"
                   <%= params[:scopes] && params[:scopes][:on_sale] ? "checked" : "" %>
           />
