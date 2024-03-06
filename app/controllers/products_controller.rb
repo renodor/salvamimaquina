@@ -24,6 +24,9 @@ class ProductsController < StoreController
   end
 
   def filter
+    # TODO: the :with_option scope is used for model, color and capacity filters which means we don't cumulate those filters
+    # because in Spree::Core::Search::BaseOverride#add_search_scopes we call :with_option scope only once with the first option_type_id received.
+    # If we want to cumulate those, we should have one specific scope per filter, call :with_option scope for every received option_type_id
     @searcher = build_searcher(products_filters_params)
     @products = @searcher
                 .retrieve_products
@@ -62,6 +65,6 @@ class ProductsController < StoreController
 
   def products_filters_params
     # TODO: authenticity_token params is flagged as unpermitted here...
-    params.require(:products_filters).permit(:per_page, :taxon_id, scopes: {}, search: {}, price_between: [])
+    params.require(:products_filters).permit(:per_page, :taxon_id, search: {}, scopes: [], price_between: [])
   end
 end

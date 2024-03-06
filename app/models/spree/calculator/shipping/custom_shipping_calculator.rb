@@ -14,7 +14,7 @@ module Spree
       end
 
       def compute_package(package)
-        if package.package_index.zero?
+        if package.package_index&.zero?
           preferred_amount
         else
           0

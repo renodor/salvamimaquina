@@ -21,7 +21,10 @@ module Spree
         end
 
         def add_simple_scopes(base_scope)
-          @properties[:scopes]&.each_key do |scope_name|
+          return base_scope unless @properties[:scopes].present?
+          raise Spree::Core::Search::Base::InvalidOptions, :scopes unless @properties[:scopes].respond_to?(:each)
+
+          @properties[:scopes]&.each do |scope_name|
             scope = scope_name.to_sym
             base_scope = base_scope.send(scope) if base_scope.respond_to?(scope)
           end
@@ -30,7 +33,10 @@ module Spree
         end
 
         def add_search_scopes(base_scope)
-          @properties[:search]&.each do |name, scope_attribute|
+          return base_scope unless @properties[:search].present?
+          raise Spree::Core::Search::Base::InvalidOptions, :search unless @properties[:search].respond_to?(:each_pair)
+
+          @properties[:search].each_pair do |name, scope_attribute|
             scope_name = name.to_sym
             if base_scope.respond_to?(:search_scopes) && base_scope.search_scopes.include?(scope_name.to_sym)
               parsed_scope_attribute = parse_scope_attribute(scope_attribute, scope_name)
