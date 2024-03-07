@@ -30,7 +30,7 @@ RSpec.configure do |config|
   config.color = true
   config.fail_fast = ENV.fetch('FAIL_FAST', false)
   config.order = 'random'
-  config.example_status_persistence_file_path = "./spec/examples.txt"
+  # config.example_status_persistence_file_path = "./spec/examples.txt"
 
   Kernel.srand config.seed
 

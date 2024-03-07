@@ -51,6 +51,8 @@ module ProductFiltersHelper
 
     prices = Spree::Price.includes(:active_sale_prices).where(variant_id: variants.map(&:id)).sort_by(&:price)
 
+    return nil unless prices.any?
+
     lowest_price = prices[0].price.floor
     highest_price = prices[-1].price.ceil
 
@@ -75,7 +77,7 @@ module ProductFiltersHelper
 
     return nil unless variants
 
-    option_type_id = Spree::OptionType.find_by(name: option_type).id
+    option_type_id = Spree::OptionType.find_by(name: option_type)&.id
 
     variant_options = {}
     variants.each do |variant|

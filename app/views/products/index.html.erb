@@ -3,7 +3,7 @@
 <div id="categories">
   <h2><%= t('spree.categories') %></h2>
   <div id="categories-grid">
-    <% @root_taxon.children.each do |category| %>
+    <% @root_taxon&.children&.each do |category| %>
       <div class="position-relative category">
         <p><%= category.name %></p>
         <%= cl_image_tag_with_folder(category.icon, width: 500, crop: :fill, model: Spree::Taxon, alt: category.name) %>
