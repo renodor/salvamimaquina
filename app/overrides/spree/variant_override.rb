@@ -5,6 +5,16 @@ module Spree
     extend ActiveSupport::Concern
 
     prepended do
+      # override this relation to include order by created_at: :desc by default
+      # With our current implementation variants should only have one price anyway,
+      # but we still make sure the last created record is returned first
+      has_many :prices,
+               -> { with_discarded.order(created_at: :desc) },
+               class_name: 'Spree::Price',
+               dependent: :destroy,
+               inverse_of: :variant,
+               autosave: true
+
       validates :repair_shopr_id, uniqueness: { conditions: -> { where(deleted_at: nil) } }, allow_nil: true
       enum condition: { original: 0, refurbished: 1 }
     end
@@ -53,13 +63,13 @@ module Spree
     end
 
     # # Simplify price methods to avoid using Spree::DefaultPrice module
-    # # (We don't need it has our store only has 1 currency, and variants can only have one price)
+    # (We don't need it has our store only has 1 currency, and variants can only have one price)
     def price
-      prices.order(created_at: :desc)&.take&.price
+      prices.take&.price
     end
 
     def price=(amount)
-      price_record = prices.order(created_at: :desc)&.take || prices.new(currency: 'USD')
+      price_record = prices.take || prices.new(currency: 'USD')
       price_record.price = amount
       price_record.save unless new_record? # For new variants price will be persisted when variant is saved
 
@@ -70,11 +80,11 @@ module Spree
     # to use :active_sale_prices relation in order to be able to includes it in ActiveRecord queries and thus avoid N+1
     # and to avoid using Spree::DefaultPrice module
     def on_sale?
-      prices.order(created_at: :desc)&.take&.active_sale_prices.present?
+      prices.take&.active_sale_prices.present?
     end
 
     def original_price
-      prices.order(created_at: :desc)&.take&.original_price
+      prices.take&.original_price
     end
 
     # Simplify Spree::Variant#can_supply method has we don't need all built in solidus options

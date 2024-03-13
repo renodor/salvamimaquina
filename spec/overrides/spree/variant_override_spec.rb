@@ -3,6 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Variant do
+  describe 'has many prices relation' do
+    let!(:price) { create(:price, amount: 130.22, created_at: Time.now) }
+    let!(:price2) { create(:price, amount: 333, created_at: Time.now - 1.day) }
+    let!(:price3) { create(:price, amount: 130.22, created_at: Time.now + 1.day) }
+    let!(:variant) { create(:smm_variant, prices: [price, price3, price2]) }
+
+    it 'orders prices by created_at' do
+      expect(variant.reload.prices).to eq([price3, price, price2])
+    end
+  end
+
   context 'repair shopr id uniqueness validation' do
     let!(:variant) { create(:variant, repair_shopr_id: 123) }
     let!(:variant2) { create(:variant, repair_shopr_id: nil) }
@@ -77,13 +88,13 @@ RSpec.describe Spree::Variant do
   end
 
   describe '#price' do
-    let(:variant) { create(:variant) }
-    let(:variant2) { create(:variant) }
-    let!(:price) { create(:price, amount: 130.22, variant: variant) }
-    let!(:price2) { create(:price, amount: 333, created_at: Time.now - 1.day, variant: variant) }
-    let!(:price3) { create(:price, amount: 130.22, variant: variant2) }
-    let(:calculator) { create(:fixed_amount_sale_price_calculator) }
-    let!(:sale_price2) { create(:sale_price, value: 122.22, enabled: true, price: price3, calculator: calculator) }
+    let!(:price) { create(:price, amount: 130.22) }
+    let!(:price2) { create(:price, amount: 333, created_at: Time.now - 1.day) }
+    let!(:price3) { create(:price, amount: 130.22) }
+    let!(:calculator) { create(:fixed_amount_sale_price_calculator) }
+    let!(:sale_price) { create(:sale_price, value: 122.22, enabled: true, price: price3, calculator: calculator) }
+    let!(:variant) { create(:smm_variant, prices: [price, price2]) }
+    let!(:variant2) { create(:smm_variant, prices: [price3]) }
 
     it 'returns variant latest price or sale price amount' do
       expect(variant.price).to eq(130.22)
@@ -93,8 +104,8 @@ RSpec.describe Spree::Variant do
 
   describe '#price=' do
     context 'when variant is already created' do
-      let(:variant) { create(:variant) }
-      let!(:price) { create(:price, amount: 123.45, variant: variant) }
+      let!(:price) { create(:price, amount: 123.45) }
+      let!(:variant) { create(:variant, prices: [price]) }
 
       it 'sets new price to variant' do
         expect { variant.price = 222.22 }.not_to change(Spree::Price, :count)
@@ -103,7 +114,7 @@ RSpec.describe Spree::Variant do
     end
 
     context 'when variant is not created yet' do
-      let(:variant) { build(:variant) }
+      let(:variant) { build(:smm_variant) }
 
       it 'sets new price to variant and persists it when variant is saved' do
         expect(variant.price).to be nil
@@ -117,15 +128,16 @@ RSpec.describe Spree::Variant do
   end
 
   describe '#on_sale?' do
-    let(:variant) { create(:variant) }
-    let(:variant2) { create(:variant) }
-    let(:variant3) { create(:variant) }
-    let!(:price) { create(:price, variant: variant) }
-    let!(:price2) { create(:price, variant: variant2) }
-    let!(:price3) { create(:price, variant: variant3) }
-    let(:calculator) { create(:fixed_amount_sale_price_calculator) }
+    let!(:price) { create(:price) }
+    let!(:price2) { create(:price) }
+    let!(:price3) { create(:price) }
+    let!(:calculator) { create(:fixed_amount_sale_price_calculator) }
+    let!(:calculator2) { create(:fixed_amount_sale_price_calculator) }
     let!(:sale_price) { create(:sale_price, value: 122.22, enabled: true, start_at: Time.now + 1.day, price: price2, calculator: calculator) }
-    let!(:sale_price2) { create(:sale_price, value: 122.22, enabled: true, price: price3, calculator: calculator) }
+    let!(:sale_price2) { create(:sale_price, value: 122.22, enabled: true, price: price3, calculator: calculator2) }
+    let!(:variant) { create(:smm_variant, prices: [price]) }
+    let!(:variant2) { create(:smm_variant, prices: [price2]) }
+    let!(:variant3) { create(:smm_variant, prices: [price3]) }
 
     it 'returns true when variant as an active sale price and false when not' do
       expect(variant.on_sale?).to be false
@@ -135,12 +147,12 @@ RSpec.describe Spree::Variant do
   end
 
   describe '#original_price' do
-    let(:variant) { create(:variant) }
-    let(:variant2) { create(:variant) }
-    let!(:price) { create(:price, amount: 130.22, variant: variant) }
-    let!(:price2) { create(:price, amount: 130.22, variant: variant2) }
-    let(:calculator) { create(:fixed_amount_sale_price_calculator) }
-    let!(:sale_price2) { create(:sale_price, value: 122.22, enabled: true, price: price2, calculator: calculator) }
+    let!(:price) { create(:price, amount: 130.22) }
+    let!(:price2) { create(:price, amount: 130.22) }
+    let!(:calculator) { create(:fixed_amount_sale_price_calculator) }
+    let!(:sale_price) { create(:sale_price, value: 122.22, enabled: true, price: price2, calculator: calculator) }
+    let!(:variant) { create(:variant, prices: [price]) }
+    let!(:variant2) { create(:variant, prices: [price2]) }
 
     it 'returns variant original price even when variant is on sale' do
       expect(variant.original_price).to eq(130.22)
