@@ -65,6 +65,8 @@ Spree.config do |config|
   # Facilitates variant creation by first creating variant and then creating its price
   # As we only set variant prices through RepairShopr import we don't need this validation anyway
   config.require_master_price = false
+
+  config.products_per_page = 1000
 end
 
 Spree::Backend::Config.configure do |config|

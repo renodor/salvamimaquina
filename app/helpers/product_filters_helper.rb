@@ -44,7 +44,7 @@ module ProductFiltersHelper
   }.freeze
 
   def build_price_range_slider_values
-    products = @taxon&.all_products&.includes(:variants) || @products.includes(:variants)
+    products = @taxon&.all_products&.includes(:variants, :master) || @products.includes(:variants, :master)
     variants = products.flat_map { |product| product.variants.presence || product.master }
 
     return nil unless variants.present?
