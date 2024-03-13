@@ -2,7 +2,7 @@
 <% color_filter = checkbox_product_filter('color') %>
 <% color_option_type = Spree::OptionType.find_by(name: 'color') %>
 <% if color_filter.present? %>
-  <div class="product-filter">
+  <div class="product-filter" data-spec="color-filter">
     <div class="product-filter-content">
       <h6 class="product-filter-title"><%= t('spree.color', count: color_filter.size) %></h6>
       <div id="color-filter" class="color-badges">

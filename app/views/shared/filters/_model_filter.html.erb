@@ -2,7 +2,7 @@
 <% model_filter = checkbox_product_filter('model') %>
 <% model_option_type = Spree::OptionType.find_by(name: 'model') %>
 <% if model_filter.present? %>
-  <div class="product-filter">
+  <div class="product-filter" data-spec="model-filter">
     <div class="product-filter-content">
       <h6 class="product-filter-title"><%= t('spree.model', count: model_filter.size) %></h6>
       <ul>

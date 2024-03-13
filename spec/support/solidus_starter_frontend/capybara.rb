@@ -14,7 +14,7 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do |example|
     screen_size = example.metadata[:screen_size] || [1400, 1400]
-    driven_by((ENV['CAPYBARA_JS_DRIVER'] || :selenium_chrome_headless).to_sym, screen_size: screen_size)
+    driven_by((example.metadata[:debug] ? :selenium_chrome : ENV['CAPYBARA_JS_DRIVER'] || :selenium_chrome_headless).to_sym, screen_size: screen_size)
   end
 end
 
