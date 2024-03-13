@@ -38,7 +38,7 @@
     }
     #product-right-part {
       width: 40%;
-      #product-description {
+      #product-infos {
         .product-title {
           border-bottom: none;
           margin-bottom: 15px;
@@ -95,6 +95,12 @@
       }
     }
   }
+
+  .product-description {
+    p {
+      margin-bottom: 0;
+    }
+  }
 }
 
 @media ($max-m) {
@@ -113,7 +119,7 @@
       #product-right-part {
         width: 100%;
         margin-bottom: 20px;
-        #product-description {
+        #product-infos {
           #product-variants {
             .variant-options {
               select, .select {

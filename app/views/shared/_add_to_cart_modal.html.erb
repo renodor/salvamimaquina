@@ -2,6 +2,7 @@
   <div
     data-controller="add-to-cart-modal"
     data-add-to-cart-modal-display-modal-value="<%= display_modal %>"
+    data-spec='add-to-cart-modal'
     class="modal fade"
     id="addToCartModal"
     tabindex="-1"
@@ -19,8 +20,8 @@
           <span id="variant-name"><%= variant_full_name %></span> <%= t('spree.added_to_your_cart') %>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><%= t('spree.continue_shopping') %></button>
-          <%= link_to cart_path, class: "btn btn-primary" do %>
+          <button type="button" class="btn btn-primary" data-spec="close-modal" data-bs-dismiss="modal"><%= t('spree.continue_shopping') %></button>
+          <%= link_to cart_es_mx_path, class: "btn btn-primary", data: { spec: 'go-to-cart' } do %>
             <%= t('spree.see_cart') %>
           <% end %>
         </div>

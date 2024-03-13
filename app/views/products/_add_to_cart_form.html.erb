@@ -2,7 +2,7 @@
   <meta itemprop="url" content="<%= request.original_url %>" data-add-to-cart-form-target="itempropUrl">
 
   <% if variant.present? %>
-    <%= form_for :order, url: cart_line_items_path do |f| %>
+    <%= form_for :order, url: cart_line_items_path, data: { spec: 'line-items-cart' } do |f| %>
       <%= hidden_field_tag 'variant_id', variant.id %>
       <div id="product-price">
         <div>
@@ -75,9 +75,11 @@
       </div>
     <% end %>
   <% else %>
-    <%= button_tag class: 'btn btn-secondary' do %>
+    <%= button_tag class: 'btn btn-secondary', disabled: true do %>
       <%= t('spree.product_not_available').upcase %>
     <% end %>
-    <p><small><%= t('spree.no_product_with_selected_options') %></small></p>
+    <p data-spec='no-variant-explanation'>
+      <small><%= t('spree.no_product_with_selected_options') %></small>
+    </p>
   <% end %>
 </div>

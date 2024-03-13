@@ -9,7 +9,7 @@
     </div>
     <div id="product-right-part" data-hook="product_right_part">
       <div data-hook="product_right_part_wrap">
-        <div id="product-description" data-hook="product_description">
+        <div id="product-infos" data-hook="product_description">
           <h1 class="product-title" itemprop="name"><%= @product.name %></h1>
 
           <%= form_with url: select_variant_product_path(@product), data: { controller: 'select-variant' } do |f| %>
@@ -21,7 +21,7 @@
                   <% @product.variant_option_values_by_option_type.sort_by { |option_type, _option_value| option_type.name == 'color' ? 0 : 1 }.each do |option_type, option_values| %>
                     <% if option_type.name == 'color' %>
                       <div id="variant-colors">
-                        <p class="variant-option-type"><%= option_type.name.capitalize %></p>
+                        <p class="variant-option-type"><%= option_type.presentation.capitalize %></p>
                         <div class="color-badges">
                           <% option_values.each do |color, index| %>
                               <%=
@@ -40,8 +40,8 @@
                         </div>
                       </div>
                     <% else %>
-                      <div class="variant-options">
-                        <p class="variant-option-type"><%= t("spree.#{option_type.name}", count: 1).capitalize %></p>
+                      <div class="variant-options" data-spec="<%= "option-type-#{option_type.id}" %>">
+                        <p class="variant-option-type"><%= t("spree.#{option_type.presentation}", count: 1).capitalize %></p>
                         <% if option_values.size > 1 %>
                           <%=
                             select_tag(
@@ -49,7 +49,7 @@
                               options_for_select(
                                 option_values.map do |option_value|
                                   [
-                                    option_value.name,
+                                    option_value.presentation,
                                     option_value.id,
                                     { selected: variant_option_values.include?(option_value) }
                                   ]
@@ -60,7 +60,7 @@
                             )
                           %>
                         <% else %>
-                          <div class="select"><%= option_values.first.name %></div>
+                          <div class="select"><%= option_values.first.presentation %></div>
                           <%= hidden_field_tag 'option_value_ids[]', option_values.first.id %>
                         <% end %>
                       </div>
@@ -84,7 +84,7 @@
   <div class="product-description">
     <h5><%= t('spree.product_information') %></h5>
     <span itemprop="description">
-      <%= product_description(@product) rescue t('spree.product_has_no_description') %>
+      <%= raw(@product.description&.gsub(/(.*?)\r?\n\r?\n/m, '<p>\1</p>')) %>
     </span>
   </div>
 

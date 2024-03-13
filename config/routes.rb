@@ -122,7 +122,7 @@ Rails.application.routes.draw do
 
   # Solidus Routes can't be localized using the localized block...
   # So we have to manually define the routes we want to translate here...
-  get '/carrito', to: 'orders#edit', as: 'cart_es_mx'
+  get '/carrito', to: 'carts#show', as: 'cart_es_mx'
   get '/mi_cuenta', to: 'users#show', as: 'account_es_mx'
   get '/mi_cuenta/editar', to: 'users#edit', as: 'edit_account_es_mx'
   get '/pedidos/:id', to: 'orders#show', as: 'orders_es_mx'
