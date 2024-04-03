@@ -1,7 +1,7 @@
 <div id="checkout-summary">
   <h3><%= t('spree.order_summary') %></h3>
 
-  <div class="checkout-summary-line">
+  <div class="checkout-summary-line" data-spec="checkout-summary-products">
     <span class="checkout-summary-element"><%= order.item_count %> <%= t('spree.product', count: order.item_count) %></span>
     <span class="checkout-summary-element"><%= order.display_item_total.to_html %></span>
   </div>

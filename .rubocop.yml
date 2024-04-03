@@ -52,6 +52,9 @@ Style/SlicingWithRange:
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
 
+Style/RegexpLiteral:
+  Enabled: false
+
 Metrics/BlockLength:
   Max: 150
   Exclude:
