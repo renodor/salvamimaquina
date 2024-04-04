@@ -241,6 +241,7 @@ class CheckoutsController < CheckoutBaseController
   # So on front end we are displaying only the first package, and user will choose the shipping method of the first package only.
   # In this method we make sure that, if there are 2 packages, the second one will have the same shipping method than the first one.
   # (Because otherwise 2nd package will always have a default shipping method)
+  # TODO: test that
   def equalize_shipments_shipping_methods
     shipment_attributes = params[:order][:shipments_attributes]
     first_shipment_shipping_method_id = Spree::ShippingRate.find(shipment_attributes['0'][:selected_shipping_rate_id]).shipping_method.id
@@ -257,6 +258,7 @@ class CheckoutsController < CheckoutBaseController
   # - if the order has an associated user, we make sure that this user is logged in
   # - if the order has no associated user, we make sure that the guest token is present
   # - + make sure to notify users and Sentry if something goes wrong
+  # TODO: test that
   def retrieve_payment_order_and_user
     payment_uuid = JSON.parse(params['Response'])['TransactionIdentifier']
     @payment     = Spree::Payment.find_by(uuid: payment_uuid)

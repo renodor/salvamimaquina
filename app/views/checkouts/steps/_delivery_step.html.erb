@@ -11,7 +11,7 @@
         <div class="radios shipping-methods">
           <% ship_form.object.shipping_rates.includes(:taxes, :shipping_method).each do |rate| %>
             <% shipping_method = rate.shipping_method %>
-            <label class="shipping-method">
+            <label class="shipping-method" data-spec="shipping-method-<%= shipping_method.id %>">
               <%= ship_form.radio_button :selected_shipping_rate_id, rate.id %>
               <div class="shipping-method-label">
                 <span>

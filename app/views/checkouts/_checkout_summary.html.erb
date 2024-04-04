@@ -17,14 +17,14 @@
   <%# Shipping %>
   <% if order.passed_checkout_step?("delivery") && order.shipments.any? %>
     <%# Shipping price %>
-    <div class="checkout-summary-line" data-hook="shipping_total">
+    <div class="checkout-summary-line" data-spec="checkout-summary-shipping">
       <span class="checkout-summary-element"><%= t('spree.shipping_total') %></span>
       <span class="checkout-summary-element"><%= number_to_currency(order.shipments.to_a.sum(&:cost)) %></span>
     </div>
 
     <% if order.shipment_adjustments.nonzero.exists? %>
       <% order.shipment_adjustments.nonzero.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
-       <div class="checkout-summary-line">
+       <div class="checkout-summary-line" data-spec="checkout-summary-shipping-promotion">
           <span class="checkout-summary-element"><%= label %></span>
           <span class="checkout-summary-element"><%= number_to_currency(adjustments.sum(&:amount)) %></span>
         </div>
