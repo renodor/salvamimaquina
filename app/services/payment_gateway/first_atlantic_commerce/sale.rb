@@ -55,7 +55,7 @@ module PaymentGateway
               ChallengeWindowSize: 5,
               MerchantResponseUrl: '01'
             },
-            MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '050b-2a02-842a-f751-4c01-14fe-8646-80a7-e8a7.ngrok-free.app'}/checkout/three_d_secure_response"
+            MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '12ef-2a02-842a-f751-4c01-fe98-f57f-8039-1532.ngrok-free.app'}/checkout/three_d_secure_response"
           }
         }.to_json
       end

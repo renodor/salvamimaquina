@@ -2,14 +2,14 @@
 
 require 'solidus_starter_frontend_spec_helper'
 
-RSpec.describe 'Product page', type: :system, js: true, debug: true do
+RSpec.describe 'Product page', type: :system, js: true, debug: false do
   let!(:store) { create(:smm_store) }
   let!(:product) do
     create(
       :smm_product,
       name: 'Cool product!',
       description: 'This is a cool product.',
-      san_francisco_stock: 2,
+      san_francisco_stock: 1,
       bella_vista_stock: 1
     )
   end
@@ -280,6 +280,18 @@ RSpec.describe 'Product page', type: :system, js: true, debug: true do
             expect(find('#checkout-summary #summary-order-total')).to have_text('$24.68')
           end
 
+          it 'equalizes shipments shipping methods and adds shipping cost to the first package only' do
+            order = Spree::Order.last
+            delivery_form = find('form#checkout_form_delivery')
+
+            delivery_form.find(".shipping-methods [data-spec='shipping-method-#{delivery_shipping_method.id}']").click
+            delivery_form.find("input[type='submit']").click
+
+            expect(order.reload.shipments.map(&:shipping_method).uniq).to eq([delivery_shipping_method])
+            expect(order.shipments.first.cost).to eq(3.9)
+            expect(order.shipments.last.cost).to eq(0)
+          end
+
           context 'when order total is greater or equal than free shipping threshold' do
             before do
               visit product_path(product2)
@@ -396,64 +408,6 @@ RSpec.describe 'Product page', type: :system, js: true, debug: true do
             }
           }
         end
-        let(:fake_three_d_secure_payload) do
-          {
-            TransactionType: 2,
-            Approved: false,
-            TransactionIdentifier: fake_uuid,
-            TotalAmount: 28.58,
-            CurrencyCode: '840',
-            IsoResponseCode: 'SP4',
-            ResponseMessage: 'SPI Preprocessing complete',
-            OrderIdentifier: fake_order_identifier,
-            RedirectData: "<html><body><form method='post' action='/checkout/three_d_secure_response'><p>Fake 3ds form<p><input type='hidden' name='Response' value='#{fake_three_d_secure_response_payload.to_json}'><input type='submit'></form></body></html>",
-            SpiToken: fake_spi_token
-          }
-        end
-        let(:fake_three_d_secure_response_payload) do
-          {
-            TransactionType: 2,
-            Approved: false,
-            TransactionIdentifier: fake_uuid,
-            TotalAmount: 28.58,
-            CurrencyCode: '840',
-            CardBrand: 'Visa',
-            IsoResponseCode: '3D0',
-            ResponseMessage: '3D-Secure complete',
-            RiskManagement: {
-              ThreeDSecure: {
-                Eci: '05',
-                Cavv: 'AJkBAGaAYwdYQHEHFIBjAAAAAAA=',
-                Xid: '63e6b68a-0392-43ee-a5b9-0672d64c9763',
-                AuthenticationStatus: 'Y',
-                ProtocolVersion: '2.1.0',
-                FingerprintIndicator: 'U',
-                DsTransId: '731ee708-1f9f-42b0-88fd-fca707f7bd32',
-                ResponseCode: '3D0',
-                CardholderInfo: 'Additional authentication is needed for this transaction, please contact(Issuer Name) at xxx - xxx - xxxx.'
-              }
-            },
-            PanToken: '2r7ihhjhuzinrgtyk3rskqt6zrluzcazs3k8otao4m7o77djfy',
-            OrderIdentifier: fake_order_identifier,
-            SpiToken: fake_spi_token
-          }
-        end
-        let(:fake_payment_response_payload) do
-          {
-            TransactionType: 2,
-            Approved: true,
-            AuthorizationCode: '123456',
-            TransactionIdentifier: fake_uuid,
-            TotalAmount: 28.58,
-            CurrencyCode: '840',
-            RRN: '409521515533',
-            CardBrand: 'Visa',
-            IsoResponseCode: '00',
-            ResponseMessage: 'Transaction is approved',
-            PanToken: '2r7ihhjhuzinrgtyk3rskqt6zrluzcazs3k8otao4m7o77djfy',
-            OrderIdentifier: fake_order_identifier
-          }
-        end
 
         before do
           # Set deterministrict uuid so that Spree::Payment can be retrieved
@@ -492,7 +446,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: true do
 
           expect(payment_form.find('.payment-icons')).to have_selector("svg[data-spec='visa-icon']")
           expect(payment_form.find('.payment-icons')).to have_selector("svg[data-spec='master-icon']")
-          expect(payment_form.find(".card_name input[type='text']#name_on_card_1")['placeholder']).to eq('Nombre en la tarjeta')
+          expect(payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}")['placeholder']).to eq('Nombre en la tarjeta')
           expect(payment_form.find(".card_number input[type='tel']#card_number")['placeholder']).to eq('Número de tarjeta')
           expect(payment_form.find('.card_number')).to have_selector("svg[data-spec='lock-icon']")
           expect(payment_form.find('.card_number .has-tooltip .tooltip-text', visible: false)).to have_text(:all, 'Todas las transacciones están aseguradas')
@@ -501,34 +455,298 @@ RSpec.describe 'Product page', type: :system, js: true, debug: true do
           expect(payment_form.find('.card_code .has-tooltip .tooltip-text', visible: false)).to have_text(:all, 'Código de seguridad de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente.')
         end
 
-        it 'allows save payment send order to next step' do
-          stub_request(:post, /\.ptranz\.com\/api\/spi\/sale/)
-            .with(body: hash_including(expected_payment_payload))
-            .to_return(
-              status: 200,
-              body: fake_three_d_secure_payload.to_json
+        context 'when payment is successfull' do
+          # We doesn't deal with the case where payment doesn't have 3D Secure because it will result in the same test
+          # Indeed without 3DS the flow is the same but instead of having to fill the 3DS form (like we mimic here with a simple submit button),
+          # the payment platform directly redirect to /three_d_secure_response endpoint with a success payload
+
+          let(:fake_sale_response_payload) do
+            {
+              TransactionType: 2,
+              Approved: false,
+              TransactionIdentifier: fake_uuid,
+              TotalAmount: 28.58,
+              CurrencyCode: '840',
+              IsoResponseCode: 'SP4',
+              ResponseMessage: 'SPI Preprocessing complete',
+              OrderIdentifier: fake_order_identifier,
+              RedirectData: three_ds_html_form,
+              SpiToken: fake_spi_token
+            }
+          end
+          let(:three_ds_html_form) { "<html><body><form method='post' action='/checkout/three_d_secure_response'><p>Fake 3ds form<p><input type='hidden' name='Response' value='#{fake_three_d_secure_response_payload.to_json}'><input type='submit'></form></body></html>" }
+          let(:fake_payment_response_payload) do
+            {
+              TransactionType: 2,
+              Approved: true,
+              AuthorizationCode: '123456',
+              TransactionIdentifier: fake_uuid,
+              TotalAmount: 28.58,
+              CurrencyCode: '840',
+              RRN: '409521515533',
+              CardBrand: 'Visa',
+              IsoResponseCode: '00',
+              ResponseMessage: 'Transaction is approved',
+              PanToken: '2r7ihhjhuzinrgtyk3rskqt6zrluzcazs3k8otao4m7o77djfy',
+              OrderIdentifier: fake_order_identifier
+            }
+          end
+
+          context 'when 3D Secure is successfull' do
+            let(:fake_three_d_secure_response_payload) do
+              {
+                TransactionType: 2,
+                Approved: false,
+                TransactionIdentifier: fake_uuid,
+                TotalAmount: 28.58,
+                CurrencyCode: '840',
+                CardBrand: 'Visa',
+                IsoResponseCode: '3D0',
+                ResponseMessage: '3D-Secure complete',
+                RiskManagement: {
+                  ThreeDSecure: {
+                    Eci: '05',
+                    Cavv: 'AJkBAGaAYwdYQHEHFIBjAAAAAAA=',
+                    Xid: '63e6b68a-0392-43ee-a5b9-0672d64c9763',
+                    AuthenticationStatus: 'Y',
+                    ProtocolVersion: '2.1.0',
+                    FingerprintIndicator: 'U',
+                    DsTransId: '731ee708-1f9f-42b0-88fd-fca707f7bd32',
+                    ResponseCode: '3D0',
+                    CardholderInfo: 'Additional authentication is needed for this transaction, please contact(Issuer Name) at xxx - xxx - xxxx.'
+                  }
+                },
+                PanToken: '2r7ihhjhuzinrgtyk3rskqt6zrluzcazs3k8otao4m7o77djfy',
+                OrderIdentifier: fake_order_identifier,
+                SpiToken: fake_spi_token
+              }
+            end
+
+            before do
+              stub_request(:post, /\.ptranz\.com\/api\/spi\/sale/)
+                .with(body: hash_including(expected_payment_payload))
+                .to_return(
+                  status: 200,
+                  body: fake_sale_response_payload.to_json
+                )
+
+              stub_request(:post, /\.ptranz\.com\/api\/spi\/payment/)
+                .with(body: fake_spi_token.to_json)
+                .to_return(
+                  status: 200,
+                  body: fake_payment_response_payload.to_json
+                )
+
+              payment_form = find('form#checkout_form_payment')
+              payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
+              payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
+              payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
+              payment_form.find(".card_code input[type='tel']#card_code").set('123')
+            end
+
+            it 'allows to save payment send order to next step' do
+              find("form#checkout_form_payment input[type='submit']").click
+
+              expect(current_url).to match(/\/checkout\/update\/payment/)
+              expect(find('form')).to have_text('Fake 3ds form')
+
+              find("form input[type='submit']").click
+
+              order = Spree::Order.last
+              expect(current_url).to match(/\/orders\/#{order.number}\/token\/#{order.guest_token}/)
+              expect(order.state).to eq('complete')
+            end
+
+            it 're-sets guest token cookie when it gets lost after 3D Secure in order not to loose the current order' do
+              find("form#checkout_form_payment input[type='submit']").click
+
+              page.driver.browser.manage.delete_cookie('guest_token')
+
+              find("form input[type='submit']").click
+
+              order = Spree::Order.last
+              expect(current_url).to match(/\/orders\/#{order.number}\/token\/#{order.guest_token}/)
+              expect(order.state).to eq('complete')
+            end
+
+            it 'sends an error to Sentry and redirects to cart with an error message when payment is lost after 3D Secure' do
+              sentry_scope_double = double('Sentry::Scope', set_context: nil)
+              allow(Sentry).to receive(:configure_scope).and_yield(sentry_scope_double)
+
+              expect(sentry_scope_double).to receive(:set_context).with(
+                'Extra data',
+                {
+                  error: /Couldn't find Spree::Payment/,
+                  retrieved_payment_uuid: fake_uuid,
+                  params: fake_three_d_secure_response_payload.to_json
+                }
+              )
+              expect(Sentry).to receive(:capture_message).with('Error returning from 3DSecure')
+
+              find("form#checkout_form_payment input[type='submit']").click
+
+              Spree::Payment.destroy_all
+
+              find("form input[type='submit']").click
+
+              expect(current_url).to match(/carrito/)
+              expect(find('#flash')).to have_text('ubo un problema procesando su pedido. Su pago no fue debitado. Por favor inténtelo de nuevo, y si el problema sigue contacte a Salva Mi Máquina.')
+            end
+          end
+
+          context 'when 3D Secure fails' do
+            let(:fake_three_d_secure_response_payload) do
+              {
+                TransactionType: 2,
+                Approved: false,
+                TransactionIdentifier: fake_uuid,
+                TotalAmount: 28.58,
+                CurrencyCode: '840',
+                CardBrand: 'Visa',
+                IsoResponseCode: '3D0',
+                ResponseMessage: '3D-Secure error',
+                RiskManagement: {
+                  ThreeDSecure: {
+                    Xid: '63e6b68a-0392-43ee-a5b9-0672d64c9763',
+                    AuthenticationStatus: 'N',
+                    StatusReason: '01',
+                    ProtocolVersion: '2.1.0',
+                    FingerprintIndicator: 'U',
+                    DsTransId: '731ee708-1f9f-42b0-88fd-fca707f7bd32',
+                    ResponseCode: '3D0',
+                    CardholderInfo: 'Additional authentication is needed for this transaction, please contact(Issuer Name) at xxx - xxx - xxxx.'
+                  }
+                },
+                PanToken: '2r7ihhjhuzinrgtyk3rskqt6zrluzcazs3k8otao4m7o77djfy',
+                OrderIdentifier: fake_order_identifier,
+                SpiToken: fake_spi_token
+              }
+            end
+
+            before do
+              stub_request(:post, /\.ptranz\.com\/api\/spi\/sale/)
+                .with(body: hash_including(expected_payment_payload))
+                .to_return(
+                  status: 200,
+                  body: fake_sale_response_payload.to_json
+                )
+
+              payment_form = find('form#checkout_form_payment')
+              payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
+              payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
+              payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
+              payment_form.find(".card_code input[type='tel']#card_code").set('123')
+            end
+
+            it 'doesnt complete order, sends an error to Sentry and redirects to payment page with an error message' do
+              order = Spree::Order.last
+              sentry_scope_double = double('Sentry::Scope', set_context: nil)
+              allow(Sentry).to receive(:configure_scope).and_yield(sentry_scope_double)
+
+              expect(sentry_scope_double).to receive(:set_context).with(
+                'Extra data',
+                {
+                  payment_gateway_iso_response_code: '3D0',
+                  payment_gateway_3ds_status: 'N',
+                  payment_gateway_error_message: '3D-Secure error',
+                  payment_gateway_method_name: '3Ds Response',
+                  order_number: order.number,
+                  payment: hash_including(
+                    {
+                      'amount' => '28.58',
+                      'avs_response' => nil,
+                      'cvv_response_code' => nil,
+                      'cvv_response_message' => nil,
+                      'order_id' => order.id,
+                      'payment_method_id' => payment_method.id,
+                      'response_code' => 'SP4',
+                      'source_type' => 'Spree::CreditCard',
+                      'spi_token' => nil,
+                      'state' => 'checkout',
+                      'uuid' => fake_uuid
+                    }
+                  )
+                }
+              )
+              expect(Sentry).to receive(:capture_message).with('Spree::PaymentMethod::BacCreditCard')
+              find("form#checkout_form_payment input[type='submit']").click
+              find("form input[type='submit']").click
+              expect(current_url).to match(/\/checkout\/three_d_secure_response/)
+              expect(find('#flash')).to have_text('Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo.')
+              expect(order.reload.state).to eq('payment')
+            end
+          end
+        end
+
+        context 'when payment authorization fails' do
+          let(:fake_sale_response_payload) do
+            {
+              TransactionType: 2,
+              Approved: false,
+              TransactionIdentifier: fake_uuid,
+              TotalAmount: 28.58,
+              CurrencyCode: '840',
+              IsoResponseCode: '12',
+              ResponseMessage: 'Invalid card/currency',
+              OrderIdentifier: fake_order_identifier,
+              RedirectData: '',
+              SpiToken: fake_spi_token
+            }
+          end
+
+          before do
+            stub_request(:post, /\.ptranz\.com\/api\/spi\/sale/)
+              .with(body: hash_including(expected_payment_payload))
+              .to_return(
+                status: 200,
+                body: fake_sale_response_payload.to_json
+              )
+
+            payment_form = find('form#checkout_form_payment')
+            payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
+            payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
+            payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
+            payment_form.find(".card_code input[type='tel']#card_code").set('123')
+          end
+
+          it 'doesnt complete order, sends an error to Sentry and redirects to payment page with an error message' do
+            order = Spree::Order.last
+            sentry_scope_double = double('Sentry::Scope', set_context: nil)
+            allow(Sentry).to receive(:configure_scope).and_yield(sentry_scope_double)
+
+            expect(sentry_scope_double).to receive(:set_context).with(
+              'Extra data',
+              {
+                payment_gateway_iso_response_code: '12',
+                payment_gateway_3ds_status: nil,
+                payment_gateway_error_message: 'Invalid card/currency',
+                payment_gateway_method_name: 'Sale',
+                order_number: order.number,
+                payment: hash_including(
+                  {
+                    'amount' => '28.58',
+                    'avs_response' => nil,
+                    'cvv_response_code' => nil,
+                    'cvv_response_message' => nil,
+                    'order_id' => order.id,
+                    'payment_method_id' => payment_method.id,
+                    'response_code' => nil,
+                    'source_type' => 'Spree::CreditCard',
+                    'spi_token' => nil,
+                    'state' => 'checkout',
+                    'uuid' => fake_uuid
+                  }
+                )
+              }
             )
+            expect(Sentry).to receive(:capture_message).with('Spree::PaymentMethod::BacCreditCard')
 
-          stub_request(:post, /\.ptranz\.com\/api\/spi\/payment/)
-            .with(body: fake_spi_token.to_json)
-            .to_return(
-              status: 200,
-              body: fake_payment_response_payload.to_json
-            )
+            find("form#checkout_form_payment input[type='submit']").click
 
-          payment_form = find('form#checkout_form_payment')
-
-          payment_form.find(".card_name input[type='text']#name_on_card_1").set('Hari Seldon')
-          payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
-          payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
-          payment_form.find(".card_code input[type='tel']#card_code").set('123')
-          payment_form.find("input[type='submit']").click
-
-          expect(current_url).to match(/\/checkout\/update\/payment/)
-          expect(find('form')).to have_text('Fake 3ds form')
-          find("form input[type='submit']").click
-
-          binding.pry
+            expect(current_url).to match(/\/checkout\/update\/payment/)
+            expect(find('#flash')).to have_text('Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo.')
+            expect(order.reload.state).to eq('payment')
+          end
         end
       end
     end

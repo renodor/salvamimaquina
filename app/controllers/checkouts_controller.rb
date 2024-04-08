@@ -241,7 +241,6 @@ class CheckoutsController < CheckoutBaseController
   # So on front end we are displaying only the first package, and user will choose the shipping method of the first package only.
   # In this method we make sure that, if there are 2 packages, the second one will have the same shipping method than the first one.
   # (Because otherwise 2nd package will always have a default shipping method)
-  # TODO: test that
   def equalize_shipments_shipping_methods
     shipment_attributes = params[:order][:shipments_attributes]
     first_shipment_shipping_method_id = Spree::ShippingRate.find(shipment_attributes['0'][:selected_shipping_rate_id]).shipping_method.id
@@ -261,7 +260,7 @@ class CheckoutsController < CheckoutBaseController
   # TODO: test that
   def retrieve_payment_order_and_user
     payment_uuid = JSON.parse(params['Response'])['TransactionIdentifier']
-    @payment     = Spree::Payment.find_by(uuid: payment_uuid)
+    @payment     = Spree::Payment.find_by!(uuid: payment_uuid)
     order        = @payment.order
 
     if order.user && !spree_current_user
@@ -273,16 +272,15 @@ class CheckoutsController < CheckoutBaseController
       )
     end
   rescue ActiveRecord::RecordNotFound => e
-    Sentry.capture_exception(
-      e,
+    SendMessageToSentry.send(
+      'Error returning from 3DSecure',
       {
-        extra: {
-          info: 'Error returning from 3DSecure',
-          retrieved_payment_uuid: JSON.parse(params['Response'])['TransactionIdentifier'],
-          params: params['Response'].as_json
-        }
+        error: e.message,
+        retrieved_payment_uuid: JSON.parse(params['Response'])['TransactionIdentifier'],
+        params: params['Response'].as_json
       }
     )
+
     flash[:error] = t('spree.spree_gateway_error_3ds')
     redirect_to cart_es_mx_path
   end

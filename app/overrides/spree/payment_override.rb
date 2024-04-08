@@ -24,7 +24,6 @@ module Spree
 
           response.params['html_form'] if response.params['html_form'].present?
         else
-          # TODO: test that
           failure
           SendMessageToSentry.send(
             payment_method.type,
