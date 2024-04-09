@@ -77,20 +77,33 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
       preferences: { server: 'fac', test_mode: false }
     )
   end
-
-  before do
-    visit product_path(product)
-    find(".add-to-cart .quantity-selector span[data-type='add']").click
-    find("#add-to-cart-form form[data-spec='line-items-cart'] button#add-to-cart-btn").click
-    find("[data-spec='add-to-cart-modal'] .modal-footer [data-spec='go-to-cart']").click
-    find("button[name='checkout'][type='submit'].checkout-button").click
+  let!(:tax_category) { create(:tax_category, is_default: true, name: 'ITBMS', tax_code: 'itbms') }
+  let!(:tax_rate) do
+    create(
+      :tax_rate,
+      name: 'ITBMS',
+      amount: 0.07,
+      level: 'order',
+      included_in_price: false,
+      show_rate_in_label: true,
+      zone: panama_country_zone,
+      tax_categories: [tax_category]
+    )
   end
 
   context 'when user is not logged in' do
+    before do
+      visit product_path(product)
+      find(".add-to-cart .quantity-selector span[data-type='add']").click
+      find("#add-to-cart-form form[data-spec='line-items-cart'] button#add-to-cart-btn").click
+      find("[data-spec='add-to-cart-modal'] .modal-footer [data-spec='go-to-cart']").click
+      find("button[name='checkout'][type='submit'].checkout-button").click
+    end
+
     context 'checkout without registration' do
       before do
-        find('#checkout_form_registration input#order_email').set('cool_email@gmail.com')
-        find("#checkout_form_registration input[type='submit']").click
+        find('form#checkout_form_registration input#order_email').set('cool_email@gmail.com')
+        find("form#checkout_form_registration input[type='submit']").click
       end
 
       context 'address step' do
@@ -100,7 +113,8 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
         it 'displays order summary' do
           expect(find("#checkout-summary [data-spec='checkout-summary-products']")).to have_text("2 Productos\n$24.68")
-          expect(find('#checkout-summary #summary-order-total')).to have_text('$24.68')
+          expect(find("#checkout-summary [data-spec='checkout-summary-tax']")).to have_text("ITBMS 7.00%\n$1.73")
+          expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$26.41")
         end
 
         it 'displays address form with email and city prefilled' do
@@ -162,18 +176,10 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
         it 'allows to save adress and send order to next step' do
           order = Spree::Order.last
-          address_form = find('form#checkout_form_address')
 
           expect(order.state).to eq('address')
 
-          address_form.find("input[type='text']#order_ship_address_attributes_name").set('Hari Seldon')
-          address_form.find("input[type='tel']#order_ship_address_attributes_phone").set('0610111213')
-          address_form.find("input[type='text']#order_ship_address_attributes_address1").set('23 Calle de aquí')
-          address_form.find("input[type='text']#order_ship_address_attributes_address2").set('Al lado de allá')
-          address_form.find("select#order_ship_address_attributes_district_id option[value='#{bella_vista_district.id}']").select_option
-          sleep(1)
-          address_form.find('#map .mapboxgl-marker').drag_to(address_form.find('#map'))
-          address_form.find("input[type='submit']").click
+          complete_address_step
 
           expect(order.reload.state).to eq('delivery')
           expect(order.email).to eq('cool_email@gmail.com')
@@ -208,18 +214,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
       context 'delivery step' do
         context 'when order ship address is in Panama Zone 1 or 2' do
-          before do
-            address_form = find('form#checkout_form_address')
-
-            address_form.find("input[type='text']#order_ship_address_attributes_name").set('Hari Seldon')
-            address_form.find("input[type='tel']#order_ship_address_attributes_phone").set('0610111213')
-            address_form.find("input[type='text']#order_ship_address_attributes_address1").set('23 Calle de aquí')
-            address_form.find("input[type='text']#order_ship_address_attributes_address2").set('Al lado de allá')
-            address_form.find("select#order_ship_address_attributes_district_id option[value='#{bella_vista_district.id}']").select_option
-            sleep(1)
-            address_form.find('#map .mapboxgl-marker').drag_to(address_form.find('#map'))
-            address_form.find("input[type='submit']").click
-          end
+          before { complete_address_step }
 
           it 'displays breadcrumb at delivery step' do
             expect(find('.progress-steps .completed')).to have_text('DIRECCIÓN')
@@ -228,7 +223,8 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
           it 'displays order summary' do
             expect(find("#checkout-summary [data-spec='checkout-summary-products']")).to have_text("2 Productos\n$24.68")
-            expect(find('#checkout-summary #summary-order-total')).to have_text('$24.68')
+            expect(find("#checkout-summary [data-spec='checkout-summary-tax']")).to have_text("ITBMS 7.00%\n$1.73")
+            expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$26.41")
           end
 
           it 'displays Panama Zone 1 delivery options form' do
@@ -241,12 +237,10 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
           it 'allows to choose delivery and send order to next step' do
             order = Spree::Order.last
-            delivery_form = find('form#checkout_form_delivery')
 
             expect(order.state).to eq('delivery')
 
-            delivery_form.find(".shipping-methods [data-spec='shipping-method-#{delivery_shipping_method.id}']").click
-            delivery_form.find("input[type='submit']").click
+            complete_delivery_step
 
             expect(order.reload.state).to eq('payment')
             expect(order.shipment_total).to eq(3.9)
@@ -258,7 +252,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
             expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$3.90")
             expect(find('#checkout-summary')).not_to have_selector("[data-spec='checkout-summary-shipping-promotion']")
-            expect(find('#checkout-summary #summary-order-total')).to have_text('$28.58')
+            expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$30.31")
           end
 
           it 'allows to choose pick up in store and send order to next step' do
@@ -277,19 +271,16 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
             expect(current_url).to match(/\/checkout\/payment/)
 
             expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$0.00")
-            expect(find('#checkout-summary #summary-order-total')).to have_text('$24.68')
+            expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$26.41")
           end
 
           it 'equalizes shipments shipping methods and adds shipping cost to the first package only' do
             order = Spree::Order.last
-            delivery_form = find('form#checkout_form_delivery')
 
-            delivery_form.find(".shipping-methods [data-spec='shipping-method-#{delivery_shipping_method.id}']").click
-            delivery_form.find("input[type='submit']").click
+            complete_delivery_step
 
             expect(order.reload.shipments.map(&:shipping_method).uniq).to eq([delivery_shipping_method])
-            expect(order.shipments.first.cost).to eq(3.9)
-            expect(order.shipments.last.cost).to eq(0)
+            expect(order.shipments.map(&:cost)).to contain_exactly(3.9, 0)
           end
 
           context 'when order total is greater or equal than free shipping threshold' do
@@ -303,12 +294,10 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
             it 'offers free shipping' do
               order = Spree::Order.last
-              delivery_form = find('form#checkout_form_delivery')
 
-              expect(delivery_form.find('.free-shipping')).to have_text('¡Entrega gratis para pedidos arriba de $150.00!')
+              expect(find('form#checkout_form_delivery .free-shipping')).to have_text('¡Entrega gratis para pedidos arriba de $150.00!')
 
-              delivery_form.find(".shipping-methods [data-spec='shipping-method-#{delivery_shipping_method.id}']").click
-              delivery_form.find("input[type='submit']").click
+              complete_delivery_step
 
               expect(order.reload.state).to eq('payment')
               expect(order.shipment_total).to eq(3.9)
@@ -320,24 +309,13 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
               expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$3.90")
               expect(find("#checkout-summary [data-spec='checkout-summary-shipping-promotion']")).to have_text("Promoción (Entrega Gratis)\n-$3.90")
-              expect(find('#checkout-summary #summary-order-total')).to have_text('$180.02')
+              expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$192.62")
             end
           end
         end
 
         context 'when delivery is in Panama Zone 3' do
-          before do
-            address_form = find('form#checkout_form_address')
-
-            address_form.find("input[type='text']#order_ship_address_attributes_name").set('Hari Seldon')
-            address_form.find("input[type='tel']#order_ship_address_attributes_phone").set('0610111213')
-            address_form.find("input[type='text']#order_ship_address_attributes_address1").set('23 Calle muy lejos')
-            address_form.find("input[type='text']#order_ship_address_attributes_address2").set('Muy lejos de allá')
-            address_form.find("select#order_ship_address_attributes_district_id option[value='#{tocumen_district.id}']").select_option
-            sleep(2)
-            address_form.find('#map .mapboxgl-marker').drag_to(address_form.find('#map'))
-            address_form.find("input[type='submit']").click
-          end
+          before { complete_address_step(district: tocumen_district) }
 
           it 'displays Panama Zone 3 delivery options form' do
             delivery_form = find('form#checkout_form_delivery')
@@ -375,7 +353,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
               expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$9.50")
               expect(find('#checkout-summary')).not_to have_selector("[data-spec='checkout-summary-shipping-promotion']")
-              expect(find('#checkout-summary #summary-order-total')).to have_text('$189.52')
+              expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$202.12")
             end
           end
         end
@@ -387,7 +365,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
         let(:fake_spi_token) { '9t1dr3wjcns8n446qj9t7xgurnr5s01svn5y14p5avat43seb-3plyg9wt7wz' }
         let(:expected_payment_payload) do
           {
-            TotalAmount: 28.58,
+            TotalAmount: 30.31,
             CurrencyCode: 840,
             ThreeDSecure: true,
             Source: {
@@ -413,20 +391,8 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
           # Set deterministrict uuid so that Spree::Payment can be retrieved
           allow(SecureRandom).to receive(:uuid).and_return(fake_uuid)
 
-          address_form = find('form#checkout_form_address')
-
-          address_form.find("input[type='text']#order_ship_address_attributes_name").set('Hari Seldon')
-          address_form.find("input[type='tel']#order_ship_address_attributes_phone").set('0610111213')
-          address_form.find("input[type='text']#order_ship_address_attributes_address1").set('23 Calle de aquí')
-          address_form.find("input[type='text']#order_ship_address_attributes_address2").set('Al lado de allá')
-          address_form.find("select#order_ship_address_attributes_district_id option[value='#{bella_vista_district.id}']").select_option
-          sleep(1)
-          address_form.find('#map .mapboxgl-marker').drag_to(address_form.find('#map'))
-          address_form.find("input[type='submit']").click
-
-          delivery_form = find('form#checkout_form_delivery')
-          delivery_form.find(".shipping-methods [data-spec='shipping-method-#{delivery_shipping_method.id}']").click
-          delivery_form.find("input[type='submit']").click
+          complete_address_step
+          complete_delivery_step
         end
 
         it 'displays breadcrumb at delivery step' do
@@ -437,8 +403,9 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
 
         it 'displays order summary' do
           expect(find("#checkout-summary [data-spec='checkout-summary-products']")).to have_text("2 Productos\n$24.68")
+          expect(find("#checkout-summary [data-spec='checkout-summary-tax']")).to have_text("ITBMS 7.00%\n$1.73")
           expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$3.9")
-          expect(find('#checkout-summary #summary-order-total')).to have_text('$28.58')
+          expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$30.31")
         end
 
         it 'displays payment form' do
@@ -455,7 +422,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
           expect(payment_form.find('.card_code .has-tooltip .tooltip-text', visible: false)).to have_text(:all, 'Código de seguridad de 3 números que se encuentra normalmente detras de su tarjeta. Las tarjetas American Expres tienen un código de 4 números en el frente.')
         end
 
-        context 'when payment is successfull' do
+        context 'when payment authorization is successfull' do
           # We doesn't deal with the case where payment doesn't have 3D Secure because it will result in the same test
           # Indeed without 3DS the flow is the same but instead of having to fill the 3DS form (like we mimic here with a simple submit button),
           # the payment platform directly redirect to /three_d_secure_response endpoint with a success payload
@@ -465,7 +432,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
               TransactionType: 2,
               Approved: false,
               TransactionIdentifier: fake_uuid,
-              TotalAmount: 28.58,
+              TotalAmount: 30.31,
               CurrencyCode: '840',
               IsoResponseCode: 'SP4',
               ResponseMessage: 'SPI Preprocessing complete',
@@ -481,7 +448,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
               Approved: true,
               AuthorizationCode: '123456',
               TransactionIdentifier: fake_uuid,
-              TotalAmount: 28.58,
+              TotalAmount: 30.31,
               CurrencyCode: '840',
               RRN: '409521515533',
               CardBrand: 'Visa',
@@ -498,7 +465,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                 TransactionType: 2,
                 Approved: false,
                 TransactionIdentifier: fake_uuid,
-                TotalAmount: 28.58,
+                TotalAmount: 30.31,
                 CurrencyCode: '840',
                 CardBrand: 'Visa',
                 IsoResponseCode: '3D0',
@@ -536,17 +503,10 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                   status: 200,
                   body: fake_payment_response_payload.to_json
                 )
-
-              payment_form = find('form#checkout_form_payment')
-              payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
-              payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
-              payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
-              payment_form.find(".card_code input[type='tel']#card_code").set('123')
             end
 
             it 'allows to save payment send order to next step' do
-              find("form#checkout_form_payment input[type='submit']").click
-
+              complete_payment_step
               expect(current_url).to match(/\/checkout\/update\/payment/)
               expect(find('form')).to have_text('Fake 3ds form')
 
@@ -558,8 +518,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
             end
 
             it 're-sets guest token cookie when it gets lost after 3D Secure in order not to loose the current order' do
-              find("form#checkout_form_payment input[type='submit']").click
-
+              complete_payment_step
               page.driver.browser.manage.delete_cookie('guest_token')
 
               find("form input[type='submit']").click
@@ -583,7 +542,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
               )
               expect(Sentry).to receive(:capture_message).with('Error returning from 3DSecure')
 
-              find("form#checkout_form_payment input[type='submit']").click
+              complete_payment_step
 
               Spree::Payment.destroy_all
 
@@ -600,7 +559,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                 TransactionType: 2,
                 Approved: false,
                 TransactionIdentifier: fake_uuid,
-                TotalAmount: 28.58,
+                TotalAmount: 30.31,
                 CurrencyCode: '840',
                 CardBrand: 'Visa',
                 IsoResponseCode: '3D0',
@@ -630,12 +589,6 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                   status: 200,
                   body: fake_sale_response_payload.to_json
                 )
-
-              payment_form = find('form#checkout_form_payment')
-              payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
-              payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
-              payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
-              payment_form.find(".card_code input[type='tel']#card_code").set('123')
             end
 
             it 'doesnt complete order, sends an error to Sentry and redirects to payment page with an error message' do
@@ -653,7 +606,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                   order_number: order.number,
                   payment: hash_including(
                     {
-                      'amount' => '28.58',
+                      'amount' => '30.31',
                       'avs_response' => nil,
                       'cvv_response_code' => nil,
                       'cvv_response_message' => nil,
@@ -669,7 +622,9 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                 }
               )
               expect(Sentry).to receive(:capture_message).with('Spree::PaymentMethod::BacCreditCard')
-              find("form#checkout_form_payment input[type='submit']").click
+
+              complete_payment_step
+
               find("form input[type='submit']").click
               expect(current_url).to match(/\/checkout\/three_d_secure_response/)
               expect(find('#flash')).to have_text('Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo.')
@@ -684,7 +639,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
               TransactionType: 2,
               Approved: false,
               TransactionIdentifier: fake_uuid,
-              TotalAmount: 28.58,
+              TotalAmount: 30.31,
               CurrencyCode: '840',
               IsoResponseCode: '12',
               ResponseMessage: 'Invalid card/currency',
@@ -701,12 +656,6 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                 status: 200,
                 body: fake_sale_response_payload.to_json
               )
-
-            payment_form = find('form#checkout_form_payment')
-            payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
-            payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
-            payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
-            payment_form.find(".card_code input[type='tel']#card_code").set('123')
           end
 
           it 'doesnt complete order, sends an error to Sentry and redirects to payment page with an error message' do
@@ -724,7 +673,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
                 order_number: order.number,
                 payment: hash_including(
                   {
-                    'amount' => '28.58',
+                    'amount' => '30.31',
                     'avs_response' => nil,
                     'cvv_response_code' => nil,
                     'cvv_response_message' => nil,
@@ -741,7 +690,7 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
             )
             expect(Sentry).to receive(:capture_message).with('Spree::PaymentMethod::BacCreditCard')
 
-            find("form#checkout_form_payment input[type='submit']").click
+            complete_payment_step
 
             expect(current_url).to match(/\/checkout\/update\/payment/)
             expect(find('#flash')).to have_text('Hubo un problema con su información de pago. Por favor, revísela e inténtelo de nuevo.')
@@ -749,6 +698,233 @@ RSpec.describe 'Product page', type: :system, js: true, debug: false do
           end
         end
       end
+
+      context 'complete step' do
+        let(:fake_uuid) { '0a0c4f98-c5d4-4c8c-b218-9a3d2ed51ed6' }
+        let(:fake_sale_response_payload) { { IsoResponseCode: 'SP4', RedirectData: three_ds_html_form } }
+        let(:fake_payment_response_payload) { { Approved: true } }
+        let(:three_ds_html_form) { "<html><body><form method='post' action='/checkout/three_d_secure_response'><p>Fake 3ds form<p><input type='hidden' name='Response' value='#{fake_three_d_secure_response_payload.to_json}'><input type='submit'></form></body></html>" }
+        let(:fake_three_d_secure_response_payload) do
+          {
+            TransactionIdentifier: fake_uuid,
+            IsoResponseCode: '3D0',
+            RiskManagement: { ThreeDSecure: { AuthenticationStatus: 'Y' } },
+            SpiToken: '9t1dr3wjcns8n446qj9t7xgurnr5s01svn5y14p5avat43seb-3plyg9wt7wz'
+          }
+        end
+
+        before do
+          # Set deterministrict uuid so that Spree::Payment can be retrieved
+          allow(SecureRandom).to receive(:uuid).and_return(fake_uuid)
+
+          stub_request(:post, /\.ptranz\.com\/api\/spi\/sale/)
+            .to_return(
+              status: 200,
+              body: fake_sale_response_payload.to_json
+            )
+
+          stub_request(:post, /\.ptranz\.com\/api\/spi\/payment/)
+            .to_return(
+              status: 200,
+              body: fake_payment_response_payload.to_json
+            )
+
+          complete_address_step
+        end
+
+        it 'displays order summary' do
+          complete_delivery_step
+          complete_payment_step
+          find("input[type='submit']").click # 3D Secure
+
+          order = Spree::Order.last
+
+          expect(find('.order-page__completed')).to have_text('¡Gracias por su pedido!')
+          expect(find('h1')).to have_text("Número de orden: #{order.number}")
+
+          payment_summary = find(".order-step[data-spec='payment-summary']")
+          expect(payment_summary.find('h6')).to have_text('Información del pago')
+          expect(payment_summary.find('.cc-type')).to have_text('Termina con: 5678')
+          expect(payment_summary.find('.full-name')).to have_text('Hari Seldon')
+
+          line_item = find(".line-item[data-id='#{order.line_items.first.id}']")
+          expect(line_item.find('img')['src']).to eq("https://cloudinary.com/salvamimaquina/image/upload/c_fit,d_test:products:product-image-placeholder.jpg,h_150/v1/test/products/#{product.images.first.attachment.key}")
+          expect(line_item.find('.line-item-quantity')).to have_text('Cantidad: 2')
+          expect(line_item.find('.line-item-total')).to have_text('$24.68')
+
+          checkout_summary = find('#checkout-summary')
+          expect(checkout_summary.find('h3')).to have_text('RESUMEN DE PEDIDO')
+          expect(checkout_summary.find("[data-spec='checkout-summary-products']")).to have_text("2 Productos\n$24.68")
+          expect(checkout_summary.find("[data-spec='checkout-summary-tax']")).to have_text("ITBMS 7.00%\n$1.73")
+
+          expect(find('#order-back-link a')).to have_text('REGRESAR A LA TIENDA')
+          expect(find('#order-back-link a')['href']).to match(/http:\/\/.+\/\z/)
+        end
+
+        it 'triggers post purchase actions' do
+          message_delivery_double = instance_double(ActionMailer::MessageDelivery)
+          allow(OrderCustomMailer).to receive(:confirm_email).and_return(message_delivery_double).twice
+
+          order = Spree::Order.last
+
+          expect(SendInvoiceToRsJob).to receive(:perform_later).with(order)
+          expect(OrderCustomMailer).to receive(:confirm_email).with(order)
+          expect(OrderCustomMailer).to receive(:confirm_email).with(order, for_admin: true)
+          expect(message_delivery_double).to receive(:deliver_later).twice
+          expect(UpdateProductPurchaseCountJob).to receive(:perform_later).with(order)
+
+          complete_delivery_step
+          complete_payment_step
+          find("input[type='submit']").click # 3D Secure
+        end
+
+        context 'when user chose delivery' do
+          before do
+            complete_delivery_step
+            complete_payment_step
+            find("input[type='submit']").click # 3D Secure
+          end
+
+          it 'displays delivery address' do
+            order = Spree::Order.last
+
+            address_summary = find(".order-step[data-spec='address-summary']")
+            expect(address_summary.find('h6')).to have_text('Dirección de envío')
+            expect(address_summary.find('.address .fn')).to have_text('Hari Seldon')
+            expect(address_summary.find('.address .adr')).to have_text("23 Calle de aquí\nAl lado de allá\nPanamá 1 Bella Vista")
+            expect(address_summary.find('.address .tel')).to have_text('Teléfono: 0610111213')
+
+            expect(find(".order-step[data-spec='delivery-summary'] h6")).to have_text('Envío')
+            expect(find(".order-step[data-spec='delivery-summary'] .delivery")).to have_text('Entrega a domicilio, en Ciudad de Panamá Zona 1')
+
+            expect(find('#static-map')['data-mapbox-static-latitude-value']).to eq(order.ship_address.latitude.to_s)
+            expect(find('#static-map')['data-mapbox-static-longitude-value']).to eq(order.ship_address.longitude.to_s)
+
+            expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$3.9")
+            expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$30.31")
+          end
+        end
+
+        context 'when user chose pick up in store' do
+          before do
+            complete_delivery_step(delivery: false)
+            complete_payment_step
+            find("input[type='submit']").click # 3D Secure
+          end
+
+          it 'displays pickup store address' do
+            expect(page).not_to have_selector(".order-step[data-spec='address-summary']")
+
+            delivery_summary = find(".order-step[data-spec='delivery-summary']")
+            expect(delivery_summary.find('h6')).to have_text('Envío')
+            expect(delivery_summary.find('.delivery')).to have_text('Recoger en la tienda de Bella Vista')
+            expect(delivery_summary.find('a')).to have_text('Dirección')
+            expect(delivery_summary.find('a')['href']).to eq(pickup_shipping_method.google_map_link)
+
+            expect(find('#static-map')['data-mapbox-static-latitude-value']).to eq(pickup_shipping_method.latitude.to_s)
+            expect(find('#static-map')['data-mapbox-static-longitude-value']).to eq(pickup_shipping_method.longitude.to_s)
+
+            expect(find("#checkout-summary [data-spec='checkout-summary-shipping']")).to have_text("Entrega\n$0.00")
+            expect(find("#checkout-summary [data-spec='checkout-summary-total']")).to have_text("TOTAL\n$26.41")
+          end
+        end
+      end
+    end
+
+    context 'checkout with registration' do
+      let(:address) do
+        create(
+          :address,
+          address1: '26 Calle cool',
+          address2: 'Detras del palo de mango',
+          city: 'Panama',
+          phone: '+507111222',
+          name: 'Cool User',
+          state: panama_state,
+          country: panama_country,
+          district: bella_vista_district,
+          latitude: 8.990457433505895,
+          longitude: -79.52670864665536
+        )
+      end
+      let!(:user) { create(:user, email: 'cool_email@gmail.com', password: '!Azerty123', ship_address: address) }
+
+      before do
+        find('form#new_spree_user input#spree_user_email').set('cool_email@gmail.com')
+        find('form#new_spree_user input#spree_user_password').set('!Azerty123')
+        find("form#new_spree_user input[type='submit']").click
+      end
+
+      it 'assigns order to user and pre-fill address form with user address' do
+        sleep(1)
+        expect(Spree::Order.last.user).to eq(user)
+
+        address_form = find('form#checkout_form_address')
+
+        expect(address_form.find("input[type='email']#order_email").value).to eq('cool_email@gmail.com')
+        expect(address_form.find("input[type='text']#order_ship_address_attributes_city").value).to eq('Panamá')
+        expect(address_form.find("input[type='text']#order_ship_address_attributes_name").value).to eq('Cool User')
+        expect(address_form.find("input[type='tel']#order_ship_address_attributes_phone").value).to eq('507111222')
+        expect(address_form.find("input[type='text']#order_ship_address_attributes_address1").value).to eq('26 Calle cool')
+        expect(address_form.find("input[type='text']#order_ship_address_attributes_address2").value).to eq('Detras del palo de mango')
+        expect(address_form.find("select#order_ship_address_attributes_district_id option[value='#{bella_vista_district.id}']")).to have_text('Bella Vista')
+        expect(address_form.find("select#order_ship_address_attributes_district_id option[value='#{tocumen_district.id}']")).to have_text('Tocumen')
+        expect(address_form.find("input[type='hidden']#order_ship_address_attributes_latitude", visible: false).value).to eq('8.990457433505895')
+        expect(address_form.find("input[type='hidden']#order_ship_address_attributes_longitude", visible: false).value).to eq('-79.52670864665536')
+      end
     end
   end
+
+  context 'when user is already logged in' do
+    let!(:user) { create(:user, email: 'cool_email@gmail.com', password: '!Azerty123') }
+
+    before do
+      visit login_path
+      find('form#new_spree_user input#spree_user_email').set('cool_email@gmail.com')
+      find('form#new_spree_user input#spree_user_password').set('!Azerty123')
+      find("form#new_spree_user input[type='submit']").click
+      sleep(1)
+
+      visit product_path(product)
+      find(".add-to-cart .quantity-selector span[data-type='add']").click
+      find("#add-to-cart-form form[data-spec='line-items-cart'] button#add-to-cart-btn").click
+      find("[data-spec='add-to-cart-modal'] .modal-footer [data-spec='go-to-cart']").click
+      find("button[name='checkout'][type='submit'].checkout-button").click
+    end
+
+    it 'skip order registration step and directly brings user to address step' do
+      sleep(1)
+
+      expect(Spree::Order.last.user).to eq(user)
+      expect(current_url).to match(match(/\/checkout\/address/))
+      expect(find("form#checkout_form_address input[type='email']#order_email").value).to eq('cool_email@gmail.com')
+    end
+  end
+end
+
+def complete_address_step(district: bella_vista_district)
+  address_form = find('form#checkout_form_address')
+  address_form.find("input[type='text']#order_ship_address_attributes_name").set('Hari Seldon')
+  address_form.find("input[type='tel']#order_ship_address_attributes_phone").set('0610111213')
+  address_form.find("input[type='text']#order_ship_address_attributes_address1").set('23 Calle de aquí')
+  address_form.find("input[type='text']#order_ship_address_attributes_address2").set('Al lado de allá')
+  address_form.find("select#order_ship_address_attributes_district_id option[value='#{district.id}']").select_option
+  sleep(2.5)
+  address_form.find('#map .mapboxgl-marker').drag_to(address_form.find('#map'))
+  address_form.find("input[type='submit']").click
+end
+
+def complete_delivery_step(delivery: true)
+  delivery_form = find('form#checkout_form_delivery')
+  delivery_form.find(".shipping-methods [data-spec='shipping-method-#{delivery ? delivery_shipping_method.id : pickup_shipping_method.id}']").click
+  delivery_form.find("input[type='submit']").click
+end
+
+def complete_payment_step
+  payment_form = find('form#checkout_form_payment')
+  payment_form.find(".card_name input[type='text']#name_on_card_#{payment_method.id}").set('Hari Seldon')
+  payment_form.find(".card_number input[type='tel']#card_number").set('12345678')
+  payment_form.find(".card_expiration input[type='tel']#card_expiry").set((Date.today + 1.year).strftime('%m / %y'))
+  payment_form.find(".card_code input[type='tel']#card_code").set('123')
+  payment_form.find("input[type='submit']").click
 end

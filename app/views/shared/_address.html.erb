@@ -1,9 +1,9 @@
 <div class="address vcard">
   <div class="fn"><%= address.name %></div>
   <% unless address.company.blank? %>
-  <div class="org">
-    <%= address.company %>
-  </div>
+    <div class="org">
+      <%= address.company %>
+    </div>
   <% end %>
   <div class="adr">
     <div class="street-address">
@@ -26,7 +26,7 @@
   </div>
   <% unless address.phone.blank? %>
   <div class="tel">
-    <span class="type"><%= t('spree.phone') %></span>
+    <span class="type"><%= t('spree.phone') %>: </span>
     <%= address.phone %>
   </div>
   <% end %>

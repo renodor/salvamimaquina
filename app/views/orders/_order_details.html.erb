@@ -6,7 +6,7 @@
 <div class="order-steps <%= order_with_delivery ? 'three-steps' : 'two-steps' %>">
   <% if shipping_method %>
     <% if order_with_delivery %>
-      <div class="order-step" data-hook="order-ship-address">
+      <div class="order-step" data-spec="address-summary">
         <h6>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
             <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
@@ -17,11 +17,14 @@
       </div>
     <% end %>
 
-    <div class="order-step" data-hook="order-shipment">
+    <div class="order-step" data-spec="delivery-summary">
       <div class="delivery">
         <% if order_with_delivery %>
           <h6>
-            <i class='fa fa-truck'></i> <%= t('spree.shipment') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:delivery) unless order.completed? %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 640 512">
+              <path d="M624 352h-16V243.9c0-12.7-5.1-24.9-14.1-33.9L494 110.1c-9-9-21.2-14.1-33.9-14.1H416V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h16c0 53 43 96 96 96s96-43 96-96h128c0 53 43 96 96 96s96-43 96-96h48c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM160 464c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm320 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-208H416V144h44.1l99.9 99.9V256z"/>
+            </svg>
+            <%= t('spree.shipment') %> <%= link_to "(#{t('spree.actions.edit')})", checkout_state_path(:delivery) unless order.completed? %>
           </h6>
           <%= t('spree.shipping_methods.delivery_zone', zone_number: shipping_method.code) %>
         <% else %>
@@ -41,7 +44,7 @@
   <% end %>
 
   <% if order.has_checkout_step?("payment") %>
-    <div class="order-step">
+    <div class="order-step" data-spec="payment-summary">
       <h6>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
           <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0V4zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7H0zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1z"/>

@@ -8,7 +8,7 @@
 
   <%# Taxes %>
   <% order.all_adjustments.nonzero.tax.eligible.group_by(&:label).each do |label, adjustments| %>
-    <div class="checkout-summary-line">
+    <div class="checkout-summary-line" data-spec="checkout-summary-tax">
       <span class="checkout-summary-element"><%= label %></span>
       <span class="checkout-summary-element"><%= number_to_currency(adjustments.sum(&:amount)) %></span>
     </div>
@@ -42,7 +42,7 @@
     <% end %>
   <% end %>
 
-  <div class="checkout-summary-line">
+  <div class="checkout-summary-line" data-spec="checkout-summary-total">
     <span class="checkout-summary-element"><strong><%= t('spree.order_total').upcase %></strong></span>
     <span class="checkout-summary-element" id='summary-order-total'><strong><%= order.display_order_total_after_store_credit.to_html %></strong></span>
   </div>
