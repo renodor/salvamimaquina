@@ -36,7 +36,7 @@
     margin-top: 20px;
     padding: 0;
     font-size: 13px;
-    form {
+    form.add-coupon {
       display: flex;
       flex-wrap: nowrap;
       input[type="text"] {
@@ -78,14 +78,20 @@
       text-align: left;
       background-color: $dark-gray;
       color: white;
-      svg {
-        fill: white;
-        width: 15px;
-        height: 15px;
-        opacity: 0.7;
-        @include default-transition(opacity);
-        &:hover {
-          opacity: 1;
+      form.remove-coupon {
+        button {
+          background-color: transparent;
+          border: none;
+        }
+        svg {
+          fill: white;
+          width: 15px;
+          height: 15px;
+          opacity: 0.7;
+          @include default-transition(opacity);
+          &:hover {
+            opacity: 1;
+          }
         }
       }
     }

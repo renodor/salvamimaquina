@@ -85,6 +85,8 @@ Rails.application.routes.draw do
   mount Spree::Core::Engine, at: '/'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  delete '/orders/:order_id/coupon_codes/:id', to: 'coupon_codes#remove', as: :remove_order_coupon_codes
+
   localized do
     resources :reparation_categories, only: [:index] do
       resources :reparation_requests, only: %i[new create]

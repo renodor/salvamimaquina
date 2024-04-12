@@ -39,7 +39,7 @@ module CloudinaryLinksWithFoldersHelper
   end
 
   def options_with_fallback_image(options)
-    return options unless options[:model].const_defined?('CLOUDINARY_FALLBACK_IMAGE')
+    return options if options[:model]::CLOUDINARY_FALLBACK_IMAGE.blank?
 
     options[:default_image] = "#{Rails.env}:#{options[:model]::CLOUDINARY_STORAGE_FOLDER}:#{options[:model]::CLOUDINARY_FALLBACK_IMAGE}"
     options

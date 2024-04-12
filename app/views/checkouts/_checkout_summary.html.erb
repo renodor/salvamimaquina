@@ -33,11 +33,11 @@
   <% end %>
 
   <%# Promotion(s) %>
-  <% if order.line_item_adjustments.nonzero.exists? %>
-    <% order.line_item_adjustments.nonzero.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
+  <% if order.adjustments.nonzero.non_tax.eligible.exists? %>
+    <% order.adjustments.nonzero.non_tax.eligible.each do |adjustment| %>
       <div class="checkout-summary-line">
-        <span class="checkout-summary-element"><%= label %></span>
-        <span class="checkout-summary-element"><%= number_to_currency(adjustments.amount) %></span>
+        <span class="checkout-summary-element"><%= adjustment.label %></span>
+        <span class="checkout-summary-element"><%= number_to_currency(adjustment.amount) %></span>
       </div>
     <% end %>
   <% end %>
