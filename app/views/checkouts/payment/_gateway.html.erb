@@ -15,16 +15,17 @@
     </div>
   </div>
 
-  <div class="field field-required card_expiration">
+  <div class="field field-required card_expiration" data-controller="card-expiry-formatter">
     <%=
       text_field_tag "#{param_prefix}[expiry]",
       '',
       id: 'card_expiry',
-      class: "required cardExpiry",
-      placeholder: "MM / YY",
-      maxLength: "7",
-      type: "tel",
-      required: true
+      class: 'required cardExpiry',
+      placeholder: 'MM / YY',
+      maxLength: '7',
+      type: 'tel',
+      required: true,
+      data: { action: 'input->card-expiry-formatter#formatDateInput' }
     %>
   </div>
 
