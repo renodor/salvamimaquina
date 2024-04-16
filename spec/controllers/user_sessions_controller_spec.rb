@@ -7,7 +7,7 @@ RSpec.describe UserSessionsController, type: :controller do
 
   before { @request.env['devise.mapping'] = Devise.mappings[:spree_user] }
 
-  context "#create" do
+  context '#create' do
     let(:format) { :html }
     let(:password) { 'secret' }
 
@@ -24,7 +24,7 @@ RSpec.describe UserSessionsController, type: :controller do
       )
     end
 
-    context "when using correct login information" do
+    context 'when using correct login information' do
       context 'with a guest token present' do
         before do
           request.cookie_jar.signed[:guest_token] = 'ABC'
@@ -49,9 +49,14 @@ RSpec.describe UserSessionsController, type: :controller do
         end
 
         it 'does not assign completed orders' do
-          order = create(:order, email: user.email, guest_token: 'ABC',
-                         user_id: nil, created_by_id: nil,
-                         completed_at: 1.minute.ago)
+          order = create(
+            :order,
+            email: user.email,
+            guest_token: 'ABC',
+            user_id: nil, created_by_id: nil,
+            completed_at: 1.minute.ago
+          )
+
           subject
 
           order.reload
@@ -74,54 +79,54 @@ RSpec.describe UserSessionsController, type: :controller do
         end
       end
 
-      context "when html format is requested" do
-        it "redirects to default after signing in" do
+      context 'when html format is requested' do
+        it 'redirects to default after signing in' do
           subject
           expect(response).to redirect_to root_path
         end
       end
 
-      context "when js format is requested" do
+      context 'when js format is requested' do
         let(:format) { :js }
 
-        it "returns a json with ship and bill address" do
+        it 'returns a json with ship and bill address' do
           subject
           parsed = ActiveSupport::JSON.decode(response.body)
-          expect(parsed).to have_key("user")
-          expect(parsed).to have_key("ship_address")
-          expect(parsed).to have_key("bill_address")
+          expect(parsed).to have_key('user')
+          expect(parsed).to have_key('ship_address')
+          expect(parsed).to have_key('bill_address')
         end
       end
     end
 
-    context "when using incorrect login information" do
+    context 'when using incorrect login information' do
       let(:password) { 'wrong' }
 
-      context "when html format is requested" do
-        it "renders new template again with errors" do
+      context 'when html format is requested' do
+        it 'renders new template again with errors' do
           subject
           expect(response).to render_template(:new)
           expect(flash[:error]).to eq I18n.t(:'devise.failure.invalid')
         end
       end
 
-      context "when js format is requested" do
+      context 'when js format is requested' do
         let(:format) { :js }
-        it "returns json with the error" do
+        it 'returns json with the error' do
           subject
           parsed = ActiveSupport::JSON.decode(response.body)
-          expect(parsed).to have_key("error")
+          expect(parsed).to have_key('error')
         end
       end
     end
   end
 
-  context "#destroy" do
+  context '#destroy' do
     subject do
       delete(:destroy)
     end
 
-    it "redirects to default after signing out" do
+    it 'redirects to default after signing out' do
       subject
       expect(controller.spree_current_user).to be_nil
       expect(response).to redirect_to root_path

@@ -5,7 +5,7 @@ class CheckoutGuestSessionsController < CheckoutBaseController
     if params[:order][:email] =~ Devise.email_regexp && current_order.update(email: params[:order][:email])
       redirect_to checkout_path
     else
-      flash[:registration_error] = t(:email_is_invalid, scope: [:errors, :messages])
+      flash[:registration_error] = t(:email_is_invalid, scope: %i[errors messages])
       @user = Spree::User.new
       render template: 'checkout_sessions/new'
     end

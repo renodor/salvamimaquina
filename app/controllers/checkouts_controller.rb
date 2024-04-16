@@ -143,13 +143,13 @@ class CheckoutsController < CheckoutBaseController
   def ensure_valid_payment
     # Fix for https://github.com/spree/spree/issues/4117
     # If confirmation of payment fails, redirect back to payment screen
-    return unless params[:state] == "confirm"
+    return unless params[:state] == 'confirm'
     return unless @order.payment_required?
 
-    if @order.payments.valid.empty?
-      flash.keep
-      redirect_to checkout_state_path("payment")
-    end
+    return unless @order.payments.valid.empty?
+
+    flash.keep
+    redirect_to checkout_state_path('payment')
   end
 
   def setup_for_current_state

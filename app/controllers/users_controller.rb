@@ -16,9 +16,7 @@ class UsersController < StoreController
     @user = Spree::User.new(user_params)
     if @user.save
 
-      if current_order
-        session[:guest_token] = nil
-      end
+      session[:guest_token] = nil if current_order
 
       redirect_back_or_default(root_url)
     else

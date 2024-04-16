@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   class OrderUpdateAttributes
     # @param order [Order] existing (persisted) order
@@ -22,7 +24,7 @@ module Spree
       order.save
     end
 
-    alias_method :apply, :call
+    alias apply call
 
     private
 

@@ -3,20 +3,23 @@
 Rails.application.routes.draw do
   root to: 'home#index'
 
-  devise_for(:user, {
-    class_name: 'Spree::User',
-    singular: :spree_user,
-    controllers: {
-      sessions: 'user_sessions',
-      registrations: 'user_registrations',
-      passwords: 'user_passwords',
-      confirmations: 'user_confirmations'
-    },
-    skip: [:unlocks, :omniauth_callbacks],
-    path_names: { sign_out: 'logout' }
-  })
+  devise_for(
+    :user,
+    {
+      class_name: 'Spree::User',
+      singular: :spree_user,
+      controllers: {
+        sessions: 'user_sessions',
+        registrations: 'user_registrations',
+        passwords: 'user_passwords',
+        confirmations: 'user_confirmations'
+      },
+      skip: %i[unlocks omniauth_callbacks],
+      path_names: { sign_out: 'logout' }
+    }
+  )
 
-  resources :users, only: [:edit, :update]
+  resources :users, only: %i[edit update]
 
   devise_scope :spree_user do
     get '/login', to: 'user_sessions#new', as: :login
@@ -67,7 +70,7 @@ Rails.application.routes.draw do
     resources :coupon_codes, only: :create
   end
 
-  resource :cart, only: [:show, :update] do
+  resource :cart, only: %i[show update] do
     put 'empty'
   end
 

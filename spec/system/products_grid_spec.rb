@@ -212,6 +212,10 @@ RSpec.describe 'Products grid', type: :system, js: true do
       visit nested_taxons_path(taxon)
     end
 
+    after do
+      page.current_window.resize_to(1400, 1400)
+    end
+
     it 'can filter products' do
       products_grid = find('#products #products-grid')
 

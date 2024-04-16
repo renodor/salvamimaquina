@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Configure Solidus Preferences
 # See http://docs.solidus.io/Spree/AppConfiguration.html for details
 
@@ -116,13 +118,13 @@ Spree::Backend::Config.configure do |config|
       label: :sync_repair_shopr,
       icon: 'refresh',
       url: '/admin/sync_repair_shopr',
-      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      condition: -> { current_spree_user&.has_spree_role?(:admin) }
     ),
     config.class::MenuItem.new(
       label: :sliders_and_banners,
       icon: 'picture-o',
       url: '/admin/sliders',
-      condition: -> { current_spree_user&.has_spree_role?(:admin) },
+      condition: -> { current_spree_user&.has_spree_role?(:admin) }
     ),
     config.class::MenuItem.new(
       label: :documentation,

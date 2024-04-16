@@ -29,16 +29,16 @@ class CheckoutBaseController < StoreController
   # jump forward and skip states (unless #skip_state_validation? is
   # truthy).
   def ensure_order_is_not_skipping_states
-    if params[:state]
-      redirect_to checkout_state_path(@order.state) if @order.can_go_to_state?(params[:state]) && !skip_state_validation?
-      @order.state = params[:state]
-    end
+    return unless params[:state]
+
+    redirect_to checkout_state_path(@order.state) if @order.can_go_to_state?(params[:state]) && !skip_state_validation?
+    @order.state = params[:state]
   end
 
   def ensure_checkout_allowed
-    unless @order.checkout_allowed?
-      redirect_to cart_path
-    end
+    return if @order.checkout_allowed?
+
+    redirect_to cart_path
   end
 
   def ensure_order_not_completed
@@ -46,11 +46,11 @@ class CheckoutBaseController < StoreController
   end
 
   def ensure_sufficient_stock_lines
-    if @order.insufficient_stock_lines.present?
-      out_of_stock_items = @order.insufficient_stock_lines.collect(&:name).to_sentence
-      flash[:error] = t('spree.inventory_error_flash_for_insufficient_quantity', names: out_of_stock_items)
-      redirect_to cart_path
-    end
+    return unless @order.insufficient_stock_lines.present?
+
+    out_of_stock_items = @order.insufficient_stock_lines.collect(&:name).to_sentence
+    flash[:error] = t('spree.inventory_error_flash_for_insufficient_quantity', names: out_of_stock_items)
+    redirect_to cart_path
   end
 
   def rescue_from_spree_gateway_error(exception)

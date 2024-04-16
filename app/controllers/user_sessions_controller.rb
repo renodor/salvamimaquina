@@ -23,8 +23,7 @@ class UserSessionsController < Devise::SessionsController
           render :new
         end
         format.js do
-          render json: { error: t('devise.failure.invalid') },
-            status: :unprocessable_entity
+          render json: { error: t('devise.failure.invalid') }, status: :unprocessable_entity
         end
       end
     end
@@ -43,8 +42,8 @@ class UserSessionsController < Devise::SessionsController
   end
 
   def redirect_back_or_default(default)
-    redirect_to(session["spree_user_return_to"] || default)
-    session["spree_user_return_to"] = nil
+    redirect_to(session['spree_user_return_to'] || default)
+    session['spree_user_return_to'] = nil
   end
 
   def success_json

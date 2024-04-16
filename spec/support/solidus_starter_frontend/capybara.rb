@@ -19,7 +19,7 @@ RSpec.configure do |config|
 end
 
 Capybara.register_driver :selenium_chrome_headless_docker_friendly do |app|
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options = Selenium::WebDriver::Chrome::Options.new
   browser_options.args << '--headless'
   browser_options.args << '--disable-gpu'
   # Sandbox cannot be used inside unprivileged Docker container

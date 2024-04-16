@@ -255,10 +255,10 @@ RSpec.describe Spree::Product do
     let(:product) { create(:smm_product) }
 
     context 'when product has variants' do
-      let(:variant) { create(:variant, product: product) }
-      let(:variant2) { create(:variant, product: product) }
-      let!(:price) { create(:price, amount: 22.22, variant: variant) }
-      let!(:price2) { create(:price, amount: 22.21, variant: variant2) }
+      let(:price) { create(:price, amount: 22.22) }
+      let(:price2) { create(:price, amount: 22.21) }
+      let!(:variant) { create(:smm_variant, product: product, prices: [price]) }
+      let!(:variant2) { create(:smm_variant, product: product, prices: [price2]) }
 
       it 'returns variant with the cheapest price' do
         expect(product.cheapest_variant).to eq(variant2)

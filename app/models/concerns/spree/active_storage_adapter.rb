@@ -15,7 +15,7 @@ module Spree
       attr_reader :attachment_definition
 
       # Specifies the relation between a single attachment and the model
-      def has_attachment(name, definition)
+      def has_attachment(name, definition) # rubocop:disable Naming/PredicateName
         @attachment_name = name.to_sym
         @attachment_definition = definition
 

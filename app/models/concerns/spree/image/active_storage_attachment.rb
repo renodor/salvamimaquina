@@ -20,9 +20,9 @@ module Spree::Image::ActiveStorageAttachment
                    service_name: 'cloudinary_products'
 
     def supported_content_type
-      unless attachment.content_type.in?(Spree::Config.allowed_image_mime_types)
-        errors.add(:attachment, :content_type_not_supported)
-      end
+      return if attachment.content_type.in?(Spree::Config.allowed_image_mime_types)
+
+      errors.add(:attachment, :content_type_not_supported)
     end
   end
 end

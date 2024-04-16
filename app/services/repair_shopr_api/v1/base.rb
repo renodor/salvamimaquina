@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RepairShoprApi::V1::Base
-  API_PATH = "https://#{Rails.application.credentials.repair_shopr_subdomain}.repairshopr.com/api/v1"
+  API_PATH = "https://#{Rails.application.credentials.repair_shopr_subdomain}.repairshopr.com/api/v1".freeze
   API_KEY = Rails.application.credentials.repair_shopr_api_key
   RS_ROOT_CATEGORY_NAME = 'ecom'
 

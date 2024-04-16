@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class BreadcrumbsComponent < ViewComponent::Base
-  SEPARATOR = '&nbsp;&raquo;&nbsp;'.freeze
-  BASE_CLASS = 'breadcrumbs'.freeze
+  SEPARATOR = '&nbsp;&raquo;&nbsp;'
+  BASE_CLASS = 'breadcrumbs'
 
   attr_reader :taxon
 
-  def initialize(taxon)
+  def initialize(taxon) # rubocop:disable Lint/MissingSuper
     @taxon = taxon
   end
 

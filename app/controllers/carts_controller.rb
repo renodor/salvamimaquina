@@ -7,17 +7,17 @@ class CartsController < StoreController
 
   before_action :store_guest_token
   before_action :assign_order, only: :update
-  # note: do not lock the #show action because that's where we redirect when we fail to acquire a lock
+  # NOTE: do not lock the #show action because that's where we redirect when we fail to acquire a lock
   around_action :lock_order, only: :update
 
   # Shows the current incomplete order from the session
   def show
     @order = current_order(build_order_if_necessary: true)
     authorize! :edit, @order, cookies.signed[:guest_token]
-    if params[:id] && @order.number != params[:id]
-      flash[:error] = t('spree.cannot_edit_orders')
-      redirect_to cart_path
-    end
+    return unless params[:id] && @order.number != params[:id]
+
+    flash[:error] = t('spree.cannot_edit_orders')
+    redirect_to cart_path
   end
 
   def update
@@ -40,7 +40,7 @@ class CartsController < StoreController
   end
 
   def empty
-    if @order = current_order
+    if (@order = current_order)
       authorize! :update, @order, cookies.signed[:guest_token]
       @order.empty!
     end
@@ -68,9 +68,9 @@ class CartsController < StoreController
 
   def assign_order
     @order = current_order
-    unless @order
-      flash[:error] = t('spree.order_not_found')
-      redirect_to(root_path) && return
-    end
+    return if @order
+
+    flash[:error] = t('spree.order_not_found')
+    redirect_to(root_path) && return
   end
 end

@@ -126,7 +126,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
           let(:attributes) do
             {
               id: '1234',
-              product_category: 'phones;iPhones',
+              product_category: 'phones;iPhones'
             }
           end
 

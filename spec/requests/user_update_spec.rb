@@ -29,10 +29,10 @@ RSpec.describe 'User update', type: :request do
       it "is not possible to take account over with the #{strategy} forgery protection strategy" do
         user = create(:user, email: 'legit@mail.com', password: 'password')
 
-        post '/login', params: "spree_user[email]=legit@mail.com&spree_user[password]=password"
+        post '/login', params: 'spree_user[email]=legit@mail.com&spree_user[password]=password'
         begin
           put '/users/123456', params: 'user[email]=hacked@example.com'
-        rescue
+        rescue # rubocop:disable Style/RescueStandardError
           # testing that the account is not compromised regardless of any raised
           # exception
         end

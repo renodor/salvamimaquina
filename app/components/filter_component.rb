@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class FilterComponent < ViewComponent::Base
-  BASE_CLASS = 'filter'.freeze
+  BASE_CLASS = 'filter'
   CSS_CLASS = "#{BASE_CLASS}__list".freeze
 
   attr_reader :filter, :search_params
 
-  def initialize(filter:, search_params:)
+  def initialize(filter:, search_params:) # rubocop:disable Lint/MissingSuper
     @filter = filter
     @search_params = search_params || {}
   end
@@ -35,10 +35,11 @@ class FilterComponent < ViewComponent::Base
 
     content_tag :li do
       concat check_box_tag(
-        "search[#{filter[:scope].to_s}][]",
+        "search[#{filter[:scope]}][]",
         value,
         filter_list_item_checked?(value),
-        id: id)
+        id: id
+      )
 
       concat label_tag(id, name)
     end
@@ -57,6 +58,6 @@ class FilterComponent < ViewComponent::Base
   end
 
   def labels
-    @labels ||= filter[:labels] || filter[:conds].map { |m,c| [m,m] }
+    @labels ||= filter[:labels] || filter[:conds].map { |m, _c| [m, m] }
   end
 end

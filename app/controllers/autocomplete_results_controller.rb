@@ -11,7 +11,7 @@ class AutocompleteResultsController < StoreController
   private
 
   def load_results
-    @results ||= begin
+    @results ||= begin # rubocop:disable Naming/MemoizedInstanceVariableName
       results = {}
       results[:products] = autocomplete_products
       results[:taxons] = autocomplete_taxons

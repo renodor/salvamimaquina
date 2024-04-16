@@ -42,7 +42,7 @@ class StoreController < Spree::BaseController
   end
 
   def lock_order
-    Spree::OrderMutex.with_lock!(@order) { yield }
+    Spree::OrderMutex.with_lock!(@order) { yield } # rubocop:disable Style/ExplicitBlockArgument
   rescue Spree::OrderMutex::LockFailed
     flash[:error] = t('spree.order_mutex_error')
     redirect_to cart_path

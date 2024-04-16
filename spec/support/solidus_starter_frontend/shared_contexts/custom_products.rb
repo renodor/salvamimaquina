@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_context "custom products" do
+RSpec.shared_context 'custom products' do
   before(:each) do
     create(:store)
 

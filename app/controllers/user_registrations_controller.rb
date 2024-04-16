@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserRegistrationsController < Devise::RegistrationsController
-  before_action :check_permissions, only: [:edit, :update]
+  before_action :check_permissions, only: %i[edit update]
   skip_before_action :require_no_authentication
 
   def create

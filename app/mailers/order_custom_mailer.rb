@@ -25,7 +25,7 @@ class OrderCustomMailer < Spree::BaseMailer
     end
   end
 
-  def cancel_email(order, resend = false)
+  def cancel_email(order, resend = false) # rubocop:disable Style/OptionalBooleanParameter
     @order = order
     @store = @order.store
     subject = build_subject(t('.subject'), resend)
@@ -33,14 +33,14 @@ class OrderCustomMailer < Spree::BaseMailer
     mail(to: @order.email, from: from_address(@store), subject: subject)
   end
 
-  def inventory_cancellation_email(order, inventory_units, resend = false)
+  def inventory_cancellation_email(order, inventory_units, resend = false) # rubocop:disable Style/OptionalBooleanParameter
     @order, @inventory_units = order, inventory_units
     @store = @order.store
     subject = build_subject(t('spree.order_mailer.inventory_cancellation.subject'), resend)
 
     mail(to: @order.email, from: from_address(@store), subject: subject)
   end
-  
+
   private
 
   def build_subject(subject_text, resend)

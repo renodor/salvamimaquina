@@ -3,7 +3,7 @@
 class ImageComponent < ViewComponent::Base
   attr_reader :image, :size, :classes, :options
 
-  def initialize(local_assigns = {})
+  def initialize(local_assigns = {}) # rubocop:disable Lint/MissingSuper
     @image = local_assigns.delete(:image)
     @size = local_assigns.delete(:size) { :mini }
     @classes = local_assigns.delete(:classes)

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Rails.application.config.to_prepare do
-  Spree::BaseController.unauthorized_redirect = -> do
+  Spree::BaseController.unauthorized_redirect = lambda do
     if spree_current_user
       flash[:error] = I18n.t('spree.authorization_failure')
 

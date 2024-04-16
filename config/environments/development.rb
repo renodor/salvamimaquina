@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
@@ -59,7 +61,7 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  # Preview email in the browser 
+  # Preview email in the browser
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SolidusStarterFrontend
   module System
     module CheckoutHelpers
@@ -5,7 +7,7 @@ module SolidusStarterFrontend
       # Authentication
       #
       def checkout_as_guest
-        click_button "Checkout"
+        click_button 'Checkout'
 
         within '#guest_checkout' do
           fill_in 'Email', with: 'test@example.com'
@@ -25,16 +27,16 @@ module SolidusStarterFrontend
           phone
         ]
         fields += if SolidusSupport.combined_first_and_last_name_in_address?
-          %w[name]
-        else
-          %w[firstname lastname]
-        end
+                    %w[name]
+                  else
+                    %w[firstname lastname]
+                  end
 
         fields.each do |field|
           fill_in "order_bill_address_attributes_#{field}", with: address.send(field).to_s
         end
-        select 'United States', from: "order_bill_address_attributes_country_id"
-        select address.state.name.to_s, from: "order_bill_address_attributes_state_id"
+        select 'United States', from: 'order_bill_address_attributes_country_id'
+        select address.state.name.to_s, from: 'order_bill_address_attributes_state_id'
 
         check 'order_use_billing'
       end

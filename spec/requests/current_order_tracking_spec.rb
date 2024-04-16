@@ -6,7 +6,7 @@ RSpec.describe 'current order tracking', type: :request, with_signed_in_user: tr
   let!(:store) { create(:store) }
   let(:user) { create(:user) }
 
-  class TestController < StoreController
+  class TestController < StoreController # rubocop:disable Lint/ConstantDefinitionInBlock
     def create_order
       @order = current_order(create_order_if_necessary: true)
       head :ok
@@ -31,11 +31,11 @@ RSpec.describe 'current order tracking', type: :request, with_signed_in_user: tr
     get '/test'
 
     expect(assigns[:order].created_by).to eq user
-    expect(assigns[:order].last_ip_address).to eq "127.0.0.1"
+    expect(assigns[:order].last_ip_address).to eq '127.0.0.1'
   end
 
-  context "current order creation" do
-    it "doesn't create a new order out of the blue" do
+  context 'current order creation' do
+    it 'doesnt create a new order out of the blue' do
       expect do
         get '/test2'
       end.not_to(change { Spree::Order.count })

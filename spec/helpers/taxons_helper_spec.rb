@@ -8,7 +8,7 @@ RSpec.describe TaxonsHelper, type: :helper do
     let(:taxon) { create(:taxon, name: 'Clothing', taxonomy: taxonomy) }
 
     it 'is the nested taxons path for the taxon' do
-      expect(taxon_seo_url(taxon)).to eq("/t/categories/clothing")
+      expect(taxon_seo_url(taxon)).to eq('/t/categories/clothing')
     end
   end
 end

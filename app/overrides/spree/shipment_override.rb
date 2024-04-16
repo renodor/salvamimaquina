@@ -2,7 +2,6 @@
 
 module Spree
   module ShipmentOverride
-
     # Remove unnecessary .includes(variant: :product)
     def to_package
       package = Stock::Package.new(stock_location)

@@ -3,13 +3,7 @@
 class TaxonsTreeComponent < ViewComponent::Base
   attr_reader :root_taxon, :title, :current_taxon, :max_level, :base_class
 
-  def initialize(
-    root_taxon:,
-    title: nil,
-    current_taxon: nil,
-    max_level: 1,
-    base_class: nil
-  )
+  def initialize(root_taxon:, title: nil, current_taxon: nil, max_level: 1, base_class: nil) # rubocop:disable Lint/MissingSuper
     @root_taxon = root_taxon
     @title = title
     @current_taxon = current_taxon
