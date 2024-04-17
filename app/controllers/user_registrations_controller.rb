@@ -14,9 +14,13 @@ class UserRegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords(resource)
       respond_with(resource) do |format|
-        format.html { render :new }
+        format.html { render :new, status: 422 }
       end
     end
+  end
+
+  def after_sign_up_path_for(resource)
+    resource.is_a?(Spree::User) ? account_es_mx_path : root_path
   end
 
   protected

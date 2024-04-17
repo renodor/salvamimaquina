@@ -11,13 +11,9 @@ class UserPasswordsController < Devise::PasswordsController
   def create
     self.resource = resource_class.send_reset_password_instructions(params[resource_name])
 
-    set_flash_message(:notice, :send_instructions) if is_navigational_format?
+    flash[:notice] = t('devise.user_passwords.spree_user.send_instructions')
 
-    if resource.errors.empty?
-      respond_with resource, location: login_path
-    else
-      respond_with_navigational(resource) { render :new }
-    end
+    redirect_to login_path
   end
 
   # Devise::PasswordsController allows for blank passwords.
