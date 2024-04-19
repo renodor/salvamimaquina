@@ -214,8 +214,7 @@ export default class extends Controller {
           tradeInCta
       );
 
-      window.Modal = require('bootstrap/js/dist/modal');
-      const myModal = new Modal(document.getElementById('tradeInFormModal'));
+      const myModal = new bootstrap.Modal(document.getElementById('tradeInFormModal'));
       myModal.show();
     }
   }

@@ -50,7 +50,8 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       ship_address = @order.ship_address
       customer_info = {
         email: @order.email,
-        fullname: ship_address.name,
+        firstname: ship_address.name.split[0],
+        lastname: ship_address.name.split[1],
         address: ship_address.address1,
         address_2: ship_address.address2,
         city: "#{ship_address.district.name} - #{ship_address.city}",

@@ -1,37 +1,35 @@
-<div class="container">
-  <%= render 'shared/slider', slider: @slider %>
-  <div id="homepage-intro">
-    <h1><%= t('home_page.intro_title') %></h1>
-    <p><%= t('home_page.intro') %></p>
-  </div>
-  <div class="homepage-block">
-    <h2 class="homepage-title"><%= t('home_page.reparation_service_title').upcase %></h2>
-    <div class="homepage-features">
-      <div class="homepage-feature">
-        <%= svg 'journal' %>
-        <h3 class="homepage-feature-title"><%= t('home_page.features.feature_one_title') %></h3>
-        <p><%= t('home_page.features.feature_one_text') %></p>
-      </div>
-      <div class="homepage-feature">
-        <%= svg 'shop' %>
-        <h3 class="homepage-feature-title"><%= t('home_page.features.feature_two_title') %></h3>
-        <p><%= t('home_page..features.feature_two_text') %></p>
-      </div>
-      <div class="homepage-feature">
-        <%= svg 'emoji_smile' %>
-        <h3 class="homepage-feature-title"><%= t('home_page.features.feature_three_title') %></h3>
-        <p><%= t('home_page.features.feature_three_text') %></p>
-      </div>
-    </div>
-    <div class="centered-flexbox">
-      <%= link_to t('reparation'), reparation_categories_path, class: 'btn btn-primary rounded large' %>
-    </div>
-  </div>
-  <% if @products.any? %>
-    <div class="homepage-block" data-hook="homepage_products">
-      <h2 class="homepage-title"><%= t('home_page.shop_name').upcase %></h2>
-      <h3 class="homepage-subtitle"><%= t('home_page.best_at_best_price') %></h3>
-      <%= render 'shared/products', products: @products %>
-    </div>
-  <% end %>
+<%= render 'shared/slider', slider: @slider %>
+<div id="homepage-intro">
+  <h1><%= t('home_page.intro_title') %></h1>
+  <p><%= t('home_page.intro') %></p>
 </div>
+<div class="homepage-block">
+  <h2 class="homepage-title"><%= t('home_page.reparation_service_title').upcase %></h2>
+  <div class="homepage-features">
+    <div class="homepage-feature">
+      <%= svg 'journal' %>
+      <h3 class="homepage-feature-title"><%= t('home_page.features.feature_one_title') %></h3>
+      <p><%= t('home_page.features.feature_one_text') %></p>
+    </div>
+    <div class="homepage-feature">
+      <%= svg 'shop' %>
+      <h3 class="homepage-feature-title"><%= t('home_page.features.feature_two_title') %></h3>
+      <p><%= t('home_page..features.feature_two_text') %></p>
+    </div>
+    <div class="homepage-feature">
+      <%= svg 'emoji_smile' %>
+      <h3 class="homepage-feature-title"><%= t('home_page.features.feature_three_title') %></h3>
+      <p><%= t('home_page.features.feature_three_text') %></p>
+    </div>
+  </div>
+  <div class="centered-flexbox">
+    <%= link_to t('reparation'), reparation_categories_path, class: 'btn btn-primary rounded large' %>
+  </div>
+</div>
+<% if @products.any? %>
+  <div class="homepage-block" data-hook="homepage_products">
+    <h2 class="homepage-title"><%= t('home_page.shop_name').upcase %></h2>
+    <h3 class="homepage-subtitle"><%= t('home_page.best_at_best_price') %></h3>
+    <%= render 'shared/products', products: @products %>
+  </div>
+<% end %>

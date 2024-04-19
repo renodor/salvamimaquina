@@ -9,10 +9,6 @@ class HomeController < StoreController
                 .where(highlight: true)
                 .limit(4)
     @slider = Slider.find_by(location: :home_page)
-
-    respond_to do |format|
-      format.html { render layout: 'homepage' }
-    end
   end
 
   def contact
@@ -36,7 +32,7 @@ class HomeController < StoreController
       redirect_to contact_path
     else
       generate_business_hours
-      render :contact
+      render :contact, status: :unauthorized
     end
   end
 
@@ -50,7 +46,7 @@ class HomeController < StoreController
 
       @corporate_services = corporate_services
       find_corporate_clients_sliders
-      render :corporate_clients
+      render :corporate_clients, status: :unauthorized
     end
   end
 

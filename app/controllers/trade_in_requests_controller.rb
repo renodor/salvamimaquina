@@ -16,7 +16,7 @@ class TradeInRequestsController < StoreController
     else
       set_form_variables
       @show_fields = true
-      render :new
+      render :new, status: :unauthorized
     end
   end
 

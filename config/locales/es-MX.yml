@@ -325,14 +325,13 @@ es-MX:
     identify_your_model: 'identificar_su_modelo'
     search_results: 'buscar'
     controllers:
-      spree:
-        reparation_requests:
-          reparation_requests: 'reparacion'
-          new: 'nueva'
-          thank_you: 'gracias'
-        trade_in_requests:
-          trade_in_requests: 'trade_in'
-          new: 'nuevo'
-          confirmed: 'confirmado'
-        products:
-          products: 'productos'
+      reparation_requests:
+        reparation_requests: 'reparacion'
+        new: 'nueva'
+        thank_you: 'gracias'
+      trade_in_requests:
+        trade_in_requests: 'trade_in'
+        new: 'nuevo'
+        confirmed: 'confirmado'
+      products:
+        products: 'productos'

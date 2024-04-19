@@ -44,7 +44,7 @@ class UsersController < StoreController
       end
       redirect_to redirect_url, notice: I18n.t('spree.account_updated')
     else
-      render :edit
+      render :edit, status: :unauthorized
     end
   end
 
