@@ -20,7 +20,7 @@ class UserSessionsController < Devise::SessionsController
       respond_to do |format|
         format.html do
           flash.now[:error] = t('devise.failure.invalid')
-          render :new
+          render :new, status: :unauthorized
         end
         format.js do
           render json: { error: t('devise.failure.invalid') }, status: :unprocessable_entity
