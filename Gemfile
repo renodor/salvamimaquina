@@ -124,7 +124,7 @@ gem 'sentry-ruby'
 # Image storage
 gem 'cloudinary', '~> 1.28'
 
-gem 'sidekiq'
+gem 'sidekiq', '< 7.0'
 gem 'sidekiq-failures', '~> 1.0'
 
 gem 'jwt'

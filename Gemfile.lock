@@ -368,8 +368,7 @@ GEM
       i18n
     rdoc (6.6.0)
       psych (>= 4.0.0)
-    redis-client (0.18.0)
-      connection_pool
+    redis (4.8.1)
     regexp_parser (2.8.2)
     reline (0.4.0)
       io-console (~> 0.5)
@@ -456,11 +455,10 @@ GEM
       sentry-ruby (~> 5.13.0)
     sentry-ruby (5.13.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sidekiq (7.2.0)
-      concurrent-ruby (< 2)
-      connection_pool (>= 2.3.0)
-      rack (>= 2.2.4)
-      redis-client (>= 0.14.0)
+    sidekiq (6.5.12)
+      connection_pool (>= 2.2.5, < 3)
+      rack (~> 2.0)
+      redis (>= 4.5.0, < 5)
     sidekiq-failures (1.0.4)
       sidekiq (>= 4.0.0)
     simple_form (5.3.0)
@@ -627,7 +625,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
-  sidekiq
+  sidekiq (< 7.0)
   sidekiq-failures (~> 1.0)
   simple_form
   solidus (= 4.2.3)
