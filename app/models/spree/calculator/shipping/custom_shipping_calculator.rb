@@ -6,7 +6,7 @@
 # the shipping cost will always be the same, and won't be applied twice)
 module Spree
   module Calculator::Shipping
-    class CustomShippingCalculator < Spree::ShippingCalculator
+    class CustomShippingCalculator < ShippingCalculator
       preference :amount, :decimal, default: 0
 
       def self.description
@@ -14,7 +14,7 @@ module Spree
       end
 
       def compute_package(package)
-        if package.package_index.zero?
+        if package.package_index&.zero?
           preferred_amount
         else
           0

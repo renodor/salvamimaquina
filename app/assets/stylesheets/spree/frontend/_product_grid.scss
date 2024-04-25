@@ -4,16 +4,18 @@
   position: relative;
   .taxon-title {
     padding-bottom: 10px;
+    font-size: 20px;
   }
 }
 
-ul#products {
+ul#products-grid {
   padding: 0;
   margin: 0;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 30px 15px;
   li {
+    display: inline-block;
     position: relative;
     width: 100%;
     margin: 0;
@@ -53,13 +55,13 @@ ul#products {
 }
 
 @media ($max-l) {
-  ul#products {
+  ul#products-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media ($max-s) {
-  ul#products {
+  ul#products-grid {
     grid-template-columns: 1fr;
   }
 }

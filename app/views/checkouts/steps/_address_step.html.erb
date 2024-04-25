@@ -1,0 +1,19 @@
+<div>
+  <fieldset id="shipping">
+    <%= form.fields_for :ship_address do |ship_form| %>
+      <%= render 'checkouts/steps/address_inputs', form: ship_form, address_type: 'shipping', address: @order.ship_address %>
+      <div data-controller="mapbox" data-mapbox-token-value="<%= Rails.application.credentials.mapbox_api_key %>">
+        <%= ship_form.hidden_field :latitude, data: { input: 'address_latitude', 'mapbox-target' => 'latitude' } %>
+        <%= ship_form.hidden_field :longitude, data: { input: 'address_longitude', 'mapbox-target' => 'longitude' } %>
+        <div id="missing-map-pin" class=""><%= t('spree.missing_map_pin') %></div>
+        <div data-mapbox-target="map" id="map" style="width: 100%; height: 600px;" >
+      </div>
+    <% end %>
+  </fieldset>
+</div>
+
+<div class="form-buttons">
+  <%= submit_tag t('spree.save_and_continue').upcase, class: 'btn btn-primary', data: { input: 'map_submit' } %>
+</div>
+<br>
+<small><%= t('spree.different_billing_address') %></small>

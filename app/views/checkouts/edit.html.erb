@@ -1,0 +1,15 @@
+<div id="checkout" data-controller="checkout-inputs-validation">
+  <%= render partial: 'spree/shared/error_messages', locals: { target: @order } %>
+
+  <%= render "checkout_header" %>
+
+  <div id="checkout-content">
+    <div id="<%= @order.state %>-wrapper" class="checkout-details" data-hook="checkout_form_wrapper">
+      <%= render "checkout_step", order: @order %>
+    </div>
+    <% if @order.state != 'confirm' %>
+      <%= render 'checkout_summary', order: @order, show_checkout_button: false %>
+    <% end %>
+  </div>
+  <%= render 'shared/related_products', related_products: @order.related_products %>
+</div>

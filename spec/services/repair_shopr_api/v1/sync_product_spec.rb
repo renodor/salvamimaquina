@@ -6,10 +6,10 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
   subject { described_class.call(sync_logs: sync_logs, attributes: attributes.dup) }
 
   let!(:sync_logs) { create(:repair_shopr_products_sync_log) }
-  let!(:default_shipping_category) { create(:shipping_category, :default) }
-  let!(:san_francisco_stock_location) { create(:stock_location, :san_francisco) }
-  let!(:bella_vista_stock_location) { create(:stock_location, :bella_vista) }
-  let!(:categories_taxonomy) { create(:taxonomy) }
+  let!(:default_shipping_category) { create(:shipping_category, name: 'Default') }
+  let!(:san_francisco_stock_location) { create(:smm_stock_location, :san_francisco) }
+  let!(:bella_vista_stock_location) { create(:smm_stock_location, :bella_vista) }
+  let!(:categories_taxonomy) { create(:taxonomy, name: 'Categories') }
   let(:notes) { '' }
   let(:product_category) { 'ecom;iPhones' }
   let(:photos) { [] }
@@ -119,7 +119,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     end
 
     context 'when product and variant already exists' do
-      let!(:product) { create(:product, available_on: Date.yesterday, name: 'iPhone 14') }
+      let!(:product) { create(:smm_product, available_on: Date.yesterday, name: 'iPhone 14') }
       let!(:variant) { create(:variant, repair_shopr_id: attributes['id'], product: product) }
 
       it 'updates existing product and variant' do
@@ -190,7 +190,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     end
 
     context 'when product already exists' do
-      let!(:product) { create(:product, name: attributes['name'].strip, available_on: Date.yesterday, master_repair_shopr_id: attributes['id']) }
+      let!(:product) { create(:smm_product, name: attributes['name'].strip, available_on: Date.yesterday, master_repair_shopr_id: attributes['id']) }
 
       it 'updates existing product' do
         expect { subject }.to not_change(Spree::Product, :count).and not_change(Spree::Variant, :count)
@@ -222,7 +222,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     context 'when stock decreases' do
       let!(:product) do
         create(
-          :product,
+          :smm_product,
           name: 'iPhone 14',
           master_repair_shopr_id: attributes['id'],
           san_francisco_stock: 5,
@@ -242,7 +242,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     context 'when stock doesnt change' do
       let!(:product) do
         create(
-          :product,
+          :smm_product,
           name: 'iPhone 14',
           master_repair_shopr_id: attributes['id'],
           san_francisco_stock: 3,
@@ -308,7 +308,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
   context 'variant reassignment' do
     context 'when adding parent_product to notes' do
       let(:notes) { "color: Red \r\ncapacity: 128GB\r\nmodel: iPhone 14\r\nparent_product: iPhone 14\r\nhighlight: yes" }
-      let!(:other_product) { create(:product, name: 'other iPhone', master_repair_shopr_id: attributes['id']) }
+      let!(:other_product) { create(:smm_product, name: 'other iPhone', master_repair_shopr_id: attributes['id']) }
 
       context 'when the corresponding parent product doesnt exist' do
         it 'reassigns variant to a new product and destroy the old one' do
@@ -317,7 +317,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
           expect { subject }.to not_change(Spree::Product, :count).and change(Spree::Variant, :count).by(1)
           expect(sync_logs.reload.sync_errors).to be_empty
 
-          expect(other_product.reload.deleted_at).not_to be nil
+          expect { other_product.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
           new_product = Spree::Product.find_by(name: 'iPhone 14')
           expect(new_product).not_to eq(other_product)
@@ -327,7 +327,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
       end
 
       context 'when the corresponding parent product exists' do
-        let!(:product) { create(:product, name: 'iPhone 14') }
+        let!(:product) { create(:smm_product, name: 'iPhone 14') }
 
         it 'reassigns variant to this existing product and destroy the old one' do
           variant = other_product.master
@@ -335,7 +335,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
           expect { subject }.to change(Spree::Product, :count).by(-1).and not_change(Spree::Variant, :count)
           expect(sync_logs.reload.sync_errors).to be_empty
 
-          expect(other_product.reload.deleted_at).not_to be nil
+          expect { other_product.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
           expect(product).not_to eq(other_product)
           expect(product.variants).to eq([variant])
@@ -345,7 +345,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     end
 
     context 'when removing parent_product to notes' do
-      let(:product) { create(:product, name: 'other iPhone') }
+      let(:product) { create(:smm_product, name: 'other iPhone') }
       let!(:variant) { create(:variant, repair_shopr_id: attributes['id'], product: product) }
 
       it 'sets variant has the product master' do
@@ -377,7 +377,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
 
     context 'when changing parent_product in notes' do
       let(:notes) { "color: Red \r\ncapacity: 128GB\r\nmodel: iPhone 14\r\nparent_product: iPhone 14\r\nhighlight: yes" }
-      let(:old_product) { create(:product, name: 'other iPhone') }
+      let(:old_product) { create(:smm_product, name: 'other iPhone') }
       let!(:variant) { create(:variant, repair_shopr_id: attributes['id'], product: old_product) }
       let!(:other_variant) { create(:variant, product: old_product) }
 
@@ -395,7 +395,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
       end
 
       context 'when new parent already exists' do
-        let!(:existing_product) { create(:product, name: 'iPhone 14') }
+        let!(:existing_product) { create(:smm_product, name: 'iPhone 14') }
 
         it 'reassigns variant to this existing new parent product' do
           expect { subject }.to not_change(Spree::Product, :count).and not_change(Spree::Variant, :count)
@@ -416,7 +416,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
           expect { subject }.to not_change(Spree::Product, :count).and not_change(Spree::Variant, :count)
           expect(sync_logs.reload.sync_errors).to be_empty
 
-          expect(old_product.reload.deleted_at).not_to be nil
+          expect { old_product.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
           new_product = Spree::Product.find_by(name: 'iPhone 14')
           expect(new_product).not_to eq(old_product)
@@ -451,7 +451,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
       # Stub URI::HTTPS so that #open method works with a local URL
       photos.each do |photo|
         uri_instance_double = instance_double(URI::HTTPS)
-        allow(URI).to receive(:parse).once.with(photo['photo_url']).and_return(uri_instance_double)
+        allow(URI).to receive(:parse).with(photo['photo_url']).and_return(uri_instance_double)
         allow(uri_instance_double).to receive(:open).and_return(File.open(photo['photo_url']))
       end
     end
@@ -480,7 +480,14 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
 
     it 'doesnt create image if it already exists' do
       variant = create(:variant, repair_shopr_id: attributes['id'])
-      variant.images.create!(repair_shopr_id: photos.first['id'])
+      image = Spree::Image.new(
+        viewable_type: 'Spree::Variant',
+        viewable_id: variant.id,
+        repair_shopr_id: photos.first['id'],
+        alt: variant.name
+      )
+      image.attachment.attach(io: URI.parse(photos.first['photo_url']).open, filename: 'filename')
+      image.save!
 
       expect { subject }.to change(Spree::Image, :count).by(1)
       expect(sync_logs.reload.sync_errors).to be_empty
@@ -492,7 +499,14 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
 
     it 'destroys old variant images' do
       variant = create(:variant, repair_shopr_id: attributes['id'])
-      old_image = variant.images.create!(repair_shopr_id: 'ABCD')
+      old_image = Spree::Image.new(
+        viewable_type: 'Spree::Variant',
+        viewable_id: variant.id,
+        repair_shopr_id: 'ABCD',
+        alt: variant.name
+      )
+      old_image.attachment.attach(io: URI.parse(photos.first['photo_url']).open, filename: 'filename')
+      old_image.save!
 
       expect { subject }.to change(Spree::Image, :count).by(1)
       expect { old_image.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -517,10 +531,10 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
   end
 
   context 'when two different products have the same name' do
-    let!(:wrong_product) { create(:product, name: 'iPhone 14 -  Nuevo - 128GB- RED- eSIM', description: 'old description') }
+    let!(:wrong_product) { create(:smm_product, name: 'iPhone 14 -  Nuevo - 128GB- RED- eSIM', description: 'old description') }
     let!(:product) do
       create(
-        :product,
+        :smm_product,
         name: 'iPhone 14 -  Nuevo - 128GB- RED- eSIM',
         description: 'old description',
         master_repair_shopr_id: attributes['id']
@@ -550,7 +564,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
     end
 
     it 'sends message to Sentry' do
-      expect(Sentry).to receive(:capture_message).with(described_class.name, { extra: { sync_logs_errors: sync_logs_errors } })
+      expect(SendMessageToSentry).to receive(:send).with(described_class.name, { sync_logs_errors: sync_logs_errors })
       subject
     end
   end

@@ -10,37 +10,16 @@ module Spree
     extend ActiveSupport::Concern
     include Spree::ActiveStorageAdapter::Normalization
 
-    included do
-      next if Rails.gem_version >= Gem::Version.new('6.1.0.alpha')
-
-      abort <<~MESSAGE
-        Configuration Error: Solidus ActiveStorage attachment adpater requires Rails >= 6.1.0.
-
-        Spree::Config.image_attachment_module preference is set to #{Spree::Config.image_attachment_module}
-        Spree::Config.taxon_attachment_module preference is set to #{Spree::Config.taxon_attachment_module}
-        Rails version is #{Rails.gem_version}
-
-        To solve the problem you can upgrade to a Rails version greater than or equal to 6.1.0
-        or use legacy Paperclip attachment adapter by editing `config/initialiers/spree/rb`:
-        config.image_attachment_module = 'Spree::Image::PaperclipAttachment'
-        config.taxon_attachment_module = 'Spree::Taxon::PaperclipAttachment'
-      MESSAGE
-    end
-
-    # rubocop:disable Metrics/BlockLength
     class_methods do
       attr_reader :attachment_name
       attr_reader :attachment_definition
 
       # Specifies the relation between a single attachment and the model
-      # We modified this method to accept a 3rd argument that represents the service name,
-      # so that we can define specific service per model
-      def has_attachment(name, definition, service_name) # rubocop:disable Naming/PredicateName
+      def has_attachment(name, definition) # rubocop:disable Naming/PredicateName
         @attachment_name = name.to_sym
         @attachment_definition = definition
 
-        # Here ActiveStorage has_one_attached method is called with a specific service
-        has_one_attached(attachment_name, service: service_name)
+        has_one_attached attachment_name, service: @attachment_definition[:service_name]
 
         override_reader
         override_writer
@@ -99,7 +78,6 @@ module Spree
         end
       end
     end
-    # rubocop:enable Metrics/BlockLength
 
     def styles
       self.class.attachment_definition[:styles]
@@ -115,6 +93,8 @@ module Spree
 
     def url(style = default_style)
       attachment.url(style)
+    rescue ActiveStorage::FileNotFoundError
+      "noimage/#{style}.png"
     end
 
     def destroy_attachment(_name)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Spree
-  class PaymentMethod::BacCreditCard < Spree::PaymentMethod::CreditCard
+  class PaymentMethod::BacCreditCard < PaymentMethod::CreditCard
     def gateway_class
       self.class
     end
@@ -35,7 +35,7 @@ module Spree
     end
 
     def handle_3ds_response(response)
-      authentication_status = response['RiskManagement']['ThreeDSecure']['AuthenticationStatus']
+      authentication_status = response.dig('RiskManagement', 'ThreeDSecure', 'AuthenticationStatus')
       iso_response_code     = response['IsoResponseCode']
 
       active_merchant_response(

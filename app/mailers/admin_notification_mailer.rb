@@ -1,6 +1,6 @@
 # frozen_string_literal:true
 
-class AdminNotificationMailer < ApplicationMailer
+class AdminNotificationMailer < Spree::BaseMailer
   ADMIN_EMAIL = Spree::Store.default.mail_from_address
 
   def user_message_email(user_message)

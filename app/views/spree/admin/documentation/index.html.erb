@@ -18,7 +18,7 @@
       <li>(You may have to reload the page to see the content...). Click on the edit button of the category you want to edit</li>
       <li>Click on the <b>"Choose File"</b> button and choose the category image (image size should be 500px width and 500px height)</li>
       <li>Click on the <b>"Update"</b> button</li>
-      <li>Those images will appear under the category name on the "Tienda en Línea" page (<%= link_to "here", products_path, target: :blank %>)</li>
+      <li>Those images will appear under the category name on the "Tienda en Línea" page (<%= link_to 'here', main_app.products_path, target: :blank %>)</li>
     </ol>
 
     <%= image_tag 'doc/product-category-banners.png' %>
@@ -184,7 +184,7 @@
   <div class="admin-doc-block" id="reparations">
     <h2>Reparations</h2>
     <h3>Reparation Categories</h3>
-    <p>This is where you define the different reparation categories that will appear on <%= link_to 'this page', reparation_categories_path, target: :blank %>. You can edit or create a reparation category by doing the following:</p>
+    <p>This is where you define the different reparation categories that will appear on <%= link_to 'this page', main_app.reparation_categories_path, target: :blank %>. You can edit or create a reparation category by doing the following:</p>
     <ol>
       <li>Go to <%= link_to 'admin > reparations > reparation categories', admin_reparation_categories_path, target: :blank %> and click the edit icon of the reparation you want to edit. Or click on the <b>"New Reparation Category"</b> button on the top right of the page if you want to create a new one</li>
       <li>You can now define the name of your reparation category, the different products belonging to this category, and the different damage types belonging to this category. (To add new product fields or new damage fields, you have to add a product name or a damage type on the "New Product" or "New Damage Type" field, and then save your changes)</li>
@@ -221,7 +221,7 @@
       <li><b>model:</b> specifies the product model. The model information is used to create the "Modelos" filter on the ecommerce</li>
       <li><b>color:</b> specifies the product color. The color information is used to create the "Colores" filter on the ecommerce</li>
       <li><b>capacity:</b> specifies the product capacity. The capacity information is used to create the "Capacidad" filter on the ecommerce</li>
-      <li><b>highlight:</b> specifies if the product should appear on the <%= link_to "home page", root_path, target: :blank %></li>
+      <li><b>highlight:</b> specifies if the product should appear on the <%= link_to 'home page', main_app.root_path, target: :blank %></li>
     </ul>
     <p>So for example the note field of a RepairShopr product could have the following information:</p>
     <p class="doc-code">
@@ -305,7 +305,7 @@
           <li><b>Delay between slides:</b> the time (in milliseconds) before a slide will change. Default value is 3000</li>
           <li><b>Space between slides:</b> the space displayed between two slides when they are changing. Default value is 10</li>
           <li><b>Force slide full width:</b> if checked, the slide image will always take the full width of the slider (even if the actual image is smaller). Default value is checked, and for most sliders this should always stay checked (Only sliders showing more than one slide at the same time shouldn't have this option checked)</li>
-          <li><b>Image per slide S, M, L, XL:</b> define for the different device screen sizes how many slides should we display at the same time. Most of the time, the value will be 1 everywhere. But for example on the <%= link_to 'Corporate client logos slider', corporate_clients_path(anchor: 'corporate-clients-slider'), target: :blank %> we display 5 logos at the same time on desktops (so 5 slides for XL), 2 logos at the same time for tablets (so 2 slides for M), and 1 logo for mobiles (so 1 slide for S)</li>
+          <li><b>Image per slide S, M, L, XL:</b> define for the different device screen sizes how many slides should we display at the same time. Most of the time, the value will be 1 everywhere. But for example on the <%= link_to 'Corporate client logos slider', main_app.corporate_clients_path(anchor: 'corporate-clients-slider'), target: :blank %> we display 5 logos at the same time on desktops (so 5 slides for XL), 2 logos at the same time for tablets (so 2 slides for M), and 1 logo for mobiles (so 1 slide for S)</li>
         </ul>
       </li>
       <li>Click on the <b>"Create slider and add first slide"</b> button</li>

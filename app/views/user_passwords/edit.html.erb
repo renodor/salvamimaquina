@@ -1,0 +1,10 @@
+<div id="forgot-password">
+  <h6><%= t('spree.reset_password').upcase %></h6>
+
+  <%= form_for @spree_user, as: :spree_user, url: update_password_path,method: :put do |f| %>
+    <%= f.password_field :password, placeholder: t('spree.password'), class: 'login-input' %>
+    <%= f.password_field :password_confirmation, placeholder: t('spree.confirm_password'), class: 'login-input' %>
+    <%= f.hidden_field :reset_password_token %>
+    <%= f.submit t('spree.reset_password'), class: 'btn btn-primary w-100' %>
+  <% end %>
+</div>

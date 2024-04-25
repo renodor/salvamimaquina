@@ -26,6 +26,7 @@
   }
   &.error {
     background-color: $dark-red;
+    color: white;
   }
   &.notice, &.success {
     background-color: $green

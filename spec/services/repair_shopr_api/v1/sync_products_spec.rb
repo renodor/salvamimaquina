@@ -32,8 +32,8 @@ RSpec.describe RepairShoprApi::V1::SyncProducts, type: :service do
   end
 
   context 'variants that have been destroyed from Repair Shopr' do
-    let(:product) { create(:product) }
-    let(:product2) { create(:product) }
+    let(:product) { create(:smm_product) }
+    let(:product2) { create(:smm_product) }
     let!(:variant) { create(:variant, repair_shopr_id: '3333', product: product) }
     let!(:variant2) { create(:variant, repair_shopr_id: '4444', product: product) }
     let!(:variant3) { create(:variant, repair_shopr_id: nil, product: product2) }
@@ -43,9 +43,9 @@ RSpec.describe RepairShoprApi::V1::SyncProducts, type: :service do
 
       expect(product.reload.deleted_at).to be nil
       expect(variant.reload.deleted_at).to be nil
-      expect(variant2.reload.deleted_at).not_to be nil
-      expect(variant3.reload.deleted_at).not_to be nil
-      expect(product2.reload.deleted_at).not_to be nil
+      expect { variant2.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { variant3.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { product2.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'update sync logs deleted_products count' do
@@ -56,7 +56,7 @@ RSpec.describe RepairShoprApi::V1::SyncProducts, type: :service do
   context 'when some taxons are not associated to any product anymore' do
     let!(:taxonomy) { create(:taxonomy) }
     let!(:taxon) { create(:taxon, parent: Spree::Taxon.root, taxonomy: taxonomy) }
-    let!(:product) { create(:product, taxons: [taxon]) }
+    let!(:product) { create(:smm_product, taxons: [taxon]) }
     let!(:variant) { create(:variant, repair_shopr_id: '4444', product: product) }
 
     it 'destroys taxons' do
@@ -72,7 +72,7 @@ RSpec.describe RepairShoprApi::V1::SyncProducts, type: :service do
   it 'updates sync logs synced_product_categories' do
     taxonomy = create(:taxonomy)
     taxon = create(:taxon, parent: Spree::Taxon.root, taxonomy: taxonomy)
-    product = create(:product, taxons: [taxon])
+    product = create(:smm_product, taxons: [taxon])
     create(:variant, repair_shopr_id: '1111', product: product)
 
     expect { subject }.to change(sync_logs.reload, :synced_product_categories).from(0).to(1)

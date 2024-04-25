@@ -1,0 +1,44 @@
+<% if slider.is_a?(Slider) && slider&.slides.present? %>
+  <%
+    slides = slider.slides.includes(image_attachment: :blob, image_mobile_attachment: :blob).order(:order).map do |slide|
+      {
+        link: URI.encode_www_form_component(slide.link),
+        alt: URI.encode_www_form_component(slide.alt),
+        images: {
+          'max' => cl_image_path_with_folder(slide.image_mobile.presence || slide.image, width: slide.correct_width(screen_width: 575), crop: :fill, model: Slide, no_fallback: true),
+          '576' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 576), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '768' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 768), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '992' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 992), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '1200' => cl_image_path_with_folder(slide.image, width: slide.correct_width(screen_width: 1200), crop: :fill, model: Slide, no_fallback: !slider.fallback_image),
+          '1400' => cl_image_path_with_folder(slide.image, model: Slide, no_fallback: !slider.fallback_image)
+        }
+      }
+    end
+  %>
+  <!-- Slider main container -->
+  <div
+    data-controller="swiper-slider"
+    data-swiper-slider-options-value=<%= slider.options.to_json %>
+    data-swiper-slider-slides-value=<%= slides.to_json %>
+    id="<%= "#{slider.location}-slider" %>"
+    class="swiper"
+  >
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper <%= slider.force_slide_full_width ? 'full-width-slides' : '' %>">
+      <!-- slides will added by JS -->
+    </div>
+
+    <% if slider.options[:navigation] %>
+      <div class="swiper-navigation swiper-prev">
+        <%= svg 'chevron_left' %>
+      </div>
+      <div class="swiper-navigation swiper-next">
+        <%= svg 'chevron_right' %>
+      </div>
+    <% end %>
+
+    <% if slider.options[:pagination] %>
+      <div class="swiper-pagination"></div>
+    <% end %>
+  </div>
+<% end %>

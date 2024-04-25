@@ -1,0 +1,16 @@
+<% self.title = @taxon.name %>
+
+<%= render 'shared/categories_nav' %>
+
+<%= render 'shared/products_sidebar', current_sorting_key: :descend_by_available_on %>
+
+<div id="taxon-header">
+  <h1 class="taxon-title flex-1"><%= @taxon.name %></h1>
+  <div class="hide-m">
+    <%= render 'shared/products_sorting_desktop', current_sorting_key: :descend_by_available_on %>
+  </div>
+</div>
+
+<div data-hook="taxon_products">
+  <%= render partial: 'shared/products', locals: { products: @products } %>
+</div>

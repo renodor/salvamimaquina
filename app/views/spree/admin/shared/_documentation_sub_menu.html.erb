@@ -1,5 +1,0 @@
-<ul class="admin-subnav" data-hook="admin_product_sub_tabs">
-  <% %i[products promotions users settings trade_in reparations repair_shopr sliders].map do |sub_menu| %>
-    <%= tab "doc_#{sub_menu}", url: admin_documentation_path(anchor: sub_menu.to_s.gsub('_', '-')) %>
-  <% end %>
-</ul>

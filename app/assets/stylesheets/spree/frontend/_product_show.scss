@@ -11,9 +11,11 @@
         #main-image {
           border: none;
           padding: 30px;
+          text-align: center;
           img {
             min-height: 0;
-            max-height:474px;
+            max-height: 474px;
+            max-width: 100%;
           }
         }
         #thumbnails {
@@ -36,9 +38,11 @@
     }
     #product-right-part {
       width: 40%;
-      #product-description {
+      #product-infos {
         .product-title {
           border-bottom: none;
+          margin-bottom: 15px;
+          font-size: 24px;
         }
         #product-variants {
           margin-bottom: 30px;
@@ -49,13 +53,20 @@
             margin: 0;
           }
           .variant-options {
+            margin-bottom: 15px;
             select {
-              width: initial;
+              width: 50%;
               min-width: 140px;
               border-radius: 0;
               &:focus {
                 box-shadow: none;
               }
+            }
+            .select {
+              padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+              border: 1px solid $light-gray;
+              min-width: 140px;
+              width: 50%;
             }
           }
         }
@@ -66,6 +77,7 @@
           .price {
             font-weight: 400;
             padding: 0 5px 0 0;
+            font-size: 20px;
             &.crossed {
               font-size: 15px;
               font-weight: 300;
@@ -75,11 +87,18 @@
         .add-to-cart {
           display: flex;
           column-gap: 10px;
+          margin-top: 15px;
           #add-to-cart-btn {
             width: 140px;
           }
         }
       }
+    }
+  }
+
+  .product-description {
+    p {
+      margin-bottom: 0;
     }
   }
 }
@@ -100,10 +119,10 @@
       #product-right-part {
         width: 100%;
         margin-bottom: 20px;
-        #product-description {
+        #product-infos {
           #product-variants {
             .variant-options {
-              select {
+              select, .select {
                 width: 100%;
               }
             }

@@ -1,0 +1,7 @@
+<%= turbo_stream.update 'navbar-cart-quantity' do %>
+  <%= render 'shared/navbar_cart_quantity', quantity: @order.quantity %>
+<% end %>
+
+<%= turbo_stream.replace 'add-to-cart-modal' do %>
+  <%= render 'shared/add_to_cart_modal', variant_full_name: @variant_full_name, display_modal: true %>
+<% end %>

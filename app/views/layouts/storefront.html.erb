@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <%= render partial: 'shared/head' %>
+    <%= RailsCriticalCssServer::Rewrite.call self do %>
+      <link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
+      <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" />
+      <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+    <%= javascript_importmap_tags %>
+    <%= javascript_import_module_tag "popper" %>
+    <%= javascript_import_module_tag "bootstrap" %>
+
+  </head>
+  <body class="<%= body_class %>" id="<%= @body_id || 'default' %>">
+    <div class="container">
+      <%= render partial: 'shared/header' %>
+
+      <div id="wrapper">
+        <%= render partial: 'shared/content_header' if content_for? :content_header %>
+        <div id="wrapper-content" class="<%= content_for?(:sidebar) ? 'sidebar-layout' : '' %>">
+          <%= render partial: 'shared/sidebar' if content_for? :sidebar %>
+          <div id="content" data-hook>
+            <%= render 'shared/flash' %>
+            <%= yield %>
+          </div>
+          <%= yield :templates %>
+        </div>
+      </div>
+    </div>
+    <%= render partial: 'shared/footer' %>
+    <%= render partial: 'shared/copyrights' %>
+    <%= render 'shared/whatsapp_widget' %>
+  </body>
+</html>

@@ -44,10 +44,14 @@
     }
     input {
       display: none;
-      &.selected + label {
+      &:checked + label {
         background-color: $light-green;
         color: $green;
       }
+    }
+    label.checked {
+      background-color: $light-green;
+      color: $green;
     }
   }
 }

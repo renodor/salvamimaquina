@@ -1,0 +1,20 @@
+<%= render 'shared/error_messages', target: @user %>
+
+<h1><%= t('spree.registration') %></h1>
+<div id="registration" data-hook>
+  <div id="account">
+    <%= render template: 'user_sessions/new' %>
+  </div>
+  <% if Spree::Config[:allow_guest_checkout] %>
+    <div id="guest_checkout" data-hook>
+      <h6><%= t('spree.guest_user_account') %></h6>
+      <% if flash[:registration_error] %>
+        <div class='flash error'><%= flash[:registration_error] %></div>
+      <% end %>
+      <%= form_for @order, url: checkout_guest_session_path, method: :post, html: { id: 'checkout_form_registration' } do |f| %>
+        <%= f.email_field :email, placeholder: t('spree.email'), class: 'login-input' %>
+        <p><%= f.submit t('spree.continue').upcase, class: 'btn btn-primary w-100' %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

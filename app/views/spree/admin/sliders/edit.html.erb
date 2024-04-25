@@ -1,6 +1,6 @@
 <% admin_layout "full-width" %>
 
-<% admin_breadcrumb(link_to 'Sliders', spree.admin_sliders_path) %>
+<% admin_breadcrumb(link_to 'Sliders', admin_sliders_path) %>
 <% admin_breadcrumb('Edit Slider') %>
 
 <%= simple_form_for @slider, url: admin_slider_path, html: { id: 'slider-form' } do |f| %>
@@ -53,7 +53,7 @@
       </div>
     <% end %>
   </div>
-  <p><%= link_to '+ Add slide', new_admin_slider_slide_path(@slider.id), class: 'btn btn-secondary' %></p>
+  <p><%= link_to '+ Add slide', new_admin_slider_slide_path(@slider), class: 'btn btn-secondary' %></p>
 <% end %>
 
 

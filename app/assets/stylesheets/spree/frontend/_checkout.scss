@@ -1,5 +1,5 @@
 #checkout {
-  #checkout-header {
+  .checkout-header {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
@@ -62,6 +62,10 @@
         &::placeholder {
           font-size: 16px;
         }
+        &:focus, &:focus-visible {
+          outline: none;
+          border-color: $green !important;
+        }
         &.disabled {
           background-color: $light-gray;
           color: $dark-gray;
@@ -78,6 +82,7 @@
         }
       }
       #billing, #shipping, #shipping_method, #payment, #order_details, #order_summary {
+        margin-top: 10px;
         border: none;
         padding: 0;
       }
@@ -149,6 +154,7 @@
       }
       #payment-methods {
         padding-left: 0;
+        list-style: none;
         .card_number, .card_code {
           display: flex;
           .has-tooltip {
@@ -163,6 +169,11 @@
         }
       }
     }
+    #address-wrapper {
+      .form-buttons {
+        margin-top: 32px;
+      }
+    }
     #checkout_form_payment {
       width: 400px;
     }
@@ -175,7 +186,7 @@
 
 @media($max-l) {
   #checkout {
-    #checkout-header {
+    .checkout-header {
       flex-direction: column;
       align-items: flex-start;
       h1 {
@@ -194,7 +205,7 @@
 
 @media ($max-m) {
   #checkout {
-    #checkout-header .progress-steps {
+    .checkout-header .progress-steps {
       div {
         padding-right: 20px;
       }

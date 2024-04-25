@@ -50,9 +50,8 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
       ship_address = @order.ship_address
       customer_info = {
         email: @order.email,
-        firstname: ship_address.firstname,
-        lastname: ship_address.lastname,
-        fullname: ship_address.name,
+        firstname: ship_address.name.split[0],
+        lastname: ship_address.name.split[1],
         address: ship_address.address1,
         address_2: ship_address.address2,
         city: "#{ship_address.district.name} - #{ship_address.city}",
@@ -82,7 +81,7 @@ class RepairShoprApi::V1::CreateInvoice < RepairShoprApi::V1::Base
         total: @order.total,
         tax: @order.additional_tax_total,
         is_paid: @order.payment_state == 'paid',
-        location_id: @order.define_stock_location.repair_shopr_id,
+        location_id: @order.find_stock_location.repair_shopr_id,
         note: "Sold from Ecommerce Website. #{buil_invoice_note}"
       }
     end

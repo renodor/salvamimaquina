@@ -1,0 +1,11 @@
+<% if flash[:alert] %>
+  <div class="flash errors"><%= flash[:alert] %></div>
+<% end %>
+<% @body_id = 'login' %>
+<div id="existing-customer">
+  <h6><%= t('spree.login_as_existing').upcase %></h6>
+  <div data-hook="login">
+    <%= render 'shared/login' %>
+    <%= link_to t('spree.create_a_new_account'), signup_path %> | <%= link_to t('spree.forgot_password'), recover_password_path %>
+  </div>
+</div>

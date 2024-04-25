@@ -15,7 +15,6 @@ module PaymentGateway
 
       def call
         response = request(http_method: :post, endpoint: 'sale', params: payload)
-
         response_code = response[:IsoResponseCode]
 
         {
@@ -56,7 +55,7 @@ module PaymentGateway
               ChallengeWindowSize: 5,
               MerchantResponseUrl: '01'
             },
-            MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '129a-78-120-155-254.ngrok.io'}/checkout/three_d_secure_response"
+            MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '12ef-2a02-842a-f751-4c01-fe98-f57f-8039-1532.ngrok-free.app'}/checkout/three_d_secure_response"
           }
         }.to_json
       end

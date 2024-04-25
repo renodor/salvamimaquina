@@ -1,0 +1,19 @@
+<% @body_id = 'signup' %>
+<%= render 'spree/shared/error_messages', target: resource %>
+
+<div id="new-customer">
+  <h6><%= t('spree.new_customer').upcase %></h6>
+
+  <div data-hook="signup">
+    <%= form_for resource, as: :spree_user, url: registration_path(resource) do |f| %>
+      <div data-hook="signup_inside_form">
+        <%= render partial: 'shared/user_form', locals: { f: f } %>
+        <p><%= f.submit t('spree.create_account').upcase, class: 'btn btn-primary w-100' %></p>
+      </div>
+    <% end %>
+    <%= link_to t('spree.login_as_existing'), login_path %>
+  </div>
+
+</div>
+
+<div data-hook="login_extras"></div>

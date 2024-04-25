@@ -32,7 +32,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
           end
 
           context 'when variant already exists' do
-            let(:product) { create(:product) }
+            let(:product) { create(:smm_product) }
             let!(:variant) { create(:variant, repair_shopr_id: '1234', product: product) }
 
             it 'destroys it' do
@@ -40,7 +40,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
 
               subject
 
-              expect(variant.reload.deleted_at).not_to be nil
+              expect { variant.reload }.to raise_error(ActiveRecord::RecordNotFound)
               expect(variant2.reload.deleted_at).to be nil
               expect(product.reload.deleted_at).to be nil
             end
@@ -48,8 +48,8 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
             it 'destroys product if it has no other variants' do
               subject
 
-              expect(variant.reload.deleted_at).not_to be nil
-              expect(product.reload.deleted_at).not_to be nil
+              expect { variant.reload }.to raise_error(ActiveRecord::RecordNotFound)
+              expect { product.reload }.to raise_error(ActiveRecord::RecordNotFound)
             end
           end
         end
@@ -100,7 +100,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
           end
 
           context 'when variant already exists' do
-            let(:product) { create(:product) }
+            let(:product) { create(:smm_product) }
             let!(:variant) { create(:variant, repair_shopr_id: '1234', product: product) }
 
             it 'destroys it' do
@@ -108,7 +108,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
 
               subject
 
-              expect(variant.reload.deleted_at).not_to be nil
+              expect { variant.reload }.to raise_error(ActiveRecord::RecordNotFound)
               expect(variant2.reload.deleted_at).to be nil
               expect(product.reload.deleted_at).to be nil
             end
@@ -116,8 +116,8 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
             it 'destroys product if it has no other variants' do
               subject
 
-              expect(variant.reload.deleted_at).not_to be nil
-              expect(product.reload.deleted_at).not_to be nil
+              expect { variant.reload }.to raise_error(ActiveRecord::RecordNotFound)
+              expect { product.reload }.to raise_error(ActiveRecord::RecordNotFound)
             end
           end
         end
@@ -126,7 +126,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
           let(:attributes) do
             {
               id: '1234',
-              product_category: 'phones;iPhones',
+              product_category: 'phones;iPhones'
             }
           end
 
@@ -138,7 +138,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
           end
 
           context 'when variant already exists' do
-            let(:product) { create(:product) }
+            let(:product) { create(:smm_product) }
             let!(:variant) { create(:variant, repair_shopr_id: '1234', product: product) }
 
             it 'destroys it' do
@@ -146,7 +146,7 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
 
               subject
 
-              expect(variant.reload.deleted_at).not_to be nil
+              expect { variant.reload }.to raise_error(ActiveRecord::RecordNotFound)
               expect(variant2.reload.deleted_at).to be nil
               expect(product.reload.deleted_at).to be nil
             end
@@ -154,8 +154,8 @@ RSpec.describe RepairShoprWebhook::ProductsController, type: :request do
             it 'destroys product if it has no other variants' do
               subject
 
-              expect(variant.reload.deleted_at).not_to be nil
-              expect(product.reload.deleted_at).not_to be nil
+              expect { variant.reload }.to raise_error(ActiveRecord::RecordNotFound)
+              expect { product.reload }.to raise_error(ActiveRecord::RecordNotFound)
             end
           end
         end

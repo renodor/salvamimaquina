@@ -1,0 +1,87 @@
+<div id="user-account-header">
+  <h1><%= t('spree.my_account') %></h1>
+  <%= form_with(url: logout_path, method: Devise.sign_out_via, local: true) do %>
+    <%= button_tag(t('spree.logout'), class: 'logout-btn') %>
+  <% end %>
+</div>
+<ul class="nav nav-tabs" id="user-account-tabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="user-infos-tab" data-bs-toggle="tab" data-bs-target="#user-infos" type="button" role="tab" aria-controls="user-infos" aria-selected="true">
+      <%= t('spree.my_profile') %>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="user-orders-tab" data-bs-toggle="tab" data-bs-target="#user-orders" type="button" role="tab" aria-controls="user-orders" aria-selected="false">
+      <%= t('spree.my_orders') %>
+    </button>
+  </li>
+</ul>
+<div class="tab-content" id="user-account">
+  <div class="tab-pane fade show active" id="user-infos" role="tabpanel" aria-labelledby="user-infos-tab">
+    <div id="user-infos-content">
+      <div>
+        <div class="user-infos-block">
+          <div class="user-infos-title">
+            <h3><%= t('spree.account_information') %></h3>
+            <%= link_to svg('pen'), edit_account_path, class: "edit-user-account" %>
+          </div>
+          <p><%= @user.email %></p>
+          <p>
+            <% 10.times do %>
+              <%= svg('dot') %>
+            <% end %>
+          </p>
+        </div>
+        <div class="user-infos-block">
+          <div class="user-infos-title">
+            <h3><%= t('spree.address') %></h3>
+            <% if @address %>
+              <%= link_to svg('pen'), account_edit_user_address_path, class: "edit-user-account" %>
+            <% end %>
+          </div>
+          <% if @address %>
+            <p><%= @address.name %></p>
+            <p><%= @address.address1 %></p>
+            <p><%= @address.address2 %></p>
+            <p><%= @address.phone %></p>
+            <p><%= @address.district&.name %></p>
+            <p><%= @address.state&.name %></p>
+            <p><%= @address.city %></p>
+          <% else %>
+            <p><%= t('spree.no_address') %></p>
+            <%= link_to t('spree.create_address'), account_new_user_address_path, class: 'btn btn-secondary' %>
+          <% end %>
+        </div>
+      </div>
+      <% if @address %>
+        <div
+          id="static-map"
+          data-controller="mapbox-static"
+          data-mapbox-static-token-value="<%= Rails.application.credentials.mapbox_api_key %>"
+          style="width: 100%; height: 300px;"
+          data-mapbox-static-latitude-value="<%= @address.latitude %>"
+          data-mapbox-static-longitude-value="<%= @address.longitude %>"
+        >
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="user-orders" role="tabpanel" aria-labelledby="user-orders-tab">
+    <div id="user-orders-content">
+      <% if @orders.present? %>
+        <% @orders.each do |order| %>
+          <div class="user-order">
+            <div class="order-number"><%= link_to order.number, orders_es_mx_url(order), class: 'btn btn-primary' %></div>
+            <div class="order-date"><%= l order.completed_at.to_date %></div>
+            <div class="order-status"><%= t("spree.order_state.#{order.state}").titleize %></div>
+            <div class="order-payment-state"><%= t("spree.payment_states.#{order.payment_state}").titleize if order.payment_state %></div>
+            <div class="order-total"><%= order.display_total %></div>
+            <div> <%= cl_image_tag_with_folder order.line_items.first&.variant&.images&.first&.attachment, height: 80, crop: :fit, model: Spree::Image %></div>
+          </div>
+        <% end %>
+      <% else %>
+        <p><%= t('spree.you_have_no_orders_yet') %> <%= link_to t('spree.see_products'), products_path %></p>
+      <% end %>
+    </div>
+  </div>
+</div>

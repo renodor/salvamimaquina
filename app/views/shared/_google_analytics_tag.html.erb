@@ -1,0 +1,13 @@
+<% if Rails.env.production? %>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MWSQZFV7DT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-MWSQZFV7DT');
+  </script>
+<% else %>
+  <!-- Google Analytics Tag will be added here in Production -->
+<% end %>

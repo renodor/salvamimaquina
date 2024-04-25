@@ -21,18 +21,16 @@
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
 
 /public/assets
-.byebug_history
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-/public/packs
-/public/packs-test
-/node_modules
-
-/solidus-master
+# TODO: remove after merging
 
 # Ignore yarn files as described here: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 # But ignore as well the cache folder (unlike recommanded by yarn doc)

@@ -3,7 +3,7 @@
 module Spree
   class Promotion
     module Rules
-      class ShippingMethod < Spree::PromotionRule
+      class ShippingMethod < PromotionRule
         def applicable?(promotable)
           promotable.is_a?(Spree::Order)
         end
