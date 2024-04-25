@@ -368,8 +368,6 @@ GEM
       i18n
     rdoc (6.6.0)
       psych (>= 4.0.0)
-    redis (5.1.0)
-      redis-client (>= 0.17.0)
     redis-client (0.18.0)
       connection_pool
     regexp_parser (2.8.2)
@@ -617,7 +615,6 @@ DEPENDENCIES
   rails-controller-testing (~> 1.0.5)
   rails-i18n
   rails_critical_css_server
-  redis
   responders
   route_translator
   rspec-activemodel-mocks (~> 1.1.0)
