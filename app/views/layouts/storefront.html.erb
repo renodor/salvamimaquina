@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <%= render partial: 'shared/head' %>
     <%= RailsCriticalCssServer::Rewrite.call self do %>
       <link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
       <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" />
@@ -10,6 +9,7 @@
     <%= javascript_importmap_tags %>
     <%= javascript_import_module_tag "popper" %>
     <%= javascript_import_module_tag "bootstrap" %>
+    <%= render partial: 'shared/head' %>
 
   </head>
   <body class="<%= body_class %>" id="<%= @body_id || 'default' %>">
