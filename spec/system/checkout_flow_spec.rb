@@ -2,7 +2,7 @@
 
 require 'solidus_starter_frontend_spec_helper'
 
-RSpec.describe 'Product page', type: :system, js: true do
+RSpec.describe 'Checkout flow', type: :system, js: true do
   let!(:store) { create(:smm_store) }
   let!(:product) do
     create(
