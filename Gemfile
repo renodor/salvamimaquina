@@ -124,6 +124,7 @@ gem 'sentry-ruby'
 # Image storage
 gem 'cloudinary', '~> 1.28'
 
+# Can't upgrade to Sidekiq 7 for now because it won't work with Heroku Rediscloud addon: https://github.com/sidekiq/sidekiq/issues/5594
 gem 'sidekiq', '< 7.0'
 gem 'sidekiq-failures', '~> 1.0'
 
