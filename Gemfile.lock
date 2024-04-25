@@ -590,6 +590,7 @@ DEPENDENCIES
   capybara
   capybara-screenshot (~> 1.0)
   cloudinary (~> 1.28)
+  connection_pool
   database_cleaner-active_record
   debug
   factory_bot (>= 4.8)
@@ -613,6 +614,7 @@ DEPENDENCIES
   rails-controller-testing (~> 1.0.5)
   rails-i18n
   rails_critical_css_server
+  redis
   responders
   route_translator
   rspec-activemodel-mocks (~> 1.1.0)
