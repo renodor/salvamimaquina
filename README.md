@@ -27,7 +27,6 @@ Salva Mi Máquina uses an entreprise resource planning (ERP) software called [Re
 
 ### Setup
 * `bundle install` to install gems
-* `yarn install` to install NPM packages
 * `bin/rails db:create` to create DB
 * `bin/rails db:migrate` to play DB migrations
 * `bin/rails s` to launch dev server
