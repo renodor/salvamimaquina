@@ -199,6 +199,7 @@ es-MX:
     eligibility_errors:
       messages:
         limit_once_per_user: 'Este usuario ya utilizó este código cupón'
+    email_is_invalid: 'El correo no es válido'
   activerecord:
     attributes:
       spree/credit_card:

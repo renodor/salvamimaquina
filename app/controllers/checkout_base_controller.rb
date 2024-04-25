@@ -56,7 +56,7 @@ class CheckoutBaseController < StoreController
   def rescue_from_spree_gateway_error(exception)
     flash.now[:error] = t('spree.spree_gateway_error_flash_for_checkout')
     @order.errors.add(:base, exception.message)
-    render :edit
+    render :edit, status: :unprocessable_entity
   end
 
   def insufficient_stock_error

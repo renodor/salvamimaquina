@@ -24,7 +24,7 @@ class UserPasswordsController < Devise::PasswordsController
       self.resource = resource_class.new
       resource.reset_password_token = params[:spree_user][:reset_password_token]
       set_flash_message(:error, :cannot_be_blank)
-      render :edit
+      render :edit, status: :unprocessable_entity
     else
       super
     end
