@@ -55,15 +55,12 @@ RSpec.describe 'Products grid', type: :system, js: true do
   let!(:variant4) { create(:smm_variant, product: product2, option_values: [option_value4, option_value8, option_value12]) }
   let!(:price) { create(:price, amount: 12.34, variant: variant) }
   let!(:price2) { create(:price, amount: 22.21, variant: variant2) }
-  let!(:price3) { create(:price, amount: 666.32, variant: variant3) }
+  let!(:price3) { create(:price, amount: 444.22, variant: variant3) }
   let!(:price4) { create(:price, amount: 555.11, variant: variant4) }
   let!(:price5) { create(:price, amount: 100, variant: product3.master) }
-  let(:calculator) { create(:fixed_amount_sale_price_calculator) }
-  let!(:sale_price) { create(:sale_price, enabled: true, value: 444.22, price: price3, calculator: calculator) }
   let!(:image) { create(:smm_image, viewable: variant, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
   let!(:image2) { create(:smm_image, viewable: variant3, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
   let!(:image3) { create(:smm_image, viewable: product3.master, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
-  let!(:cross_sell_relation_type) { create(:cross_sell_relation_type) }
 
   it 'displays products with their name price and image' do
     visit nested_taxons_path(taxon)
@@ -82,7 +79,7 @@ RSpec.describe 'Products grid', type: :system, js: true do
     expect(second_product.find('.product-image img')['src'])
       .to eq("https://cloudinary.com/salvamimaquina/image/upload/c_fill,d_test:products:product-image-placeholder.jpg,w_540/v1/test/products/#{image2.attachment.key}")
     expect(second_product.find('.product-name')).to have_text('Second cool product')
-    expect(second_product.find('.prices')).to have_text("$444.22\n$666.32")
+    expect(second_product.find('.prices')).to have_text('$444.22')
 
     third_product = products_grid.find("#product_#{product3.id}")
     expect(third_product.find('.product-image img')['src'])
@@ -189,19 +186,6 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       expect(products_grid.find("#products #products-grid [data-spec='product']:first-child")['id']).to eq("product_#{product2.id}")
       expect(products_grid.find("#products #products-grid [data-spec='product']:nth-child(2)")['id']).to eq("product_#{product3.id}")
-      expect(products_grid.find("#products #products-grid [data-spec='product']:last-child")['id']).to eq("product_#{product.id}")
-    end
-
-    it 'can order product by most sales' do
-      products_grid = find('#products #products-grid')
-
-      find('#products-sorting-desktop').click
-      find("label[for='descend_by_purchase_count']").click
-
-      expect(find('#current-products-sorting')).to have_text('Más vendido')
-
-      expect(products_grid.find("#products #products-grid [data-spec='product']:first-child")['id']).to eq("product_#{product3.id}")
-      expect(products_grid.find("#products #products-grid [data-spec='product']:nth-child(2)")['id']).to eq("product_#{product2.id}")
       expect(products_grid.find("#products #products-grid [data-spec='product']:last-child")['id']).to eq("product_#{product.id}")
     end
   end

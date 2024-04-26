@@ -17,7 +17,6 @@ RSpec.describe 'Checkout flow', type: :system, js: true do
   let!(:price) { create(:price, amount: 12.34, variant: product.master) }
   let!(:price2) { create(:price, amount: 155.34, variant: product2.master) }
   let!(:image) { create(:smm_image, viewable: product.master, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
-  let!(:cross_sell_relation_type) { create(:cross_sell_relation_type) }
   let!(:panama_country) { create(:country, name: 'Panama', iso_name: 'PANAMA', iso: 'PA', iso3: 'PAN') }
   let!(:panama_state) { create(:state, name: 'Panamá', country: panama_country) }
   let!(:bella_vista_district) { create(:district, name: 'Bella Vista', latitude: 8.983972, longitude: -79.526022, state: panama_state) }

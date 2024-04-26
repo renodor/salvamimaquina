@@ -6,13 +6,8 @@
       <%= hidden_field_tag 'variant_id', variant.id %>
       <div id="product-price">
         <div>
-          <% if variant.on_sale? %>
-            <span class="price selling discount">
-              <%= number_to_currency(variant.price) %>
-            </span>
-          <% end %>
-          <span class="price selling original <%= 'crossed' if variant.on_sale? %>">
-            <%= number_to_currency(variant.original_price) %>
+          <span class="price selling original">
+            <%= number_to_currency(variant.price) %>
           </span>
         </div>
         <meta itemprop="price" content="<%= variant.price %>">

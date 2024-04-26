@@ -34,87 +34,6 @@ RSpec.describe Spree::Product do
       end
     end
 
-    describe 'on_sale' do
-      let!(:product) { create(:smm_product) }
-      let!(:product2) { create(:smm_product) }
-      let!(:price) { create(:price, variant: product.master, amount: 33.33) }
-      let!(:price2) { create(:price, variant: product2.master, amount: 33.33) }
-      let(:sale_price_calculator) { create(:fixed_amount_sale_price_calculator) }
-      let!(:sale_price) { create(:sale_price, start_at: start_at, end_at: end_at, enabled: true, value: 22.22, price: price, calculator: sale_price_calculator) }
-
-      context 'when sale price has already started and ended' do
-        let(:start_at) { Time.now - 2.days }
-        let(:end_at) { Time.now - 1.day }
-
-        it 'doesnt return product' do
-          expect(described_class.on_sale).to be_empty
-        end
-      end
-
-      context 'when sale price has already started and doesnt have an end date' do
-        let(:start_at) { Time.now - 2.days }
-        let(:end_at) { nil }
-
-        it 'returns product' do
-          expect(described_class.on_sale).to eq([product])
-        end
-      end
-
-      context 'when sale price has already started and didnt end yet' do
-        let(:start_at) { Time.now - 2.days }
-        let(:end_at) { Time.now + 1.day }
-
-        it 'returns product' do
-          expect(described_class.on_sale).to eq([product])
-        end
-      end
-
-      context 'when sale price doesnt have a start date and already ended' do
-        let(:start_at) { nil }
-        let(:end_at) { Time.now - 1.day }
-
-        it 'doesnt return product' do
-          expect(described_class.on_sale).to be_empty
-        end
-      end
-
-      context 'when sale price doesnt have a start date and doesnt have an end date' do
-        let(:start_at) { nil }
-        let(:end_at) { nil }
-
-        it 'returns product' do
-          expect(described_class.on_sale).to eq([product])
-        end
-      end
-
-      context 'when sale price doesnt have a start date and didnt end yet' do
-        let(:start_at) { nil }
-        let(:end_at) { Time.now + 1.day }
-
-        it 'returns product' do
-          expect(described_class.on_sale).to eq([product])
-        end
-      end
-
-      context 'when sale price didnt start yet and doesnt have an end date' do
-        let(:start_at) { Time.now + 1.day }
-        let(:end_at) { nil }
-
-        it 'doesnt return product' do
-          expect(described_class.on_sale).to be_empty
-        end
-      end
-
-      context 'when sale price didnt start yet and didnt end yet' do
-        let(:start_at) { Time.now + 1.day }
-        let(:end_at) { Time.now + 2.days }
-
-        it 'doesnt return product' do
-          expect(described_class.on_sale).to be_empty
-        end
-      end
-    end
-
     describe 'with_option' do
       let(:option_type) { create(:option_type) }
       let(:option_type2) { create(:option_type) }
@@ -155,98 +74,13 @@ RSpec.describe Spree::Product do
     end
 
     describe 'price_between' do
-      context 'when product is on sale' do
-        let!(:product) { create(:smm_product) }
-        let!(:price) { create(:price, variant: product.master, amount: 33.33) }
-        let(:sale_price_calculator) { create(:fixed_amount_sale_price_calculator) }
-        let!(:sale_price) { create(:sale_price, start_at: start_at, end_at: end_at, enabled: true, value: 22.22, price: price, calculator: sale_price_calculator) }
+      let!(:product) { create(:smm_product) }
+      let!(:product2) { create(:smm_product) }
+      let!(:price) { create(:price, variant: product.master, amount: 33.33) }
+      let!(:price2) { create(:price, variant: product.master, amount: 22.22) }
 
-        context 'when sale price has already started and ended' do
-          let(:start_at) { Time.now - 2.days }
-          let(:end_at) { Time.now - 1.day }
-
-          it 'doesnt return product with price between given values' do
-            expect(described_class.price_between(22, 23)).to be_empty
-          end
-        end
-
-        context 'when sale price has already started and doesnt have an end date' do
-          let(:start_at) { Time.now - 2.days }
-          let(:end_at) { nil }
-
-          it 'returns product with price between given values' do
-            expect(described_class.price_between(22, 23)).to eq([product])
-            expect(described_class.price_between(20, 21)).to be_empty
-          end
-        end
-
-        context 'when sale price has already started and didnt end yet' do
-          let(:start_at) { Time.now - 2.days }
-          let(:end_at) { Time.now + 1.day }
-
-          it 'returns product with price between given values' do
-            expect(described_class.price_between(22, 23)).to eq([product])
-            expect(described_class.price_between(20, 21)).to be_empty
-          end
-        end
-
-        context 'when sale price doesnt have a start date and already ended' do
-          let(:start_at) { nil }
-          let(:end_at) { Time.now - 1.day }
-
-          it 'doesnt return product with price between given values' do
-            expect(described_class.price_between(22, 23)).to be_empty
-          end
-        end
-
-        context 'when sale price doesnt have a start date and doesnt have an end date' do
-          let(:start_at) { nil }
-          let(:end_at) { nil }
-
-          it 'returns product with price between given values' do
-            expect(described_class.price_between(22, 23)).to eq([product])
-            expect(described_class.price_between(20, 21)).to be_empty
-          end
-        end
-
-        context 'when sale price doesnt have a start date and didnt end yet' do
-          let(:start_at) { nil }
-          let(:end_at) { Time.now + 1.day }
-
-          it 'returns product with price between given values' do
-            expect(described_class.price_between(22, 23)).to eq([product])
-            expect(described_class.price_between(20, 21)).to be_empty
-          end
-        end
-
-        context 'when sale price didnt start yet and doesnt have an end date' do
-          let(:start_at) { Time.now + 1.day }
-          let(:end_at) { nil }
-
-          it 'doesnt return product with price between given values' do
-            expect(described_class.price_between(22, 23)).to be_empty
-          end
-        end
-
-        context 'when sale price didnt start yet and didnt end yet' do
-          let(:start_at) { Time.now + 1.day }
-          let(:end_at) { Time.now + 2.days }
-
-          it 'doesnt return product with price between given values' do
-            expect(described_class.price_between(22, 23)).to be_empty
-          end
-        end
-      end
-
-      context 'when product is not on sale' do
-        let!(:product) { create(:smm_product) }
-        let!(:product2) { create(:smm_product) }
-        let!(:price) { create(:price, variant: product.master, amount: 33.33) }
-        let!(:price2) { create(:price, variant: product.master, amount: 22.22) }
-
-        it 'returns product with price between given values' do
-          expect(described_class.price_between(33, 34)).to eq([product])
-        end
+      it 'returns product with price between given values' do
+        expect(described_class.price_between(33, 34)).to eq([product])
       end
     end
   end
@@ -262,11 +96,6 @@ RSpec.describe Spree::Product do
 
       it 'returns variant with the cheapest price' do
         expect(product.cheapest_variant).to eq(variant2)
-      end
-
-      it 'takes into account sale price' do
-        create(:sale_price, value: 22.20, enabled: true, price: price, calculator: create(:fixed_amount_sale_price_calculator))
-        expect(product.cheapest_variant).to eq(variant)
       end
     end
 

@@ -30,7 +30,7 @@ class ProductsController < StoreController
     @searcher = build_searcher(products_filters_params)
     @products = @searcher
                 .retrieve_products
-                .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
+                .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, :prices])
 
     @products_filters_count = products_filters_params[:search][:with_option]&.values&.flatten&.count.to_i
     @products_filters_count += (products_filters_params[:search][:price_between] - params[:price_filter_min_max]).count
@@ -56,7 +56,7 @@ class ProductsController < StoreController
   def search_results
     @products = Spree::Product
                 .in_name_or_description(params[:products_search][:keywords])
-                .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
+                .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, :prices])
 
     @current_sorting_key = params[:products_sorting]
   end
