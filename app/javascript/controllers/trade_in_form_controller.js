@@ -97,6 +97,16 @@ export default class extends Controller {
       show(childrenSelectTag);
     };
 
+    // Whenever a product without variant is selected it's corresponding "variants" <option> tag doesn't exsit
+    // so we need to programmatically create the unexisting <option> tag with variant master id as value and select it
+    const createAndSelectOption = (select, optionValue) => {
+      const option = document.createElement('option')
+      option.value = optionValue
+      select.appendChild(option)
+      select.disabled = false
+      select.value = optionValue
+    }
+
     // When selected trade in category change:
     // - Hide trade in model price (in case it was already displayed)
     // - Hide variant infos (in case it was already displayed)
@@ -148,9 +158,11 @@ export default class extends Controller {
     //    - Show the variants options corresponding to the new selected product (and hide the others)
     // - Else if trade in model price is not set
     //    - Hide variants
+    //    - programmatically select the product master   
     //    - Set the variant info id with the product master id (will be used to display the correct variant infos when a trade in model is selected)
     // - Else this product don't have variants:
     //    - hide variants
+    //    - programmatically select the product master
     //    - change variant infos with the porduct master id
     products.addEventListener('change', (event) => {
       const productSelect = event.currentTarget;
@@ -162,9 +174,11 @@ export default class extends Controller {
         displayOptionsOfSelectedParent(variants, productSelect.value);
       } else if (tradeInModelPrice.classList.contains('hidden')) {
         hide(variants);
+        createAndSelectOption(variants, selectedOption.dataset.masterId)
         variantInfos.dataset.id = selectedOption.dataset.masterId;
       } else {
         hide(variants);
+        createAndSelectOption(variants, selectedOption.dataset.masterId)
         changeVariantInfos(selectedOption.dataset.masterId);
       }
     });
@@ -199,6 +213,7 @@ export default class extends Controller {
         changeVariantInfos(variants.value);
         show(variants);
       } else {
+        createAndSelectOption(variants, selectedProduct.dataset.masterId)
         changeVariantInfos(selectedProduct.dataset.masterId);
       }
 
