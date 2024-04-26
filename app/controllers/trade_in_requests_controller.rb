@@ -14,6 +14,14 @@ class TradeInRequestsController < StoreController
       AdminNotificationMailer.trade_in_request_email(@trade_in_request).deliver_later
       redirect_to trade_in_request_path(@trade_in_request.token)
     else
+      SendMessageToSentry.send(
+        'TradeInRequest error',
+        {
+          params: trade_in_request_params,
+          error: @trade_in_request.errors.messages
+        }
+      )
+
       set_form_variables
       @show_fields = true
       render :new, status: :unauthorized
