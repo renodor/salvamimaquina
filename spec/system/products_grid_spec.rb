@@ -188,6 +188,19 @@ RSpec.describe 'Products grid', type: :system, js: true do
       expect(products_grid.find("#products #products-grid [data-spec='product']:nth-child(2)")['id']).to eq("product_#{product3.id}")
       expect(products_grid.find("#products #products-grid [data-spec='product']:last-child")['id']).to eq("product_#{product.id}")
     end
+
+    it 'can order product by most sales' do
+      products_grid = find('#products #products-grid')
+
+      find('#products-sorting-desktop').click
+      find("label[for='descend_by_purchase_count']").click
+
+      expect(find('#current-products-sorting')).to have_text('Más vendido')
+
+      expect(products_grid.find("#products #products-grid [data-spec='product']:first-child")['id']).to eq("product_#{product3.id}")
+      expect(products_grid.find("#products #products-grid [data-spec='product']:nth-child(2)")['id']).to eq("product_#{product2.id}")
+      expect(products_grid.find("#products #products-grid [data-spec='product']:last-child")['id']).to eq("product_#{product.id}")
+    end
   end
 
   context 'on mobile' do
