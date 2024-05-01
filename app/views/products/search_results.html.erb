@@ -1,4 +1,4 @@
-<% self.title = t('spree.search_result', keyword: h(params[:products_search][:keywords])) %>
+<% self.title = t('spree.search_result', keyword: h(params.dig(:products_search, :keywords))) %>
 
 <% if @products.present? %>
   <%= render 'shared/products_sidebar', current_sorting_key: @current_sorting_key.presence&.to_sym || :descend_by_available_on %>
@@ -6,7 +6,7 @@
 
 <div>
   <h6 class="search-results-title">
-    <%= t('spree.search_results', count: @products.size) %> <span>"<%= h(params[:products_search][:keywords]) %>"</span>
+    <%= t('spree.search_results', count: @products.size) %> <span>"<%= h(params.dig(:products_search, :keywords)) %>"</span>
   </h6>
 </div>
 

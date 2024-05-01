@@ -55,7 +55,7 @@ class ProductsController < StoreController
 
   def search_results
     @products = Spree::Product
-                .in_name_or_description(params[:products_search][:keywords])
+                .in_name_or_description(params.dig(:products_search, :keywords))
                 .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, :prices])
 
     @current_sorting_key = params[:products_sorting]
