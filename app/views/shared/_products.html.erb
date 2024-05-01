@@ -18,14 +18,8 @@
           </div>
           <div class="product-name"><%= product.name %></div>
           <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-            <% cheapest_variant_is_on_sale = cheapest_variant.on_sale? %>
-            <% if cheapest_variant_is_on_sale %>
-              <span class="price selling" itemprop="price" content="<%= cheapest_variant.price %>">
-                <%= number_to_currency(cheapest_variant.price) %>
-              </span>
-            <% end %>
-            <span class="price selling <%= cheapest_variant_is_on_sale ? 'crossed' : '' %>" itemprop="price" content="<%= cheapest_variant.original_price %>">
-              <%= number_to_currency(cheapest_variant.original_price) %>
+            <span class="price selling" itemprop="price" content="<%= cheapest_variant.price %>">
+              <%= number_to_currency(cheapest_variant.price) %>
             </span>
             <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
           </span>

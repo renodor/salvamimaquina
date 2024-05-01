@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_101361) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_26_123759) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -759,29 +759,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_101361) do
     t.index ["order_id"], name: "index_spree_reimbursements_on_order_id"
   end
 
-  create_table "spree_relation_types", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.string "applies_to"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "applies_from"
-    t.boolean "bidirectional", default: false
-  end
-
-  create_table "spree_relations", id: :serial, force: :cascade do |t|
-    t.integer "relation_type_id"
-    t.string "relatable_type"
-    t.integer "relatable_id"
-    t.string "related_to_type"
-    t.integer "related_to_id"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.decimal "discount_amount", precision: 8, scale: 2, default: "0.0"
-    t.integer "position"
-    t.string "description"
-  end
-
   create_table "spree_return_authorizations", id: :serial, force: :cascade do |t|
     t.string "number"
     t.string "state"
@@ -840,22 +817,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_101361) do
     t.index ["role_id"], name: "index_spree_roles_users_on_role_id"
     t.index ["user_id", "role_id"], name: "index_spree_roles_users_on_user_id_and_role_id", unique: true
     t.index ["user_id"], name: "index_spree_roles_users_on_user_id"
-  end
-
-  create_table "spree_sale_prices", id: :serial, force: :cascade do |t|
-    t.integer "price_id"
-    t.decimal "value", precision: 10, scale: 2, null: false
-    t.datetime "start_at", precision: nil
-    t.datetime "end_at", precision: nil
-    t.boolean "enabled"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.datetime "deleted_at", precision: nil
-    t.decimal "calculated_price", precision: 10, scale: 2
-    t.index ["deleted_at"], name: "index_spree_sale_prices_on_deleted_at"
-    t.index ["price_id", "start_at", "end_at", "enabled"], name: "index_active_sale_prices_for_price"
-    t.index ["price_id"], name: "index_sale_prices_for_price"
-    t.index ["start_at", "end_at", "enabled"], name: "index_active_sale_prices_for_all_variants"
   end
 
   create_table "spree_shipments", id: :serial, force: :cascade do |t|

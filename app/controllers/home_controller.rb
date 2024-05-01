@@ -5,7 +5,7 @@ class HomeController < StoreController
 
   def index
     @products = Spree::Product
-                .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }])
+                .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, :prices])
                 .where(highlight: true)
                 .limit(4)
     @slider = Slider.find_by(location: :home_page)

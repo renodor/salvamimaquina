@@ -11,7 +11,7 @@
     <%= form_for @order, url: cart_path, html: { id: 'update-cart' } do |order_form| %>
       <div class="line-items" data-hook="cart_items">
         <%= render 'shared/error_messages', target: order_form.object %>
-        <% order_form.object.line_items.includes(variant: [:product, prices: :active_sale_prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
+        <% order_form.object.line_items.includes(variant: [:product, :prices, option_values: :option_type, images: [attachment_attachment: :blob]]).each do |line_item| %>
           <%= order_form.fields_for :line_items, line_item do |item_form| -%>
             <%= render 'orders/line_item', line_item: line_item, static: false %>
           <% end %>
@@ -21,4 +21,3 @@
     <%= render 'checkouts/checkout_summary', order: @order, show_checkout_button: true %>
   </div>
 <% end %>
-<%= render 'shared/related_products', related_products: @order.related_products %>

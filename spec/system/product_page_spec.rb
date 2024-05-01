@@ -15,7 +15,6 @@ RSpec.describe 'Product page', type: :system, js: true do
   end
   let!(:image) { create(:smm_image, viewable: product.master, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
   let!(:image2) { create(:smm_image, viewable: product.master, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
-  let!(:cross_sell_relation_type) { create(:cross_sell_relation_type) }
 
   it 'display product informations' do
     visit product_path(product)
@@ -82,9 +81,7 @@ RSpec.describe 'Product page', type: :system, js: true do
     let!(:variant3) { create(:smm_variant, product: product, option_values: [option_value2, option_value3, option_value4]) }
     let!(:price) { create(:price, amount: 12.34, variant: variant) }
     let!(:price2) { create(:price, amount: 333.21, variant: variant2) }
-    let!(:price3) { create(:price, amount: 12.34, variant: variant3) }
-    let(:calculator) { create(:fixed_amount_sale_price_calculator) }
-    let!(:sale_price) { create(:sale_price, enabled: true, value: 10.00, price: price3, calculator: calculator) }
+    let!(:price3) { create(:price, amount: 10.00, variant: variant3) }
     let!(:image3) { create(:smm_image, viewable: variant, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-15.png').open) }
     let(:stock_item2) { create(:stock_item, variant: variant) }
     let(:stock_item3) { create(:stock_item, variant: variant2) }
@@ -105,8 +102,7 @@ RSpec.describe 'Product page', type: :system, js: true do
 
       expect(find("#product-variants #variant-colors .color-badges input[type='radio']#color_option_#{option_value2.id}", visible: false)).to be_checked
       expect(find("#product-variants .variant-options[data-spec='option-type-#{option_type3.id}'] option[value='#{option_value4.id}']")).to be_selected
-      expect(add_to_cart_form.find('#product-price .original.crossed')).to have_text('$12.34')
-      expect(add_to_cart_form.find('#product-price .discount')).to have_text('$10.00')
+      expect(add_to_cart_form.find('#product-price')).to have_text('$10.00')
       expect(add_to_cart_form.find("input[name='variant_id']", visible: false).value.to_i).to eq(variant3.id)
     end
 

@@ -49,7 +49,7 @@ module ProductFiltersHelper
 
     return nil unless variants.present?
 
-    prices = Spree::Price.includes(:active_sale_prices).where(variant_id: variants.map(&:id)).sort_by(&:price)
+    prices = Spree::Price.where(variant_id: variants.map(&:id)).sort_by(&:price)
 
     return nil unless prices.any?
 

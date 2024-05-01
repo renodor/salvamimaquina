@@ -91,14 +91,5 @@
   <meta itemprop="brand" content="apple">
   <meta itemprop="productID" content="<%= @product.slug %>">
 
-  <%=
-    render 'shared/related_products',
-    related_products: @product.cross_sells.includes(
-      variants_including_master: [
-        { images: [attachment_attachment: :blob] }, { prices: :active_sale_prices }
-      ]
-    )
-  %>
-
   <%= render "shared/add_to_cart_modal", variant_full_name: '', display_modal: false %>
 </div>

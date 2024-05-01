@@ -25,9 +25,6 @@
       </p>
       <p class="line-item-total" data-hook="cart_item_total">
         <%= number_to_currency(line_item.amount) unless line_item.quantity.nil? %>
-        <% if line_item.variant.on_sale? %>
-          <span class="line-item-original-price crossed"><%= number_to_currency(line_item.variant.original_price) %></span>
-        <% end %>
       </p>
       <% unless static %>
         <span class="delete-line-item">
