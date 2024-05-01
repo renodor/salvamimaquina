@@ -370,7 +370,7 @@ RSpec.describe 'Checkout flow', type: :system, js: true do
             Source: {
               CardPan: '12345678',
               CardCvv: '123',
-              CardExpiration: '2504',
+              CardExpiration: (Date.today + 1.year).strftime('%y%m'),
               CardholderName: 'Hari Seldon'
             },
             BillingAddress: {

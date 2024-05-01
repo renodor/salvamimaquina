@@ -20,7 +20,6 @@ module Spree
           add_search_scopes(base_scope)
         end
 
-        # TODO: Do we still needs this override now that on_sale scope is not used anymore?
         def add_simple_scopes(base_scope)
           return base_scope unless @properties[:scopes].present?
           raise Spree::Core::Search::Base::InvalidOptions, :scopes unless @properties[:scopes].respond_to?(:each)

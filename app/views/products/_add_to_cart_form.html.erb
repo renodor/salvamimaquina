@@ -6,8 +6,7 @@
       <%= hidden_field_tag 'variant_id', variant.id %>
       <div id="product-price">
         <div>
-          <!-- TODO: do we need "original" class here? -->
-          <span class="price selling original">
+          <span class="price selling">
             <%= number_to_currency(variant.price) %>
           </span>
         </div>
