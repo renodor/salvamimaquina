@@ -46,7 +46,7 @@ module PaymentGateway
             Line1: @order_info[:billing_address][:address1],
             Line2: @order_info[:billing_address][:address2],
             City: @order_info[:billing_address][:city],
-            County: 'Panamá',
+            County: 'Panama',
             CountryCode: COUNTRY_CODE,
             EmailAddress: @order_info[:email]
           },
@@ -55,7 +55,7 @@ module PaymentGateway
               ChallengeWindowSize: 5,
               MerchantResponseUrl: '01'
             },
-            MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '12ef-2a02-842a-f751-4c01-fe98-f57f-8039-1532.ngrok-free.app'}/checkout/three_d_secure_response"
+            MerchantResponseUrl: "https://#{Rails.env.production? ? 'www.salvamimaquina.com' : '5bcc-2a02-842a-f751-4c01-e003-b211-95e4-bba.ngrok-free.app'}/checkout/three_d_secure_response"
           }
         }.to_json
       end

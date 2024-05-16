@@ -68,6 +68,7 @@ module Spree
             payment_gateway_error_message: response.message,
             payment_gateway_method_name: response.params['method_name'],
             order_number: order.number,
+            errors: response.params['errors'],
             payment: as_json
           }
         )

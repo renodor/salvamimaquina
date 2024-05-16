@@ -15,7 +15,7 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
         number: '123 456 78',
         expiry: '19 / 04',
         verification_value: '333',
-        name: 'Cool Client'
+        name: 'Cool Clientíño'
       }
     end
     let(:order_info) do
@@ -24,9 +24,9 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
         originator: SecureRandom,
         email: 'cool_client@gmail.com',
         billing_address: {
-          name: 'Cool Client',
-          address1: '2 Cool street',
-          address2: 'Next to another street',
+          name: 'Cool Clientíño',
+          address1: '2 Calle De la niña con árbol de café',
+          address2: 'Al lado del camino público de la tía jamón',
           city: 'Cool City'
         }
       }
@@ -41,16 +41,16 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
           CardPan: '12345678',
           CardCvv: '333',
           CardExpiration: '0419',
-          CardholderName: 'Cool Client'
+          CardholderName: 'Cool Clientino'
         },
         OrderIdentifier: '123ABCD',
         BillingAddress: {
           FirstName: 'Cool',
-          LastName: 'Client',
-          Line1: '2 Cool street',
-          Line2: 'Next to another street',
+          LastName: 'Clientino',
+          Line1: '2 Calle De la nina con arbol de cafe',
+          Line2: 'Al lado del camino publico de la tia jamon',
           City: 'Cool City',
-          County: 'Panamá',
+          County: 'Panama',
           CountryCode: 591,
           EmailAddress: 'cool_client@gmail.com'
         },
@@ -59,12 +59,12 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
             ChallengeWindowSize: 5,
             MerchantResponseUrl: '01'
           },
-          MerchantResponseUrl: 'https://12ef-2a02-842a-f751-4c01-fe98-f57f-8039-1532.ngrok-free.app/checkout/three_d_secure_response'
+          MerchantResponseUrl: /https:\/\/.+\/checkout\/three_d_secure_response/
         }
-      }.to_json
+      }
     end
 
-    it 'calls FAC sale endpoint with the correct payload and return an active merchant response' do
+    it 'calls FAC sale endpoint with the correct payload replacing special characters and return an active merchant response' do
       allow(SecureRandom).to receive(:uuid).and_return('fake_uuid')
 
       stub_request(:post, 'https://staging.ptranz.com/api/spi/sale')
@@ -97,6 +97,7 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
 
     let(:iso_response_code) { '3D0' }
     let(:authentication_status) { 'Y' }
+    let(:errors) { nil }
     let(:response) do
       {
         'IsoResponseCode' => iso_response_code,
@@ -106,7 +107,8 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
           'ThreeDSecure' => {
             'AuthenticationStatus' => authentication_status
           }
-        }
+        },
+        'Errors' => errors
       }
     end
 
@@ -120,7 +122,8 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
           'spi_token' => '12345',
           'iso_response_code' => '3D0',
           'three_ds_status' => 'Y',
-          'method_name' => '3Ds Response'
+          'method_name' => '3Ds Response',
+          'errors' => nil
         }
       )
     end
@@ -164,9 +167,13 @@ RSpec.describe Spree::PaymentMethod::BacCreditCard, type: :model do
     context 'when response code is not correct' do
       let(:iso_response_code) { '00' }
       let(:authentication_status) { 'Y' }
+      let(:errors) { [{ 'Boom' => 'Something went wrong' }] }
 
-      it 'returns failures' do
-        expect(subject.success?).to be false
+      it 'returns failures and include errors in response' do
+        handled_response = subject
+
+        expect(handled_response.success?).to be false
+        expect(handled_response.params).to include({ 'errors' => [{ 'Boom' => 'Something went wrong' }] })
       end
     end
   end

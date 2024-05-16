@@ -13,13 +13,13 @@ module Spree
           number: options[:order_id],
           transaction_uuid: options[:originator].uuid,
           email: options[:email],
-          billing_address: options[:billing_address]
+          billing_address: options[:billing_address].transform_values! { |value| I18n.transliterate(value || '') }
         },
         card_info: {
           number: source[:number].delete(' '),
           expiry_date: source[:expiry].split(' / ').reverse.join,
           cvv: source[:verification_value],
-          name: source[:name]
+          name: I18n.transliterate(source[:name])
         }
       ).call
 
@@ -45,7 +45,8 @@ module Spree
           spi_token: response['SpiToken'],
           iso_response_code: iso_response_code,
           three_ds_status: authentication_status,
-          method_name: '3Ds Response'
+          method_name: '3Ds Response',
+          errors: response['Errors']
         }
       )
     end

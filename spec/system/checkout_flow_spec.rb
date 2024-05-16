@@ -376,10 +376,10 @@ RSpec.describe 'Checkout flow', type: :system, js: true do
             BillingAddress: {
               FirstName: 'Hari',
               LastName: 'Seldon',
-              Line1: '23 Calle de aquí',
-              Line2: 'Al lado de allá',
-              City: 'Panamá',
-              County: 'Panamá',
+              Line1: '23 Calle de aqui',
+              Line2: 'Al lado de alla',
+              City: 'Panama',
+              County: 'Panama',
               CountryCode: 591,
               EmailAddress: 'cool_email@gmail.com'
             }
@@ -577,7 +577,8 @@ RSpec.describe 'Checkout flow', type: :system, js: true do
                 },
                 PanToken: '2r7ihhjhuzinrgtyk3rskqt6zrluzcazs3k8otao4m7o77djfy',
                 OrderIdentifier: fake_order_identifier,
-                SpiToken: fake_spi_token
+                SpiToken: fake_spi_token,
+                Errors: [{ 'Boom' => 'Something went wrong' }]
               }
             end
 
@@ -603,6 +604,7 @@ RSpec.describe 'Checkout flow', type: :system, js: true do
                   payment_gateway_error_message: '3D-Secure error',
                   payment_gateway_method_name: '3Ds Response',
                   order_number: order.number,
+                  errors: [{ 'Boom' => 'Something went wrong' }],
                   payment: hash_including(
                     {
                       'amount' => '30.31',

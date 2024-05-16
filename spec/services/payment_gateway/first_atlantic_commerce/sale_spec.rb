@@ -47,7 +47,7 @@ RSpec.describe PaymentGateway::FirstAtlanticCommerce::Sale, type: :service do
           Line1: '2 Cool street',
           Line2: 'Next to another street',
           City: 'Cool City',
-          County: 'Panamá',
+          County: 'Panama',
           CountryCode: 591,
           EmailAddress: 'cool_client@gmail.com'
         },
@@ -56,9 +56,9 @@ RSpec.describe PaymentGateway::FirstAtlanticCommerce::Sale, type: :service do
             ChallengeWindowSize: 5,
             MerchantResponseUrl: '01'
           },
-          MerchantResponseUrl: 'https://12ef-2a02-842a-f751-4c01-fe98-f57f-8039-1532.ngrok-free.app/checkout/three_d_secure_response'
+          MerchantResponseUrl: /https:\/\/.+\/checkout\/three_d_secure_response/
         }
-      }.to_json
+      }
     end
 
     it 'calls sale endpoint with the correct payload and return cleaned response' do
