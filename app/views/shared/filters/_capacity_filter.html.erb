@@ -16,7 +16,12 @@
               data-action="change->products-filters-form#inputChanged"
               <%= params.dig(:search, :with_option, capacity_option_type.id.to_s)&.include?(capacity_id.to_s) ? "checked" : "" %>
             />
-            <label class="product-filter-label" for="<%= capacity_id %>">
+            <label
+              class="product-filter-label"
+              for="<%= capacity_id %>"
+              data-selected="false"
+              data-products-filters-form-target="label"
+            >
               <span><%= capacity %></span>
               <%= svg 'cross' %>
             </label>

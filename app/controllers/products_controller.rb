@@ -32,9 +32,6 @@ class ProductsController < StoreController
                 .retrieve_products
                 .includes(variants_including_master: [{ images: [attachment_attachment: :blob] }, :prices])
 
-    @products_filters_count = products_filters_params[:search][:with_option]&.values&.flatten&.count.to_i
-    @products_filters_count += (products_filters_params[:search][:price_between] - params[:price_filter_min_max]).count
-
     return unless Spree::Product.sorting_options.keys.include?(params[:products_sorting]&.to_sym)
 
     # TOOD: sort_products should be normal product scopes applied when doing build_searcher.retrieve_products...

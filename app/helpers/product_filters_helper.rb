@@ -95,7 +95,18 @@ module ProductFiltersHelper
     variant_options
   end
 
-  def color_code(color)
-    COLORS[color.downcase.tr(' ', '_').to_sym]
+  def map_color_texts_to_hexa_color_codes(color_text_to_option_id)
+    color_hexa_code_to_option_ids = Hash.new { |hash, key| hash[key] = [] }
+
+    color_text_to_option_id.each do |color_text, id|
+      color_hexa_code = color_hexa_code(color_text)
+      color_hexa_code_to_option_ids[color_hexa_code] << id
+    end
+
+    color_hexa_code_to_option_ids
+  end
+
+  def color_hexa_code(color_text)
+    COLORS[color_text.downcase.tr(' ', '_').to_sym]
   end
 end

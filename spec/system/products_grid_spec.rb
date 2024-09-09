@@ -7,18 +7,19 @@ RSpec.describe 'Products grid', type: :system, js: true do
   let(:option_type) { create(:option_type, name: 'color') }
   let(:option_type2) { create(:option_type, name: 'model') }
   let(:option_type3) { create(:option_type, name: 'capacity') }
-  let(:option_value) { create(:option_value, option_type: option_type, name: 'Verde') }
-  let(:option_value2) { create(:option_value, option_type: option_type, name: 'Rojo') }
-  let(:option_value3) { create(:option_value, option_type: option_type, name: 'Azul') }
-  let(:option_value4) { create(:option_value, option_type: option_type, name: 'Negro') }
-  let(:option_value5) { create(:option_value, option_type: option_type2, name: 'iPhone 11') }
-  let(:option_value6) { create(:option_value, option_type: option_type2, name: 'iPhone 12') }
-  let(:option_value7) { create(:option_value, option_type: option_type2, name: 'iPhone 13') }
-  let(:option_value8) { create(:option_value, option_type: option_type2, name: 'iPhone 14') }
-  let(:option_value9) { create(:option_value, option_type: option_type3, name: '64gb') }
-  let(:option_value10) { create(:option_value, option_type: option_type3, name: '128gb') }
-  let(:option_value11) { create(:option_value, option_type: option_type3, name: '256gb') }
-  let(:option_value12) { create(:option_value, option_type: option_type3, name: '512gb') }
+  let(:option_value_verde) { create(:option_value, option_type: option_type, name: 'Verde') }
+  let(:option_value_rojo) { create(:option_value, option_type: option_type, name: 'Rojo') }
+  let(:option_value_azul) { create(:option_value, option_type: option_type, name: 'Azul') }
+  let(:option_value_blue) { create(:option_value, option_type: option_type, name: 'Blue') }
+  let(:option_value_negro) { create(:option_value, option_type: option_type, name: 'Negro') }
+  let(:option_value_iphone11) { create(:option_value, option_type: option_type2, name: 'iPhone 11') }
+  let(:option_value_iphone12) { create(:option_value, option_type: option_type2, name: 'iPhone 12') }
+  let(:option_value_iphone13) { create(:option_value, option_type: option_type2, name: 'iPhone 13') }
+  let(:option_value_iphone14) { create(:option_value, option_type: option_type2, name: 'iPhone 14') }
+  let(:option_value_64gb) { create(:option_value, option_type: option_type3, name: '64gb') }
+  let(:option_value_128gb) { create(:option_value, option_type: option_type3, name: '128gb') }
+  let(:option_value_256gb) { create(:option_value, option_type: option_type3, name: '256gb') }
+  let(:option_value_512gb) { create(:option_value, option_type: option_type3, name: '512gb') }
   let!(:product) do
     create(
       :smm_product,
@@ -49,17 +50,19 @@ RSpec.describe 'Products grid', type: :system, js: true do
       purchase_count: 3
     )
   end
-  let!(:variant) { create(:smm_variant, product: product, option_values: [option_value, option_value5, option_value9]) }
-  let!(:variant2) { create(:smm_variant, product: product, option_values: [option_value2, option_value6, option_value10]) }
-  let!(:variant3) { create(:smm_variant, product: product2, option_values: [option_value3, option_value7, option_value11]) }
-  let!(:variant4) { create(:smm_variant, product: product2, option_values: [option_value4, option_value8, option_value12]) }
+  let!(:variant) { create(:smm_variant, product: product, option_values: [option_value_verde, option_value_iphone11, option_value_64gb]) }
+  let!(:variant2) { create(:smm_variant, product: product, option_values: [option_value_rojo, option_value_iphone12, option_value_128gb]) }
+  let!(:variant3) { create(:smm_variant, product: product, option_values: [option_value_blue]) }
+  let!(:variant4) { create(:smm_variant, product: product2, option_values: [option_value_azul, option_value_iphone13, option_value_256gb]) }
+  let!(:variant5) { create(:smm_variant, product: product2, option_values: [option_value_negro, option_value_iphone14, option_value_512gb]) }
   let!(:price) { create(:price, amount: 12.34, variant: variant) }
   let!(:price2) { create(:price, amount: 22.21, variant: variant2) }
-  let!(:price3) { create(:price, amount: 444.22, variant: variant3) }
-  let!(:price4) { create(:price, amount: 555.11, variant: variant4) }
-  let!(:price5) { create(:price, amount: 100, variant: product3.master) }
+  let!(:price3) { create(:price, amount: 22.21, variant: variant3) }
+  let!(:price4) { create(:price, amount: 444.22, variant: variant4) }
+  let!(:price5) { create(:price, amount: 555.11, variant: variant5) }
+  let!(:price6) { create(:price, amount: 100, variant: product3.master) }
   let!(:image) { create(:smm_image, viewable: variant, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
-  let!(:image2) { create(:smm_image, viewable: variant3, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
+  let!(:image2) { create(:smm_image, viewable: variant4, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
   let!(:image3) { create(:smm_image, viewable: product3.master, attachment: Rails.root.join('spec', 'fixtures', 'product_images', 'iphone-14a.jpg').open) }
 
   it 'displays products with their name price and image' do
@@ -89,7 +92,7 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
     second_product.click
 
-    expect(page).to have_current_path("/productos/second-cool-product?variant_id=#{variant3.id}")
+    expect(page).to have_current_path("/productos/second-cool-product?variant_id=#{variant4.id}")
   end
 
   context 'on desktop' do
@@ -100,7 +103,7 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       expect(products_grid).to have_selector("[data-spec='product']", count: 3)
 
-      find(".product-filter[data-spec='model-filter'] label[for='#{option_value5.id}']").click
+      find(".product-filter[data-spec='model-filter'] label[for='#{option_value_iphone11.id}']").click
 
       expect(products_grid).to have_selector("[data-spec='product']", count: 1)
       expect(products_grid).to have_selector("#product_#{product.id}")
@@ -111,9 +114,22 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       expect(products_grid).to have_selector("[data-spec='product']", count: 3)
 
-      find(".product-filter[data-spec='color-filter'] label[for='#{option_value3.id}']").click
+      find(".product-filter[data-spec='color-filter'] label[for='#{[option_value_rojo.id]}']").click
 
       expect(products_grid).to have_selector("[data-spec='product']", count: 1)
+      expect(products_grid).to have_selector("#product_#{product.id}")
+    end
+
+    it 'groups colors with the same hexa code' do
+      products_grid = find('#products #products-grid')
+
+      expect(products_grid).to have_selector("[data-spec='product']", count: 3)
+      expect(find(".product-filter[data-spec='color-filter']")).to have_selector('label.color-filter-label', count: 4)
+
+      find(".product-filter[data-spec='color-filter'] label[for='#{[option_value_azul.id, option_value_blue.id].sort}']").click
+
+      expect(products_grid).to have_selector("[data-spec='product']", count: 2)
+      expect(products_grid).to have_selector("#product_#{product.id}")
       expect(products_grid).to have_selector("#product_#{product2.id}")
     end
 
@@ -134,7 +150,7 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       expect(products_grid).to have_selector("[data-spec='product']", count: 3)
 
-      find(".product-filter[data-spec='capacity-filter'] label[for='#{option_value12.id}']").click
+      find(".product-filter[data-spec='capacity-filter'] label[for='#{option_value_512gb.id}']").click
 
       expect(products_grid).to have_selector("[data-spec='product']", count: 1)
       expect(products_grid).to have_selector("#product_#{product2.id}")
@@ -220,7 +236,7 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       find('#show-products-sidebar-content').click
       sleep(0.5)
-      find(".product-filter[data-spec='model-filter'] label[for='#{option_value5.id}']").click
+      find(".product-filter[data-spec='model-filter'] label[for='#{option_value_iphone11.id}']").click
       find('#products-sidebar-content-footer button.hide-products-sidebar-content').click
       sleep(0.5)
 
@@ -251,10 +267,10 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       find('#show-products-sidebar-content').click
       sleep(0.5)
-      find(".product-filter[data-spec='model-filter'] label[for='#{option_value5.id}']").click
-      find(".product-filter[data-spec='color-filter'] label[for='#{option_value3.id}']").click
+      find(".product-filter[data-spec='model-filter'] label[for='#{option_value_iphone11.id}']").click
+      find(".product-filter[data-spec='color-filter'] label[for='#{[option_value_azul.id, option_value_blue.id].sort}']").click
       find(".product-filter[data-spec='price-filter'] .slider input[value='556']").click
-      find(".product-filter[data-spec='capacity-filter'] label[for='#{option_value12.id}']").click
+      find(".product-filter[data-spec='capacity-filter'] label[for='#{option_value_512gb.id}']").click
 
       expect(find('#filter-count-button')).to have_text('(4)')
 
@@ -269,7 +285,7 @@ RSpec.describe 'Products grid', type: :system, js: true do
 
       find('#show-products-sidebar-content').click
       sleep(0.5)
-      find(".product-filter[data-spec='model-filter'] label[for='#{option_value5.id}']").click
+      find(".product-filter[data-spec='model-filter'] label[for='#{option_value_iphone11.id}']").click
 
       expect(find('#filter-count-button')).to have_text('(1)')
 
