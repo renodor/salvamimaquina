@@ -6,10 +6,11 @@
     <ul id="products-grid" class="product-listing">
       <% products.each do |product| %>
         <% cheapest_variant = product.cheapest_variant %>
+        <% cheapest_variant = nil %>
         <li id="product_<%= product.id %>" itemscope itemtype="http://schema.org/Product" data-spec="product">
           <div class="product-image">
             <%= cl_image_tag_with_folder(
-              cheapest_variant.images.first&.attachment,
+              cheapest_variant&.images&.first&.attachment,
               width: 540,
               crop: :fill,
               model: Spree::Image,
@@ -18,8 +19,8 @@
           </div>
           <div class="product-name"><%= product.name %></div>
           <span class="prices" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-            <span class="price selling" itemprop="price" content="<%= cheapest_variant.price %>">
-              <%= number_to_currency(cheapest_variant.price) %>
+            <span class="price selling" itemprop="price" content="<%= cheapest_variant&.price %>">
+              <%= number_to_currency(cheapest_variant&.price) %>
             </span>
             <span itemprop="priceCurrency" content="<%= current_pricing_options.currency %>"></span>
           </span>
