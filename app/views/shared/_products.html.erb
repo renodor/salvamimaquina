@@ -6,7 +6,6 @@
     <ul id="products-grid" class="product-listing">
       <% products.each do |product| %>
         <% cheapest_variant = product.cheapest_variant %>
-        <% cheapest_variant = nil %>
         <li id="product_<%= product.id %>" itemscope itemtype="http://schema.org/Product" data-spec="product">
           <div class="product-image">
             <%= cl_image_tag_with_folder(
