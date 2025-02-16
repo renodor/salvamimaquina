@@ -18,7 +18,7 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
       'id' => 1234,
       'price_cost' => 800.0,
       'price_retail' => 1016.45,
-      'condition' => '',
+      'condition' => nil,
       'description' => 'Cool product',
       'maintain_stock' => true,
       'name' => 'iPhone 14 -  Nuevo - 128GB- RED- eSIM ',

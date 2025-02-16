@@ -34,6 +34,8 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       attributes['variant_options'] = {}
       attributes['notes'].split(/\r\n|\n/).reject(&:blank?).map do |attribute|
         match = attribute.match(/(?<type>.+)[:=](?<value>.+)/)
+        next if match.blank?
+
         attribute_type = match[:type].strip.downcase
         attribute_value = match[:value].strip
 
@@ -90,7 +92,7 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
         is_master: attributes['parent_product'].blank?,
         sku: attributes['upc_code'] || '',
         cost_price: attributes['price_cost'],
-        condition: attributes['condition'].match('refurbished')&.to_s || 'original'
+        condition: attributes['condition']&.match('refurbished')&.to_s || 'original'
       )
 
       # Add Spree::OptionValues to variant
