@@ -22,7 +22,6 @@ class RepairShoprApi::V1::SyncProduct < RepairShoprApi::V1::Base
       false
     ensure
       sync_logs.save!
-      SendMessageToSentry.send(name, { sync_logs_errors: sync_logs.sync_errors }) if sync_logs.sync_errors.any?
     end
 
     private

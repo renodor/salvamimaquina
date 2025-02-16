@@ -555,17 +555,11 @@ RSpec.describe RepairShoprApi::V1::SyncProduct, type: :service do
 
     before do
       allow_any_instance_of(Spree::Variant).to receive(:save!).and_raise('Booom')
-      allow(Sentry).to receive(:capture_message)
     end
 
     it 'rescues error and add it to sync logs' do
       expect { subject }.not_to raise_error
       expect(sync_logs.sync_errors).to eq(sync_logs_errors)
-    end
-
-    it 'sends message to Sentry' do
-      expect(SendMessageToSentry).to receive(:send).with(described_class.name, { sync_logs_errors: sync_logs_errors })
-      subject
     end
   end
 end
