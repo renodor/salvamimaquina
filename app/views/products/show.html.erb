@@ -69,7 +69,7 @@
                 </div>
               <% else %>
                 <div class="master-description">
-                  <%= @variant.options_text(show_option_type: true, show_model: true) %>
+                  <%= @variant&.options_text(show_option_type: true, show_model: true) %>
                 </div>
               <% end %>
             </div>

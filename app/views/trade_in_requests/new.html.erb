@@ -79,13 +79,14 @@
           <%=
             options_for_select(
               @products.map do |product|
+
                 [
                   product.name,
                   product.id,
                   data: {
                     parent_id: product.taxons.first.depth == 2 ? @accessories_taxon_id : product.taxon_ids.first,
                     has_variants: product.has_variants?,
-                    master_id: product.master.id
+                    master_id: product.master&.id
                   }
                 ]
               end,
