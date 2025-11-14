@@ -8,7 +8,7 @@
       flex-grow: 1;
       margin-right: 15px;
       img {
-        width: 150px;
+        width: 100px;
         height: auto;
       }
     }
@@ -85,9 +85,9 @@
 
 @media($max-xl) {
   #header .navbar {
-    #logo img {
-      width: 100px;
-    }
+    // #logo img {
+    //   width: 100px;
+    // }
     .navbar-collapse .navbar-nav {
       .nav-link {
         padding-left: 0.4rem;
@@ -100,9 +100,9 @@
 @media ($max-l) {
   #header {
     .navbar {
-      #logo img {
-        width: 150px;
-      }
+      // #logo img {
+      //   width: 150px;
+      // }
       .navbar-collapse {
         position: fixed;
         top: 0;
