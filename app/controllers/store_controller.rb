@@ -47,4 +47,8 @@ class StoreController < Spree::BaseController
     flash[:error] = t('spree.order_mutex_error')
     redirect_to cart_path
   end
+
+  def redirect_to_new_catalog
+    redirect_to 'https://salva.softr.app/', allow_other_host: true
+  end
 end

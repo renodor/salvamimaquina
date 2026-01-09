@@ -66,8 +66,4 @@ class ProductsController < StoreController
     # TODO: authenticity_token params is flagged as unpermitted here...
     params.require(:products_filters).permit(:per_page, :taxon_id, search: {}, scopes: [], price_between: [])
   end
-
-  def redirect_to_new_catalog
-    redirect_to 'https://salva.softr.app/', allow_other_host: true
-  end
 end

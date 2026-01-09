@@ -3,6 +3,7 @@
 class TaxonsController < StoreController
   helper 'spree/taxons', 'spree/products', 'taxon_filters'
 
+  before_action :redirect_to_new_catalog
   before_action :load_taxon, only: [:show]
 
   respond_to :html
