@@ -5,6 +5,8 @@ class ProductsController < StoreController
     raise ActionController::BadRequest.new, error.message
   end
 
+  before_action :redirect_to_new_catalog
+
   def index
     @taxonomies = Spree::Taxonomy.includes(root: :children)
     @root_taxon = Spree::Taxon.includes(children: [icon_attachment: :blob]).find_by(depth: 0)
@@ -63,5 +65,9 @@ class ProductsController < StoreController
   def products_filters_params
     # TODO: authenticity_token params is flagged as unpermitted here...
     params.require(:products_filters).permit(:per_page, :taxon_id, search: {}, scopes: [], price_between: [])
+  end
+
+  def redirect_to_new_catalog
+    redirect_to 'https://salva.softr.app/', allow_other_host: true
   end
 end
